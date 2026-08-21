@@ -114,15 +114,46 @@ switch (cmd) {
     }
     const { hashPassword } = await import('../../engine/api/session.js');
     const hash = await hashPassword(password);
-    await withPlatform((client) =>
-      client.query(
-        `INSERT INTO admin_users (tenant_id, email, password_hash, role)
-         VALUES ($1, $2, $3, 'tenant_admin')
-         ON CONFLICT (lower(email)) DO UPDATE SET password_hash = EXCLUDED.password_hash`,
-        [tenantId, email, hash],
-      ),
-    );
-    console.log(`admin ${email} готов`);
+
+    // Почта уникальна на всю платформу, а не внутри клиента. Значит, у команды
+    // «создай пользователя» есть случай, когда такая запись уже существует —
+    // и принадлежит ДРУГОМУ клиенту. Прежний ON CONFLICT в этом случае менял
+    // пароль, не трогая tenant_id: тот, кто просил доступ ко второму клиенту,
+    // получал рабочий вход в первый. Чужие переписки, чужие заявки, выгрузка.
+    //
+    // Поэтому смена владельца записи здесь не делается ни при каких условиях.
+    // Пароль обновляется только своему; чужая почта — отказ с объяснением.
+    await withPlatform(async (client) => {
+      const { rows } = await client.query<{ id: string; tenant_id: string | null; role: string }>(
+        'SELECT id, tenant_id, role FROM admin_users WHERE lower(email) = lower($1)',
+        [email],
+      );
+      const existing = rows[0];
+
+      if (!existing) {
+        await client.query(
+          `INSERT INTO admin_users (tenant_id, email, password_hash, role)
+           VALUES ($1, $2, $3, 'tenant_admin')`,
+          [tenantId, email, hash],
+        );
+        console.log(`admin ${email} создан`);
+        return;
+      }
+
+      if (existing.tenant_id !== tenantId) {
+        const where = existing.tenant_id ?? `роль ${existing.role} без клиента`;
+        throw new Error(
+          `почта ${email} уже занята: ${where}. ` +
+          'Смена владельца записи здесь не делается — это молчаливая выдача ' +
+          'доступа к чужому клиенту. Заведите отдельную почту для этого клиента ' +
+          'либо удалите старую запись сознательно.',
+        );
+      }
+
+      await client.query('UPDATE admin_users SET password_hash = $2 WHERE id = $1',
+        [existing.id, hash]);
+      console.log(`admin ${email}: пароль обновлён`);
+    });
     break;
   }
 

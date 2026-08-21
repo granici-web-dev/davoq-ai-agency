@@ -102,20 +102,49 @@ export function registerWidget(app: FastifyInstance): void {
       return reply.code(403).send({ error: 'origin not allowed' });
     }
 
-    await withTenant(tenant.id, (client) =>
-      client.query(
+    await withTenant(tenant.id, async (client) => {
+      // Разговор привязывается, только если он существует и принадлежит этому
+      // клиенту. Идентификатор приходит из тела запроса, а `Origin` подделывается
+      // обычным curl — то есть сюда можно прислать чужой UUID. Записанный как
+      // есть, он ломал настоящую заявку того клиента: уникальность была общей
+      // на всю платформу, ON CONFLICT бился о невидимую под RLS строку и валил
+      // транзакцию ответа целиком.
+      //
+      // Не найден — заявка сохраняется без привязки, а не отклоняется. Случай
+      // законный: виджет получает идентификатор в meta раньше, чем разговор
+      // попадает в базу, и при сбое модели разговора так и не появится.
+      // Терять из-за этого контакт — хуже, чем потерять привязку.
+      let linked: string | null = null;
+      if (b.conversationId && UUID.test(b.conversationId)) {
+        const { rows } = await client.query(
+          'SELECT 1 FROM conversations WHERE id = $1', [b.conversationId],
+        );
+        if (rows.length > 0) linked = b.conversationId;
+        else request.log.info(
+          { tenantId: tenant.id, conversationId: b.conversationId },
+          'заявка с неизвестным этому клиенту разговором — сохранена без привязки',
+        );
+      }
+
+      await client.query(
         `INSERT INTO leads (tenant_id, conversation_id, name, email, phone, note)
-         VALUES ($1, $2, $3, $4, $5, $6)`,
+         VALUES ($1, $2, $3, $4, $5, $6)
+         ON CONFLICT (tenant_id, conversation_id) WHERE conversation_id IS NOT NULL
+         DO UPDATE SET
+           name  = coalesce(excluded.name,  leads.name),
+           email = coalesce(excluded.email, leads.email),
+           phone = coalesce(excluded.phone, leads.phone),
+           note  = coalesce(excluded.note,  leads.note)`,
         [
           tenant.id,
-          b.conversationId ?? null,
+          linked,
           b.name?.trim() || null,
           b.email?.trim() || null,
           b.phone?.trim() || null,
           b.note?.trim() || null,
         ],
-      ),
-    );
+      );
+    });
 
     return reply.code(201).send({ ok: true });
   });
@@ -129,5 +158,7 @@ function withDefaults(custom: Record<string, string> | undefined): Record<string
   }
   return out;
 }
+
+const UUID = /^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/i;
 
 export { withPlatform };

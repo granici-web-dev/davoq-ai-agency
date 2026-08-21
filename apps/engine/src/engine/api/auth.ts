@@ -4,6 +4,8 @@ export interface ResolvedTenant {
   id: string;
   allowedDomains: string[];
   localeDefault: string;
+  /** Языки, которые клиент объявил. Список для проверки, а не украшение. */
+  supportedLocales: string[];
   modelTier: 'base' | 'premium';
   monthlyMessageCap: number | null;
 }
@@ -18,6 +20,7 @@ export async function resolveTenant(publicKey: string): Promise<ResolvedTenant |
       id: string;
       allowed_domains: string[];
       locale_default: string;
+      supported_locales: string[];
       model_tier: 'base' | 'premium';
       status: string;
       monthly_message_cap: number | null;
@@ -30,6 +33,7 @@ export async function resolveTenant(publicKey: string): Promise<ResolvedTenant |
       id: row.id,
       allowedDomains: row.allowed_domains,
       localeDefault: row.locale_default,
+      supportedLocales: row.supported_locales?.length ? row.supported_locales : [row.locale_default],
       modelTier: row.model_tier,
       monthlyMessageCap: row.monthly_message_cap,
     };

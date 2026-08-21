@@ -14,6 +14,8 @@
  *   npm run test:isolation
  */
 import '../src/engine/env.js';
+import { randomUUID } from 'node:crypto';
+import { spawnSync } from 'node:child_process';
 import { closeOwnerPool, pool, withOwner, withTenant } from '../src/engine/db/pool.js';
 import { retrieve } from '../src/engine/rag/retrieve.js';
 
@@ -134,6 +136,47 @@ await withTenant(a.id, async (client) => {
   const spoofed = await withTenant(b.id, (c) => retrieve(c, a.id, question));
   if (spoofed.length > 0) bad(`подстановка чужого tenantId в поиск вернула ${spoofed.length} фрагментов`);
   else ok('подстановка чужого идентификатора в поиск не возвращает ничего');
+}
+
+// 6. Вход. Изоляция данных не спасает, если сессия ведёт не к тому клиенту.
+//
+// Почта уникальна на всю платформу. Команда create-user на второго клиента
+// с уже занятой почтой раньше меняла пароль, не трогая tenant_id: тот, кто
+// просил доступ ко второму клиенту, получал рабочий вход в первый — со всеми
+// его переписками, заявками и выгрузкой. Все проверки выше при этом проходили:
+// контекст был выставлен верно, просто не на того.
+{
+  const email = `probe-${randomUUID().slice(0, 8)}@isolation.invalid`;
+  const cli = (tenantId: string): { code: number; err: string } => {
+    const r = spawnSync('npx', ['tsx', '--env-file=.env', 'src/platform/cli/admin.ts',
+      'create-user', tenantId, email, 'parola-de-proba-123'], { encoding: 'utf8' });
+    return { code: r.status ?? -1, err: `${r.stdout}${r.stderr}` };
+  };
+
+  const first = cli(a.id);
+  if (first.code !== 0) bad(`не удалось завести пользователя первому клиенту: ${first.err.slice(0, 200)}`);
+  else {
+    const second = cli(b.id);
+    if (second.code === 0) bad('та же почта завелась второму клиенту — вход ведёт в чужой кабинет');
+    else if (!/уже занята/.test(second.err)) bad(`отказ есть, но не по той причине: ${second.err.slice(0, 200)}`);
+    else ok('почта, занятая другим клиентом, не переезжает: отказ с объяснением');
+
+    const { rows } = await withOwner((client) => client.query<{ tenant_id: string }>(
+      'SELECT tenant_id FROM admin_users WHERE lower(email) = lower($1)', [email]));
+    if (rows[0]?.tenant_id !== a.id) bad('запись всё-таки сменила владельца');
+    else ok('владелец записи не изменился');
+
+    await withOwner((client) => client.query('DELETE FROM admin_users WHERE lower(email) = lower($1)', [email]));
+  }
+}
+
+// 7. Уникальность заявки на разговор — внутри клиента, а не на всю платформу.
+{
+  const { rows } = await withOwner((client) => client.query<{ def: string }>(
+    "SELECT indexdef AS def FROM pg_indexes WHERE indexname = 'leads_one_per_conversation'"));
+  const def = rows[0]?.def ?? '';
+  if (/\(tenant_id, conversation_id\)/.test(def)) ok('ключ заявки составной: столкнуть клиентов через чужой UUID нельзя');
+  else bad(`ключ заявки не тенантный: ${def || 'индекса нет'}`);
 }
 
 if (temporary) {
