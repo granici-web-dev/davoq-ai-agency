@@ -401,4 +401,46 @@ export const RU: Record<string, string> = {
     "Что-то пошло не так.",
   "Toate ecranele sunt ascunse pentru acest cont. Contactați administratorul.":
     "Все экраны скрыты для этой учётной записи. Обратитесь к администратору.",
+  "Abonament":
+    "Подписка",
+  "{price} € pe lună":
+    "{price} € в месяц",
+  "Perioadă de probă — au mai rămas {n} zile":
+    "Пробный период — осталось дней: {n}",
+  "Perioadă de probă":
+    "Пробный период",
+  "Activ — următoarea plată {date}":
+    "Активна — следующий платёж {date}",
+  "Activ":
+    "Активна",
+  "Plata nu a trecut. Asistentul funcționează încă {n} zile":
+    "Платёж не прошёл. Ассистент работает ещё дней: {n}",
+  "Perioada de probă s-a încheiat":
+    "Пробный период закончился",
+  "Abonamentul nu este plătit":
+    "Подписка не оплачена",
+  "Abonamentul este anulat":
+    "Подписка отменена",
+  "Asistentul nu mai răspunde vizitatorilor. Formularul de contact rămâne activ, așa că nu pierdeți cererile.":
+    "Ассистент больше не отвечает посетителям. Форма контакта работает, так что обращения не теряются.",
+  "Card și facturi":
+    "Карта и счета",
+  "Consum luna aceasta":
+    "Расход за месяц",
+  "Mesaje":
+    "Сообщения",
+  "Documente":
+    "Документы",
+  "Spațiu":
+    "Место",
+  "Când numărul de mesaje se epuizează, asistentul propune vizitatorului să lase datele de contact — cererile continuă să ajungă la dumneavoastră.":
+    "Когда сообщения кончаются, ассистент предлагает посетителю оставить контакт — обращения продолжают доходить.",
+  "Pachete":
+    "Пакеты",
+  "Pachetul dumneavoastră":
+    "Ваш пакет",
+  "Pentru a schimba pachetul, scrieți-ne — configurăm noi și primiți link de plată.":
+    "Чтобы сменить пакет, напишите нам — мы настроим и пришлём ссылку на оплату.",
+  "Nu există încă un abonament de administrat":
+    "Управлять пока нечем: подписки нет",
 };

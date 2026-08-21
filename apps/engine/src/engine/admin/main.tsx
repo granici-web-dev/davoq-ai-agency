@@ -1,12 +1,14 @@
 import { StrictMode, useCallback, useEffect, useMemo, useRef, useState } from 'react';
 import { createRoot } from 'react-dom/client';
 import { STRINGS, type Locale } from '../shared/i18n.js';
+import { planFor } from '../plans.js';
+import type { Screen } from '../shared/screens.js';
 import { auditTheme, type ContrastWarning, type Preset, type Theme } from '../shared/theme.js';
 import { del, get, post, put, upload, UnauthorizedError } from './api.js';
 import { previewSrcDoc } from './preview.js';
 import { setPanelLocale, t, tf } from './i18n.js';
 
-type Screen = 'kb' | 'drive' | 'aspect' | 'connectors' | 'chats' | 'analytics' | 'install';
+
 
 /**
  * Названия разделов вычисляются на каждой отрисовке, а не один раз при импорте.
@@ -21,6 +23,7 @@ const allScreens = (): Array<[Screen, string]> => [
   ['chats', t('Conversații')],
   ['analytics', t('Analize')],
   ['install', t('Instalare')],
+  ['subscription', t('Abonament')],
 ];
 
 /**
@@ -219,7 +222,7 @@ function App(): React.ReactElement {
             </>
           )}
         </div>
-        <p className="plan">plan {me.tenant.plan}</p>
+        <p className="plan">{planFor(me.tenant.plan).name}</p>
 
         <nav className="coupons" aria-label={t('Secțiuni')}>
           {screens.map(([id, label]) => (
@@ -268,6 +271,7 @@ function App(): React.ReactElement {
       )}
       {current === 'analytics' && <Analytics />}
       {current === 'install' && <Install />}
+      {current === 'subscription' && <Subscription />}
       </div>
     </div>
   );
@@ -1630,6 +1634,155 @@ function Install(): React.ReactElement {
         {/* На этом экране проглоченная ошибка означает мёртвый виджет при
             «сохранённых» доменах — то есть тихую поломку у клиента на сайте. */}
         {saveError && <p className="note err">{saveError}</p>}
+      </section>
+    </>
+  );
+}
+
+
+// ── Abonament ────────────────────────────────────────────────────────────────
+
+interface PlanCard {
+  id: string; name: string; priceEur: number; monthlyMessages: number;
+  highlights: string[]; current: boolean;
+}
+
+interface SubscriptionData {
+  plan: { id: string; name: string; priceEur: number; highlights: string[] };
+  allPlans: PlanCard[];
+  status: string;
+  active: boolean;
+  reason: string;
+  daysLeft: number | null;
+  currentPeriodEnd: string | null;
+  usage: {
+    messages: number; messagesCap: number;
+    documents: number; documentsCap: number;
+    chunks: number; chunksCap: number;
+    bytes: number; bytesCap: number;
+  };
+  canManageBilling: boolean;
+}
+
+/**
+ * Полоса расхода.
+ *
+ * Цвет меняется на девяноста процентах, а не на ста: сообщить, что лимит
+ * ИСЧЕРПАН, — значит сообщить об этом, когда сделать уже ничего нельзя.
+ */
+function Meter({ label, used, cap, format }: {
+  label: string; used: number; cap: number; format?: (v: number) => string;
+}): React.ReactElement {
+  const pct = cap > 0 ? Math.min(100, (used / cap) * 100) : 0;
+  const show = format ?? ((v: number) => v.toLocaleString());
+  return (
+    <div className="meter">
+      <div className="row" style={{ justifyContent: 'space-between' }}>
+        <span>{label}</span>
+        <span className={pct >= 90 ? 'err' : 'quiet'}>{show(used)} / {show(cap)}</span>
+      </div>
+      <div className="bar"><i style={{ width: `${pct}%` }} data-full={pct >= 90 || undefined} /></div>
+    </div>
+  );
+}
+
+function Subscription(): React.ReactElement {
+  const { data, error, reload } = useResource(() => get<SubscriptionData>('/subscription'), []);
+  const [portalError, setPortalError] = useState('');
+
+  if (error) return <Failed error={error} onRetry={reload} />;
+  if (!data) return <Loading />;
+
+  const mb = (v: number): string => `${Math.round(v / 1048576)} MB`;
+
+  // Состояние подписки словами, а не кодом. Читает директор по продажам,
+  // а не мы: «past_due» ему не говорит ничего, «карта не прошла» — говорит.
+  const state = (): { text: string; kind: 'ok' | 'warn' | 'err' } => {
+    switch (data.reason) {
+      case 'trial':
+        return { kind: 'ok', text: data.daysLeft !== null
+          ? tf('Perioadă de probă — au mai rămas {n} zile', { n: data.daysLeft })
+          : t('Perioadă de probă') };
+      case 'paid':
+        return { kind: 'ok', text: data.currentPeriodEnd
+          ? tf('Activ — următoarea plată {date}', { date: d(data.currentPeriodEnd) })
+          : t('Activ') };
+      case 'grace':
+        return { kind: 'warn', text: tf('Plata nu a trecut. Asistentul funcționează încă {n} zile', { n: data.daysLeft ?? 0 }) };
+      case 'trial_expired':
+        return { kind: 'err', text: t('Perioada de probă s-a încheiat') };
+      case 'unpaid':
+        return { kind: 'err', text: t('Abonamentul nu este plătit') };
+      default:
+        return { kind: 'err', text: t('Abonamentul este anulat') };
+    }
+  };
+  const s = state();
+
+  return (
+    <>
+      <section className="sheet stack">
+        <div className="row" style={{ justifyContent: 'space-between', alignItems: 'flex-start' }}>
+          <div>
+            <h2>{data.plan.name}</h2>
+            <p className="note">{tf('{price} € pe lună', { price: data.plan.priceEur })}</p>
+          </div>
+          <span className={`stamp ${s.kind}`}>{s.text}</span>
+        </div>
+
+        {!data.active && (
+          <p className="note err">
+            {t('Asistentul nu mai răspunde vizitatorilor. Formularul de contact rămâne activ, așa că nu pierdeți cererile.')}
+          </p>
+        )}
+
+        <ul className="ticks">
+          {data.plan.highlights.map((h) => <li key={h}>{h}</li>)}
+        </ul>
+
+        <div className="row">
+          {data.canManageBilling && (
+            <button onClick={() => {
+              setPortalError('');
+              void post<{ url: string }>('/subscription/portal')
+                .then((r) => { location.href = r.url; })
+                .catch((e: Error) => setPortalError(e.message));
+            }}>{t('Card și facturi')}</button>
+          )}
+        </div>
+        {portalError && <p className="note err">{portalError}</p>}
+      </section>
+
+      <section className="sheet stack">
+        <h2>{t('Consum luna aceasta')}</h2>
+        <Meter label={t('Mesaje')} used={data.usage.messages} cap={data.usage.messagesCap} />
+        <Meter label={t('Documente')} used={data.usage.documents} cap={data.usage.documentsCap} />
+        <Meter label={t('Fragmente')} used={data.usage.chunks} cap={data.usage.chunksCap} />
+        <Meter label={t('Spațiu')} used={data.usage.bytes} cap={data.usage.bytesCap} format={mb} />
+        <p className="note">
+          {t('Când numărul de mesaje se epuizează, asistentul propune vizitatorului să lase datele de contact — cererile continuă să ajungă la dumneavoastră.')}
+        </p>
+      </section>
+
+      <section className="sheet stack">
+        <h2>{t('Pachete')}</h2>
+        <div className="plans">
+          {data.allPlans.map((p) => (
+            <div key={p.id} className={`plan-card${p.current ? ' current' : ''}`}>
+              <div className="row" style={{ justifyContent: 'space-between' }}>
+                <strong>{p.name}</strong>
+                <span className="quiet">{p.priceEur} €</span>
+              </div>
+              <ul className="ticks">
+                {p.highlights.map((h) => <li key={h}>{h}</li>)}
+              </ul>
+              {p.current && <span className="stamp ok">{t('Pachetul dumneavoastră')}</span>}
+            </div>
+          ))}
+        </div>
+        <p className="note">
+          {t('Pentru a schimba pachetul, scrieți-ne — configurăm noi și primiți link de plată.')}
+        </p>
       </section>
     </>
   );

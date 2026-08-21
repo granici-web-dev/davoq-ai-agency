@@ -4,6 +4,7 @@ import { parse } from 'yaml';
 import { assertNoProtectedBlocks } from '../../engine/prompt/vertical.js';
 import { LOCALES } from '../../engine/shared/i18n.js';
 import { isPlanId, PLAN_IDS } from '../../engine/plans.js';
+import { SCREENS } from '../../engine/shared/screens.js';
 
 /**
  * Конфигурация клиента.
@@ -248,7 +249,7 @@ function buildProfile(raw: Record<string, unknown>): Record<string, unknown> {
  * оператор уверен, что скрыл экран, а тот на месте. Полный список тоже
  * отвергается: панель без единого экрана — это не настройка, это поломка.
  */
-const SCREENS = ['kb', 'drive', 'aspect', 'connectors', 'chats', 'analytics', 'install'];
+
 
 function validateHiddenScreens(raw: unknown, where: string): string[] {
   const list = (raw ?? []) as unknown;
@@ -256,7 +257,7 @@ function validateHiddenScreens(raw: unknown, where: string): string[] {
   const hidden = list.map(String);
 
   for (const id of hidden) {
-    if (!SCREENS.includes(id)) {
+    if (!(SCREENS as readonly string[]).includes(id)) {
       throw new Error(
         `${where}: panel.hidden_screens — экрана «${id}» нет. Есть: ${SCREENS.join(', ')}`,
       );

@@ -14,6 +14,7 @@ import { mkdtempSync, mkdirSync, writeFileSync, rmSync } from 'node:fs';
 import { tmpdir } from 'node:os';
 import { join } from 'node:path';
 import { closeOwnerPool, pool, withOwner } from '../src/engine/db/pool.js';
+import { SCREENS } from '../src/engine/shared/screens.js';
 
 let failed = 0;
 const ok = (m: string): void => console.log(`  ✓ ${m}`);
@@ -128,8 +129,7 @@ try {
   rejects('опечатка в hidden_screens',
     config('Probe Doi', 'panel:\n  hidden_screens: [analitycs]'), /экрана «analitycs» нет/);
   rejects('скрыты все экраны',
-    config('Probe Doi',
-      'panel:\n  hidden_screens: [kb, drive, aspect, connectors, chats, analytics, install]'),
+    config('Probe Doi', `panel:\n  hidden_screens: [${SCREENS.join(', ')}]`),
     /панели не останется/);
 
   write(config('Probe Doi'));

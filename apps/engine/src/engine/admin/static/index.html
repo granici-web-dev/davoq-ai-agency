@@ -374,6 +374,36 @@ pre{font-family:ui-monospace,SFMono-Regular,Menlo,monospace;font-size:12.5px;
   .seek{margin-left:0;flex:1 1 auto}
   .chart svg{height:88px}
 }
+
+/* ── Abonament ─────────────────────────────────────────────────────────── */
+/* Галочка нарисована здесь, а не символом: символ зависит от шрифта
+   и на чужой машине превращается в квадрат. */
+:root{--tick:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 20 20' fill='none' stroke='%23000' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='M4 10.5l4 4 8-9'/%3E%3C/svg%3E")}
+.stamp.warn{color:var(--warn)}
+.stamp.err{color:var(--danger)}
+
+/* Полоса расхода. Цвет меняется на девяноста процентах, а не на ста:
+   сообщать об исчерпанном лимите поздно — сделать уже ничего нельзя. */
+.meter{display:flex;flex-direction:column;gap:6px}
+.bar{height:6px;border-radius:999px;background:var(--muted);overflow:hidden}
+.bar i{display:block;height:100%;background:var(--primary);border-radius:999px;
+       transition:width .3s ease}
+.bar i[data-full]{background:var(--danger)}
+
+.ticks{list-style:none;padding:0;margin:0;display:flex;flex-direction:column;gap:6px;
+       font-size:14px;color:var(--muted-fg)}
+.ticks li{display:flex;gap:8px;align-items:flex-start}
+.ticks li::before{content:"";flex:none;width:16px;height:16px;margin-top:2px;
+  background:var(--accent-strong);
+  -webkit-mask:var(--tick) center/contain no-repeat;mask:var(--tick) center/contain no-repeat}
+
+.plans{display:grid;gap:14px;grid-template-columns:repeat(auto-fit,minmax(220px,1fr))}
+.plan-card{display:flex;flex-direction:column;gap:10px;padding:18px;border-radius:var(--radius);
+      background:var(--bg);border:1px solid var(--border)}
+.plan-card.current{border-color:var(--primary);box-shadow:0 0 0 1px var(--primary)}
+/* Незанятая часть полосы должна быть видна: без неё непонятно, 283 из скольких. */
+.meter .quiet{font-variant-numeric:tabular-nums}
+@media (prefers-reduced-motion: reduce){.bar i{transition:none}}
 </style>
 </head>
 <body>

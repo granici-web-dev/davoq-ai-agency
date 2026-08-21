@@ -11,6 +11,7 @@ import { listVerticals } from '../../engine/prompt/vertical.js';
 import { applyClientConfig } from '../onboarding/apply.js';
 import { listClients, loadClientConfig } from '../onboarding/config.js';
 import { scaffoldClient } from '../onboarding/scaffold.js';
+import { isPlanId, PLAN_IDS, PLANS } from '../../engine/plans.js';
 
 const [cmd, ...rest] = process.argv.slice(2);
 const positional = rest.filter((a) => !a.startsWith('--'));
@@ -159,8 +160,64 @@ try {
       break;
     }
 
+    /**
+     * Ссылка на оплату. Создаём мы, а не клиент: тариф переключаем мы,
+     * иначе он выберет Business сам и без нас.
+     */
+    case 'checkout': {
+      const [clientId, planId] = rest;
+      if (!clientId || !planId) throw new Error('usage: checkout <клиент> <starter|pro|business>');
+      if (!isPlanId(planId)) throw new Error(`тариф «${planId}» не существует. Есть: ${PLAN_IDS.join(', ')}`);
+
+      const tenant = await withOwner(async (c) => {
+        const { rows } = await c.query<{ id: string; name: string; subscription_status: string }>(
+          'SELECT id, name, subscription_status FROM tenants WHERE client_id = $1', [clientId]);
+        if (!rows[0]) throw new Error(`клиент «${clientId}» не заведён — сначала apply`);
+        return rows[0];
+      });
+
+      const base = process.env.PUBLIC_BASE_URL ?? 'http://localhost:3779';
+      const { createCheckout } = await import('../billing/stripe.js');
+      const { url } = await createCheckout({
+        tenantId: tenant.id,
+        plan: planId,
+        successUrl: `${base}/admin#subscription`,
+        cancelUrl: `${base}/admin#subscription`,
+      });
+      console.log(`\n${tenant.name} · ${PLANS[planId].name} · ${PLANS[planId].priceEur} €/мес`);
+      console.log(`\n${url}\n`);
+      console.log('Ссылка живёт около суток. Тариф переключится сам, вебхуком,');
+      console.log('после успешной оплаты — руками менять ничего не нужно.');
+      break;
+    }
+
+    /**
+     * Смена тарифа без оплаты: для пилотов и особых договорённостей.
+     * Обычный путь — checkout, он же и переключит.
+     */
+    case 'plan': {
+      const [clientId, planId] = rest;
+      if (!clientId || !planId) throw new Error('usage: plan <клиент> <starter|pro|business>');
+      if (!isPlanId(planId)) throw new Error(`тариф «${planId}» не существует. Есть: ${PLAN_IDS.join(', ')}`);
+
+      const changed = await withOwner(async (c) => {
+        const { rows } = await c.query<{ name: string; plan: string }>(
+          'UPDATE tenants SET plan = $2 WHERE client_id = $1 RETURNING name, plan', [clientId, planId]);
+        return rows[0];
+      });
+      if (!changed) throw new Error(`клиент «${clientId}» не заведён`);
+      const plan = PLANS[planId];
+      console.log(`${changed.name}: тариф ${plan.name}, модель ${plan.modelTier}, ` +
+                  `${plan.monthlyMessages} сообщений в месяц`);
+      if (plan.modelTier === 'premium') {
+        console.log('Внимание: старшая модель втрое дороже. Расход на модель вырастет соответственно.');
+      }
+      console.log('Не забудьте про clients/' + clientId + '/config.yaml — иначе следующий apply вернёт прежний тариф.');
+      break;
+    }
+
     default:
-      console.error('команды: new | apply | list | metrics');
+      console.error('команды: new | apply | list | metrics | checkout | plan');
       console.error(`вертикали: ${listVerticals().join(', ') || '—'}`);
       process.exitCode = 1;
   }

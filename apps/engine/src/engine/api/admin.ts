@@ -11,6 +11,8 @@ import { listApproved, saveApproved } from '../rag/approved.js';
 import { callConnector, formatResult, loadTools } from '../llm/connector.js';
 import { encryptSecret } from '../llm/secrets.js';
 import { assertPublicUrl } from '../llm/ssrf.js';
+import { entitlementOf } from '../billing/entitlement.js';
+import { messageCapFor, planFor, PLANS, PLAN_IDS } from '../plans.js';
 import { safeFetch } from '../net/safe-fetch.js';
 import { auditTheme, normalizeTheme, PRESETS, type Theme } from '../shared/theme.js';
 import {
@@ -146,6 +148,7 @@ export function registerAdmin(app: FastifyInstance): void {
     { path: /^\/admin\/api\/insights(\/|$)/, screen: 'analytics' },
     { path: /^\/admin\/api\/approved(\/|$)/, screen: 'analytics' },
     { path: /^\/admin\/api\/install(\/|$)/, screen: 'install' },
+    { path: /^\/admin\/api\/subscription(\/|$)/, screen: 'subscription' },
   ];
 
   const screenOf = (url: string, method: string): string | null => {
@@ -217,6 +220,90 @@ export function registerAdmin(app: FastifyInstance): void {
         });
       }
     };
+
+  /**
+   * Тариф, расход и состояние подписки.
+   *
+   * Клиент видит здесь ровно то, что его касается: что он купил, сколько
+   * израсходовал и когда следующий платёж. Истории наших расчётов с платёжной
+   * системой — событий вебхука — здесь нет и быть не должно.
+   *
+   * Расход показывается вместе с потолком, а не отдельно. «1 240 сообщений» —
+   * это не информация; «1 240 из 5 000» — это информация.
+   */
+  app.get('/admin/api/subscription', guarded(async ({ session, client }) => {
+    const { rows } = await client.query<{
+      plan: string; subscription_status: string;
+      trial_ends_at: Date | null; current_period_end: Date | null;
+      monthly_message_cap: number | null; billing_customer_id: string | null;
+    }>(`SELECT plan, subscription_status, trial_ends_at, current_period_end,
+               monthly_message_cap, billing_customer_id
+          FROM tenants WHERE id = $1`, [session.tenantId]);
+    const t = rows[0];
+    if (!t) throw clientError('tenant_missing', 'Contul nu a fost găsit');
+
+    const plan = planFor(t.plan);
+    const cap = messageCapFor(t.plan, t.monthly_message_cap);
+
+    const { rows: used } = await client.query<{
+      messages: string; documents: string; chunks: string; bytes: string;
+    }>(`SELECT
+          (SELECT coalesce(sum(messages), 0) FROM usage_daily
+            WHERE tenant_id = $1 AND date >= date_trunc('month', current_date)) AS messages,
+          (SELECT count(*) FROM documents) AS documents,
+          (SELECT count(*) FROM chunks) AS chunks,
+          (SELECT coalesce(sum(size_bytes), 0) FROM documents) AS bytes`,
+      [session.tenantId]);
+    const u = used[0]!;
+
+    const entitlement = entitlementOf({
+      subscriptionStatus: t.subscription_status,
+      trialEndsAt: t.trial_ends_at,
+      currentPeriodEnd: t.current_period_end,
+    });
+
+    return {
+      plan: {
+        id: plan.id, name: plan.name, priceEur: plan.priceEur,
+        highlights: plan.highlights,
+      },
+      // Все тарифы — чтобы клиент видел, что он получит, если попросит выше.
+      // Кнопки переключения нет намеренно: тариф меняем мы.
+      allPlans: PLAN_IDS.map((id) => ({
+        id, name: PLANS[id].name, priceEur: PLANS[id].priceEur,
+        monthlyMessages: PLANS[id].monthlyMessages,
+        highlights: PLANS[id].highlights,
+        current: id === plan.id,
+      })),
+      status: t.subscription_status,
+      active: entitlement.active,
+      reason: entitlement.reason,
+      daysLeft: entitlement.daysLeft,
+      currentPeriodEnd: t.current_period_end,
+      usage: {
+        messages: Number(u.messages), messagesCap: cap,
+        documents: Number(u.documents), documentsCap: plan.maxDocuments,
+        chunks: Number(u.chunks), chunksCap: plan.maxChunks,
+        bytes: Number(u.bytes), bytesCap: plan.maxTotalBytes,
+      },
+      // Управлять картой и счетами клиент вправе сам. Кнопки не будет, пока
+      // подписки нет вовсе или пока оплата не настроена.
+      canManageBilling: Boolean(t.billing_customer_id) && Boolean(process.env.STRIPE_SECRET_KEY),
+    };
+  }));
+
+  /** Ссылка на управление картой и счетами. Живёт минуты — потому и создаётся по нажатию. */
+  app.post('/admin/api/subscription/portal', guarded(async ({ session, client, request }) => {
+    const { rows } = await client.query<{ billing_customer_id: string | null }>(
+      'SELECT billing_customer_id FROM tenants WHERE id = $1', [session.tenantId]);
+    const customer = rows[0]?.billing_customer_id;
+    if (!customer) throw clientError('no_billing', 'Nu există încă un abonament de administrat');
+
+    const host = request.headers.host ?? '';
+    const proto = (request.headers['x-forwarded-proto'] as string | undefined) ?? 'https';
+    const { createPortalLink } = await import('../../platform/billing/stripe.js');
+    return createPortalLink(customer, `${proto}://${host}/admin`);
+  }));
 
   app.get('/admin/api/me', guarded(async ({ session, client }) => {
     const { rows } = await client.query<{

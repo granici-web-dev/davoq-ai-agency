@@ -401,4 +401,46 @@ export const EN: Record<string, string> = {
     "Something went wrong.",
   "Toate ecranele sunt ascunse pentru acest cont. Contactați administratorul.":
     "All screens are hidden for this account. Contact your administrator.",
+  "Abonament":
+    "Subscription",
+  "{price} € pe lună":
+    "{price} € per month",
+  "Perioadă de probă — au mai rămas {n} zile":
+    "Trial — {n} days left",
+  "Perioadă de probă":
+    "Trial",
+  "Activ — următoarea plată {date}":
+    "Active — next payment {date}",
+  "Activ":
+    "Active",
+  "Plata nu a trecut. Asistentul funcționează încă {n} zile":
+    "Payment failed. The assistant keeps working for {n} more days",
+  "Perioada de probă s-a încheiat":
+    "The trial has ended",
+  "Abonamentul nu este plătit":
+    "The subscription is unpaid",
+  "Abonamentul este anulat":
+    "The subscription is canceled",
+  "Asistentul nu mai răspunde vizitatorilor. Formularul de contact rămâne activ, așa că nu pierdeți cererile.":
+    "The assistant no longer answers visitors. The contact form stays on, so you do not lose enquiries.",
+  "Card și facturi":
+    "Card and invoices",
+  "Consum luna aceasta":
+    "This month",
+  "Mesaje":
+    "Messages",
+  "Documente":
+    "Documents",
+  "Spațiu":
+    "Storage",
+  "Când numărul de mesaje se epuizează, asistentul propune vizitatorului să lase datele de contact — cererile continuă să ajungă la dumneavoastră.":
+    "When the messages run out, the assistant asks the visitor for contact details — enquiries keep reaching you.",
+  "Pachete":
+    "Packages",
+  "Pachetul dumneavoastră":
+    "Your package",
+  "Pentru a schimba pachetul, scrieți-ne — configurăm noi și primiți link de plată.":
+    "To change your package, write to us — we set it up and send you a payment link.",
+  "Nu există încă un abonament de administrat":
+    "There is no subscription to manage yet",
 };

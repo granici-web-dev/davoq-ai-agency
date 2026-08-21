@@ -363,6 +363,6 @@ scripts/           smoke, проверки изоляции, SSRF, онборд�
 | `npm run test:plans` | тарифы согласованы, модели существуют, маржа положительна |
 | `npm run test:billing` | границы триала, отсрочки и отмены |
 | `npm run test:webhook` | подделать вебхук об оплате нельзя |
-| `npm run client new\|apply\|list\|metrics` | работа с клиентами |
+| `npm run client new\|apply\|list\|metrics\|plan\|checkout` | работа с клиентами и тарифами |
 | `npm run cli` | тенанты, пользователи, загрузка материалов, поиск |
 | `npm run typecheck` | типы |
