@@ -205,7 +205,7 @@ function Knowledge(): React.ReactElement {
       <section className="sheet stack">
         <h2>Adaugă materiale</h2>
         <div className="row">
-          <input className="grow" placeholder="https://sofabelle.ro/paturi" value={url}
+          <input className="grow" placeholder="https://exemplu.ro/produse" value={url}
                  onChange={(e) => setUrl(e.target.value)} aria-label="Adresa paginii" />
           <button className="go" disabled={busy || !url.trim()}
                   onClick={() => void guard(async () => { await post('/documents', { url }); setUrl(''); })}>
@@ -1271,7 +1271,7 @@ function Install(): React.ReactElement {
         <h2>Verifică instalarea</h2>
         <p className="note">Deschidem pagina și căutăm pe ea codul cu cheia ta.</p>
         <div className="row">
-          <input className="grow" placeholder="https://sofabelle.ro/" value={checkUrl}
+          <input className="grow" placeholder="https://exemplu.ro/" value={checkUrl}
                  onChange={(e) => setCheckUrl(e.target.value)} aria-label="Adresa paginii" />
           <button disabled={checking || !checkUrl.trim()} onClick={() => {
             setChecking(true); setVerify(null);

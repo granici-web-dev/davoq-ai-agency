@@ -2,12 +2,12 @@
  * Административный CLI Phase 1. По §13 админка на этом этапе — «hardcoded-config via SQL»;
  * это тот самый слой, только с проверками вместо голых INSERT'ов.
  *
- *   tsx src/cli/admin.ts create-tenant "SofaBelle" sofabelle.md ro
- *   tsx src/cli/admin.ts ingest-url <tenantId> https://sofabelle.md/
- *   tsx src/cli/admin.ts ingest-file <tenantId> ./page.html
- *   tsx src/cli/admin.ts search <tenantId> "какая гарантия на диван"
- *   tsx src/cli/admin.ts rank   <tenantId> "какая гарантия на диван"   # калибровка порога
- *   tsx src/cli/admin.ts create-user <tenantId> admin@example.com <пароль>
+ *   npm run cli create-tenant "Example Ltd" example.com ro
+ *   npm run cli ingest-url <tenantId> https://example.com/
+ *   npm run cli ingest-file <tenantId> ./page.html
+ *   npm run cli search <tenantId> "какая гарантия на диван"
+ *   npm run cli rank   <tenantId> "какая гарантия на диван"   # калибровка порога
+ *   npm run cli create-user <tenantId> admin@example.com <пароль>
  */
 
 // Первым импортом: остальные модули создают пулы и клиентов на этапе загрузки.

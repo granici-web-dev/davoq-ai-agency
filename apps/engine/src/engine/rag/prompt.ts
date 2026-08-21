@@ -38,8 +38,14 @@ export interface TenantPrompt {
  * размере префикса всё равно не включается (см. ниже), а цена устаревшего
  * обещания — разговор с недовольным клиентом.
  */
+/**
+ * Формат намеренно английский и в тон промпту. Раньше здесь стояла русская
+ * локаль, и модель читала «Today is 21 августа 2026 г.» — кириллица посреди
+ * английских инструкций, ровно тот лишний повод для языковой протечки,
+ * с которым уже боролись при переводе промптов.
+ */
 const today = (): string =>
-  new Date().toLocaleDateString('ru-RU', { day: 'numeric', month: 'long', year: 'numeric' });
+  new Date().toLocaleDateString('en-GB', { day: 'numeric', month: 'long', year: 'numeric' });
 
 export function buildSystem(t: TenantPrompt): Array<{
   type: 'text';

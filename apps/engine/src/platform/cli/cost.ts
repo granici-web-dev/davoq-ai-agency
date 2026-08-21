@@ -4,7 +4,7 @@ import { CAPTURE_LEAD } from '../../engine/llm/tools.js';
 
 const est = (s: string): number => Math.ceil(s.length / 4);
 
-const system = buildSystem({ botName: 'SofaBelle', companyName: 'SofaBelle', localeDefault: 'de' })
+const system = buildSystem({ botName: 'Assistant', companyName: 'Example Ltd', localeDefault: 'en' })
   .map((b) => b.text).join('');
 const tools = JSON.stringify([CAPTURE_LEAD]);
 
@@ -13,7 +13,7 @@ const toolTokens = est(tools);
 const stable = systemTokens + toolTokens;
 
 // Переменная часть: 6 фрагментов по ~400 токенов — это верхняя граница нарезки,
-// реальные чанки на страницах SofaBelle вышли по 40–60.
+// реальные чанки на страницах пилотного клиента вышли по 40–60.
 const chunks = 6 * 400;
 const history = 700;
 const question = 60;
