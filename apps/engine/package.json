@@ -31,7 +31,8 @@
     "migrate:built": "node dist/engine/db/migrate.js",
     "start:watchdog": "node dist/engine/ops/watchdog.js",
     "watchdog": "tsx src/engine/ops/watchdog.ts",
-    "test:load": "tsx --env-file=.env scripts/load-test.mts"
+    "test:load": "tsx --env-file=.env scripts/load-test.mts",
+    "cost": "tsx --env-file=.env src/platform/cli/cost.ts"
   },
   "dependencies": {
     "@anthropic-ai/bedrock-sdk": "^0.30.0",
