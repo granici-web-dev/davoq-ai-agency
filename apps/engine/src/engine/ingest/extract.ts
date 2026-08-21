@@ -1,5 +1,6 @@
 import * as cheerio from 'cheerio';
 import { clientError } from '../api/errors.js';
+import { safeFetch } from '../net/safe-fetch.js';
 
 /** Кусок исходника с сохранённым путём заголовков — «Тарифы > Enterprise» (§7). */
 export interface Block {
@@ -185,18 +186,33 @@ export async function extract(
   }
 }
 
+/** Потолок на страницу: больше этого в базу знаний всё равно не берётся. */
+const PAGE_MAX_BYTES = 2 * 1024 * 1024;
+
 const toBuffer = (c: string | Buffer): Buffer =>
   Buffer.isBuffer(c) ? c : Buffer.from(c, 'binary');
 
-/** Загрузка страницы сайта — основной источник для демо и для онбординга клиента. */
+/**
+ * Загрузка страницы сайта — основной источник для демо и для онбординга клиента.
+ *
+ * Адрес приходит из панели, то есть от человека с логином, а запрос по нему
+ * делает наш сервер. Поэтому только через `safeFetch`: проверка адреса, проверка
+ * каждого перехода, проверка адреса в момент соединения и потолок на размер.
+ * Голый `fetch` здесь означал бы, что достаточно добавить «документ» с адресом
+ * метаданных облака, чтобы учётные данные роли стали читаемы прямо в панели.
+ */
 export async function fetchPage(url: string): Promise<{ content: string; mime: string }> {
-  const res = await fetch(url, {
+  const res = await safeFetch(url, {
     headers: { 'user-agent': 'AssistWidgetBot/0.1 (+ingest)' },
-    signal: AbortSignal.timeout(15_000),
+    maxBytes: PAGE_MAX_BYTES,
   });
-  if (!res.ok) throw new Error(`Pagina ${url} a răspuns cu ${res.status}`);
-  return {
-    content: await res.text(),
-    mime: res.headers.get('content-type') ?? 'text/html',
-  };
+  if (res.status < 200 || res.status >= 300) {
+    throw new Error(`Pagina ${url} a răspuns cu ${res.status}`);
+  }
+  if (res.truncated) {
+    throw new Error(
+      `Pagina ${url} depășește ${Math.round(PAGE_MAX_BYTES / 1024)} KB și nu a fost preluată.`,
+    );
+  }
+  return { content: res.body, mime: res.contentType || 'text/html' };
 }

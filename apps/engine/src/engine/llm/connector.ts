@@ -1,6 +1,7 @@
 import type pg from 'pg';
 import { decryptSecret } from './secrets.js';
-import { assertPublicUrl, SsrfError } from './ssrf.js';
+import { SsrfError } from './ssrf.js';
+import { safeFetch } from '../net/safe-fetch.js';
 
 /** §8: жёсткие лимиты. Коннектор ходит в чужую сеть — он не должен уметь нас задержать. */
 const TIMEOUT_MS = 5_000;
@@ -153,68 +154,32 @@ export async function callConnector(
   return { status: null, body: '', truncated: false, error: lastError };
 }
 
+/**
+ * Единственный выход наружу. Переходы, проверка адреса на каждом шаге и потолок
+ * на тело — всё в `safeFetch`; здесь остаётся только то, что специфично для
+ * коннектора.
+ *
+ * Секрет уезжает вместе с заголовками, и это ровно та причина, по которой
+ * заголовки нельзя нести через переход на чужой источник: сервис, который
+ * отвечает `302` на свой домен, — обычное дело, а сервис, который отвечает
+ * `302` на чужой, забирает с собой ключ от CRM клиента. Отсечение делает
+ * `safeFetch`, здесь об этом сказано, чтобы не вернули «оптимизацией».
+ */
 async function fetchGuarded(
   target: string,
   method: string,
   headers: Record<string, string>,
   body: string | undefined,
 ): Promise<CallResult> {
-  let url = target;
-
-  for (let hop = 0; hop <= MAX_REDIRECTS; hop++) {
-    // Проверка повторяется на каждом переходе: иначе публичный адрес,
-    // отвечающий редиректом на 169.254.169.254, обходит всю защиту.
-    await assertPublicUrl(url);
-
-    const res = await fetch(url, {
-      method,
-      headers,
-      ...(body === undefined ? {} : { body }),
-      redirect: 'manual',
-      signal: AbortSignal.timeout(TIMEOUT_MS),
-    });
-
-    if (res.status >= 300 && res.status < 400) {
-      const location = res.headers.get('location');
-      if (!location) return { status: res.status, body: '', truncated: false };
-      url = new URL(location, url).toString();
-      continue;
-    }
-
-    return { status: res.status, ...(await readCapped(res)) };
-  }
-
-  throw new SsrfError('Prea multe redirecționări');
-}
-
-/**
- * Тело читается с потолком в 32 КБ. Content-Length доверять нельзя — сервер может
- * соврать или не прислать его вовсе, поэтому считаем фактически прочитанное
- * и обрываем поток, а не проверяем заголовок.
- */
-async function readCapped(res: Response): Promise<{ body: string; truncated: boolean }> {
-  if (!res.body) return { body: '', truncated: false };
-
-  const reader = res.body.getReader();
-  const chunks: Uint8Array[] = [];
-  let size = 0;
-  let truncated = false;
-
-  for (;;) {
-    const { value, done } = await reader.read();
-    if (done) break;
-    if (!value) continue;
-    if (size + value.length > MAX_BYTES) {
-      chunks.push(value.subarray(0, MAX_BYTES - size));
-      truncated = true;
-      await reader.cancel();
-      break;
-    }
-    chunks.push(value);
-    size += value.length;
-  }
-
-  return { body: Buffer.concat(chunks).toString('utf8'), truncated };
+  const res = await safeFetch(target, {
+    method,
+    headers,
+    body,
+    maxBytes: MAX_BYTES,
+    timeoutMs: TIMEOUT_MS,
+    maxRedirects: MAX_REDIRECTS,
+  });
+  return { status: res.status, body: res.body, truncated: res.truncated };
 }
 
 /** Результат в том виде, в каком его увидит модель. */

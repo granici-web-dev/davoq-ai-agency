@@ -10,6 +10,7 @@ import { listApproved, saveApproved } from '../rag/approved.js';
 import { callConnector, formatResult, loadTools } from '../llm/connector.js';
 import { encryptSecret } from '../llm/secrets.js';
 import { assertPublicUrl } from '../llm/ssrf.js';
+import { safeFetch } from '../net/safe-fetch.js';
 import { auditTheme, normalizeTheme, PRESETS, type Theme } from '../shared/theme.js';
 import {
   buildWhere, CSV_PREAMBLE, csvRow, listConversations, type ConversationFilters,
@@ -466,15 +467,18 @@ export function registerAdmin(app: FastifyInstance): void {
     const key = rows[0]?.public_key ?? '';
 
     try {
-      await assertPublicUrl(url);
-      const res = await fetch(url, {
+      // Через safeFetch, а не через голый fetch: переход на 169.254.169.254
+      // иначе превращает эту проверку в оракул по внутренней сети — коды
+      // ответов и признак «нашли скрипт» видны в панели.
+      const res = await safeFetch(url, {
         headers: { 'user-agent': 'AssistWidgetBot/0.1 (+verify)' },
-        signal: AbortSignal.timeout(10_000),
+        maxBytes: 512 * 1024,
+        timeoutMs: 10_000,
       });
-      const html = (await res.text()).slice(0, 512 * 1024);
+      const html = res.body;
       const host = request.headers.host ?? '';
       return {
-        reachable: res.ok,
+        reachable: res.status >= 200 && res.status < 300,
         status: res.status,
         scriptFound: html.includes('/widget.js') && html.includes(host),
         keyFound: key !== '' && html.includes(key),
