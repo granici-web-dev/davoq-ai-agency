@@ -19,10 +19,17 @@ export function mailer(): Transporter | null {
   return cached;
 }
 
-export const mailFrom = (): string =>
+/**
+ * Отправитель по умолчанию. Используется только когда у тенанта не задан свой:
+ * адрес отправителя — свойство клиента, а не процесса, иначе второй клиент
+ * получает письма от имени первого.
+ */
+export const defaultMailFrom = (): string =>
   process.env.MAIL_FROM ?? 'AssistWidget <no-reply@assistwidget.local>';
 
 export interface Mail {
+  /** Отправитель тенанта. Пусто — берётся платформенный по умолчанию. */
+  from?: string | undefined;
   to: string;
   subject: string;
   text: string;
@@ -38,5 +45,6 @@ export interface Mail {
 export async function send(mail: Mail): Promise<void> {
   const t = mailer();
   if (!t) throw new Error('SMTP_URL is not configured');
-  await t.sendMail({ from: mailFrom(), ...mail });
+  const { from, ...rest } = mail;
+  await t.sendMail({ from: from?.trim() || defaultMailFrom(), ...rest });
 }

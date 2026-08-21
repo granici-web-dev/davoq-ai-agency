@@ -20,6 +20,7 @@ interface LeadRow {
 interface TenantRow {
   name: string;
   lead_notify_email: string | null;
+  lead_notify_from: string | null;
   quote_fields: unknown;
 }
 
@@ -55,7 +56,8 @@ export async function notifyLead(
       [conversationId],
     );
     const tenant = await client.query<TenantRow>(
-      `SELECT name, lead_notify_email, quote_fields FROM tenants WHERE id = $1`,
+      `SELECT name, lead_notify_email, lead_notify_from, quote_fields
+         FROM tenants WHERE id = $1`,
       [tenantId],
     );
     return { lead: lead.rows[0], tenant: tenant.rows[0] };
@@ -71,6 +73,7 @@ export async function notifyLead(
   if (!to) return 'no_recipient';
 
   const mail = buildMail({
+    from: data.tenant.lead_notify_from ?? undefined,
     to,
     lead: data.lead,
     companyName: data.tenant.name,
@@ -105,13 +108,14 @@ const conversationLink = (conversationId: string): string =>
   `/admin#chats/${conversationId}`;
 
 function buildMail(a: {
+  from: string | undefined;
   to: string;
   lead: LeadRow;
   companyName: string;
   fields: Array<{ key: string; label: string }>;
   conversationId: string;
   isUpdate: boolean;
-}): { to: string; subject: string; text: string; html: string } {
+}): { from: string | undefined; to: string; subject: string; text: string; html: string } {
   const { lead } = a;
   // В теме — то, по чему звонят. Директор видит список писем на телефоне и должен
   // понять, кому перезвонить, не открывая ни одного из них. У исправления тема
@@ -188,7 +192,7 @@ function buildMail(a: {
     `</div>`,
   ].join('');
 
-  return { to: a.to, subject, text, html };
+  return { from: a.from, to: a.to, subject, text, html };
 }
 
 /**
