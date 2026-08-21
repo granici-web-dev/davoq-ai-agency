@@ -8,7 +8,7 @@
   },
   "scripts": {
     "dev": "tsx watch src/engine/api/server.ts",
-    "build": "tsc -p tsconfig.json",
+    "build": "npm run build:server && npm run build:widget && npm run build:admin && npm run build:static",
     "typecheck": "tsc -p tsconfig.json --noEmit",
     "migrate": "tsx src/engine/db/migrate.ts",
     "db:up": "docker compose up -d && sleep 3 && npm run migrate",
@@ -23,7 +23,12 @@
     "test:guard": "tsx --env-file=.env scripts/prompt-guard-test.mts",
     "test:language": "tsx scripts/language-test.mts",
     "test:ssrf": "tsx scripts/ssrf-test.mts",
-    "test:onboarding": "tsx --env-file=.env scripts/onboarding-test.mts"
+    "test:onboarding": "tsx --env-file=.env scripts/onboarding-test.mts",
+    "build:server": "tsc -p tsconfig.json",
+    "build:static": "node scripts/build-static.mjs",
+    "start": "node dist/engine/api/server.js",
+    "start:worker": "node dist/engine/ingest/worker.js",
+    "migrate:built": "node dist/engine/db/migrate.js"
   },
   "dependencies": {
     "@anthropic-ai/bedrock-sdk": "^0.30.0",

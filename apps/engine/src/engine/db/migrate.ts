@@ -30,4 +30,30 @@ for (const name of (await readdir(dir)).filter((f) => f.endsWith('.sql')).sort()
   console.log('ok');
 }
 
+/**
+ * Пароль роли приложения.
+ *
+ * В миграции 002 он задан как 'dev' — это нормально для разработки и никуда
+ * не годится на сервере: роль `assistwidget_app` имеет доступ ко всем данным
+ * всех клиентов, RLS её ограничивает только по выставленному контексту.
+ * Менять пароль правкой миграции нельзя — она уже применена и второй раз
+ * не выполнится.
+ *
+ * Поэтому отдельным шагом здесь: задана переменная — пароль ставится, не задана —
+ * ничего не происходит (разработке он не нужен). Значение подставляется через
+ * set_config и format(%L), а не склейкой строк: пароль приходит из окружения,
+ * и склейка здесь была бы приглашением.
+ */
+const appPassword = process.env.APP_DB_PASSWORD;
+if (appPassword) {
+  await client.query('SELECT set_config($1, $2, false)', ['app.new_password', appPassword]);
+  await client.query(`
+    DO $$
+    BEGIN
+      EXECUTE format('ALTER ROLE assistwidget_app PASSWORD %L', current_setting('app.new_password'));
+    END $$;
+  `);
+  console.log('пароль роли assistwidget_app обновлён из APP_DB_PASSWORD');
+}
+
 await client.end();
