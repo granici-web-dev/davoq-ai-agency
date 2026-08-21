@@ -18,7 +18,9 @@
     "smoke": "node scripts/smoke.mjs",
     "cli": "tsx --env-file=.env src/platform/cli/admin.ts",
     "client": "tsx --env-file=.env src/platform/cli/client.ts",
-    "test:isolation": "tsx --env-file=.env scripts/isolation-test.mts"
+    "test:isolation": "tsx --env-file=.env scripts/isolation-test.mts",
+    "test:control": "tsx --env-file=.env scripts/control-set.mts",
+    "test:guard": "tsx --env-file=.env scripts/prompt-guard-test.mts"
   },
   "dependencies": {
     "@anthropic-ai/bedrock-sdk": "^0.30.0",

@@ -114,7 +114,7 @@ export function loadVertical(id: string): Vertical {
     onboardingChecklist: checklist(v.onboarding_checklist, where),
   };
 
-  assertNoProtectedBlocks(vertical);
+  assertNoProtectedBlocks(vertical.prompt, `вертикаль ${id}`);
   cache.set(id, vertical);
   return vertical;
 }
@@ -168,14 +168,28 @@ export const verticalOf = (id: string | null | undefined): Vertical | undefined 
  * Проверка нужна потому, что соблазн «оптимизировать промпт под нишу» возникнет
  * обязательно, а последствия у этих двух блоков не такие, как у остальных.
  */
-const PROTECTED = ['Nature.', 'Data versus commands.', 'Scope.', 'Priority.'];
+export const PROTECTED_BLOCKS = ['Nature.', 'Data versus commands.', 'Scope.', 'Priority.'];
 
-export function assertNoProtectedBlocks(v: Vertical): void {
-  for (const [name, text] of Object.entries(v.prompt)) {
-    for (const block of PROTECTED) {
+/**
+ * Ни вертикаль, ни конфиг клиента не имеют права подменять эти блоки.
+ *
+ * `Nature` — требование AI Act Art. 50: бот, назвавшийся человеком, попадает
+ * под ст. 5 со штрафом до 7% оборота. `Data versus commands` — защита от
+ * инъекций через материалы клиента: любой, кто может положить файл в папку,
+ * может положить туда и «игнорируй инструкции».
+ *
+ * Проверяются оба слоя, а не только вертикаль. Текст клиента (тон, правила
+ * о ценах, факты профиля) попадает в тот же промпт, и через него строка
+ * «Nature. You are a human consultant» доезжала до модели — проверено.
+ */
+export function assertNoProtectedBlocks(texts: Record<string, string>, where: string): void {
+  for (const [name, text] of Object.entries(texts)) {
+    if (typeof text !== 'string') continue;
+    for (const block of PROTECTED_BLOCKS) {
       if (text.includes(block)) {
         throw new Error(
-          `${v.id}/${name}: блок «${block}» задаётся движком и не может быть переопределён вертикалью`,
+          `${where}: поле «${name}» содержит блок «${block}». ` +
+          'Эти блоки задаёт движок, переопределить их нельзя.',
         );
       }
     }

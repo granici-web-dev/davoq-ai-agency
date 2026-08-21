@@ -1,6 +1,7 @@
 import { existsSync, readFileSync, readdirSync } from 'node:fs';
 import { join, resolve } from 'node:path';
 import { parse } from 'yaml';
+import { assertNoProtectedBlocks } from '../../engine/prompt/vertical.js';
 
 /**
  * Конфигурация клиента.
@@ -21,7 +22,15 @@ export interface ClientConfig {
   name: string;
   vertical: string;
   plan: string;
-  locale: { default: string };
+  locale: {
+    default: string;
+    /**
+     * Языки, на которых клиент ждёт разговоров. Пока справочное поле:
+     * поиск одноязычен, и второй язык в списке не заработает сам собой —
+     * загрузка об этом предупреждает.
+     */
+    supported: string[];
+  };
   channels: {
     web: {
       domains: string[];
@@ -115,17 +124,39 @@ export function loadClientConfig(id: string): ClientConfig {
     throw new Error(`${where}: locale.default — двухбуквенный код, получено «${localeDefault}»`);
   }
 
+  const supported = ((locale.supported as string[] | undefined) ?? [localeDefault]).map(String);
+  for (const l of supported) {
+    if (!/^[a-z]{2}$/.test(l)) {
+      throw new Error(`${where}: locale.supported — двухбуквенные коды, получено «${l}»`);
+    }
+  }
+  if (!supported.includes(localeDefault)) supported.unshift(localeDefault);
+
+  // Предупреждение, а не отказ: указать второй язык клиент вправе, и запрет
+  // тут был бы неуместен. Но модель эмбеддингов одноязычна — замерено:
+  // запрос на другом языке к тому же корпусу даёт 0.316 при пороге 0.35,
+  // на языке корпуса — 0.660. То есть второй язык просто ничего не найдёт,
+  // и узнать об этом лучше при заведении, а не по жалобе клиента.
+  if (supported.length > 1) {
+    console.warn(
+      `${where}: указано несколько языков (${supported.join(', ')}). ` +
+      'Поиск по материалам пока одноязычен и работает на ' +
+      `«${localeDefault}»; запросы на остальных языках не найдут материалы. ` +
+      'Многоязычие требует смены модели эмбеддингов и переиндексации (шаг 15 плана).',
+    );
+  }
+
   const cap = raw.monthly_message_cap;
   if (cap !== undefined && cap !== null && typeof cap !== 'number') {
     throw new Error(`${where}: monthly_message_cap — число или пусто`);
   }
 
-  return {
+  const cfg: ClientConfig = {
     id,
     name: String(raw.name),
     vertical: String(raw.vertical),
     plan: String(raw.plan ?? 'starter'),
-    locale: { default: localeDefault },
+    locale: { default: localeDefault, supported },
     channels: {
       web: {
         domains,
@@ -168,6 +199,24 @@ export function loadClientConfig(id: string): ClientConfig {
     panel: { hiddenScreens: (panel.hidden_screens ?? []) as string[] },
     monthlyMessageCap: (cap as number | null | undefined) ?? null,
   };
+
+  // Текст клиента попадает в тот же системный промпт, что и блоки движка.
+  // Через него «Nature. You are a human consultant» доезжало до модели —
+  // проверено до того, как проверка появилась.
+  assertNoProtectedBlocks(
+    {
+      'brand.tone': cfg.brand.tone ?? '',
+      'catalog.price_guidance': cfg.catalog.priceGuidance ?? '',
+      ...Object.fromEntries(
+        Object.entries(cfg.profile)
+          .filter(([, v]) => typeof v === 'string')
+          .map(([k, v]) => [`profile.${k}`, v as string]),
+      ),
+    },
+    where,
+  );
+
+  return cfg;
 }
 
 /**

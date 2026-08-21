@@ -35,10 +35,32 @@ const bad = (m: string): void => {
 const { rows: tenants } = await withOwner((client) =>
   client.query<{ id: string; name: string }>(`SELECT id, name FROM tenants ORDER BY created_at`),
 );
+
+// Второго тенанта заводим сами, если его нет. Проверка изоляции, которая
+// требует ручной подготовки, не запускается — а значит не защищает.
+let temporary: string | null = null;
 if (tenants.length < 2) {
-  console.error('нужно минимум два тенанта, иначе проверять нечего');
-  await pool.end();
-  process.exit(1);
+  const created = await withOwner(async (client) => {
+    const { rows } = await client.query<{ id: string; name: string }>(
+      `INSERT INTO tenants (name, allowed_domains, locale_default, public_key, status)
+       VALUES ('__isolation_probe__', ARRAY['probe.invalid'], 'en',
+               'pk_probe_' || substr(md5(random()::text), 1, 22), 'suspended')
+       RETURNING id, name`,
+    );
+    const probe = rows[0]!;
+    // Кладём пробнику собственный фрагмент: без своих строк «чужого не видно»
+    // доказывается тривиально и ничего не значит.
+    await client.query(
+      `INSERT INTO chunks (tenant_id, document_id, seq, content, embedding_model)
+       SELECT $1, d.id, 0, 'фрагмент тенанта-пробника', 'probe'
+         FROM documents d LIMIT 1`,
+      [probe.id],
+    ).catch(() => undefined);
+    return probe;
+  });
+  tenants.push(created);
+  temporary = created.id;
+  console.log('(заведён временный тенант-пробник)');
 }
 const [a, b] = [tenants[0]!, tenants[1]!];
 console.log(`изоляция: «${a.name}» против «${b.name}»\n`);
@@ -112,6 +134,10 @@ await withTenant(a.id, async (client) => {
   const spoofed = await withTenant(b.id, (c) => retrieve(c, a.id, question));
   if (spoofed.length > 0) bad(`подстановка чужого tenantId в поиск вернула ${spoofed.length} фрагментов`);
   else ok('подстановка чужого идентификатора в поиск не возвращает ничего');
+}
+
+if (temporary) {
+  await withOwner((client) => client.query('DELETE FROM tenants WHERE id = $1', [temporary]));
 }
 
 console.log(failures === 0 ? '\nИЗОЛЯЦИЯ OK' : `\nИЗОЛЯЦИЯ НАРУШЕНА: ${failures}`);
