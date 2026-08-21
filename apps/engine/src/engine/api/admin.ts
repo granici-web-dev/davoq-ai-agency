@@ -14,6 +14,7 @@ import { auditTheme, normalizeTheme, PRESETS, type Theme } from '../shared/theme
 import {
   buildWhere, CSV_PREAMBLE, csvRow, listConversations, type ConversationFilters,
 } from './conversations.js';
+import { clientError, type ClientError } from './errors.js';
 import {
   hashToken, newToken, readCookie, SESSION_COOKIE, SESSION_TTL_DAYS, sessionCookie, verifyPassword,
 } from './session.js';
@@ -134,7 +135,15 @@ export function registerAdmin(app: FastifyInstance): void {
         // осмысленное «адрес ведёт в частную сеть» превращается в HTTP 500,
         // и вся проверка при сохранении теряет смысл.
         request.log.warn({ err }, 'admin request rejected');
-        return reply.code(422).send({ error: (err as Error).message });
+        // Код нужен панели, чтобы показать сообщение на языке клиента.
+        // Текст остаётся рядом: неизвестный панели код лучше показать
+        // словами, чем строкой вида `error.file_empty`.
+        const e = err as ClientError;
+        return reply.code(422).send({
+          error: e.message,
+          ...(e.code ? { code: e.code } : {}),
+          ...(e.detail ? { detail: e.detail } : {}),
+        });
       }
     };
 
@@ -344,7 +353,7 @@ export function registerAdmin(app: FastifyInstance): void {
     const b = body as {
       name?: string; baseUrl?: string; headersTemplate?: Record<string, string>; secret?: string;
     };
-    if (!b.name?.trim() || !b.baseUrl?.trim()) throw new Error('Sunt necesare numele și adresa de bază');
+    if (!b.name?.trim() || !b.baseUrl?.trim()) throw clientError('connector_name_url_required', 'Sunt necesare numele și adresa de bază');
 
     // Адрес проверяется при сохранении, а не только при вызове: тенант должен
     // узнать об отказе в форме, а не через молчащего бота неделю спустя.
@@ -437,7 +446,7 @@ export function registerAdmin(app: FastifyInstance): void {
    */
   app.post('/admin/api/install/verify', guarded(async ({ client, session, body, request }) => {
     const url = (body as { url?: string })?.url?.trim();
-    if (!url) throw new Error('Indicați adresa paginii');
+    if (!url) throw clientError('page_url_required', 'Indicați adresa paginii');
 
     const { rows } = await client.query<{ public_key: string }>(
       'SELECT public_key FROM tenants WHERE id = $1', [session.tenantId],

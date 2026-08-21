@@ -1,5 +1,6 @@
 import type pg from 'pg';
 import { createEmbeddingProvider, toVectorLiteral } from '../llm/embeddings.js';
+import { clientError } from '../api/errors.js';
 
 /**
  * Утверждённые ответы: директор по продажам правит ответ бота прямо из переписки,
@@ -31,11 +32,11 @@ export async function saveApproved(
 ): Promise<string> {
   const question = input.question.trim();
   const answer = input.answer.trim();
-  if (!question) throw new Error('Întrebarea nu poate fi goală');
-  if (!answer) throw new Error('Răspunsul nu poate fi gol');
+  if (!question) throw clientError('approved_question_empty', 'Întrebarea nu poate fi goală');
+  if (!answer) throw clientError('approved_answer_empty', 'Răspunsul nu poate fi gol');
 
   const [vector] = await embeddings.embed([question], 'query');
-  if (!vector) throw new Error('Nu am putut procesa întrebarea, încercați din nou');
+  if (!vector) throw clientError('approved_embed_failed', 'Nu am putut procesa întrebarea, încercați din nou');
 
   // Повторное утверждение того же вопроса заменяет ответ, а не заводит второй:
   // иначе два разных ответа на один вопрос конкурируют по близости, и какой

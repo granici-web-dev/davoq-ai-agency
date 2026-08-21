@@ -1,6 +1,7 @@
 import { withTenant } from '../db/pool.js';
 import { createDocument, processDocument } from '../ingest/index.js';
 import { DriveClient } from './client.js';
+import { clientError } from '../api/errors.js';
 
 export interface SyncResult {
   added: number;
@@ -21,7 +22,7 @@ export async function syncDrive(tenantId: string): Promise<SyncResult> {
   const result: SyncResult = { added: 0, updated: 0, removed: 0, unchanged: 0, errors: [] };
 
   const conn = await withTenant(tenantId, (c) => DriveClient.forTenant(c, tenantId));
-  if (!conn) throw new Error('Google Drive nu este conectat');
+  if (!conn) throw clientError('drive_not_connected', 'Google Drive nu este conectat');
 
   const files = await conn.drive.list(conn.folderId);
 

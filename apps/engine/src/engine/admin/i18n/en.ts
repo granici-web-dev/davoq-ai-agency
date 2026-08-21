@@ -323,4 +323,28 @@ export const EN: Record<string, string> = {
     "The request",
   "Trimitem fiecare cerere pe":
     "We send every request to",
+  "error.odt_broken":
+    "The .odt file has no content.xml — it is probably damaged.",
+  "error.document_missing":
+    "Document not found.",
+  "error.file_no_text":
+    "The file contains no text that can be indexed.",
+  "error.plan_limit_documents":
+    "Plan limit reached: {limit} documents.",
+  "error.plan_limit_bytes":
+    "Plan limit reached: {limit} MB in total.",
+  "error.plan_limit_chunks":
+    "Plan limit reached: {limit} fragments.",
+  "error.approved_question_empty":
+    "The question cannot be empty.",
+  "error.approved_answer_empty":
+    "The answer cannot be empty.",
+  "error.approved_embed_failed":
+    "Could not process the question, please try again.",
+  "error.connector_name_url_required":
+    "Name and base address are required.",
+  "error.page_url_required":
+    "Enter the page address.",
+  "error.drive_not_connected":
+    "Google Drive is not connected.",
 };

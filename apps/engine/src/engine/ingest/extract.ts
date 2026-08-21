@@ -1,4 +1,5 @@
 import * as cheerio from 'cheerio';
+import { clientError } from '../api/errors.js';
 
 /** Кусок исходника с сохранённым путём заголовков — «Тарифы > Enterprise» (§7). */
 export interface Block {
@@ -100,7 +101,7 @@ export async function extractPdf(buffer: Buffer): Promise<Block[]> {
 export async function extractOdt(buffer: Buffer): Promise<Block[]> {
   const JSZip = (await import('jszip')).default;
   const xml = await (await JSZip.loadAsync(buffer)).file('content.xml')?.async('string');
-  if (!xml) throw new Error('Fișierul .odt nu conține content.xml — probabil este deteriorat');
+  if (!xml) throw clientError('odt_broken', 'Fișierul .odt nu conține content.xml — probabil este deteriorat');
 
   const blocks: Block[] = [];
   let path: string[] = [];

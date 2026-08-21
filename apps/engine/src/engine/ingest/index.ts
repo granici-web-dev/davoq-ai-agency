@@ -6,6 +6,7 @@ import { chunkBlocks, type Chunk } from './chunk.js';
 import { extract, fetchPage } from './extract.js';
 import { limitsFor } from './limits.js';
 import * as storage from './storage.js';
+import { clientError } from '../api/errors.js';
 
 const embeddings = createEmbeddingProvider();
 
@@ -59,7 +60,7 @@ export async function processDocument(tenantId: string, documentId: string): Pro
       }>('SELECT filename, mime, storage_key, source_url FROM documents WHERE id = $1', [documentId]);
 
       const doc = rows[0];
-      if (!doc) throw new Error('Documentul nu a fost găsit');
+      if (!doc) throw clientError('document_missing', 'Documentul nu a fost găsit');
       await client.query(`UPDATE documents SET status = 'processing' WHERE id = $1`, [documentId]);
 
       // Страница забирается заново на каждой попытке: повторная обработка должна
@@ -75,7 +76,7 @@ export async function processDocument(tenantId: string, documentId: string): Pro
     });
 
     const chunks = chunkBlocks(blocks);
-    if (chunks.length === 0) throw new Error('Fișierul nu conține text care să poată fi indexat');
+    if (chunks.length === 0) throw clientError('file_no_text', 'Fișierul nu conține text care să poată fi indexat');
 
     const vectors: number[][] = [];
     for (let i = 0; i < chunks.length; i += EMBED_BATCH) {
@@ -136,15 +137,19 @@ async function assertWithinLimits(
   const used = usage[0]!;
 
   if (Number(used.docs) >= limits.maxDocuments) {
-    throw new Error(`Ați atins limita planului: ${limits.maxDocuments} documente.`);
+    throw clientError('plan_limit_documents',
+      `Ați atins limita planului: ${limits.maxDocuments} documente.`,
+      { limit: limits.maxDocuments });
   }
   if (Number(used.bytes) + incomingBytes > limits.maxTotalBytes) {
-    throw new Error(
+    throw clientError('plan_limit_bytes',
       `Ați atins limita planului: ${Math.round(limits.maxTotalBytes / 1024 / 1024)} MB în total.`,
-    );
+      { limit: Math.round(limits.maxTotalBytes / 1024 / 1024) });
   }
   if (Number(used.chunks) >= limits.maxChunks) {
-    throw new Error(`Ați atins limita planului: ${limits.maxChunks} fragmente.`);
+    throw clientError('plan_limit_chunks',
+      `Ați atins limita planului: ${limits.maxChunks} fragmente.`,
+      { limit: limits.maxChunks });
   }
 }
 

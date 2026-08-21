@@ -323,4 +323,28 @@ export const RU: Record<string, string> = {
     "Заявка",
   "Trimitem fiecare cerere pe":
     "Отправляем каждую заявку на",
+  "error.odt_broken":
+    "В файле .odt нет content.xml — вероятно, он повреждён.",
+  "error.document_missing":
+    "Документ не найден.",
+  "error.file_no_text":
+    "В файле нет текста, который можно проиндексировать.",
+  "error.plan_limit_documents":
+    "Достигнут лимит тарифа: {limit} документов.",
+  "error.plan_limit_bytes":
+    "Достигнут лимит тарифа: {limit} МБ суммарно.",
+  "error.plan_limit_chunks":
+    "Достигнут лимит тарифа: {limit} фрагментов.",
+  "error.approved_question_empty":
+    "Вопрос не может быть пустым.",
+  "error.approved_answer_empty":
+    "Ответ не может быть пустым.",
+  "error.approved_embed_failed":
+    "Не удалось обработать вопрос, попробуйте ещё раз.",
+  "error.connector_name_url_required":
+    "Нужны название и базовый адрес.",
+  "error.page_url_required":
+    "Укажите адрес страницы.",
+  "error.drive_not_connected":
+    "Google Drive не подключён.",
 };
