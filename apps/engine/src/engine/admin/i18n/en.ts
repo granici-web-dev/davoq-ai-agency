@@ -355,4 +355,12 @@ export const EN: Record<string, string> = {
     "Text",
   "Cheia corespunde":
     "Key matches",
+  "Sistem":
+    "System",
+  "Deschis":
+    "Light",
+  "Întunecat":
+    "Dark",
+  "Tema panoului":
+    "Panel theme",
 };

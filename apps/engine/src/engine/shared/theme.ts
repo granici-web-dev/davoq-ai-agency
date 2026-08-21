@@ -34,6 +34,25 @@ export interface Preset {
 
 /** Кураторские пресеты (§10, экран Appearance). Каждый прошёл проверку контраста. */
 export const PRESETS: Preset[] = [
+  /**
+   * Монохром. Первый в списке не случайно: у большинства производителей
+   * марка чёрно-белая, и виджет в фирменном цвете чужого бренда выглядит
+   * на их сайте вставкой из другого места. Чёрное на белом не спорит ни
+   * с одной палитрой и не устаревает.
+   */
+  {
+    id: 'mono',
+    name: 'Monocrom',
+    theme: {
+      ...DEFAULT_THEME,
+      primary: '#111111',
+      bg: '#ffffff',
+      text: '#111111',
+      userBubble: '#111111',
+      botBubble: '#f4f4f5',
+      radius: '14px',
+    },
+  },
   { id: 'classic', name: 'Classic Blue', theme: DEFAULT_THEME },
   {
     id: 'graphite',

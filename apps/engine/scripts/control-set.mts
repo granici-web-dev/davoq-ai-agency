@@ -147,6 +147,13 @@ for (const c of cases) {
 
 // Контрольные разговоры не должны копиться в панели клиента.
 await withOwner(async (client) => {
+  // Пробелы удаляются ДО разговоров: внешний ключ обнуляется при удалении
+  // разговора, и осиротевшие строки уже не связать с прогоном. Без этого
+  // контрольные вопросы копились в списке пробелов клиента — «есть ли
+  // шоурум в Кишинёве» тридцать раз подряд.
+  await client.query(
+    `DELETE FROM unanswered_log WHERE conversation_id IN
+       (SELECT id FROM conversations WHERE visitor_id = $1)`, [VISITOR]);
   await client.query('DELETE FROM conversations WHERE visitor_id = $1', [VISITOR]);
   await client.query("DELETE FROM leads WHERE conversation_id IS NULL AND name ILIKE '%Control%'");
 });

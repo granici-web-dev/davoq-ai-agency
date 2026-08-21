@@ -5,6 +5,7 @@ import { randomBytes } from 'node:crypto';
 import { withOwner, withTenant } from '../../engine/db/pool.js';
 import { get as storageGet, put as storagePut } from '../../engine/ingest/storage.js';
 import { loadVertical } from '../../engine/prompt/vertical.js';
+import { PRESETS } from '../../engine/shared/theme.js';
 import { clientDir, type ClientConfig } from './config.js';
 
 /**
@@ -92,6 +93,14 @@ export async function applyClientConfig(
 
   const quoteFields = mergeQualification(cfg, vertical);
 
+  const presetId = cfg.channels.web.widget.preset;
+  const preset = presetId ? PRESETS.find((p) => p.id === presetId) : undefined;
+  if (presetId && !preset) {
+    throw new Error(
+      `тема «${presetId}» не найдена. Известные: ${PRESETS.map((p) => p.id).join(', ')}`,
+    );
+  }
+
   return withTenant(tenantId, async (client) => {
     const { rows } = await client.query<Record<string, unknown>>(
       `SELECT t.name, t.vertical, t.plan, t.locale_default, t.allowed_domains,
@@ -99,7 +108,8 @@ export async function applyClientConfig(
               t.hidden_screens, t.profile, t.retrieval_overrides, t.monthly_message_cap,
               t.supported_locales,
               t.applied_config,
-              w.bot_name, w.position, w.welcome_message, w.ai_disclosure_text
+              w.bot_name, w.position, w.welcome_message, w.ai_disclosure_text,
+              w.preset_id, w.theme
          FROM tenants t LEFT JOIN widget_configs w ON w.tenant_id = t.id
         WHERE t.id = $1`,
       [tenantId],
@@ -125,6 +135,15 @@ export async function applyClientConfig(
       { field: 'retrieval', column: 'retrieval_overrides', table: 'tenants', value: cfg.retrieval },
       { field: 'messageCap', column: 'monthly_message_cap', table: 'tenants', value: cfg.monthlyMessageCap },
       { field: 'botName', column: 'bot_name', table: 'widget', value: cfg.channels.web.widget.botName ?? cfg.name },
+      // Тема ставится пресетом, а не набором цветов: подобранные пары уже
+      // прошли проверку контраста, а шесть шестнадцатеричных значений
+      // в конфиге — приглашение получить нечитаемый виджет.
+      ...(preset
+        ? [
+            { field: 'preset', column: 'preset_id', table: 'widget' as const, value: preset.id },
+            { field: 'theme', column: 'theme', table: 'widget' as const, value: preset.theme },
+          ]
+        : []),
       ...(cfg.channels.web.widget.position
         ? [{ field: 'position', column: 'position', table: 'widget' as const, value: cfg.channels.web.widget.position }]
         : []),
@@ -251,6 +270,7 @@ function mergeQualification(
 
 const JSON_COLUMNS = new Set([
   'quote_fields', 'profile', 'retrieval_overrides', 'welcome_message', 'ai_disclosure_text',
+  'theme',
 ]);
 const isJsonColumn = (c: string): boolean => JSON_COLUMNS.has(c);
 

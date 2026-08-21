@@ -95,7 +95,7 @@ function App(): React.ReactElement {
 
   return (
     <div className="shell">
-      <header className="wallet-head">
+      <aside className="side">
         <div className="mark">
           {me.tenant.logo_url ? (
             // Марка уже произносит имя — дублировать его текстом незачем.
@@ -107,23 +107,28 @@ function App(): React.ReactElement {
               <b>{me.tenant.name}</b>
             </>
           )}
-          <span className="note">plan {me.tenant.plan}</span>
         </div>
-        <div className="who">
-          <span>{me.email}</span>
-          <button onClick={() => post('/logout').then(() => location.reload())}>{t('Ieșire')}</button>
+        <p className="plan">plan {me.tenant.plan}</p>
+
+        <nav className="coupons" aria-label={t('Secțiuni')}>
+          {screens.map(([id, label]) => (
+            <button key={id} className="coupon" onClick={() => setScreen(id)}
+                    {...(current === id ? { 'aria-current': 'page' as const } : {})}>
+              {label}
+            </button>
+          ))}
+        </nav>
+
+        <div className="foot">
+          <ThemeSwitch />
+          <div className="who">
+            <span>{me.email}</span>
+            <button onClick={() => post('/logout').then(() => location.reload())}>{t('Ieșire')}</button>
+          </div>
         </div>
-      </header>
+      </aside>
 
-      <nav className="coupons" aria-label={t('Secțiuni')}>
-        {screens.map(([id, label]) => (
-          <button key={id} className="coupon" onClick={() => setScreen(id)}
-                  {...(current === id ? { 'aria-current': 'page' as const } : {})}>
-            {label}
-          </button>
-        ))}
-      </nav>
-
+      <div className="main">
       {current === 'kb' && <Knowledge />}
       {current === 'drive' && <Drive />}
       {current === 'aspect' && <Aspect />}
@@ -133,6 +138,53 @@ function App(): React.ReactElement {
       )}
       {current === 'analytics' && <Analytics />}
       {current === 'install' && <Install />}
+      </div>
+    </div>
+  );
+}
+
+/**
+ * Переключатель темы.
+ *
+ * Три состояния, а не два. «Как в системе» — тоже выбор, и он же по умолчанию:
+ * бинарная пара пришлось бы врать о том, что происходит, пока человек ничего
+ * не выбрал. Выбор запоминается в браузере, а не в базе: это свойство рабочего
+ * места, а не учётной записи, и у одного директора рабочий стол может стоять
+ * у окна, а ноутбук — дома вечером.
+ */
+type ThemeChoice = 'system' | 'light' | 'dark';
+const THEME_KEY = 'aw-theme';
+
+function applyTheme(choice: ThemeChoice): void {
+  const root = document.documentElement;
+  if (choice === 'system') root.removeAttribute('data-theme');
+  else root.setAttribute('data-theme', choice);
+}
+
+function ThemeSwitch(): React.ReactElement {
+  const [choice, setChoice] = useState<ThemeChoice>(
+    () => (localStorage.getItem(THEME_KEY) as ThemeChoice | null) ?? 'system',
+  );
+
+  useEffect(() => {
+    applyTheme(choice);
+    if (choice === 'system') localStorage.removeItem(THEME_KEY);
+    else localStorage.setItem(THEME_KEY, choice);
+  }, [choice]);
+
+  const options: Array<[ThemeChoice, string]> = [
+    ['system', t('Sistem')],
+    ['light', t('Deschis')],
+    ['dark', t('Întunecat')],
+  ];
+
+  return (
+    <div className="theme-switch" role="group" aria-label={t('Tema panoului')}>
+      {options.map(([id, label]) => (
+        <button key={id} type="button" aria-pressed={choice === id} onClick={() => setChoice(id)}>
+          {label}
+        </button>
+      ))}
     </div>
   );
 }

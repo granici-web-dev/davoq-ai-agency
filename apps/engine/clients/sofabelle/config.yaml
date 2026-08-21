@@ -29,6 +29,9 @@ channels:
       bot_name: SofaBelle
       logo: assets/logo.svg
       position: bottom-right
+      # Марка у клиента чёрно-белая; виджет в чужом цвете выглядел бы
+      # на их сайте вставкой из другого места.
+      preset: mono
       welcome:
         ro: Bună! Sunt asistentul SofaBelle. Întrebați-mă despre garanție, livrare sau termene.
         ru: Здравствуйте! Я ассистент SofaBelle. Спросите про гарантию, доставку или сроки.

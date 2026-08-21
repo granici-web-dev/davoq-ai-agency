@@ -177,6 +177,11 @@ try {
     await pool.end();
     process.exit(process.exitCode ?? 0);
   }
+  // Пробелы — до разговоров: после удаления разговора связь теряется,
+  // и вопросы теста остаются в списке пробелов клиента навсегда.
+  await pool.query(
+    `DELETE FROM unanswered_log WHERE conversation_id IN
+       (SELECT id FROM conversations WHERE visitor_id = $1)`, [VISITOR]);
   const { rows } = await pool.query(
     `DELETE FROM conversations WHERE visitor_id = $1 RETURNING id`, [VISITOR]);
   await pool.query(`DELETE FROM leads WHERE conversation_id IS NULL AND name = 'Ion Test'`);

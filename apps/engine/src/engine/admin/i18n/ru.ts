@@ -355,4 +355,12 @@ export const RU: Record<string, string> = {
     "Текст",
   "Cheia corespunde":
     "Ключ совпадает",
+  "Sistem":
+    "Система",
+  "Deschis":
+    "Светлая",
+  "Întunecat":
+    "Тёмная",
+  "Tema panoului":
+    "Тема панели",
 };
