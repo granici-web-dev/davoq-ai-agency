@@ -4,7 +4,7 @@ import { withTenant } from '../db/pool.js';
 import { createEmbeddingProvider, toVectorLiteral } from '../llm/embeddings.js';
 import { chunkBlocks, type Chunk } from './chunk.js';
 import { extract, fetchPage } from './extract.js';
-import { limitsFor } from './limits.js';
+import { planFor } from '../plans.js';
 import * as storage from './storage.js';
 import { clientError } from '../api/errors.js';
 
@@ -138,7 +138,7 @@ async function assertWithinLimits(
   const { rows } = await client.query<{ plan: string }>(
     'SELECT plan FROM tenants WHERE id = $1', [tenantId],
   );
-  const limits = limitsFor(rows[0]?.plan ?? 'starter');
+  const limits = planFor(rows[0]?.plan);
 
   const { rows: usage } = await client.query<{ docs: string; bytes: string; chunks: string }>(
     `SELECT count(*) AS docs, coalesce(sum(size_bytes), 0) AS bytes,
@@ -181,7 +181,7 @@ async function insertChunks(
   const { rows: planRows } = await client.query<{ plan: string }>(
     'SELECT plan FROM tenants WHERE id = $1', [tenantId],
   );
-  const limits = limitsFor(planRows[0]?.plan ?? 'starter');
+  const limits = planFor(planRows[0]?.plan);
   const { rows: countRows } = await client.query<{ n: string }>('SELECT count(*) AS n FROM chunks');
   const already = Number(countRows[0]?.n ?? 0);
   if (already + chunks.length > limits.maxChunks) {

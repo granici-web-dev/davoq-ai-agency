@@ -4,6 +4,7 @@ import { withTenant } from '../db/pool.js';
 import { enqueueLeadNotify } from '../ingest/queue.js';
 import { contactKey } from '../notify/contact.js';
 import { claude, modelFor } from '../llm/claude.js';
+import { planFor } from '../plans.js';
 import { loadTools, toClaudeTool } from '../llm/connector.js';
 import { buildQuoteTool, loadQuoteConfig } from '../llm/quote.js';
 import { CAPTURE_LEAD, REPORT_UNANSWERED, runTool, type ToolContext } from '../llm/tools.js';
@@ -169,7 +170,10 @@ export function registerChat(app: FastifyInstance): void {
     const conversationId = existing ?? randomUUID();
     const requestLocale = safeLocale(body.locale, tenant);
 
-    const model = modelFor(tenant.modelTier);
+    // Модель задаёт тариф, и только он. Отдельной ручки больше нет —
+    // именно её независимость и развела настройки пилота.
+    const plan = planFor(tenant.plan);
+    const model = modelFor(plan.modelTier);
     const system = buildSystem({
       botName: tenantCfg?.bot_name ?? 'Assistant',
       companyName: tenantCfg?.tenant_name ?? 'the company',
@@ -434,7 +438,7 @@ export function registerChat(app: FastifyInstance): void {
         answer,
         hits,
         model,
-        tier: tenant.modelTier,
+        tier: plan.modelTier,
         usage,
         leads: pendingLeads,
         unanswered: pendingUnanswered,
@@ -517,12 +521,18 @@ async function loadHistory(
   return rows.reverse();
 }
 
+/**
+ * Месячный потолок сообщений.
+ *
+ * Потолок теперь есть ВСЕГДА: он приходит из тарифа, и `null` в базе означает
+ * «как в тарифе», а не «без ограничений». Прежнее «без ограничений» было
+ * не свободой, а счётом за Bedrock, ограниченным чужой добросовестностью.
+ */
 async function overQuota(
   client: import('pg').PoolClient,
   tenantId: string,
-  cap: number | null,
+  cap: number,
 ): Promise<boolean> {
-  if (cap === null) return false;
   const { rows } = await client.query<{ used: string }>(
     `SELECT coalesce(sum(messages), 0) AS used FROM usage_daily
       WHERE tenant_id = $1 AND date >= date_trunc('month', current_date)`,

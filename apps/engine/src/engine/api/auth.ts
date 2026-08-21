@@ -1,4 +1,5 @@
 import { withPlatform } from '../db/pool.js';
+import { messageCapFor } from '../plans.js';
 
 export interface ResolvedTenant {
   id: string;
@@ -6,8 +7,11 @@ export interface ResolvedTenant {
   localeDefault: string;
   /** Языки, которые клиент объявил. Список для проверки, а не украшение. */
   supportedLocales: string[];
-  modelTier: 'base' | 'premium';
-  monthlyMessageCap: number | null;
+  /** Тариф. Он же задаёт модель, потолок сообщений и лимиты базы знаний. */
+  plan: string;
+  subscriptionStatus: string;
+  /** Уже с учётом тарифа: null здесь больше не означает «без ограничений». */
+  monthlyMessageCap: number;
 }
 
 /**
@@ -21,8 +25,9 @@ export async function resolveTenant(publicKey: string): Promise<ResolvedTenant |
       allowed_domains: string[];
       locale_default: string;
       supported_locales: string[];
-      model_tier: 'base' | 'premium';
+      plan: string;
       status: string;
+      subscription_status: string;
       monthly_message_cap: number | null;
     }>('SELECT * FROM resolve_tenant_by_public_key($1)', [publicKey]);
 
@@ -34,8 +39,9 @@ export async function resolveTenant(publicKey: string): Promise<ResolvedTenant |
       allowedDomains: row.allowed_domains,
       localeDefault: row.locale_default,
       supportedLocales: row.supported_locales?.length ? row.supported_locales : [row.locale_default],
-      modelTier: row.model_tier,
-      monthlyMessageCap: row.monthly_message_cap,
+      plan: row.plan,
+      subscriptionStatus: row.subscription_status,
+      monthlyMessageCap: messageCapFor(row.plan, row.monthly_message_cap),
     };
   });
 }

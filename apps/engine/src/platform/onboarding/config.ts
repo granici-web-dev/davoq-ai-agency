@@ -3,6 +3,7 @@ import { join, resolve } from 'node:path';
 import { parse } from 'yaml';
 import { assertNoProtectedBlocks } from '../../engine/prompt/vertical.js';
 import { LOCALES } from '../../engine/shared/i18n.js';
+import { isPlanId, PLAN_IDS } from '../../engine/plans.js';
 
 /**
  * Конфигурация клиента.
@@ -163,7 +164,7 @@ export function loadClientConfig(id: string): ClientConfig {
     id,
     name: String(raw.name),
     vertical: String(raw.vertical),
-    plan: String(raw.plan ?? 'starter'),
+    plan: validatePlan(raw.plan, where),
     locale: { default: localeDefault, supported },
     channels: {
       web: {
@@ -265,4 +266,21 @@ function validateHiddenScreens(raw: unknown, where: string): string[] {
     throw new Error(`${where}: panel.hidden_screens скрывает все экраны — панели не останется`);
   }
   return hidden;
+}
+
+/**
+ * Тариф из конфига.
+ *
+ * Опечатка здесь тихая и дорогая: неизвестное значение раньше просто ложилось
+ * в базу, а `planFor` молча откатывал клиента на самый дешёвый тариф. Клиент
+ * при этом считал, что купил старший, и обнаружил бы это на упёртом лимите.
+ */
+function validatePlan(raw: unknown, where: string): string {
+  const value = String(raw ?? 'starter');
+  if (!isPlanId(value)) {
+    throw new Error(
+      `${where}: тариф «${value}» не существует. Есть: ${PLAN_IDS.join(', ')}`,
+    );
+  }
+  return value;
 }

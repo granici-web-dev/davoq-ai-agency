@@ -32,7 +32,8 @@
     "start:watchdog": "node dist/engine/ops/watchdog.js",
     "watchdog": "tsx src/engine/ops/watchdog.ts",
     "test:load": "tsx --env-file=.env scripts/load-test.mts",
-    "cost": "tsx --env-file=.env src/platform/cli/cost.ts"
+    "cost": "tsx --env-file=.env src/platform/cli/cost.ts",
+    "test:plans": "tsx --env-file=.env scripts/plans-test.mts"
   },
   "dependencies": {
     "@anthropic-ai/bedrock-sdk": "^0.30.0",
