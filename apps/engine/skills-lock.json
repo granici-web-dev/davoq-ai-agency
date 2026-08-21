@@ -1,0 +1,11 @@
+{
+  "version": 1,
+  "skills": {
+    "rigorous": {
+      "source": "CoRLab-Tech/skills",
+      "sourceType": "github",
+      "skillPath": "rigorous/SKILL.md",
+      "computedHash": "6edea7612003496329650bc3ae18a382c8b94ee0a1465987bff1eff49c92e450"
+    }
+  }
+}
