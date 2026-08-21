@@ -2,6 +2,7 @@ import { existsSync, readFileSync, readdirSync } from 'node:fs';
 import { join, resolve } from 'node:path';
 import { parse } from 'yaml';
 import { assertNoProtectedBlocks } from '../../engine/prompt/vertical.js';
+import { LOCALES } from '../../engine/shared/i18n.js';
 
 /**
  * Конфигурация клиента.
@@ -119,15 +120,22 @@ export function loadClientConfig(id: string): ClientConfig {
     | undefined;
   const panel = (raw.panel ?? {}) as Record<string, unknown>;
 
+  // Не «двухбуквенный код», а один из тех, для которых у виджета и панели есть
+  // тексты. Прежняя проверка пропускала `fr`: конфиг применялся, а экран
+  // «Aspect» падал в белый лист на STRINGS['fr'] — error boundary в панели нет.
+  const known = LOCALES.join(', ');
   const localeDefault = String(locale.default ?? 'en');
-  if (!/^[a-z]{2}$/.test(localeDefault)) {
-    throw new Error(`${where}: locale.default — двухбуквенный код, получено «${localeDefault}»`);
+  if (!(LOCALES as readonly string[]).includes(localeDefault)) {
+    throw new Error(
+      `${where}: locale.default — «${localeDefault}», а поддерживаются ${known}. ` +
+      'Новый язык — это переводы виджета и панели, а не строчка в конфиге.',
+    );
   }
 
   const supported = ((locale.supported as string[] | undefined) ?? [localeDefault]).map(String);
   for (const l of supported) {
-    if (!/^[a-z]{2}$/.test(l)) {
-      throw new Error(`${where}: locale.supported — двухбуквенные коды, получено «${l}»`);
+    if (!(LOCALES as readonly string[]).includes(l)) {
+      throw new Error(`${where}: locale.supported — «${l}», а поддерживаются ${known}`);
     }
   }
   if (!supported.includes(localeDefault)) supported.unshift(localeDefault);
@@ -196,7 +204,7 @@ export function loadClientConfig(id: string): ClientConfig {
       },
     },
     retrieval: (raw.retrieval ?? {}) as Record<string, number>,
-    panel: { hiddenScreens: (panel.hidden_screens ?? []) as string[] },
+    panel: { hiddenScreens: validateHiddenScreens(panel.hidden_screens, where) },
     monthlyMessageCap: (cap as number | null | undefined) ?? null,
   };
 
@@ -230,4 +238,31 @@ function buildProfile(raw: Record<string, unknown>): Record<string, unknown> {
   const brand = raw.brand as { tone?: string } | undefined;
   if (brand?.tone) profile.tone = brand.tone.trim();
   return profile;
+}
+
+/**
+ * Экраны панели, которые клиенту не показываются.
+ *
+ * Список сверяется с настоящим: опечатка иначе не значит ничего и молчит —
+ * оператор уверен, что скрыл экран, а тот на месте. Полный список тоже
+ * отвергается: панель без единого экрана — это не настройка, это поломка.
+ */
+const SCREENS = ['kb', 'drive', 'aspect', 'connectors', 'chats', 'analytics', 'install'];
+
+function validateHiddenScreens(raw: unknown, where: string): string[] {
+  const list = (raw ?? []) as unknown;
+  if (!Array.isArray(list)) throw new Error(`${where}: panel.hidden_screens — список`);
+  const hidden = list.map(String);
+
+  for (const id of hidden) {
+    if (!SCREENS.includes(id)) {
+      throw new Error(
+        `${where}: panel.hidden_screens — экрана «${id}» нет. Есть: ${SCREENS.join(', ')}`,
+      );
+    }
+  }
+  if (SCREENS.every((id) => hidden.includes(id))) {
+    throw new Error(`${where}: panel.hidden_screens скрывает все экраны — панели не останется`);
+  }
+  return hidden;
 }

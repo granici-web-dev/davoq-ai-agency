@@ -124,6 +124,18 @@ function App(): React.ReactElement {
   // Первый видимый экран становится стартовым только после загрузки /me:
   // до неё неизвестно, какие экраны у этого клиента вообще есть.
   const screens = visibleScreens(me.tenant.hiddenScreens ?? []);
+  // Пустой список экранов — не «такого не бывает», а «кто-то перечислил в
+  // hidden_screens всё». Прежде здесь стоял `screens[0]!`, и панель падала
+  // в белый лист без единого слова о причине.
+  if (screens.length === 0) {
+    return (
+      <div className="shell">
+        <div className="sheet">
+          {t('Toate ecranele sunt ascunse pentru acest cont. Contactați administratorul.')}
+        </div>
+      </div>
+    );
+  }
   const current = screen && screens.some(([id]) => id === screen) ? screen : screens[0]![0];
 
   return (
@@ -570,7 +582,13 @@ interface AspectData {
   locales: string[];
 }
 
-const COLOR_FIELDS: Array<[keyof Theme, string]> = [
+/**
+ * Функция, а не константа. Константа вычислялась при импорте — до того, как
+ * панель узнавала язык клиента, — и подписи цветов навсегда оставались
+ * румынскими, хотя переводы есть. Та же ошибка, от которой уже защищены
+ * `allScreens` и `statusLabels`.
+ */
+const colorFields = (): Array<[keyof Theme, string]> => [
   ['primary', t('Culoare principală')],
   ['bg', t('Fundalul panoului')],
   ['text', t('Textul')],
@@ -580,20 +598,26 @@ const COLOR_FIELDS: Array<[keyof Theme, string]> = [
 
 function Aspect(): React.ReactElement {
   const [data, setData] = useState<AspectData | null>(null);
-  const [locale, setLocale] = useState<Locale>('ro');
+  // Язык вкладки текстов — первый язык КЛИЕНТА, а не зашитый румынский.
+  // Прежде тексты немецкого клиента сохранялись в ключ `ro`: панель показывала
+  // «Salvat» и верный предпросмотр, а виджет открывался без приветствия.
+  const [locale, setLocale] = useState<Locale | null>(null);
   const [saved, setSaved] = useState(false);
 
   useEffect(() => { void get<AspectData>('/appearance').then(setData); }, []);
   if (!data) return <Loading />;
+
+  const known = (data.locales as Locale[]).filter((l) => l in STRINGS);
+  const active: Locale = locale && known.includes(locale) ? locale : (known[0] ?? 'en');
 
   const patch = (next: Partial<AspectData>): void => { setData({ ...data, ...next }); setSaved(false); };
   const warnings = auditTheme(data.theme);
 
   const srcDoc = previewSrcDoc({
     theme: data.theme, botName: data.botName,
-    welcome: data.welcomeMessage[locale] || STRINGS[locale].title,
-    disclosure: data.aiDisclosureText[locale] || STRINGS[locale].disclosure,
-    placeholder: STRINGS[locale].placeholder, send: STRINGS[locale].send,
+    welcome: data.welcomeMessage[active] || STRINGS[active].title,
+    disclosure: data.aiDisclosureText[active] || STRINGS[active].disclosure,
+    placeholder: STRINGS[active].placeholder, send: STRINGS[active].send,
   });
 
   return (
@@ -615,7 +639,7 @@ function Aspect(): React.ReactElement {
 
         <section className="sheet stack">
           <h2>{t('Culori')}</h2>
-          {COLOR_FIELDS.map(([key, label]) => (
+          {colorFields().map(([key, label]) => (
             <div key={key} className="row" style={{ justifyContent: 'space-between' }}>
               <label className="field" htmlFor={`c-${key}`}>
                 {label}
@@ -650,8 +674,8 @@ function Aspect(): React.ReactElement {
           <h2>Texte</h2>
           <div className="row">
             <span className="note">Limba:</span>
-            {(data.locales as Locale[]).map((l) => (
-              <button key={l} className={locale === l ? 'go' : ''} onClick={() => setLocale(l)}>
+            {known.map((l) => (
+              <button key={l} className={active === l ? 'go' : ''} onClick={() => setLocale(l)}>
                 {l.toUpperCase()}
               </button>
             ))}
@@ -660,12 +684,12 @@ function Aspect(): React.ReactElement {
             <input value={data.botName} onChange={(e) => patch({ botName: e.target.value })} />
           </label>
           <label className="field">{t('Mesajul de întâmpinare')}
-            <input value={data.welcomeMessage[locale] ?? ''}
-                   onChange={(e) => patch({ welcomeMessage: { ...data.welcomeMessage, [locale]: e.target.value } })} />
+            <input value={data.welcomeMessage[active] ?? ''}
+                   onChange={(e) => patch({ welcomeMessage: { ...data.welcomeMessage, [active]: e.target.value } })} />
           </label>
           <label className="field">{t('Textul despre inteligența artificială')}
-            <input placeholder={STRINGS[locale].disclosure} value={data.aiDisclosureText[locale] ?? ''}
-                   onChange={(e) => patch({ aiDisclosureText: { ...data.aiDisclosureText, [locale]: e.target.value } })} />
+            <input placeholder={STRINGS[active].disclosure} value={data.aiDisclosureText[active] ?? ''}
+                   onChange={(e) => patch({ aiDisclosureText: { ...data.aiDisclosureText, [active]: e.target.value } })} />
           </label>
           <p className="note">
             {t('Mențiunea că vizitatorul discută cu o inteligență artificială este obligatorie prin lege (AI Act, art. 50) și nu poate fi dezactivată. Poți schimba formularea; câmpul gol readuce textul implicit.')}

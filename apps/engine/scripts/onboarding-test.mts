@@ -108,6 +108,32 @@ try {
   if (nameRows[0]?.public_key === key) ok('публичный ключ не изменился');
   else bad('публичный ключ изменился — виджет на сайте клиента мёртв');
 
+  // ── 4b. Что валидация обязана не пропустить ───────────────────────────
+  //
+  // Обе ошибки тихие: конфиг применяется, а панель клиента падает в белый лист.
+  // Error boundary в панели нет, так что «упадёт и увидим» здесь не работает.
+  const rejects = (what: string, text: string, expect: RegExp): void => {
+    write(text);
+    try {
+      loadClientConfig(ID);
+      bad(`${what}: конфиг принят`);
+    } catch (err) {
+      if (expect.test((err as Error).message)) ok(`${what}: отвергнут`);
+      else bad(`${what}: отказ не по той причине — ${(err as Error).message.slice(0, 120)}`);
+    }
+  };
+
+  rejects('язык без переводов', config('Probe Doi').replace('default: ro', 'default: fr'),
+    /поддерживаются/);
+  rejects('опечатка в hidden_screens',
+    config('Probe Doi', 'panel:\n  hidden_screens: [analitycs]'), /экрана «analitycs» нет/);
+  rejects('скрыты все экраны',
+    config('Probe Doi',
+      'panel:\n  hidden_screens: [kb, drive, aspect, connectors, chats, analytics, install]'),
+    /панели не останется/);
+
+  write(config('Probe Doi'));
+
   // ── 5. Два одноимённых тенанта — отказ, а не выбор наугад ─────────────
   //
   // UNIQUE на имени нет и быть не должно: вывеска не идентификатор. Но выбрать
