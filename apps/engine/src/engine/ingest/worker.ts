@@ -6,7 +6,7 @@ import { processDocument } from './index.js';
 import { WORKER_HEARTBEAT_KEY } from '../ops/health.js';
 import {
   driveQueue, enqueueRecheck, notifyQueue, recheckQueue, redis, scheduleDriveSync,
-  DRIVE_SYNC_MINUTES,
+  DRIVE_SYNC_MINUTES, scheduleTrialNotices, trialQueue,
   type DriveSyncJob, type IngestJob, type NotifyJob, type RecheckJob,
 } from './queue.js';
 
@@ -104,6 +104,11 @@ notifyWorker.on('failed', (job, err) =>
   );
   for (const r of rows) await scheduleDriveSync(r.tenant_id);
   console.log(`drive sync каждые ${DRIVE_SYNC_MINUTES} мин для ${rows.length} тенант(ов)`);
+
+  // Расписание одно на всю установку, а не на клиента: сам проход перебирает
+  // тех, у кого триал заканчивается.
+  await scheduleTrialNotices();
+  console.log('напоминания о конце триала: проверка каждый час');
 }
 
 /**
@@ -122,6 +127,18 @@ const heartbeat = setInterval(() => {
 }, 30_000);
 void redis.set(WORKER_HEARTBEAT_KEY, String(Date.now()), 'EX', 600);
 
+const trialWorker = new Worker(
+  'trial-notices',
+  async () => {
+    const { sendTrialNotices } = await import('../notify/trial.js');
+    const n = await sendTrialNotices();
+    if (n > 0) console.log(`напоминаний о триале отправлено: ${n}`);
+    return n;
+  },
+  { connection: redis, concurrency: 1 },
+);
+trialWorker.on('failed', (job, err) => console.error('trial notices failed', job?.id, err));
+
 const shutdown = async (): Promise<void> => {
   clearInterval(heartbeat);
   // Отметка убирается сразу: перезапуск воркера не должен три минуты выглядеть
@@ -133,9 +150,11 @@ const shutdown = async (): Promise<void> => {
   await driveWorker.close();
   await recheckWorker.close();
   await notifyWorker.close();
+  await trialWorker.close();
   await driveQueue.close();
   await recheckQueue.close();
   await notifyQueue.close();
+  await trialQueue.close();
   await redis.quit();
   await pool.end();
   await closeOwnerPool();

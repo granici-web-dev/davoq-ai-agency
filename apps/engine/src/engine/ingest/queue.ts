@@ -193,3 +193,25 @@ export async function enqueueIngest(job: IngestJob): Promise<void> {
   }
   await ingestQueue.add('ingest', job, { jobId: job.documentId });
 }
+
+/**
+ * Напоминания о конце пробного периода.
+ *
+ * Раз в час, а не раз в сутки: клиент, у которого триал кончается сегодня,
+ * должен узнать об этом сегодня, а не завтра. Отметка о последней отправленной
+ * ступени лежит в базе, поэтому частый проход не превращается в частые письма.
+ *
+ * jobId постоянный: повторный запуск воркера обновляет расписание,
+ * а не заводит второе.
+ */
+export const trialQueue = new Queue('trial-notices', { connection: redis });
+
+export const TRIAL_CHECK_MINUTES = Number(process.env.TRIAL_CHECK_MINUTES ?? 60);
+
+export async function scheduleTrialNotices(): Promise<void> {
+  await trialQueue.add('check', {}, {
+    repeat: { every: TRIAL_CHECK_MINUTES * 60_000 },
+    jobId: 'trial-notices',
+    removeOnComplete: true,
+  });
+}

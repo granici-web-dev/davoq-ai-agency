@@ -1697,6 +1697,8 @@ function Meter({ label, used, cap, format }: {
 function Subscription(): React.ReactElement {
   const { data, error, reload } = useResource(() => get<SubscriptionData>('/subscription'), []);
   const [portalError, setPortalError] = useState('');
+  const [busy, setBusy] = useState('');
+  const [requested, setRequested] = useState<string | null>(null);
 
   if (error) return <Failed error={error} onRetry={reload} />;
   if (!data) return <Loading />;
@@ -1749,12 +1751,27 @@ function Subscription(): React.ReactElement {
         </ul>
 
         <div className="row">
+          {/* Оплата ТЕКУЩЕГО пакета. Не выбор тарифа — плата за то, что уже есть.
+              Триал кончается ночью, и утром человек должен мочь заплатить сам,
+              а не писать письмо и ждать нас.
+              Тому, у кого подписка уже оформлена, кнопка не показывается:
+              «Оплатить» рядом с «Активна» читается как просьба заплатить дважды.
+              Ему нужна другая кнопка — карта и счета. */}
+          {!data.canManageBilling && (
+          <button className="go" disabled={busy !== ''} onClick={() => {
+            setPortalError(''); setBusy('pay');
+            void post<{ url: string }>('/subscription/checkout')
+              .then((r) => { location.href = r.url; })
+              .catch((e: Error) => { setPortalError(e.message); setBusy(''); });
+          }}>{busy === 'pay' ? t('Se trimite…') : t('Plătește abonamentul')}</button>
+          )}
+
           {data.canManageBilling && (
-            <button onClick={() => {
-              setPortalError('');
+            <button disabled={busy !== ''} onClick={() => {
+              setPortalError(''); setBusy('portal');
               void post<{ url: string }>('/subscription/portal')
                 .then((r) => { location.href = r.url; })
-                .catch((e: Error) => setPortalError(e.message));
+                .catch((e: Error) => { setPortalError(e.message); setBusy(''); });
             }}>{t('Card și facturi')}</button>
           )}
         </div>
@@ -1784,12 +1801,21 @@ function Subscription(): React.ReactElement {
               <ul className="ticks">
                 {p.highlights.map((h) => <li key={h}>{h}</li>)}
               </ul>
-              {p.current && <span className="stamp ok">{t('Pachetul dumneavoastră')}</span>}
+              {p.current ? <span className="stamp ok">{t('Pachetul dumneavoastră')}</span>
+               : requested === p.id ? <span className="stamp ok">{t('Cererea a fost trimisă')}</span>
+               : (
+                <button disabled={busy !== ''} onClick={() => {
+                  setPortalError(''); setBusy(p.id);
+                  void post('/subscription/request', { plan: p.id })
+                    .then(() => { setRequested(p.id); setBusy(''); })
+                    .catch((e: Error) => { setPortalError(e.message); setBusy(''); });
+                }}>{busy === p.id ? t('Se trimite…') : t('Vreau acest pachet')}</button>
+              )}
             </div>
           ))}
         </div>
         <p className="note">
-          {t('Pentru a schimba pachetul, scrieți-ne — configurăm noi și primiți link de plată.')}
+          {t('Schimbarea pachetului se face de către noi — primiți un link de plată în aceeași zi.')}
         </p>
       </section>
     </>

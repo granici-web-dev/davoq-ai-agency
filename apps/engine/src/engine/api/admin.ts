@@ -12,7 +12,7 @@ import { callConnector, formatResult, loadTools } from '../llm/connector.js';
 import { encryptSecret } from '../llm/secrets.js';
 import { assertPublicUrl } from '../llm/ssrf.js';
 import { entitlementOf } from '../billing/entitlement.js';
-import { messageCapFor, planFor, PLANS, PLAN_IDS } from '../plans.js';
+import { isPlanId, messageCapFor, planFor, PLANS, PLAN_IDS } from '../plans.js';
 import { safeFetch } from '../net/safe-fetch.js';
 import { auditTheme, normalizeTheme, PRESETS, type Theme } from '../shared/theme.js';
 import {
@@ -291,6 +291,75 @@ export function registerAdmin(app: FastifyInstance): void {
       canManageBilling: Boolean(t.billing_customer_id) && Boolean(process.env.STRIPE_SECRET_KEY),
     };
   }));
+
+  /**
+   * Оплата ТЕКУЩЕГО пакета.
+   *
+   * Это не выбор тарифа: клиент платит за то, что у него уже есть. Разница
+   * принципиальна — тариф переключаем мы, но заставлять человека писать письмо,
+   * чтобы отдать нам деньги за то, чем он уже пользуется, — это не строгость,
+   * а препятствие. Триал кончается ночью, и утром он должен мочь заплатить сам.
+   */
+  app.post('/admin/api/subscription/checkout', guarded(async ({ session, client, request }) => {
+    const { rows } = await client.query<{ plan: string }>(
+      'SELECT plan FROM tenants WHERE id = $1', [session.tenantId]);
+    const plan = planFor(rows[0]?.plan);
+
+    const host = request.headers.host ?? '';
+    const proto = (request.headers['x-forwarded-proto'] as string | undefined) ?? 'https';
+    const back = `${proto}://${host}/admin#subscription`;
+
+    const { createCheckout } = await import('../../platform/billing/stripe.js');
+    return createCheckout({
+      tenantId: session.tenantId, plan: plan.id,
+      successUrl: back, cancelUrl: back,
+    });
+  }));
+
+  /**
+   * Заявка на другой пакет.
+   *
+   * Не переключение — письмо нам. Клиент нажимает и видит подтверждение,
+   * вместо того чтобы читать «напишите нам» и не знать, куда именно.
+   * Тариф по-прежнему меняем мы, но теперь у нас есть повод это сделать,
+   * а у него — способ попросить.
+   */
+  app.post<{ Body: { plan?: string } }>('/admin/api/subscription/request',
+    guarded(async ({ session, client, body }) => {
+      const wanted = String((body as { plan?: string })?.plan ?? '');
+      if (!isPlanId(wanted)) throw clientError('unknown_plan', 'Pachet necunoscut');
+
+      const { rows } = await client.query<{ name: string; plan: string }>(
+        'SELECT name, plan FROM tenants WHERE id = $1', [session.tenantId]);
+      const t = rows[0];
+      if (!t) throw clientError('tenant_missing', 'Contul nu a fost găsit');
+
+      const to = process.env.SALES_EMAIL ?? process.env.WATCHDOG_EMAIL;
+      if (!to) {
+        // Некому переслать — значит заявка пропадёт. Сказать об этом честно
+        // лучше, чем показать «отправлено» и не отправить.
+        throw clientError('sales_email_missing',
+          'Momentan nu putem prelua cererea. Scrieți-ne direct, vă rugăm.');
+      }
+
+      const { send, defaultMailFrom } = await import('../notify/email.js');
+      await send({
+        from: defaultMailFrom(), to,
+        subject: `Заявка на смену тарифа: ${t.name} → ${PLANS[wanted].name}`,
+        text: [
+          `Клиент: ${t.name}`,
+          `Сейчас: ${planFor(t.plan).name}`,
+          `Просит: ${PLANS[wanted].name} (${PLANS[wanted].priceEur} €/мес)`,
+          `Кто просит: ${session.email}`,
+          ``,
+          `Переключить и прислать ссылку на оплату:`,
+          `  npm run client -- plan <клиент> ${wanted}`,
+          `  npm run client -- checkout <клиент> ${wanted}`,
+        ].join('\n'),
+        html: '',
+      });
+      return { ok: true };
+    }));
 
   /** Ссылка на управление картой и счетами. Живёт минуты — потому и создаётся по нажатию. */
   app.post('/admin/api/subscription/portal', guarded(async ({ session, client, request }) => {

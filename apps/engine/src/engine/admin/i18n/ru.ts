@@ -443,4 +443,18 @@ export const RU: Record<string, string> = {
     "Чтобы сменить пакет, напишите нам — мы настроим и пришлём ссылку на оплату.",
   "Nu există încă un abonament de administrat":
     "Управлять пока нечем: подписки нет",
+  "Plătește abonamentul":
+    "Оплатить подписку",
+  "Vreau acest pachet":
+    "Хочу этот пакет",
+  "Cererea a fost trimisă":
+    "Заявка отправлена",
+  "Schimbarea pachetului se face de către noi — primiți un link de plată în aceeași zi.":
+    "Пакет переключаем мы — ссылку на оплату пришлём в тот же день.",
+  "Pachet necunoscut":
+    "Неизвестный пакет",
+  "Momentan nu putem prelua cererea. Scrieți-ne direct, vă rugăm.":
+    "Сейчас принять заявку не можем. Напишите нам напрямую.",
+  "Se trimite…":
+    "Отправляется…",
 };
