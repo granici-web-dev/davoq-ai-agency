@@ -2,10 +2,56 @@ import pg from 'pg';
 
 const { Pool } = pg;
 
+/**
+ * Рабочий пул приложения. Подключается ролью `assistwidget_app`
+ * (NOSUPERUSER, NOBYPASSRLS) — именно поэтому политики RLS вообще
+ * что-то значат. Владелец базы superuser и обходит даже FORCE RLS,
+ * то есть под ним изоляция тенантов существует только на бумаге.
+ */
 export const pool = new Pool({
   connectionString: process.env.DATABASE_URL,
   max: 10,
 });
+
+/**
+ * Пул владельца. Нужен ровно для двух вещей, которые по определению
+ * происходят вне тенантного контекста: миграции и заведение тенанта.
+ * Всё остальное обязано ходить через `pool` — иначе смысл разделения
+ * теряется на первом же удобном случае.
+ *
+ * Отдельная переменная окружения, а не флаг: адрес с правами владельца
+ * не должен случайно оказаться в конфигурации веб-процесса.
+ */
+let owner: pg.Pool | null = null;
+const ownerPool = (): pg.Pool => {
+  const url = process.env.DATABASE_ADMIN_URL;
+  if (!url) {
+    throw new Error(
+      'DATABASE_ADMIN_URL не задан — заведение тенантов и миграции требуют прав владельца базы',
+    );
+  }
+  owner ??= new Pool({ connectionString: url, max: 4 });
+  return owner;
+};
+
+/**
+ * Провизионирование: создание тенанта и миграции. Ходит под владельцем,
+ * то есть RLS здесь не применяется. Пользовательский ввод сюда попадать
+ * не должен — вызывается из CLI и онбординга, не из веб-обработчиков.
+ */
+export async function withOwner<T>(fn: (client: pg.PoolClient) => Promise<T>): Promise<T> {
+  const client = await ownerPool().connect();
+  try {
+    return await fn(client);
+  } finally {
+    client.release();
+  }
+}
+
+export const closeOwnerPool = async (): Promise<void> => {
+  if (owner) await owner.end();
+  owner = null;
+};
 
 /**
  * Выполняет работу в тенантном контексте.
@@ -43,7 +89,11 @@ export async function withTenant<T>(
   }
 }
 
-/** Платформенный контекст: agencies, создание тенантов, служебные задачи. Без RLS. */
+/**
+ * Платформенный контекст: таблицы без RLS (admin_users, admin_sessions)
+ * и функции SECURITY DEFINER. Ходит рабочей ролью — «платформенный»
+ * здесь значит «без тенантного контекста», а не «с правами владельца».
+ */
 export async function withPlatform<T>(fn: (client: pg.PoolClient) => Promise<T>): Promise<T> {
   const client = await pool.connect();
   try {

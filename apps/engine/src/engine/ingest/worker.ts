@@ -1,7 +1,7 @@
 // Первым импортом: остальные модули создают пулы и клиентов на этапе загрузки.
 import '../env.js';
 import { Worker } from 'bullmq';
-import { pool } from '../db/pool.js';
+import { closeOwnerPool, pool, withOwner } from '../db/pool.js';
 import { processDocument } from './index.js';
 import {
   driveQueue, enqueueRecheck, notifyQueue, recheckQueue, redis, scheduleDriveSync,
@@ -93,8 +93,13 @@ notifyWorker.on('failed', (job, err) =>
 // Расписание восстанавливается при старте: тенанты с подключённым диском должны
 // синхронизироваться и после перезапуска воркера, без ручного вмешательства.
 {
-  const { rows } = await pool.query<{ tenant_id: string }>(
-    `SELECT tenant_id FROM connectors WHERE type = 'google_drive' AND status = 'active'`,
+  // Восстановление расписания — операция поверх всех тенантов сразу, то есть
+  // по определению вне тенантного контекста. Рабочая роль под RLS такой запрос
+  // видит пустым, и без пула владельца сверка молча перестала бы запускаться.
+  const { rows } = await withOwner((client) =>
+    client.query<{ tenant_id: string }>(
+      `SELECT tenant_id FROM connectors WHERE type = 'google_drive' AND status = 'active'`,
+    ),
   );
   for (const r of rows) await scheduleDriveSync(r.tenant_id);
   console.log(`drive sync каждые ${DRIVE_SYNC_MINUTES} мин для ${rows.length} тенант(ов)`);
@@ -112,6 +117,7 @@ const shutdown = async (): Promise<void> => {
   await notifyQueue.close();
   await redis.quit();
   await pool.end();
+  await closeOwnerPool();
   process.exit(0);
 };
 

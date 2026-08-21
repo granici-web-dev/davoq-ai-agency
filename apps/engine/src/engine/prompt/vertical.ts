@@ -106,11 +106,30 @@ export function loadVertical(id: string): Vertical {
       minSimilarity: r.min_similarity ?? 0.35,
       approvedMinSimilarity: r.approved_min_similarity ?? 0.3,
     },
-    onboardingChecklist: (v.onboarding_checklist as string[] | undefined) ?? [],
+    onboardingChecklist: checklist(v.onboarding_checklist, where),
   };
 
   cache.set(id, vertical);
   return vertical;
+}
+
+/**
+ * Пункт чек-листа с двоеточием YAML разбирает как словарь, если он не в кавычках,
+ * и в вывод уезжает [object Object]. Проверяем тип, а не надеемся на аккуратность:
+ * это ровно тот случай, ради которого схема и проверяется.
+ */
+function checklist(raw: unknown, where: string): string[] {
+  if (raw === undefined || raw === null) return [];
+  if (!Array.isArray(raw)) throw new Error(`${where}: onboarding_checklist — список строк`);
+  return raw.map((item, i) => {
+    if (typeof item !== 'string') {
+      throw new Error(
+        `${where}: onboarding_checklist[${i}] — не строка. ` +
+        'Пункт с двоеточием нужно взять в кавычки, иначе YAML читает его как словарь.',
+      );
+    }
+    return item;
+  });
 }
 
 /** Путь блока не должен выводить за каталог вертикали — файлы читаются по имени из YAML. */

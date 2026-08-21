@@ -1,0 +1,184 @@
+import { existsSync, readFileSync, readdirSync } from 'node:fs';
+import { join, resolve } from 'node:path';
+import { parse } from 'yaml';
+
+/**
+ * Конфигурация клиента.
+ *
+ * Важно понимать, чем этот файл НЕ является: он не читается в рантайме.
+ * Приветствие, тему, адрес для заявок и утверждённые ответы клиент правит
+ * из панели, и правда о них живёт в базе. Файл — вход онбординга: он даёт
+ * воспроизводимое заведение клиента и запись о том, с чего всё начиналось.
+ *
+ *   clients/<id>/config.yaml ──apply──> база ──читает──> движок
+ *
+ * Секретов здесь нет и быть не может: токены Drive и ключи коннекторов
+ * шифруются SECRETS_KEY и лежат в базе, в конфиге — только имена переменных.
+ */
+
+export interface ClientConfig {
+  id: string;
+  name: string;
+  vertical: string;
+  plan: string;
+  locale: { default: string };
+  channels: {
+    web: {
+      domains: string[];
+      widget: {
+        preset?: string;
+        position?: string;
+        botName?: string;
+        logo?: string;
+        welcome?: Record<string, string>;
+        aiDisclosure?: Record<string, string>;
+      };
+    };
+  };
+  brand: { tone?: string | undefined };
+  catalog: { priceGuidance?: string | undefined };
+  qualification: {
+    inherit: boolean;
+    override: Array<{ key: string; label?: string; description?: string }>;
+    extra: Array<{ key: string; label: string; description: string }>;
+    drop: string[];
+  };
+  profile: Record<string, unknown>;
+  notifications: { leads: { email?: string; from?: string } };
+  retrieval: Record<string, number>;
+  panel: { hiddenScreens: string[] };
+  monthlyMessageCap: number | null;
+}
+
+export const CLIENTS_ROOT = resolve(
+  process.env.CLIENTS_DIR ?? new URL('../../../clients', import.meta.url).pathname,
+);
+
+export const listClients = (): string[] =>
+  existsSync(CLIENTS_ROOT)
+    ? readdirSync(CLIENTS_ROOT, { withFileTypes: true })
+        .filter((e) => e.isDirectory() && existsSync(join(CLIENTS_ROOT, e.name, 'config.yaml')))
+        .map((e) => e.name)
+        .sort()
+    : [];
+
+export const clientDir = (id: string): string => join(CLIENTS_ROOT, id);
+
+/**
+ * Разбор с проверкой. YAML прощает то, чего JSON не даёт написать: `no`
+ * молча становится булевым false, `ro` — строкой, а `01` — числом. Поэтому
+ * каждое поле, от которого что-то зависит, проверяется здесь и падает
+ * с внятным текстом, а не уезжает в базу в неожиданном типе.
+ */
+export function loadClientConfig(id: string): ClientConfig {
+  const file = join(clientDir(id), 'config.yaml');
+  if (!existsSync(file)) {
+    throw new Error(
+      `конфиг клиента «${id}» не найден: ${file}. Известные: ${listClients().join(', ') || '—'}`,
+    );
+  }
+
+  const raw = parse(readFileSync(file, 'utf8')) as Record<string, unknown>;
+  const where = `clients/${id}/config.yaml`;
+  const need = (v: unknown, what: string): void => {
+    if (v === undefined || v === null || v === '') throw new Error(`${where}: нужно поле ${what}`);
+  };
+
+  if (raw.schema !== 1) throw new Error(`${where}: поддерживается только schema: 1`);
+  need(raw.id, 'id');
+  if (raw.id !== id) throw new Error(`${where}: id «${String(raw.id)}» не совпадает с каталогом «${id}»`);
+  need(raw.name, 'name');
+  need(raw.vertical, 'vertical');
+
+  const channels = (raw.channels ?? {}) as Record<string, Record<string, unknown>>;
+  const web = (channels.web ?? {}) as Record<string, unknown>;
+  const domains = (web.domains ?? []) as string[];
+  if (!Array.isArray(domains) || domains.length === 0) {
+    throw new Error(`${where}: channels.web.domains не может быть пустым — виджет проверяет Origin`);
+  }
+  for (const d of domains) {
+    if (typeof d !== 'string' || d.includes('/') || d.includes(':')) {
+      throw new Error(`${where}: домен «${String(d)}» — нужно имя хоста без схемы и пути`);
+    }
+  }
+
+  const widget = (web.widget ?? {}) as Record<string, unknown>;
+  const locale = (raw.locale ?? {}) as Record<string, unknown>;
+  const qual = (raw.qualification ?? {}) as Record<string, unknown>;
+  const notif = ((raw.notifications ?? {}) as Record<string, unknown>).leads as
+    | Record<string, string>
+    | undefined;
+  const panel = (raw.panel ?? {}) as Record<string, unknown>;
+
+  const localeDefault = String(locale.default ?? 'en');
+  if (!/^[a-z]{2}$/.test(localeDefault)) {
+    throw new Error(`${where}: locale.default — двухбуквенный код, получено «${localeDefault}»`);
+  }
+
+  const cap = raw.monthly_message_cap;
+  if (cap !== undefined && cap !== null && typeof cap !== 'number') {
+    throw new Error(`${where}: monthly_message_cap — число или пусто`);
+  }
+
+  return {
+    id,
+    name: String(raw.name),
+    vertical: String(raw.vertical),
+    plan: String(raw.plan ?? 'starter'),
+    locale: { default: localeDefault },
+    channels: {
+      web: {
+        domains,
+        widget: {
+          ...(widget.preset ? { preset: String(widget.preset) } : {}),
+          ...(widget.position ? { position: String(widget.position) } : {}),
+          ...(widget.bot_name ? { botName: String(widget.bot_name) } : {}),
+          ...(widget.logo ? { logo: String(widget.logo) } : {}),
+          ...(widget.welcome ? { welcome: widget.welcome as Record<string, string> } : {}),
+          ...(widget.ai_disclosure
+            ? { aiDisclosure: widget.ai_disclosure as Record<string, string> }
+            : {}),
+        },
+      },
+    },
+    // Блоки `|` в YAML сохраняют хвостовой перевод строки. В базе он ничего
+    // не значит, а при сравнении даёт вечное «изменилось» на неизменном тексте.
+    brand: { ...(raw.brand ? { tone: (raw.brand as { tone?: string }).tone?.trim() } : {}) },
+    catalog: {
+      ...(raw.catalog
+        ? { priceGuidance: (raw.catalog as { price_guidance?: string }).price_guidance?.trim() }
+        : {}),
+    },
+    qualification: {
+      inherit: qual.inherit !== false,
+      override: (qual.override ?? []) as ClientConfig['qualification']['override'],
+      extra: (qual.extra ?? []) as ClientConfig['qualification']['extra'],
+      drop: (qual.drop ?? []) as string[],
+    },
+    profile: buildProfile(raw),
+    // Пустая строка в YAML читается как «не задано»: в базе для этого NULL,
+    // и без нормализации применение показывало бы изменение «— → —».
+    notifications: {
+      leads: {
+        ...(notif?.email?.trim() ? { email: notif.email.trim() } : {}),
+        ...(notif?.from?.trim() ? { from: notif.from.trim() } : {}),
+      },
+    },
+    retrieval: (raw.retrieval ?? {}) as Record<string, number>,
+    panel: { hiddenScreens: (panel.hidden_screens ?? []) as string[] },
+    monthlyMessageCap: (cap as number | null | undefined) ?? null,
+  };
+}
+
+/**
+ * Профиль — факты о клиенте, которые нужны боту в разговоре, а не в поиске:
+ * шоурумы, тон общения, что угодно ещё, добавленное вертикалью. Собирается
+ * в один объект, чтобы промпт подставлял его по имени плейсхолдера.
+ */
+function buildProfile(raw: Record<string, unknown>): Record<string, unknown> {
+  const profile: Record<string, unknown> = { ...((raw.profile as object) ?? {}) };
+  if (raw.showrooms) profile.showrooms = raw.showrooms;
+  const brand = raw.brand as { tone?: string } | undefined;
+  if (brand?.tone) profile.tone = brand.tone.trim();
+  return profile;
+}

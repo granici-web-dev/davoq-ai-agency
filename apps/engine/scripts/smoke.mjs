@@ -19,7 +19,12 @@ process.loadEnvFile();
 const BASE = process.env.BASE ?? `http://localhost:${process.env.PORT ?? 3779}`;
 const VISITOR = `smoke-${process.pid}`;
 
-const pool = new pg.Pool({ connectionString: process.env.DATABASE_URL });
+// Тест смотрит в базу поверх тенантов (выбирает клиента, проверяет чужие
+// таблицы), поэтому подключается правами владельца. Само приложение при этом
+// работает под ролью без права обходить RLS — это и проверяет test:isolation.
+const pool = new pg.Pool({
+  connectionString: process.env.DATABASE_ADMIN_URL ?? process.env.DATABASE_URL,
+});
 
 const fail = (msg) => {
   console.error(`  ✗ ${msg}`);

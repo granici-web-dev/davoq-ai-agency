@@ -1,0 +1,68 @@
+# Конфигурация клиента «SofaBelle» — пилотный клиент, мебель на заказ, Румыния.
+#
+# Это ВХОД онбординга, а не источник правды в рантайме. Команда
+# «npm run client apply sofabelle» переносит отсюда всё в базу; дальше
+# приветствие, тему и адрес для заявок клиент правит сам из панели,
+# и повторное применение его правки не затирает.
+#
+# Секретов здесь нет: токен Google Drive и ключи коннекторов шифруются
+# SECRETS_KEY и живут в базе.
+schema: 1
+id: sofabelle
+name: SofaBelle
+
+vertical: furniture
+plan: business
+
+locale:
+  default: ro
+
+channels:
+  web:
+    domains:
+      - sofabelle.ro
+    widget:
+      bot_name: SofaBelle
+      logo: assets/logo.svg
+      position: bottom-right
+      welcome:
+        ro: Bună! Sunt asistentul SofaBelle. Întrebați-mă despre garanție, livrare sau termene.
+        ru: Здравствуйте! Я ассистент SofaBelle. Спросите про гарантию, доставку или сроки.
+        en: Hi! I am the SofaBelle assistant. Ask me about warranty, delivery or lead times.
+
+brand:
+  tone: |
+    Обращение на «вы». Коротко, по-деловому, без восторженных прилагательных.
+    Не обещать сроков и цен, которых нет в материалах.
+
+catalog:
+  price_guidance: |
+    Paturi, fotolii, saltele și celelalte produse: prețul este publicat pe pagina produsului și depinde de dimensiune — spune-l exact așa cum este scris.
+    Canapele și canapele de colț: nu au un preț unic, se compun din module prin configurator, iar umplutura, tapițeria și cerințele speciale schimbă totalul. Prețul exact îl calculează managerul.
+    În showroom-uri există produse gata făcute din stoc, iar la secțiunea Outlet reduceri de până la 30%.
+
+# Сценарий квалификации наследуется от ниши «Кастомная мягкая мебель» целиком:
+# продукт, размеры, наполнитель, обивка, механизм, город.
+qualification:
+  inherit: true
+
+# Данные с их собственного сайта — телефоны шоурумов.
+showrooms:
+  - { city: Brașov, phone: "+40 720 111 224" }
+  - { city: București, phone: "+40 720 111 225" }
+  - { city: Cluj-Napoca, phone: "+40 799 111 224" }
+
+notifications:
+  leads:
+    # На время пилота — тестовый адрес. Заменить на адрес отдела продаж.
+    email: designer.nefele@gmail.com
+    from: SofaBelle Asistent <asistent@sofabelle.ro>
+
+# Пороги ниши подходят: корпус румынский и обычный.
+retrieval: {}
+
+panel:
+  # Единственный источник материалов — папка на Google Drive, поэтому база
+  # знаний и коннекторы скрыты: два лишних экрана только заставляли бы
+  # директора выбирать, куда класть файл.
+  hidden_screens: [kb, connectors]

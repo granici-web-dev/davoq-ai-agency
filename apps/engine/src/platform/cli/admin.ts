@@ -15,7 +15,7 @@ import '../../engine/env.js';
 import { randomBytes } from 'node:crypto';
 import { readFile } from 'node:fs/promises';
 import { basename, extname } from 'node:path';
-import { pool, withPlatform, withTenant } from '../../engine/db/pool.js';
+import { closeOwnerPool, pool, withOwner, withPlatform, withTenant } from '../../engine/db/pool.js';
 import { ingestNow, ingestUrl } from '../../engine/ingest/index.js';
 import { retrieve } from '../../engine/rag/retrieve.js';
 
@@ -36,7 +36,7 @@ switch (cmd) {
     if (!name || !domain) throw new Error('usage: create-tenant <name> <domain> [locale]');
 
     const publicKey = `pk_${randomBytes(16).toString('hex')}`;
-    const id = await withPlatform(async (client) => {
+    const id = await withOwner(async (client) => {
       const { rows } = await client.query<{ id: string }>(
         `INSERT INTO tenants (name, allowed_domains, locale_default, public_key)
          VALUES ($1, $2, $3, $4) RETURNING id`,
@@ -240,3 +240,4 @@ switch (cmd) {
 }
 
 await pool.end();
+await closeOwnerPool();

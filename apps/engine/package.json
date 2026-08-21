@@ -16,7 +16,9 @@
     "build:admin": "esbuild src/engine/admin/main.tsx --bundle --minify --format=iife --target=es2020 --outfile=dist/admin.js",
     "worker": "tsx src/engine/ingest/worker.ts",
     "smoke": "node scripts/smoke.mjs",
-    "cli": "tsx --env-file=.env src/platform/cli/admin.ts"
+    "cli": "tsx --env-file=.env src/platform/cli/admin.ts",
+    "client": "tsx --env-file=.env src/platform/cli/client.ts",
+    "test:isolation": "tsx --env-file=.env scripts/isolation-test.mts"
   },
   "dependencies": {
     "@anthropic-ai/bedrock-sdk": "^0.30.0",

@@ -6,7 +6,11 @@ import pg from 'pg';
 
 const dir = new URL('../../../migrations/', import.meta.url).pathname;
 
-const client = new pg.Client({ connectionString: process.env.DATABASE_URL });
+// Миграции идут под владельцем базы: рабочая роль намеренно не умеет
+// создавать таблицы и менять схему.
+const url = process.env.DATABASE_ADMIN_URL;
+if (!url) throw new Error('DATABASE_ADMIN_URL не задан — миграции требуют прав владельца базы');
+const client = new pg.Client({ connectionString: url });
 await client.connect();
 
 await client.query(`
