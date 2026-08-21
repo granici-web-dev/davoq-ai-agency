@@ -31,6 +31,7 @@
     "bullmq": "^5.0.0",
     "cheerio": "^1.2.0",
     "fastify": "^5.0.0",
+    "geist": "^1.7.2",
     "ioredis": "^5.4.0",
     "jszip": "^3.10.1",
     "mammoth": "^1.12.1",
