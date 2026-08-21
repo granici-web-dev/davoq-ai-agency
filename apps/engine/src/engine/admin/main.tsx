@@ -54,6 +54,36 @@ const DEEP_LINK = typeof location === 'undefined' ? null : takeDeepLink();
 const dt = (v: string): string => new Date(v).toLocaleString('ro-RO');
 const d = (v: string): string => new Date(v).toLocaleDateString('ro-RO');
 
+/**
+ * Иконки. Свои, а не из библиотеки: Lucide и Feather — первый выбор
+ * по умолчанию, и интерфейс с ними узнаётся как собранный из деталей.
+ * Один штрих 1.5, одна сетка 20×20, скруглённые концы — набор должен
+ * читаться как один почерк, а не как подборка.
+ */
+const PATHS: Record<string, React.ReactNode> = {
+  drive: <><path d="M3 7.5 6.2 4h7.6L17 7.5" /><path d="M3 7.5h14v7.2a1.3 1.3 0 0 1-1.3 1.3H4.3A1.3 1.3 0 0 1 3 14.7Z" /><path d="M7.5 11h5" /></>,
+  kb: <><path d="M4 4.6A1.6 1.6 0 0 1 5.6 3H16v14H5.6A1.6 1.6 0 0 1 4 15.4Z" /><path d="M7 7h6M7 10h6" /></>,
+  aspect: <><circle cx="10" cy="10" r="7" /><circle cx="7.4" cy="8.2" r="1" /><circle cx="12.6" cy="8.2" r="1" /><path d="M10 17c1.5 0 2-1 1.4-1.9-.5-.8.1-1.6 1-1.6H14" /></>,
+  connectors: <><path d="M7 3v4M13 3v4" /><path d="M5 7h10v3a5 5 0 0 1-10 0Z" /><path d="M10 15v2.5" /></>,
+  chats: <><path d="M4 5.6A1.6 1.6 0 0 1 5.6 4h8.8A1.6 1.6 0 0 1 16 5.6v5.8a1.6 1.6 0 0 1-1.6 1.6H8l-4 3.4Z" /></>,
+  analytics: <><path d="M3.5 16.5h13" /><path d="M6 13V9M10 16V5M14 16v-6" /></>,
+  install: <><path d="M7.5 6.5 4 10l3.5 3.5" /><path d="M12.5 6.5 16 10l-3.5 3.5" /></>,
+  search: <><circle cx="9" cy="9" r="5.2" /><path d="m13 13 3.5 3.5" /></>,
+  logout: <><path d="M8 3.5H5.3A1.3 1.3 0 0 0 4 4.8v10.4a1.3 1.3 0 0 0 1.3 1.3H8" /><path d="M12 13.5 15.5 10 12 6.5" /><path d="M15.5 10h-8" /></>,
+};
+
+function Icon({ name }: { name: string }): React.ReactElement | null {
+  const d = PATHS[name];
+  if (!d) return null;
+  return (
+    <svg className="icon" viewBox="0 0 20 20" width="20" height="20" fill="none"
+         stroke="currentColor" strokeWidth="1.5" strokeLinecap="round"
+         strokeLinejoin="round" aria-hidden="true">
+      {d}
+    </svg>
+  );
+}
+
 function Spinner(): React.ReactElement {
   return <span className="spinner" role="status" aria-label={t('Se încarcă')} />;
 }
@@ -71,6 +101,9 @@ function App(): React.ReactElement {
     };
   } | null>(null);
   const [screen, setScreen] = useState<Screen | null>(DEEP_LINK?.screen ?? null);
+  // Поиск из верхней строки — не украшение: он уводит в переписки
+  // с уже применённым фильтром по тексту, то есть делает то, что обещает.
+  const [query, setQuery] = useState('');
   const [checking, setChecking] = useState(true);
 
   useEffect(() => {
@@ -114,6 +147,7 @@ function App(): React.ReactElement {
           {screens.map(([id, label]) => (
             <button key={id} className="coupon" onClick={() => setScreen(id)}
                     {...(current === id ? { 'aria-current': 'page' as const } : {})}>
+              <Icon name={id} />
               {label}
             </button>
           ))}
@@ -121,20 +155,37 @@ function App(): React.ReactElement {
 
         <div className="foot">
           <ThemeSwitch />
-          <div className="who">
-            <span>{me.email}</span>
-            <button onClick={() => post('/logout').then(() => location.reload())}>{t('Ieșire')}</button>
-          </div>
         </div>
       </aside>
 
       <div className="main">
+        <header className="topbar">
+          <h1>{screens.find(([id]) => id === current)?.[1]}</h1>
+          <form className="seek" onSubmit={(e) => {
+            e.preventDefault();
+            const q = new FormData(e.currentTarget).get('q');
+            setQuery(typeof q === 'string' ? q.trim() : '');
+            setScreen('chats');
+          }}>
+            <Icon name="search" />
+            <input name="q" type="search" placeholder={t('Caută în conversații')}
+                   aria-label={t('Caută în conversații')} />
+          </form>
+          <div className="who">
+            <span>{me.email}</span>
+            <button className="icon-btn" title={t('Ieșire')} aria-label={t('Ieșire')}
+                    onClick={() => post('/logout').then(() => location.reload())}>
+              <Icon name="logout" />
+            </button>
+          </div>
+        </header>
       {current === 'kb' && <Knowledge />}
       {current === 'drive' && <Drive />}
       {current === 'aspect' && <Aspect />}
       {current === 'connectors' && <Connectors />}
       {current === 'chats' && (
-        <Chats locales={me.tenant.locales} {...(DEEP_LINK ? { initialOpen: DEEP_LINK.conversationId } : {})} />
+        <Chats key={query} locales={me.tenant.locales} initialQuery={query}
+               {...(DEEP_LINK ? { initialOpen: DEEP_LINK.conversationId } : {})} />
       )}
       {current === 'analytics' && <Analytics />}
       {current === 'install' && <Install />}
@@ -859,8 +910,11 @@ interface Detail {
 const EMPTY_F = { from: '', to: '', q: '', locale: '', hasLead: false, hasGap: false };
 const PER = 25;
 
-function Chats({ initialOpen, locales }: { initialOpen?: string; locales: string[] }): React.ReactElement {
-  const [f, setF] = useState(EMPTY_F);
+function Chats(
+  { initialOpen, locales, initialQuery }:
+  { initialOpen?: string; locales: string[]; initialQuery?: string },
+): React.ReactElement {
+  const [f, setF] = useState({ ...EMPTY_F, q: initialQuery ?? '' });
   const [data, setData] = useState<{ rows: Conv[]; total: number } | null>(null);
   const [page, setPage] = useState(0);
   const [open, setOpen] = useState<string | null>(initialOpen ?? null);
@@ -1111,6 +1165,63 @@ interface Approved {
   id: string; question: string; answer: string; updated_at: string;
 }
 
+/**
+ * График расхода за 30 дней.
+ *
+ * Настоящие данные, а не украшение: по нему видно, когда виджет реально
+ * разговаривал, а когда молчал. Без осей и сетки — они здесь ничего не
+ * добавляют; подписаны только края и максимум, то есть ровно те три числа,
+ * которые с графика и считывают.
+ *
+ * Рисуется вручную, а не библиотекой: одна кривая с заливкой не стоит
+ * трёхсот килобайт зависимости, а собственный SVG слушается токенов темы.
+ */
+function UsageChart({ rows }: { rows: Array<{ date: string; messages: number }> }): React.ReactElement | null {
+  const points = useMemo(() => {
+    if (rows.length < 2) return null;
+    const max = Math.max(...rows.map((r) => r.messages), 1);
+    const W = 100;
+    const H = 34;
+    const step = W / (rows.length - 1);
+    const xy = rows.map((r, i) => [i * step, H - (r.messages / max) * H] as const);
+    // Сглаживание по средним точкам: ломаная из тридцати отрезков читается
+    // как шум, а не как ход событий.
+    let d = `M ${xy[0]![0]} ${xy[0]![1]}`;
+    for (let i = 1; i < xy.length; i++) {
+      const [px, py] = xy[i - 1]!;
+      const [cx, cy] = xy[i]!;
+      d += ` C ${(px + cx) / 2} ${py}, ${(px + cx) / 2} ${cy}, ${cx} ${cy}`;
+    }
+    return { d, area: `${d} L ${W} ${H} L 0 ${H} Z`, max, last: xy[xy.length - 1]! };
+  }, [rows]);
+
+  if (!points) return null;
+  const first = rows[0]!.date;
+  const last = rows[rows.length - 1]!.date;
+
+  return (
+    <figure className="chart">
+      <svg viewBox="0 0 100 34" preserveAspectRatio="none" role="img"
+           aria-label={tf('Mesaje pe zi, maximum {max}', { max: points.max })}>
+        <defs>
+          <linearGradient id="usageFill" x1="0" y1="0" x2="0" y2="1">
+            <stop offset="0%" stopColor="var(--accent)" stopOpacity=".55" />
+            <stop offset="100%" stopColor="var(--accent)" stopOpacity="0" />
+          </linearGradient>
+        </defs>
+        <path d={points.area} fill="url(#usageFill)" />
+        <path d={points.d} fill="none" stroke="var(--accent-strong)" strokeWidth="1"
+              vectorEffect="non-scaling-stroke" strokeLinejoin="round" />
+      </svg>
+      <figcaption>
+        <span>{d(first)}</span>
+        <span className="peak">{tf('maxim {max} pe zi', { max: points.max })}</span>
+        <span>{d(last)}</span>
+      </figcaption>
+    </figure>
+  );
+}
+
 function Analytics(): React.ReactElement {
   const [d2, setD2] = useState<AnalyticsData | null>(null);
   const [approved, setApproved] = useState<Approved[]>([]);
@@ -1132,6 +1243,7 @@ function Analytics(): React.ReactElement {
           )}
           <p className="figure">{total}<small>{t('în ultimele 30 de zile')}</small></p>
         </div>
+        <UsageChart rows={d2.usage} />
       </section>
 
       <section className="sheet">

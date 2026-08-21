@@ -363,4 +363,10 @@ export const RU: Record<string, string> = {
     "Тёмная",
   "Tema panoului":
     "Тема панели",
+  "Caută în conversații":
+    "Поиск по перепискам",
+  "Mesaje pe zi, maximum {max}":
+    "Сообщений в день, максимум {max}",
+  "maxim {max} pe zi":
+    "максимум {max} в день",
 };
