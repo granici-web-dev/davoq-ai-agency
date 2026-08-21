@@ -4,17 +4,23 @@ import { STRINGS, type Locale } from '../shared/i18n.js';
 import { auditTheme, type ContrastWarning, type Preset, type Theme } from '../shared/theme.js';
 import { del, get, post, put, upload, UnauthorizedError } from './api.js';
 import { previewSrcDoc } from './preview.js';
+import { setPanelLocale, t, tf } from './i18n.js';
 
 type Screen = 'kb' | 'drive' | 'aspect' | 'connectors' | 'chats' | 'analytics' | 'install';
 
-const ALL_SCREENS: Array<[Screen, string]> = [
-  ['kb', 'Bază de cunoștințe'],
-  ['drive', 'Google Drive'],
-  ['aspect', 'Aspect'],
-  ['connectors', 'Conectori'],
-  ['chats', 'Conversații'],
-  ['analytics', 'Analize'],
-  ['install', 'Instalare'],
+/**
+ * Названия разделов вычисляются на каждой отрисовке, а не один раз при импорте.
+ * Константа с t() на уровне модуля вычислилась бы до того, как язык вообще
+ * известен — панель мигала бы румынским меню у русского клиента.
+ */
+const allScreens = (): Array<[Screen, string]> => [
+  ['kb', t('Bază de cunoștințe')],
+  ['drive', t('Google Drive')],
+  ['aspect', t('Aspect')],
+  ['connectors', t('Conectori')],
+  ['chats', t('Conversații')],
+  ['analytics', t('Analize')],
+  ['install', t('Instalare')],
 ];
 
 /**
@@ -26,7 +32,7 @@ const ALL_SCREENS: Array<[Screen, string]> = [
  * Скрыты, а не удалены: экраны рабочие, эндпоинты на месте.
  */
 const visibleScreens = (hidden: string[]): Array<[Screen, string]> =>
-  ALL_SCREENS.filter(([id]) => !hidden.includes(id));
+  allScreens().filter(([id]) => !hidden.includes(id));
 
 /**
  * Ссылка из письма о заявке: `#chats/<id>` открывает панель сразу на нужном
@@ -49,23 +55,34 @@ const dt = (v: string): string => new Date(v).toLocaleString('ro-RO');
 const d = (v: string): string => new Date(v).toLocaleDateString('ro-RO');
 
 function Spinner(): React.ReactElement {
-  return <span className="spinner" role="status" aria-label="Se încarcă" />;
+  return <span className="spinner" role="status" aria-label={t('Se încarcă')} />;
 }
 
 function Loading(): React.ReactElement {
-  return <div className="sheet row"><Spinner /><span className="note">Se încarcă…</span></div>;
+  return <div className="sheet row"><Spinner /><span className="note">{t('Se încarcă…')}</span></div>;
 }
 
 function App(): React.ReactElement {
   const [me, setMe] = useState<{
     email: string;
-    tenant: { name: string; plan: string; logo_url: string | null; hiddenScreens: string[] };
+    tenant: {
+      name: string; plan: string; logo_url: string | null;
+      hiddenScreens: string[]; locale: string;
+    };
   } | null>(null);
   const [screen, setScreen] = useState<Screen | null>(DEEP_LINK?.screen ?? null);
   const [checking, setChecking] = useState(true);
 
   useEffect(() => {
-    get<typeof me>('/me').then(setMe).catch(() => setMe(null)).finally(() => setChecking(false));
+    get<typeof me>('/me')
+      .then((data) => {
+        // Язык ставится до первой отрисовки экранов: иначе панель успевает
+        // мигнуть румынским у клиента, который его не знает.
+        if (data) setPanelLocale(data.tenant.locale);
+        setMe(data);
+      })
+      .catch(() => setMe(null))
+      .finally(() => setChecking(false));
   }, []);
 
   if (checking) return <div className="shell"><Loading /></div>;
@@ -94,11 +111,11 @@ function App(): React.ReactElement {
         </div>
         <div className="who">
           <span>{me.email}</span>
-          <button onClick={() => post('/logout').then(() => location.reload())}>Ieșire</button>
+          <button onClick={() => post('/logout').then(() => location.reload())}>{t('Ieșire')}</button>
         </div>
       </header>
 
-      <nav className="coupons" aria-label="Secțiuni">
+      <nav className="coupons" aria-label={t('Secțiuni')}>
         {screens.map(([id, label]) => (
           <button key={id} className="coupon" onClick={() => setScreen(id)}
                   {...(current === id ? { 'aria-current': 'page' as const } : {})}>
@@ -132,7 +149,7 @@ function Login(): React.ReactElement {
       location.reload();
     } catch (err) {
       setError(err instanceof UnauthorizedError
-        ? 'Email sau parolă greșită.'
+        ? t('Email sau parolă greșită.')
         : `Nu am putut verifica datele: ${(err as Error).message}`);
       setBusy(false);
     }
@@ -145,16 +162,16 @@ function Login(): React.ReactElement {
       </header>
       <form className="sheet stack" onSubmit={submit}>
         <h2>Autentificare</h2>
-        <label className="field">Email
+        <label className="field">{t('Email')}
           <input type="email" value={form.email} autoComplete="username" required
                  onChange={(e) => setForm({ ...form, email: e.target.value })} />
         </label>
-        <label className="field">Parolă
+        <label className="field">{t('Parolă')}
           <input type="password" value={form.password} autoComplete="current-password" required
                  onChange={(e) => setForm({ ...form, password: e.target.value })} />
         </label>
         {error && <p className="note err">{error}</p>}
-        <button className="go" disabled={busy}>{busy ? 'Se verifică…' : 'Intră în cont'}</button>
+        <button className="go" disabled={busy}>{busy ? t('Se verifică…') : t('Intră în cont')}</button>
       </form>
     </div>
   );
@@ -167,15 +184,16 @@ interface Doc {
   status: string; error_text: string | null; chunk_count: number; uploaded_at: string;
 }
 
-const STATUS: Record<string, [string, string]> = {
-  indexed: ['ok', 'Indexat'],
-  processing: ['wait', 'Se procesează'],
-  uploaded: ['wait', 'În așteptare'],
-  failed: ['void', 'Eșuat'],
-};
+/** Тоже функцией, и по той же причине, что и названия разделов. */
+const statusLabels = (): Record<string, [string, string]> => ({
+  indexed: ['ok', t('Indexat')],
+  processing: ['wait', t('Se procesează')],
+  uploaded: ['wait', t('În așteptare')],
+  failed: ['void', t('Eșuat')],
+});
 
 function Stamp({ status }: { status: string }): React.ReactElement {
-  const [cls, label] = STATUS[status] ?? ['wait', status];
+  const [cls, label] = statusLabels()[status] ?? ['wait', status];
   return <span className={`stamp ${cls}`}>{label}</span>;
 }
 
@@ -192,8 +210,8 @@ function Knowledge(): React.ReactElement {
   const pending = (docs ?? []).some((x) => x.status === 'uploaded' || x.status === 'processing');
   useEffect(() => {
     if (!pending) return;
-    const t = setInterval(() => void load(), 2000);
-    return () => clearInterval(t);
+    const timer = setInterval(() => void load(), 2000);
+    return () => clearInterval(timer);
   }, [pending, load]);
 
   const guard = async (fn: () => Promise<unknown>): Promise<void> => {
@@ -209,13 +227,13 @@ function Knowledge(): React.ReactElement {
   return (
     <>
       <section className="sheet stack">
-        <h2>Adaugă materiale</h2>
+        <h2>{t('Adaugă materiale')}</h2>
         <div className="row">
           <input className="grow" placeholder="https://exemplu.ro/produse" value={url}
                  onChange={(e) => setUrl(e.target.value)} aria-label="Adresa paginii" />
           <button className="go" disabled={busy || !url.trim()}
                   onClick={() => void guard(async () => { await post('/documents', { url }); setUrl(''); })}>
-            Adaugă pagina
+            {t('Adaugă pagina')}
           </button>
         </div>
 
@@ -225,10 +243,10 @@ function Knowledge(): React.ReactElement {
              style={{ border: '1px dashed var(--input)', borderRadius: 'calc(var(--radius) - 2px)',
                       padding: 20, textAlign: 'center', background: 'var(--muted)' }}>
           <p className="note" style={{ marginBottom: 8 }}>
-            Trage aici un fișier .docx, .odt, .pdf, .md sau .html
+            {t('Trage aici un fișier .docx, .odt, .pdf, .md sau .html')}
           </p>
           <input type="file" accept=".docx,.odt,.pdf,.md,.txt,.html" style={{ width: 'auto' }}
-                 aria-label="Alege fișier"
+                 aria-label={t('Alege fișier')}
                  onChange={(e) => { const f = e.target.files?.[0]; if (f) void guard(() => upload('/documents/upload', f)); }} />
         </div>
 
@@ -237,16 +255,15 @@ function Knowledge(): React.ReactElement {
       </section>
 
       <section className="sheet">
-        <h2>Materiale indexate</h2>
+        <h2>{t('Materiale indexate')}</h2>
         {!docs ? <Loading /> : (
           <div className="ledger-wrap">
             <table>
-              <thead><tr><th>Sursă</th><th>Stare</th><th>Fragmente</th><th /></tr></thead>
+              <thead><tr><th>{t('Sursă')}</th><th>{t('Stare')}</th><th>{t('Fragmente')}</th><th /></tr></thead>
               <tbody>
                 {site.length === 0 && (
                   <tr><td colSpan={4}>
-                    <p className="note">Încă nimic. Adaugă prima pagină de pe site — botul
-                      va putea răspunde din ea în câteva secunde.</p>
+                    <p className="note">{t('Încă nimic. Adaugă prima pagină de pe site — botul va putea răspunde din ea în câteva secunde.')}</p>
                   </td></tr>
                 )}
                 {site.map((x) => (
@@ -258,10 +275,10 @@ function Knowledge(): React.ReactElement {
                       <div className="row">
                         {x.status === 'failed' && (
                           <button onClick={() => void guard(() => post(`/documents/${x.id}/retry`))}>
-                            Reîncearcă
+                            {t('Reîncearcă')}
                           </button>
                         )}
-                        <button onClick={() => void guard(() => del(`/documents/${x.id}`))}>Șterge</button>
+                        <button onClick={() => void guard(() => del(`/documents/${x.id}`))}>{t('Șterge')}</button>
                       </div>
                     </td>
                   </tr>
@@ -304,8 +321,8 @@ function Drive(): React.ReactElement {
   const pending = docs.some((x) => x.status === 'uploaded' || x.status === 'processing');
   useEffect(() => {
     if (!pending) return;
-    const t = setInterval(() => void load(), 2000);
-    return () => clearInterval(t);
+    const timer = setInterval(() => void load(), 2000);
+    return () => clearInterval(timer);
   }, [pending, load]);
 
   // Сверка ставится в очередь, а не выполняется в ответе. Поэтому ждём не
@@ -332,10 +349,9 @@ function Drive(): React.ReactElement {
   if (!state.connected) {
     return (
       <section className="sheet stack">
-        <h2>Google Drive</h2>
+        <h2>{t('Google Drive')}</h2>
         <p className="note">
-          Dosarul nu este conectat. Conectarea se face o singură dată și cere confirmare
-          în browser — cere-i acest lucru persoanei care a configurat sistemul.
+          {t('Dosarul nu este conectat. Conectarea se face o singură dată și cere confirmare în browser — cere-i acest lucru persoanei care a configurat sistemul.')}
         </p>
       </section>
     );
@@ -349,76 +365,76 @@ function Drive(): React.ReactElement {
       <section className="sheet stack">
         <div className="row" style={{ justifyContent: 'space-between', alignItems: 'flex-start' }}>
           <div className="stack" style={{ gap: 4 }}>
-            <h2>Dosarul cu materiale</h2>
+            <h2>{t('Dosarul cu materiale')}</h2>
+            {/* Числа подставляются в перевод, а не приклеиваются к его кускам:
+                собранная из фрагментов фраза в другом языке не собирается. */}
             <p className="note">
-              Ultima verificare:{' '}
-              {state.lastSyncAt ? dt(state.lastSyncAt) : 'încă niciuna'}
-              {' · '}verificăm și singuri la fiecare {state.everyMinutes} minute
+              {tf('Ultima verificare: {when} · verificăm și singuri la fiecare {every} minute', {
+                when: state.lastSyncAt ? dt(state.lastSyncAt) : t('încă niciuna'),
+                every: state.everyMinutes ?? '—',
+              })}
             </p>
             {r && (
               <p className="note">
-                adăugate {r.added} · actualizate {r.updated} · șterse {r.removed} ·
-                neschimbate {r.unchanged}
-                {r.errors.length > 0 && <span className="err"> · erori {r.errors.length}</span>}
+                {tf('adăugate {added} · actualizate {updated} · șterse {removed} · neschimbate {same}', {
+                  added: r.added, updated: r.updated, removed: r.removed, same: r.unchanged,
+                })}
+                {r.errors.length > 0 && (
+                  <span className="err">{tf(' · erori {n}', { n: r.errors.length })}</span>
+                )}
               </p>
             )}
           </div>
           <button className="go" disabled={syncing} onClick={() => void sync()}>
-            {syncing ? <><Spinner /> Se sincronizează…</> : 'Sincronizează acum'}
+            {syncing ? <><Spinner /> {t('Se sincronizează…')}</> : t('Sincronizează acum')}
           </button>
         </div>
 
         {stalled && (
           <p className="note err">
-            Sincronizarea nu s-a încheiat în 90 de secunde. Serviciul care citește dosarul
-            pare oprit — anunțați persoana care a configurat sistemul.
+            {t('Sincronizarea nu s-a încheiat în 90 de secunde. Serviciul care citește dosarul pare oprit — anunțați persoana care a configurat sistemul.')}
           </p>
         )}
         {r?.errors.map((e, i) => <p key={i} className="note err">{e}</p>)}
 
         <p className="note">
-          Puneți un fișier în dosar și apăsați <b>Sincronizează acum</b> — apare mai jos.
-          Scoateți-l din dosar și botul nu îl mai folosește: așa retrageți materialele depășite.
+          {t('Puneți un fișier în dosar și apăsați')} <b>{t('Sincronizează acum')}</b> {t('— apare mai jos. Scoateți-l din dosar și botul nu îl mai folosește: așa retrageți materialele depășite.')}
         </p>
         {sitePages > 0 && (
           // Иначе директор решит, что бот знает только эти файлы, и начнёт
           // перезаливать в папку то, что уже есть на сайте.
           <p className="note">
-            Pe lângă fișierele din dosar, botul citește și cele {sitePages} pagini
-            preluate de pe site-ul dumneavoastră.
+            {t('Pe lângă fișierele din dosar, botul citește și cele')} {sitePages} {t('pagini preluate de pe site-ul dumneavoastră.')}
           </p>
         )}
         {(state.closedRecently ?? 0) > 0 && (
           // Ради этой строки всё и делалось: положил файл — увидел, что починил.
           <p className="note ok">
-            După materialele adăugate, {state.closedRecently} întrebări la care botul
-            nu știa să răspundă s-au închis. Le vedeți în <b>Analize</b>.
+            {t('După materialele adăugate,')} {state.closedRecently} {t('întrebări la care botul nu știa să răspundă s-au închis. Le vedeți în')} <b>{t('Analize')}</b>.
           </p>
         )}
         {(state.reopenedRecently ?? 0) > 0 && (
           // Обратная сторона: удаление файла должно быть видимым, иначе оно
           // выглядит бесплатным, а список пробелов молча отрастает обратно.
           <p className="note warn">
-            {state.reopenedRecently} întrebări au revenit în listă: materialul din care
-            botul răspundea la ele nu mai este în dosar.
+            {state.reopenedRecently} {t('întrebări au revenit în listă: materialul din care botul răspundea la ele nu mai este în dosar.')}
           </p>
         )}
       </section>
 
       <section className="sheet">
         <div className="row" style={{ justifyContent: 'space-between' }}>
-          <h2>Fișiere din dosar</h2>
+          <h2>{t('Fișiere din dosar')}</h2>
           {failed > 0 && <span className="stamp void">{failed} necitit(e)</span>}
         </div>
         <div className="ledger-wrap">
           <table>
-            <thead><tr><th>Fișier</th><th>Stare</th><th>Fragmente</th></tr></thead>
+            <thead><tr><th>{t('Fișier')}</th><th>{t('Stare')}</th><th>{t('Fragmente')}</th></tr></thead>
             <tbody>
               {docs.length === 0 && (
                 <tr><td colSpan={3}>
                   <p className="note">
-                    Dosarul este gol. Puneți în el prețuri, condiții de livrare, garanție —
-                    orice răspundeți zilnic la telefon.
+                    {t('Dosarul este gol. Puneți în el prețuri, condiții de livrare, garanție — orice răspundeți zilnic la telefon.')}
                   </p>
                 </td></tr>
               )}
@@ -448,11 +464,11 @@ interface AspectData {
 }
 
 const COLOR_FIELDS: Array<[keyof Theme, string]> = [
-  ['primary', 'Culoare principală'],
+  ['primary', t('Culoare principală')],
   ['bg', 'Fundalul panoului'],
   ['text', 'Textul'],
   ['userBubble', 'Replica vizitatorului'],
-  ['botBubble', 'Răspunsul botului'],
+  ['botBubble', t('Răspunsul botului')],
 ];
 
 function Aspect(): React.ReactElement {
@@ -477,7 +493,7 @@ function Aspect(): React.ReactElement {
     <div className="split">
       <div>
         <section className="sheet stack">
-          <h2>Teme gata făcute</h2>
+          <h2>{t('Teme gata făcute')}</h2>
           <div className="swatches">
             {data.presets.map((p) => (
               <button key={p.id} onClick={() => patch({ theme: p.theme })}>
@@ -491,7 +507,7 @@ function Aspect(): React.ReactElement {
         </section>
 
         <section className="sheet stack">
-          <h2>Culori</h2>
+          <h2>{t('Culori')}</h2>
           {COLOR_FIELDS.map(([key, label]) => (
             <div key={key} className="row" style={{ justifyContent: 'space-between' }}>
               <label className="field" htmlFor={`c-${key}`}>
@@ -504,21 +520,20 @@ function Aspect(): React.ReactElement {
           ))}
           <div className="row" style={{ justifyContent: 'space-between' }}>
             <label className="field" htmlFor="dark">
-              Tema întunecată
+              {t('Tema întunecată')}
             </label>
             <select id="dark" style={{ width: 190 }} value={data.theme.darkMode}
                     onChange={(e) => patch({ theme: { ...data.theme, darkMode: e.target.value as Theme['darkMode'] } })}>
-              <option value="auto">după setarea vizitatorului</option>
-              <option value="light">mereu deschisă</option>
-              <option value="dark">mereu întunecată</option>
+              <option value="auto">{t('după setarea vizitatorului')}</option>
+              <option value="light">{t('mereu deschisă')}</option>
+              <option value="dark">{t('mereu întunecată')}</option>
             </select>
           </div>
           {warnings.length > 0 && (
             <div className="stack" style={{ gap: 3 }}>
               {warnings.map((w) => <p key={w.field} className="note warn">{w.message}</p>)}
               <p className="note">
-                Culoarea textului de pe buton și din replici se alege automat, așa că
-                widgetul nu devine ilizibil — dar avertismentele merită rezolvate.
+                {t('Culoarea textului de pe buton și din replici se alege automat, așa că widgetul nu devine ilizibil — dar avertismentele merită rezolvate.')}
               </p>
             </div>
           )}
@@ -537,18 +552,16 @@ function Aspect(): React.ReactElement {
           <label className="field">Numele botului
             <input value={data.botName} onChange={(e) => patch({ botName: e.target.value })} />
           </label>
-          <label className="field">Mesajul de întâmpinare
+          <label className="field">{t('Mesajul de întâmpinare')}
             <input value={data.welcomeMessage[locale] ?? ''}
                    onChange={(e) => patch({ welcomeMessage: { ...data.welcomeMessage, [locale]: e.target.value } })} />
           </label>
-          <label className="field">Textul despre inteligența artificială
+          <label className="field">{t('Textul despre inteligența artificială')}
             <input placeholder={STRINGS[locale].disclosure} value={data.aiDisclosureText[locale] ?? ''}
                    onChange={(e) => patch({ aiDisclosureText: { ...data.aiDisclosureText, [locale]: e.target.value } })} />
           </label>
           <p className="note">
-            Mențiunea că vizitatorul discută cu o inteligență artificială este obligatorie
-            prin lege (AI Act, art. 50) și nu poate fi dezactivată. Poți schimba formularea;
-            câmpul gol readuce textul implicit.
+            {t('Mențiunea că vizitatorul discută cu o inteligență artificială este obligatorie prin lege (AI Act, art. 50) și nu poate fi dezactivată. Poți schimba formularea; câmpul gol readuce textul implicit.')}
           </p>
         </section>
 
@@ -559,13 +572,13 @@ function Aspect(): React.ReactElement {
               theme: data.theme, welcomeMessage: data.welcomeMessage,
               aiDisclosureText: data.aiDisclosureText,
             }).then(() => setSaved(true));
-          }}>Salvează</button>
-          {saved && <span className="stamp ok">Salvat</span>}
+          }}>{t('Salvează')}</button>
+          {saved && <span className="stamp ok">{t('Salvat')}</span>}
         </div>
       </div>
 
       <section className="sheet">
-        <h2>Previzualizare</h2>
+        <h2>{t('Previzualizare')}</h2>
         <iframe title="Previzualizarea widgetului" srcDoc={srcDoc}
                 style={{ width: '100%', height: 560, border: 0, background: 'var(--muted)',
                          borderRadius: 'calc(var(--radius) - 2px)' }} />
@@ -599,7 +612,7 @@ const EMPTY_T = {
 function Connectors(): React.ReactElement {
   const [data, setData] = useState<{ connectors: Connector[]; tools: Tool[] } | null>(null);
   const [c, setC] = useState(EMPTY_C);
-  const [t, setT] = useState(EMPTY_T);
+  const [toolForm, setToolForm] = useState(EMPTY_T);
   const [target, setTarget] = useState('');
   const [error, setError] = useState('');
   const [testInput, setTestInput] = useState('{"order_id":"SB-1042"}');
@@ -621,16 +634,15 @@ function Connectors(): React.ReactElement {
       {error && <div className="sheet"><p className="note err">{error}</p></div>}
 
       <section className="sheet stack">
-        <h2>Conector nou</h2>
+        <h2>{t('Conector nou')}</h2>
         <p className="note">
-          Adresa este verificată la salvare: cererile către rețele interne și către
-          adresele de metadate ale furnizorului de cloud sunt respinse.
+          {t('Adresa este verificată la salvare: cererile către rețele interne și către adresele de metadate ale furnizorului de cloud sunt respinse.')}
         </p>
-        <label className="field">Denumire
+        <label className="field">{t('Denumire')}
           <input placeholder="CRM-ul companiei" value={c.name}
                  onChange={(e) => setC({ ...c, name: e.target.value })} />
         </label>
-        <label className="field">Adresa de bază
+        <label className="field">{t('Adresa de bază')}
           <input placeholder="https://api.example.com" value={c.baseUrl}
                  onChange={(e) => setC({ ...c, baseUrl: e.target.value })} />
         </label>
@@ -642,13 +654,12 @@ function Connectors(): React.ReactElement {
             <input value={c.headerValue} onChange={(e) => setC({ ...c, headerValue: e.target.value })} />
           </label>
         </div>
-        <label className="field">Cheia secretă
-          <input type="password" placeholder="se pune în locul {{secret}}" value={c.secret}
+        <label className="field">{t('Cheia secretă')}
+          <input type="password" placeholder={t('se pune în locul {{secret}}')} value={c.secret}
                  onChange={(e) => setC({ ...c, secret: e.target.value })} />
         </label>
         <p className="note">
-          Cheia este criptată înainte de salvare și nu mai poate fi citită înapoi —
-          nici în panou, nici prin interfața de programare.
+          {t('Cheia este criptată înainte de salvare și nu mai poate fi citită înapoi — nici în panou, nici prin interfața de programare.')}
         </p>
         <button className="go" disabled={!c.name.trim() || !c.baseUrl.trim()}
                 onClick={() => void guard(async () => {
@@ -658,7 +669,7 @@ function Connectors(): React.ReactElement {
                     secret: c.secret,
                   });
                   setC(EMPTY_C);
-                })}>Creează conectorul</button>
+                })}>{t('Creează conectorul')}</button>
       </section>
 
       {data.connectors.map((conn) => {
@@ -667,16 +678,16 @@ function Connectors(): React.ReactElement {
           <section key={conn.id} className="sheet stack">
             <h2>{conn.name}</h2>
             <div className="row" style={{ justifyContent: 'space-between' }}>
-              <p className="note">{conn.base_url}{conn.has_secret ? ' · cheie setată' : ''}</p>
-              <button onClick={() => void guard(() => del(`/connectors/${conn.id}`))}>Șterge</button>
+              <p className="note">{conn.base_url}{conn.has_secret ? t(' · cheie setată') : ''}</p>
+              <button onClick={() => void guard(() => del(`/connectors/${conn.id}`))}>{t('Șterge')}</button>
             </div>
 
             <div className="ledger-wrap">
               <table>
-                <thead><tr><th>Instrument</th><th>Metodă</th><th>Cale</th><th /></tr></thead>
+                <thead><tr><th>{t('Instrument')}</th><th>{t('Metodă')}</th><th>Cale</th><th /></tr></thead>
                 <tbody>
                   {tools.length === 0 && (
-                    <tr><td colSpan={4}><p className="note">Niciun instrument încă.</p></td></tr>
+                    <tr><td colSpan={4}><p className="note">{t('Niciun instrument încă.')}</p></td></tr>
                   )}
                   {tools.map((tool) => (
                     <tr key={tool.id}>
@@ -691,8 +702,8 @@ function Connectors(): React.ReactElement {
                               setResult(await post<TestResult>(`/tools/${tool.id}/test`,
                                 { input: JSON.parse(testInput) }));
                             } finally { setTesting(null); }
-                          })}>{testing === tool.id ? 'Se testează…' : 'Testează'}</button>
-                          <button onClick={() => void guard(() => del(`/tools/${tool.id}`))}>Șterge</button>
+                          })}>{testing === tool.id ? t('Se testează…') : t('Testează')}</button>
+                          <button onClick={() => void guard(() => del(`/tools/${tool.id}`))}>{t('Șterge')}</button>
                         </div>
                       </td>
                     </tr>
@@ -702,47 +713,45 @@ function Connectors(): React.ReactElement {
             </div>
 
             <button onClick={() => setTarget(target === conn.id ? '' : conn.id)}>
-              {target === conn.id ? 'Renunță' : 'Adaugă un instrument'}
+              {target === conn.id ? t('Renunță') : t('Adaugă un instrument')}
             </button>
 
             {target === conn.id && (
               <div className="stack" style={{ borderTop: '1px solid var(--border)', paddingTop: 16 }}>
                 <label className="field">Numele instrumentului
-                  <input placeholder="stare_comanda" value={t.toolName}
-                         onChange={(e) => setT({ ...t, toolName: e.target.value })} />
+                  <input placeholder="stare_comanda" value={toolForm.toolName}
+                         onChange={(e) => setToolForm({ ...toolForm, toolName: e.target.value })} />
                 </label>
                 <label className="field">Ce face
-                  <input placeholder="Află starea comenzii după numărul ei" value={t.description}
-                         onChange={(e) => setT({ ...t, description: e.target.value })} />
+                  <input placeholder={t('Află starea comenzii după numărul ei')} value={toolForm.description}
+                         onChange={(e) => setToolForm({ ...toolForm, description: e.target.value })} />
                 </label>
                 <p className="note">
-                  Descrierea este singurul lucru după care botul decide dacă să folosească
-                  instrumentul. „Află starea comenzii după numărul ei” funcționează;
-                  „comenzi” nu.
+                  {t('Descrierea este singurul lucru după care botul decide dacă să folosească instrumentul. „Află starea comenzii după numărul ei” funcționează; „comenzi” nu.')}
                 </p>
                 <div className="row">
-                  <select style={{ width: 120 }} value={t.httpMethod}
-                          onChange={(e) => setT({ ...t, httpMethod: e.target.value })}>
+                  <select style={{ width: 120 }} value={toolForm.httpMethod}
+                          onChange={(e) => setToolForm({ ...toolForm, httpMethod: e.target.value })}>
                     {['GET', 'POST', 'PUT', 'PATCH', 'DELETE'].map((m) => <option key={m}>{m}</option>)}
                   </select>
-                  <input className="grow" placeholder="/orders/{order_id}" value={t.pathTemplate}
-                         onChange={(e) => setT({ ...t, pathTemplate: e.target.value })} />
+                  <input className="grow" placeholder="/orders/{order_id}" value={toolForm.pathTemplate}
+                         onChange={(e) => setToolForm({ ...toolForm, pathTemplate: e.target.value })} />
                 </div>
                 <label className="field">Parametrii
-                  <textarea rows={8} value={t.schemaText}
-                            onChange={(e) => setT({ ...t, schemaText: e.target.value })} />
+                  <textarea rows={8} value={toolForm.schemaText}
+                            onChange={(e) => setToolForm({ ...toolForm, schemaText: e.target.value })} />
                 </label>
-                <label className="field">Cum să interpreteze răspunsul
-                  <input value={t.responseInstructions}
-                         onChange={(e) => setT({ ...t, responseInstructions: e.target.value })} />
+                <label className="field">{t('Cum să interpreteze răspunsul')}
+                  <input value={toolForm.responseInstructions}
+                         onChange={(e) => setToolForm({ ...toolForm, responseInstructions: e.target.value })} />
                 </label>
                 <button className="go" onClick={() => void guard(async () => {
                   let inputSchema: Record<string, unknown>;
-                  try { inputSchema = JSON.parse(t.schemaText) as Record<string, unknown>; }
+                  try { inputSchema = JSON.parse(toolForm.schemaText) as Record<string, unknown>; }
                   catch (err) { throw new Error(`Parametrii nu sunt corecți: ${(err as Error).message}`); }
-                  await post('/tools', { ...t, connectorId: conn.id, inputSchema });
-                  setT(EMPTY_T);
-                })}>Salvează instrumentul</button>
+                  await post('/tools', { ...toolForm, connectorId: conn.id, inputSchema });
+                  setToolForm(EMPTY_T);
+                })}>{t('Salvează instrumentul')}</button>
               </div>
             )}
           </section>
@@ -750,7 +759,7 @@ function Connectors(): React.ReactElement {
       })}
 
       <section className="sheet stack">
-        <h2>Test</h2>
+        <h2>{t('Test')}</h2>
         <label className="field">Parametrii cu care se face testul
           <textarea rows={3} value={testInput} onChange={(e) => setTestInput(e.target.value)} />
         </label>
@@ -758,10 +767,10 @@ function Connectors(): React.ReactElement {
           <>
             <p className="note">
               HTTP {result.status ?? '—'}
-              {result.truncated && ' · răspuns tăiat la 32 KB'}
+              {result.truncated && t(' · răspuns tăiat la 32 KB')}
               {result.error && <span className="err"> · {result.error}</span>}
             </p>
-            <p className="note">Răspunsul brut al serviciului:</p>
+            <p className="note">{t('Răspunsul brut al serviciului:')}</p>
             <pre>{result.raw || '(gol)'}</pre>
             <p className="note">Ce vede botul din el:</p>
             <pre>{result.asModelSees}</pre>
@@ -837,13 +846,13 @@ function Chats({ initialOpen }: { initialOpen?: string }): React.ReactElement {
     return (
       <>
         <div className="row" style={{ marginBottom: 14 }}>
-          <button onClick={() => setOpen(null)}>← Înapoi la listă</button>
+          <button onClick={() => setOpen(null)}>{t('← Înapoi la listă')}</button>
         </div>
         {!detail ? <Loading /> : (
           <>
             {detail.lead && (
               <section className="sheet stack">
-                <h2>Cerere de ofertă</h2>
+                <h2>{t('Cerere de ofertă')}</h2>
                 <p><b>{[detail.lead.name, detail.lead.email, detail.lead.phone]
                   .filter(Boolean).join(' · ')}</b></p>
                 <div className="ledger-wrap">
@@ -865,31 +874,31 @@ function Chats({ initialOpen }: { initialOpen?: string }): React.ReactElement {
             )}
             {detail.gaps.length > 0 && (
               <section className="sheet stack">
-                <h2>Nu s-a găsit în materiale</h2>
+                <h2>{t('Nu s-a găsit în materiale')}</h2>
                 {detail.gaps.map((g, i) => <p key={i} className="note warn">{g.question}</p>)}
               </section>
             )}
             <section className="sheet stack">
-              <h2>Conversația</h2>
-              {detail.messages.map((t, i) => {
+              <h2>{t('Conversația')}</h2>
+              {detail.messages.map((turn, i) => {
                 // Вопрос берётся из ближайшей реплики посетителя выше: правят
                 // ответ, но утверждают пару, иначе искать его будет не по чему.
                 const asked = detail.messages.slice(0, i)
                   .reverse().find((m) => m.role === 'user')?.content ?? '';
-                const editable = t.role !== 'user' && asked !== '';
+                const editable = turn.role !== 'user' && asked !== '';
                 return (
                   <div key={i} className="turn">
                     <div className="row" style={{ justifyContent: 'space-between', gap: 12 }}>
                       <span className="note">
-                        {t.role === 'user' ? 'Vizitator' : 'Bot'} · {dt(t.created_at)}
-                        {t.tool_calls ? ' · a folosit un instrument' : ''}
+                        {turn.role === 'user' ? t('Vizitator') : t('Bot')} · {dt(turn.created_at)}
+                        {turn.tool_calls ? t(' · a folosit un instrument') : ''}
                       </span>
                       {editable && editing !== i && (
                         saved.has(i)
-                          ? <span className="stamp ok">Aprobat</span>
+                          ? <span className="stamp ok">{t('Aprobat')}</span>
                           : <button onClick={() => {
-                              setEditing(i); setDraft(t.content); setAsk(asked); setErr('');
-                            }}>Corectează răspunsul</button>
+                              setEditing(i); setDraft(turn.content); setAsk(asked); setErr('');
+                            }}>{t('Corectează răspunsul')}</button>
                       )}
                     </div>
 
@@ -898,16 +907,15 @@ function Chats({ initialOpen }: { initialOpen?: string }): React.ReactElement {
                         {/* Вопрос правится вместе с ответом: посетитель мог спросить
                             «а в Клуж?» — утверждать ответ на такую формулировку
                             бессмысленно, по ней потом ничего не найдётся. */}
-                        <label className="field">Întrebarea la care răspunde
+                        <label className="field">{t('Întrebarea la care răspunde')}
                           <input value={ask} onChange={(e) => setAsk(e.target.value)} />
                         </label>
-                        <label className="field">Răspunsul pe care îl aprobați
+                        <label className="field">{t('Răspunsul pe care îl aprobați')}
                           <textarea rows={5} value={draft}
                                     onChange={(e) => setDraft(e.target.value)} />
                         </label>
                         <p className="note">
-                          Botul va folosi acest text cuvânt cu cuvânt când cineva întreabă
-                          același lucru, chiar dacă în materiale scrie altceva.
+                          {t('Botul va folosi acest text cuvânt cu cuvânt când cineva întreabă același lucru, chiar dacă în materiale scrie altceva.')}
                         </p>
                         {err && <p className="note err">{err}</p>}
                         <div className="row">
@@ -920,12 +928,12 @@ function Chats({ initialOpen }: { initialOpen?: string }): React.ReactElement {
                               .then(() => { setSaved(new Set(saved).add(i)); setEditing(null); })
                               .catch((e: Error) => setErr(e.message))
                               .finally(() => setBusy(false));
-                          }}>{busy ? 'Se salvează…' : 'Aprobă răspunsul'}</button>
-                          <button onClick={() => setEditing(null)}>Renunță</button>
+                          }}>{busy ? t('Se salvează…') : t('Aprobă răspunsul')}</button>
+                          <button onClick={() => setEditing(null)}>{t('Renunță')}</button>
                         </div>
                       </div>
                     ) : (
-                      <div style={{ whiteSpace: 'pre-wrap' }}>{t.content}</div>
+                      <div style={{ whiteSpace: 'pre-wrap' }}>{turn.content}</div>
                     )}
                   </div>
                 );
@@ -947,59 +955,57 @@ function Chats({ initialOpen }: { initialOpen?: string }): React.ReactElement {
   return (
     <>
       <section className="sheet stack">
-        <h2>Filtre</h2>
+        <h2>{t('Filtre')}</h2>
         <div className="row">
           <label className="field">De la
             <input type="date" value={f.from} onChange={(e) => set({ from: e.target.value })} /></label>
-          <label className="field">Până la
+          <label className="field">{t('Până la')}
             <input type="date" value={f.to} onChange={(e) => set({ to: e.target.value })} /></label>
-          <label className="field">Limba
+          <label className="field">{t('Limba')}
             <select style={{ width: 150 }} value={f.locale} onChange={(e) => set({ locale: e.target.value })}>
               <option value="">toate</option>
               {['ro', 'de', 'en', 'ru'].map((l) => <option key={l} value={l}>{l.toUpperCase()}</option>)}
             </select>
           </label>
         </div>
-        <label className="field">Caută în text
-          <input placeholder="rate, garanție, livrare…" value={f.q}
+        <label className="field">{t('Caută în text')}
+          <input placeholder={t('rate, garanție, livrare…')} value={f.q}
                  onChange={(e) => set({ q: e.target.value })} />
         </label>
         <div className="row">
           <label className="row" style={{ gap: 6 }}>
             <input type="checkbox" checked={f.hasLead}
-                   onChange={(e) => set({ hasLead: e.target.checked })} /> cu cerere de ofertă
+                   onChange={(e) => set({ hasLead: e.target.checked })} /> {t('cu cerere de ofertă')}
           </label>
           <label className="row" style={{ gap: 6 }}>
             <input type="checkbox" checked={f.hasGap}
-                   onChange={(e) => set({ hasGap: e.target.checked })} /> cu întrebări fără răspuns
+                   onChange={(e) => set({ hasGap: e.target.checked })} /> {t('cu întrebări fără răspuns')}
           </label>
-          <button onClick={() => { setF(EMPTY_F); setPage(0); }}>Resetează</button>
+          <button onClick={() => { setF(EMPTY_F); setPage(0); }}>{t('Resetează')}</button>
         </div>
         <div className="row">
-          <span className="note">Descarcă ce vezi acum:</span>
-          <a href={exportUrl('conversation')}><button>Pe conversații</button></a>
+          <span className="note">{t('Descarcă ce vezi acum:')}</span>
+          <a href={exportUrl('conversation')}><button>{t('Pe conversații')}</button></a>
           <a href={exportUrl('message')}><button>Pe replici</button></a>
         </div>
         <p className="note">
-          „Pe conversații” — un rând per discuție, cu cererea de ofertă și numărul de goluri;
-          pentru situația de ansamblu. „Pe replici” — fiecare mesaj separat; pentru a citi
-          și a marca unde botul a răspuns greșit.
+          {t('„Pe conversații” — un rând per discuție, cu cererea de ofertă și numărul de goluri; pentru situația de ansamblu. „Pe replici” — fiecare mesaj separat; pentru a citi și a marca unde botul a răspuns greșit.')}
         </p>
       </section>
 
       <section className="sheet">
-        <h2>Conversații{data ? ` · ${data.total}` : ''}</h2>
+        <h2>{t('Conversații')}{data ? ` · ${data.total}` : ''}</h2>
         {!data ? <Loading /> : (
           <div className="ledger-wrap">
             <table>
               <thead>
-                <tr><th>Început</th><th>Prima întrebare</th><th>Lb.</th><th>Replici</th>
-                  <th>Ofertă</th><th>Goluri</th><th /></tr>
+                <tr><th>{t('Început')}</th><th>{t('Prima întrebare')}</th><th>Lb.</th><th>Replici</th>
+                  <th>{t('Ofertă')}</th><th>Goluri</th><th /></tr>
               </thead>
               <tbody>
                 {data.rows.length === 0 && (
                   <tr><td colSpan={7}><p className="note">
-                    Nicio conversație pentru filtrele alese.</p></td></tr>
+                    {t('Nicio conversație pentru filtrele alese.')}</p></td></tr>
                 )}
                 {data.rows.map((c) => (
                   <tr key={c.id}>
@@ -1007,7 +1013,7 @@ function Chats({ initialOpen }: { initialOpen?: string }): React.ReactElement {
                     <td>{c.first_question?.slice(0, 72) ?? '—'}</td>
                     <td className="quiet">{c.locale.toUpperCase()}</td>
                     <td className="num">{c.message_count}</td>
-                    <td>{c.has_lead ? <span className="stamp lead">Ofertă</span> : ''}</td>
+                    <td>{c.has_lead ? <span className="stamp lead">{t('Ofertă')}</span> : ''}</td>
                     <td>{c.gap_count > 0 ? <span className="stamp wait">{c.gap_count}</span> : ''}</td>
                     <td><button onClick={() => setOpen(c.id)}>Deschide</button></td>
                   </tr>
@@ -1020,12 +1026,12 @@ function Chats({ initialOpen }: { initialOpen?: string }): React.ReactElement {
 
       {data && data.total > PER && (
         <div className="row">
-          <button disabled={page === 0} onClick={() => setPage(page - 1)}>Înapoi</button>
+          <button disabled={page === 0} onClick={() => setPage(page - 1)}>{t('Înapoi')}</button>
           <span className="note">
             {page * PER + 1}–{Math.min((page + 1) * PER, data.total)} din {data.total}
           </span>
           <button disabled={(page + 1) * PER >= data.total}
-                  onClick={() => setPage(page + 1)}>Înainte</button>
+                  onClick={() => setPage(page + 1)}>{t('Înainte')}</button>
         </div>
       )}
     </>
@@ -1062,29 +1068,28 @@ function Analytics(): React.ReactElement {
   return (
     <>
       <section className="sheet">
-        <h2>Consum</h2>
+        <h2>{t('Consum')}</h2>
         <div className="row" style={{ gap: 40 }}>
-          <p className="figure">{d2.quota.usedThisMonth}<small>mesaje luna aceasta</small></p>
+          <p className="figure">{d2.quota.usedThisMonth}<small>{t('mesaje luna aceasta')}</small></p>
           {d2.quota.cap !== null && (
-            <p className="figure">{d2.quota.cap}<small>incluse în plan</small></p>
+            <p className="figure">{d2.quota.cap}<small>{t('incluse în plan')}</small></p>
           )}
-          <p className="figure">{total}<small>în ultimele 30 de zile</small></p>
+          <p className="figure">{total}<small>{t('în ultimele 30 de zile')}</small></p>
         </div>
       </section>
 
       <section className="sheet">
-        <h2>Întrebări fără răspuns</h2>
+        <h2>{t('Întrebări fără răspuns')}</h2>
         <p className="note" style={{ padding: '0 0 12px' }}>
-          Exact temele care lipsesc din materiale. Cel mai scurt drum spre un bot mai bun
-          este să adaugi un document despre primele rânduri din listă.
+          {t('Exact temele care lipsesc din materiale. Cel mai scurt drum spre un bot mai bun este să adaugi un document despre primele rânduri din listă.')}
         </p>
         <div className="ledger-wrap">
           <table>
-            <thead><tr><th>Întrebare</th><th>De câte ori</th><th>Ultima dată</th></tr></thead>
+            <thead><tr><th>{t('Întrebare')}</th><th>{t('De câte ori')}</th><th>{t('Ultima dată')}</th></tr></thead>
             <tbody>
               {d2.unanswered.length === 0 && (
                 <tr><td colSpan={3}><p className="note">
-                  Toate întrebările și-au găsit răspunsul în materiale.</p></td></tr>
+                  {t('Toate întrebările și-au găsit răspunsul în materiale.')}</p></td></tr>
               )}
               {d2.unanswered.map((u, i) => (
                 <tr key={i}>
@@ -1103,11 +1108,9 @@ function Analytics(): React.ReactElement {
           страницу из-за одного необязательного блока нельзя. */}
       {(d2.closed ?? []).length > 0 && (
         <section className="sheet">
-          <h2>Închise după completarea materialelor</h2>
+          <h2>{t('Închise după completarea materialelor')}</h2>
           <p className="note" style={{ padding: '0 0 12px' }}>
-            Verificăm lista singuri de fiecare dată când adăugați ceva în dosar.
-            Citiți răspunsurile: dacă unul nu vă convine, adăugați un material mai clar
-            despre acel subiect.
+            {t('Verificăm lista singuri de fiecare dată când adăugați ceva în dosar. Citiți răspunsurile: dacă unul nu vă convine, adăugați un material mai clar despre acel subiect.')}
           </p>
           <div className="stack" style={{ gap: 16 }}>
             {(d2.closed ?? []).map((u, i) => (
@@ -1125,11 +1128,9 @@ function Analytics(): React.ReactElement {
 
       {approved.length > 0 && (
         <section className="sheet">
-          <h2>Răspunsuri aprobate de dumneavoastră</h2>
+          <h2>{t('Răspunsuri aprobate de dumneavoastră')}</h2>
           <p className="note" style={{ padding: '0 0 12px' }}>
-            La aceste întrebări botul răspunde exact cu textul de mai jos, cuvânt cu cuvânt,
-            indiferent ce scrie în materiale. Le creați din <b>Conversații</b>, corectând
-            un răspuns al botului.
+            {t('La aceste întrebări botul răspunde exact cu textul de mai jos, cuvânt cu cuvânt, indiferent ce scrie în materiale. Le creați din')} <b>{t('Conversații')}</b>{t(', corectând un răspuns al botului.')}
           </p>
           <div className="stack" style={{ gap: 16 }}>
             {approved.map((a) => (
@@ -1139,7 +1140,7 @@ function Analytics(): React.ReactElement {
                   <span className="row" style={{ gap: 10 }}>
                     <span className="when">{d(a.updated_at)}</span>
                     <button onClick={() => void del(`/approved/${a.id}`).then(loadApproved)}>
-                      Șterge
+                      {t('Șterge')}
                     </button>
                   </span>
                 </div>
@@ -1151,14 +1152,14 @@ function Analytics(): React.ReactElement {
       )}
 
       <section className="sheet stack">
-        <h2>Cereri de ofertă</h2>
+        <h2>{t('Cereri de ofertă')}</h2>
         <NotifyEmail initial={d2.notifyEmail ?? ''} />
         <div className="ledger-wrap">
           <table>
-            <thead><tr><th>Când</th><th>Nume</th><th>Email</th><th>Telefon</th><th>Cererea</th></tr></thead>
+            <thead><tr><th>{t('Când')}</th><th>{t('Nume')}</th><th>{t('Email')}</th><th>{t('Telefon')}</th><th>{t('Cererea')}</th></tr></thead>
             <tbody>
               {d2.leads.length === 0 && (
-                <tr><td colSpan={5}><p className="note">Nicio cerere încă.</p></td></tr>
+                <tr><td colSpan={5}><p className="note">{t('Nicio cerere încă.')}</p></td></tr>
               )}
               {d2.leads.map((l) => (
                 <tr key={l.id}>
@@ -1193,7 +1194,7 @@ function NotifyEmail({ initial }: { initial: string }): React.ReactElement {
 
   return (
     <>
-      <label className="field" htmlFor="notify-email">Trimitem fiecare cerere pe</label>
+      <label className="field" htmlFor="notify-email">{t('Trimitem fiecare cerere pe')}</label>
       <div className="row">
         <input id="notify-email" type="email" value={value} placeholder="vanzari@exemplu.ro"
                style={{ flex: 1, minWidth: 200, maxWidth: 420 }}
@@ -1202,14 +1203,12 @@ function NotifyEmail({ initial }: { initial: string }): React.ReactElement {
           void put<{ error?: string }>('/lead-notify', { email: value })
             .then((r) => (r.error ? setErr(r.error) : setSaved(true)))
             .catch((e: Error) => setErr(e.message));
-        }}>Salvează</button>
-        {saved && <span className="stamp ok">Salvat</span>}
+        }}>{t('Salvează')}</button>
+        {saved && <span className="stamp ok">{t('Salvat')}</span>}
       </div>
       {err && <p className="note err">{err}</p>}
       <p className="note">
-        Anunțul pleacă la două minute după ce vizitatorul lasă un contact — atât cât
-        îi ia asistentului să afle și restul detaliilor. Câmpul gol oprește anunțurile;
-        cererile rămân oricum aici.
+        {t('Anunțul pleacă la două minute după ce vizitatorul lasă un contact — atât cât îi ia asistentului să afle și restul detaliilor. Câmpul gol oprește anunțurile; cererile rămân oricum aici.')}
       </p>
     </>
   );
@@ -1225,12 +1224,12 @@ function NotifyState({ lead }: {
 }): React.ReactElement | null {
   if (lead.notified_at) {
     return (
-      <div><span className="stamp ok" title={dt(lead.notified_at)}>Trimis</span></div>
+      <div><span className="stamp ok" title={dt(lead.notified_at)}>{t('Trimis')}</span></div>
     );
   }
   if (lead.notify_error) {
     return (
-      <div><span className="stamp void" title={lead.notify_error}>Netrimis</span></div>
+      <div><span className="stamp void" title={lead.notify_error}>{t('Netrimis')}</span></div>
     );
   }
   return null;
@@ -1267,15 +1266,15 @@ function Install(): React.ReactElement {
         <div className="row">
           <button onClick={() => {
             void navigator.clipboard.writeText(data.snippet).then(() => setCopied(true));
-          }}>Copiază</button>
-          {copied && <span className="stamp ok">Copiat</span>}
-          <span className="note">Se pune înainte de eticheta &lt;/body&gt;.</span>
+          }}>{t('Copiază')}</button>
+          {copied && <span className="stamp ok">{t('Copiat')}</span>}
+          <span className="note">{t('Se pune înainte de eticheta &lt;/body&gt;.')}</span>
         </div>
       </section>
 
       <section className="sheet stack">
-        <h2>Verifică instalarea</h2>
-        <p className="note">Deschidem pagina și căutăm pe ea codul cu cheia ta.</p>
+        <h2>{t('Verifică instalarea')}</h2>
+        <p className="note">{t('Deschidem pagina și căutăm pe ea codul cu cheia ta.')}</p>
         <div className="row">
           <input className="grow" placeholder="https://exemplu.ro/" value={checkUrl}
                  onChange={(e) => setCheckUrl(e.target.value)} aria-label="Adresa paginii" />
@@ -1283,7 +1282,7 @@ function Install(): React.ReactElement {
             setChecking(true); setVerify(null);
             void post<VerifyResult>('/install/verify', { url: checkUrl })
               .then(setVerify).finally(() => setChecking(false));
-          }}>{checking ? 'Se verifică…' : 'Verifică'}</button>
+          }}>{checking ? t('Se verifică…') : t('Verifică')}</button>
         </div>
         {verify && (
           <div className="stack" style={{ gap: 3 }}>
@@ -1295,11 +1294,11 @@ function Install(): React.ReactElement {
             {verify.reachable && (
               <>
                 <p className={verify.scriptFound ? 'note' : 'note err'}>
-                  {verify.scriptFound ? 'Codul widgetului a fost găsit'
-                    : 'Codul widgetului nu apare pe pagină'}
+                  {verify.scriptFound ? t('Codul widgetului a fost găsit')
+                    : t('Codul widgetului nu apare pe pagină')}
                 </p>
                 <p className={verify.keyFound ? 'note' : 'note err'}>
-                  {verify.keyFound ? 'Cheia corespunde' : 'Cheia ta nu apare pe pagină'}
+                  {verify.keyFound ? 'Cheia corespunde' : t('Cheia ta nu apare pe pagină')}
                 </p>
               </>
             )}
@@ -1308,10 +1307,9 @@ function Install(): React.ReactElement {
       </section>
 
       <section className="sheet stack">
-        <h2>Domenii permise</h2>
+        <h2>{t('Domenii permise')}</h2>
         <p className="note">
-          Widgetul răspunde doar pe aceste domenii — câte unul pe rând, subdomeniile
-          sunt incluse automat. Lista goală înseamnă că widgetul nu funcționează nicăieri.
+          {t('Widgetul răspunde doar pe aceste domenii — câte unul pe rând, subdomeniile sunt incluse automat. Lista goală înseamnă că widgetul nu funcționează nicăieri.')}
         </p>
         <textarea rows={4} value={draft} aria-label="Domenii permise"
                   onChange={(e) => { setDraft(e.target.value); setSaved(false); }} />
@@ -1321,8 +1319,8 @@ function Install(): React.ReactElement {
             void put<{ domains: string[] }>('/install', { domains }).then((next) => {
               setDraft(next.domains.join('\n')); setSaved(true);
             });
-          }}>Salvează</button>
-          {saved && <span className="stamp ok">Salvat</span>}
+          }}>{t('Salvează')}</button>
+          {saved && <span className="stamp ok">{t('Salvat')}</span>}
         </div>
       </section>
     </>

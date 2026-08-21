@@ -141,8 +141,8 @@ export function registerAdmin(app: FastifyInstance): void {
   app.get('/admin/api/me', guarded(async ({ session, client }) => {
     const { rows } = await client.query<{
       name: string; plan: string; public_key: string; logo_key: string | null;
-      hidden_screens: string[];
-    }>(`SELECT name, plan, public_key, logo_key, hidden_screens
+      hidden_screens: string[]; locale_default: string;
+    }>(`SELECT name, plan, public_key, logo_key, hidden_screens, locale_default
           FROM tenants WHERE id = $1`, [session.tenantId]);
     const t = rows[0];
     return {
@@ -152,6 +152,9 @@ export function registerAdmin(app: FastifyInstance): void {
         logo_url: t.logo_key ? '/admin/brand/logo' : null,
         // Какие экраны показывать — решает запись тенанта, а не сборка панели.
         hiddenScreens: t.hidden_screens,
+        // Язык панели — язык клиента. Панель писалась по-румынски, но читать
+        // её будет тот, кто работает с заявками, а он не обязан знать румынский.
+        locale: t.locale_default,
       },
     };
   }));
