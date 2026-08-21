@@ -43,6 +43,15 @@ export function safeLocale(raw: unknown, tenant: { localeDefault: string; suppor
   return allowed.includes(base) ? base : tenant.localeDefault;
 }
 
+/**
+ * Отказ по частоте от Bedrock.
+ *
+ * Проверяем поле, а не класс ошибки: клиент оборачивает исключения по-своему,
+ * а `instanceof` через границу пакета — известный источник тихих несрабатываний.
+ */
+const isRateLimited = (err: unknown): boolean =>
+  (err as { status?: number } | null)?.status === 429;
+
 /** История диалога, отдаваемая модели. Больше — дороже и без выигрыша в качестве. */
 const HISTORY_LIMIT = 10;
 
@@ -86,8 +95,11 @@ export function registerChat(app: FastifyInstance): void {
     const slot = acquireSlot(tenant.id);
     if (!slot) {
       request.log.warn({ tenantId: tenant.id, ...slotStats() }, 'потолок одновременных диалогов');
+      // Причина различается намеренно. «Наш потолок» лечится его подъёмом,
+      // «квота модели» — заявкой в Service Quotas у Amazon. Одинаковый ответ
+      // на оба случая означал бы, что чинить будут наугад.
       return reply.code(503).header('retry-after', '5')
-        .send({ error: 'busy', retryAfterSeconds: 5 });
+        .send({ error: 'busy', reason: 'concurrency', retryAfterSeconds: 5 });
     }
 
     try {
@@ -198,6 +210,23 @@ export function registerChat(app: FastifyInstance): void {
     try {
       step = await iterator.next();
     } catch (err) {
+      // Отказ по частоте (429 от Bedrock) — это не поломка, а очередь: квота
+      // аккаунта кончилась на эту минуту. Отдавать его как 502 «ассистент
+      // временно недоступен» нельзя по трём причинам сразу: посетителю сказано
+      // не то, в статистике это выглядит нашей аварией, и чинить будут не то.
+      //
+      // Замерено: с потолком в 12 одновременных диалогов на клиента Bedrock
+      // начинает отвечать 429 примерно с шестнадцатого параллельного запроса.
+      // Повторять здесь нечего — SDK уже повторил дважды с задержкой; ещё один
+      // круг повторов под нагрузкой только удлинил бы очередь всем остальным.
+      if (isRateLimited(err)) {
+        request.log.warn(
+          { tenantId: tenant.id },
+          'Bedrock отказал по частоте — отдаём как «занято»',
+        );
+        return reply.code(503).header('retry-after', '10')
+          .send({ error: 'busy', reason: 'upstream', retryAfterSeconds: 10 });
+      }
       request.log.error({ err }, 'llm stream failed before first token');
       return reply.code(502).send({ error: 'assistant temporarily unavailable' });
     }
@@ -420,6 +449,13 @@ export function registerChat(app: FastifyInstance): void {
       // ответа и уронит процесс на ERR_HTTP_HEADERS_SENT.
       if (visitorGone) {
         // Ушёл посетитель, а не сломались мы. Писать некуда и жаловаться не на что.
+      } else if (isRateLimited(err)) {
+        // То же самое, но заголовки уже ушли: кода состояния не поменять,
+        // остаётся сказать честно внутри потока. Виджет отличает «занято»
+        // от поломки и просит повторить, а не показывает «что-то пошло не так».
+        request.log.warn({ tenantId: tenant.id, conversationId },
+          'Bedrock отказал по частоте на середине ответа');
+        reply.raw.write('event: error\ndata: {"error":"busy"}\n\n');
       } else {
         request.log.error({ err }, 'llm stream failed mid-flight');
         reply.raw.write('event: error\ndata: {"error":"stream interrupted"}\n\n');

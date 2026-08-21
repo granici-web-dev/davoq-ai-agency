@@ -22,6 +22,13 @@ export interface Strings {
   leadThanks: string;
   leadNeedContact: string;
   /**
+   * Отказ по занятости: наш потолок или квота модели. Отличается от поломки
+   * тем, что повтор через минуту помогает, — и посетителю надо сказать
+   * именно это, а не «что-то пошло не так».
+   */
+  busy: string;
+
+  /**
    * Когда оборот кончился без единого знака текста: модель только вызывала
    * инструменты. Пустую реплику нельзя ни показать, ни сохранить — в истории
    * она отвергается моделью, и разговор ломается насмерть.
@@ -40,6 +47,7 @@ export const STRINGS: Record<Locale, Strings> = {
     leadName: 'Name', leadSubmit: 'Send', leadThanks: 'Thank you, we will be in touch.',
     leadNeedContact: 'Please provide an email or a phone number.',
     noAnswer: 'I have noted your request — a colleague will get back to you shortly.',
+    busy: 'A lot of people are writing right now. Please try again in a moment.',
   },
   de: {
     launcher: 'Schreiben Sie uns', title: 'Assistent', placeholder: 'Stellen Sie eine Frage…',
@@ -51,6 +59,7 @@ export const STRINGS: Record<Locale, Strings> = {
     leadName: 'Name', leadSubmit: 'Absenden', leadThanks: 'Danke, wir melden uns.',
     leadNeedContact: 'Bitte geben Sie eine E-Mail-Adresse oder Telefonnummer an.',
     noAnswer: 'Ich habe Ihre Anfrage notiert — ein Kollege meldet sich in Kürze bei Ihnen.',
+    busy: 'Gerade schreiben viele Menschen. Bitte versuchen Sie es gleich noch einmal.',
   },
   ro: {
     launcher: 'Scrieți-ne', title: 'Asistent', placeholder: 'Puneți o întrebare…',
@@ -62,6 +71,7 @@ export const STRINGS: Record<Locale, Strings> = {
     leadName: 'Nume', leadSubmit: 'Trimite', leadThanks: 'Mulțumim, vă contactăm în curând.',
     leadNeedContact: 'Indicați un email sau un număr de telefon.',
     noAnswer: 'Am notat solicitarea dvs. — un coleg vă va contacta în curând.',
+    busy: 'Acum ne scriu mulți. Încercați din nou peste un minut.',
   },
   ru: {
     launcher: 'Написать нам', title: 'Ассистент', placeholder: 'Задайте вопрос…',
@@ -73,6 +83,7 @@ export const STRINGS: Record<Locale, Strings> = {
     leadName: 'Имя', leadSubmit: 'Отправить', leadThanks: 'Спасибо, мы свяжемся с вами.',
     leadNeedContact: 'Укажите email или телефон.',
     noAnswer: 'Я записал ваш запрос — коллега свяжется с вами в ближайшее время.',
+    busy: 'Сейчас пишут многие. Попробуйте ещё раз через минуту.',
   },
 };
 

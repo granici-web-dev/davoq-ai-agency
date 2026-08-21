@@ -358,6 +358,7 @@ scripts/           smoke, проверки изоляции, SSRF, онборд�
 | `npm run test:ssrf` | сервер не ходит по адресу, который ему назвали |
 | `npm run test:onboarding` | заведение второго клиента |
 | `npm run watchdog` | наблюдатель: проверки и письма о поломках |
+| `npm run test:load` | замер под нагрузкой (тратит деньги на модель) |
 | `npm run client new\|apply\|list\|metrics` | работа с клиентами |
 | `npm run cli` | тенанты, пользователи, загрузка материалов, поиск |
 | `npm run typecheck` | типы |

@@ -5,7 +5,7 @@ import { DEFAULT_THEME, resolveTheme, toCssVars } from '../shared/theme.js';
 import { fetchConfig, streamChat, submitLead, visitorId, type WidgetConfig } from './api.js';
 
 type Msg = { role: 'user' | 'bot' | 'note'; text: string };
-type Phase = 'idle' | 'streaming' | 'error' | 'offline';
+type Phase = 'idle' | 'streaming' | 'error' | 'busy' | 'offline';
 
 /**
  * Переписка в sessionStorage.
@@ -192,7 +192,7 @@ export function App({ base, publicKey }: { base: string; publicKey: string }): p
             // Пустой пузырь бота убираем: оборванный ответ не должен выглядеть
             // как ответ, состоящий из пустоты.
             setMessages((m) => (m[m.length - 1]?.text === '' ? m.slice(0, -1) : m));
-            setPhase(kind === 'quota' ? 'offline' : 'error');
+            setPhase(kind === 'quota' ? 'offline' : kind === 'busy' ? 'busy' : 'error');
           },
         },
         abort.current.signal,
@@ -271,9 +271,9 @@ export function App({ base, publicKey }: { base: string; publicKey: string }): p
                 <i /><i /><i />
               </div>
             )}
-            {phase === 'error' && (
+            {(phase === 'error' || phase === 'busy') && (
               <div class="msg note">
-                {t.error}{' '}
+                {phase === 'busy' ? t.busy : t.error}{' '}
                 <button class="retry" onClick={() => void ask(lastQuestion.current)}>
                   {t.retry}
                 </button>
