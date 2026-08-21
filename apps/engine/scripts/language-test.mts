@@ -12,7 +12,7 @@
  *   npm run test:language
  */
 import type { FastifyReply } from 'fastify';
-import { detectLocale, wrongLanguage } from '../src/engine/rag/language.js';
+import { detectLocale, plausibleLocales, wrongLanguage } from '../src/engine/rag/language.js';
 import { createStreamGuard } from '../src/engine/api/stream-guard.js';
 
 let failed = 0;
@@ -131,6 +131,51 @@ function fakeReply(): { reply: FastifyReply; sent: () => string } {
   check('протечка остановлена на середине', stopped, true);
   check('протечка помечена', guard.rejected, true);
   check('посетителю не ушло ни знака', sent(), '');
+}
+
+
+// ── Язык посетителя по короткому вопросу ─────────────────────────────────
+//
+// Дефект, внесённый вместе с самой охраной: определитель на пяти словах честно
+// отвечает «не знаю», охрана брала язык из настроек браузера и отвергала
+// правильный английский ответ англоязычному посетителю.
+{
+  const short = 'Do you deliver to France?';
+  check('короткий английский вопрос: английский не исключён',
+    plausibleLocales(short).includes('en'), true);
+  check('и правильный английский ответ на него проходит',
+    wrongLanguage("Apologies, we deliver only within Romania at the moment, sorry about that.",
+      [...plausibleLocales(short), 'ro']),
+    false);
+
+  const roShort = 'Ce garanție oferiți?';
+  check('короткий румынский вопрос не открывает дорогу английскому ответу',
+    wrongLanguage("Apologies, but I don't have that information in the knowledge base for you.",
+      [...plausibleLocales(roShort), 'ro']),
+    true);
+}
+
+// ── Вторая неудача подряд: текст обязан дойти ────────────────────────────
+//
+// Второй мой дефект. Буфер очищался при отклонении, поэтому после второй
+// неудачной генерации отдавать было нечего: посетитель получал пустой пузырь,
+// обе генерации были оплачены, а в статистике случай выглядел доставленным.
+{
+  const { reply, sent } = fakeReply();
+  const guard = createStreamGuard(reply, ['ro']);
+  const leak = "I'm sorry, but I don't have that information in my knowledge base right now.";
+  for (const ch of leak.match(/.{1,7}/g) ?? []) if (!guard.push(ch)) break;
+  guard.settle();
+  check('протечка отклонена', guard.rejected, true);
+  check('до release посетителю ничего не ушло', sent(), '');
+
+  guard.release();
+  check('release отдаёт придержанное', sent().length > 0, true);
+  check('и дальше пишет насквозь', (() => {
+    const before = sent();
+    guard.push(' Additional text.');
+    return sent() === before + ' Additional text.';
+  })(), true);
 }
 
 console.log(failed === 0 ? '\nОПРЕДЕЛИТЕЛЬ ЯЗЫКА OK' : `\nОПРЕДЕЛИТЕЛЬ ЯЗЫКА: ошибок ${failed}`);

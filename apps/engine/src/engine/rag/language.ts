@@ -29,6 +29,15 @@ const MARKERS: Record<DetectedLocale, string[]> = {
     'the', 'and', 'is', 'are', 'you', 'your', 'we', 'our', 'for', 'with',
     'that', 'this', 'have', 'not', 'can', 'will', 'would', 'about', 'please',
     'need', 'sorry', 'apologies', 'information', 'delivery', 'knowledge',
+    // Добавлено ради коротких вопросов посетителя. Определить язык ответа бота
+    // по служебным словам легко — он длинный; определить язык вопроса из пяти
+    // слов было нельзя, и охрана из-за этого отвергала правильный английский
+    // ответ англоязычному посетителю. Здесь только слова, которых нет
+    // ни в румынском, ни в немецком, ни в русском.
+    'do', 'does', 'did', 'what', 'how', 'when', 'where', 'why', 'who', 'which',
+    'to', 'of', 'it', 'from', 'they', 'there', 'if', 'but', 'just', 'want',
+    'know', 'thanks', 'thank', 'hello', 'yes', 'much', 'many', 'some', 'any',
+    'all', 'been', 'send', 'get', 'give', 'tell', 'show', 'make', 'made',
   ],
   de: [
     'der', 'die', 'das', 'und', 'ist', 'sind', 'nicht', 'für', 'mit', 'wir',
@@ -66,6 +75,45 @@ export function detectLocale(text: string): DetectedLocale | null {
   if (!best || best[1] === 0) return null;
   if (second && best[1] - second[1] < MIN_MARGIN) return null;
   return best[0];
+}
+
+
+/**
+ * Сколько маркеров считается основанием не исключать язык. Порог ниже, чем
+ * у `detectLocale`, и это намеренно: здесь решается не «какой это язык»,
+ * а «какой язык нельзя исключить».
+ */
+const MIN_PLAUSIBLE = 2;
+
+/**
+ * Языки, на которых посетитель мог написать. Не классификация, а список того,
+ * что нельзя исключить.
+ *
+ * Нужно потому, что охрана языка судит о правильности ответа по языку вопроса,
+ * а вопрос бывает коротким. «Do you deliver to France?» — пять слов, для
+ * `detectLocale` этого мало, и честный ответ там «не знаю». Прежде в такой
+ * момент охрана брала язык из настроек браузера, и англоязычный посетитель
+ * получал правильный английский ответ, который выбрасывался и переписывался
+ * по-румынски. То есть охрана ломала ровно то, что должна была защищать.
+ *
+ * Цена ошибок здесь несимметрична, поэтому и порог несимметричный: лишний
+ * язык в списке стоит одной пропущенной протечки, недостающий — выброшенного
+ * правильного ответа и второй оплаченной генерации.
+ */
+export function plausibleLocales(text: string): DetectedLocale[] {
+  const confident = detectLocale(text);
+  const out = new Set<DetectedLocale>(confident ? [confident] : []);
+
+  const words = new Set(
+    text.toLowerCase().replace(/[^\p{L}\p{M}'’]+/gu, ' ').split(' ').filter(Boolean),
+  );
+  for (const [locale, markers] of Object.entries(MARKERS) as Array<[DetectedLocale, string[]]>) {
+    if (markers.filter((m) => words.has(m)).length >= MIN_PLAUSIBLE) out.add(locale);
+  }
+  // Кириллица говорит сама за себя и на длину не смотрит.
+  if ((text.match(/[а-яА-ЯёЁ]/g) ?? []).length > 3) out.add('ru');
+
+  return [...out];
 }
 
 /**

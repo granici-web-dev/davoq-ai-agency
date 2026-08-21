@@ -11,7 +11,8 @@ import { verticalOf } from '../prompt/vertical.js';
 import { buildSystem, buildUserContent } from '../rag/prompt.js';
 import { retrieveAll } from '../rag/retrieve.js';
 import { originAllowed, resolveTenant } from './auth.js';
-import { detectLocale } from '../rag/language.js';
+import { plausibleLocales } from '../rag/language.js';
+import { LOCALES, STRINGS, type Locale } from '../shared/i18n.js';
 import { createStreamGuard, languageCorrection } from './stream-guard.js';
 
 /** Тип реплики выводим из самого клиента: путь к нему внутри пакета — не публичный контракт. */
@@ -180,11 +181,25 @@ export function registerChat(app: FastifyInstance): void {
       //
       // Отклоняем только ответ, не попавший ни в один из допустимых: ровно
       // тот случай, ради которого всё затевалось.
+      //
+      // Языки берутся из того, что посетитель НАПИСАЛ, — из этого сообщения и из
+      // его прежних реплик. Настройки браузера идут следом, а не вместо: пять
+      // английских слов определителю не по зубам, и раньше в этот момент
+      // побеждал browser locale, из-за чего англоязычный посетитель получал
+      // правильный английский ответ, который выбрасывался и переписывался
+      // по-румынски. Охрана ломала ровно то, что защищала.
+      const visitorSaid = [
+        body.message,
+        ...history.filter((m) => m.role === 'user').map((m) => m.content),
+      ].join('\n');
       const acceptedLocales = [
         ...new Set(
-          [detectLocale(body.message), requestLocale, tenant.localeDefault].filter(
-            (l): l is string => Boolean(l),
-          ),
+          [
+            ...plausibleLocales(body.message),
+            ...plausibleLocales(visitorSaid),
+            requestLocale,
+            tenant.localeDefault,
+          ].filter((l): l is string => Boolean(l)),
         ),
       ];
       const replyLocale = acceptedLocales[0]!;
@@ -225,7 +240,11 @@ export function registerChat(app: FastifyInstance): void {
             stream = runTurn(languageCorrection(replyLocale));
             iterator = stream[Symbol.asyncIterator]();
             step = await iterator.next();
-            turn = -1; // следующий проход цикла начнёт оборот заново
+            // Оборот переигрывается, а не начинается заново: `turn--` гасит
+            // `turn++` в заголовке цикла. Прежде здесь стояло `turn = -1`,
+            // и это сбрасывало потолок в три оборота — до семи вызовов модели
+            // на одно сообщение, с дублями в журнале вызовов.
+            turn--;
             continue;
           }
           if (guard.rejected) {
@@ -233,6 +252,15 @@ export function registerChat(app: FastifyInstance): void {
             // посетителю хуже странного языка, — но помечаем, чтобы это
             // попало в статистику пилота, а не растворилось.
             languageFlag = 'leak';
+            guard.release();
+            // Поток был прерван на пробе, остаток ещё не прочитан. Без этого
+            // посетитель получил бы первые несколько десятков знаков и обрыв.
+            for (; !step.done; step = await iterator.next()) {
+              const event = step.value;
+              if (event.type === 'content_block_delta' && event.delta.type === 'text_delta') {
+                guard.push(event.delta.text);
+              }
+            }
           }
 
           const final = await stream.finalMessage();
@@ -243,8 +271,12 @@ export function registerChat(app: FastifyInstance): void {
             .flatMap((block) => (block.type === 'text' ? [block.text] : []))
             .join('');
 
-          if (final.stop_reason !== 'tool_use' || turn >= 2) break;
+          if (final.stop_reason !== 'tool_use') break;
 
+          // Инструменты выполняются ВСЕГДА, в том числе на последнем разрешённом
+          // обороте. Прежде выход из цикла стоял до этого места, и вызовы третьего
+          // оборота выбрасывались молча: контакт, названный третьей репликой,
+          // не сохранялся — а именно ради контакта всё и делается.
           convo.push({ role: 'assistant', content: final.content });
           const results: Array<{
             type: 'tool_result';
@@ -271,9 +303,28 @@ export function registerChat(app: FastifyInstance): void {
           }
           convo.push({ role: 'user', content: results });
 
+          // Потолок оборотов (§6 п.5). Четвёртый вызов модели ради вежливой
+          // фразы не делаем: побочные действия уже выполнены, а на ответ без
+          // единого знака текста есть отдельный случай ниже.
+          if (turn >= 2) break;
+
           stream = runTurn();
           iterator = stream[Symbol.asyncIterator]();
           step = await iterator.next();
+        }
+
+        // Ответ без единого знака текста — не ответ, а тишина. Так выходит, когда
+        // модель до последнего оборота только вызывала инструменты. Показать
+        // посетителю пустой пузырь плохо, но хуже другое: пустая реплика
+        // ассистента, попав в историю, отвергается моделью — и КАЖДОЕ следующее
+        // сообщение в этом разговоре падает в 502. Навсегда, до нового разговора.
+        if (answer.trim() === '') {
+          const uiLocale: Locale = (LOCALES as readonly string[]).includes(replyLocale)
+            ? (replyLocale as Locale)
+            : 'en';
+          answer = STRINGS[uiLocale].noAnswer;
+          guard.release();
+          guard.push(answer);
         }
 
         // Всё сохраняется одним куском после успеха. Записывать вопрос до вызова модели

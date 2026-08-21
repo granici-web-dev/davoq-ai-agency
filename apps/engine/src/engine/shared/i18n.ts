@@ -21,6 +21,12 @@ export interface Strings {
   leadSubmit: string;
   leadThanks: string;
   leadNeedContact: string;
+  /**
+   * Когда оборот кончился без единого знака текста: модель только вызывала
+   * инструменты. Пустую реплику нельзя ни показать, ни сохранить — в истории
+   * она отвергается моделью, и разговор ломается насмерть.
+   */
+  noAnswer: string;
 }
 
 export const STRINGS: Record<Locale, Strings> = {
@@ -33,6 +39,7 @@ export const STRINGS: Record<Locale, Strings> = {
     leadIntro: 'Leave your contact details', leadEmail: 'Email', leadPhone: 'Phone',
     leadName: 'Name', leadSubmit: 'Send', leadThanks: 'Thank you, we will be in touch.',
     leadNeedContact: 'Please provide an email or a phone number.',
+    noAnswer: 'I have noted your request — a colleague will get back to you shortly.',
   },
   de: {
     launcher: 'Schreiben Sie uns', title: 'Assistent', placeholder: 'Stellen Sie eine Frage…',
@@ -43,6 +50,7 @@ export const STRINGS: Record<Locale, Strings> = {
     leadIntro: 'Hinterlassen Sie Ihre Kontaktdaten', leadEmail: 'E-Mail', leadPhone: 'Telefon',
     leadName: 'Name', leadSubmit: 'Absenden', leadThanks: 'Danke, wir melden uns.',
     leadNeedContact: 'Bitte geben Sie eine E-Mail-Adresse oder Telefonnummer an.',
+    noAnswer: 'Ich habe Ihre Anfrage notiert — ein Kollege meldet sich in Kürze bei Ihnen.',
   },
   ro: {
     launcher: 'Scrieți-ne', title: 'Asistent', placeholder: 'Puneți o întrebare…',
@@ -53,6 +61,7 @@ export const STRINGS: Record<Locale, Strings> = {
     leadIntro: 'Lăsați datele de contact', leadEmail: 'Email', leadPhone: 'Telefon',
     leadName: 'Nume', leadSubmit: 'Trimite', leadThanks: 'Mulțumim, vă contactăm în curând.',
     leadNeedContact: 'Indicați un email sau un număr de telefon.',
+    noAnswer: 'Am notat solicitarea dvs. — un coleg vă va contacta în curând.',
   },
   ru: {
     launcher: 'Написать нам', title: 'Ассистент', placeholder: 'Задайте вопрос…',
@@ -63,6 +72,7 @@ export const STRINGS: Record<Locale, Strings> = {
     leadIntro: 'Оставьте контакты', leadEmail: 'Email', leadPhone: 'Телефон',
     leadName: 'Имя', leadSubmit: 'Отправить', leadThanks: 'Спасибо, мы свяжемся с вами.',
     leadNeedContact: 'Укажите email или телефон.',
+    noAnswer: 'Я записал ваш запрос — коллега свяжется с вами в ближайшее время.',
   },
 };
 
