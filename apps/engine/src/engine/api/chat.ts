@@ -11,6 +11,8 @@ import { verticalOf } from '../prompt/vertical.js';
 import { buildSystem, buildUserContent } from '../rag/prompt.js';
 import { retrieveAll } from '../rag/retrieve.js';
 import { originAllowed, resolveTenant } from './auth.js';
+import { detectLocale } from '../rag/language.js';
+import { createStreamGuard, languageCorrection } from './stream-guard.js';
 
 /** Тип реплики выводим из самого клиента: путь к нему внутри пакета — не публичный контракт. */
 type MessageParam = Parameters<typeof claude.messages.stream>[0]['messages'][number];
@@ -98,11 +100,13 @@ export function registerChat(app: FastifyInstance): void {
         { role: 'user', content: buildUserContent(body.message, hits, approved) },
       ];
 
-      const runTurn = () =>
+      const runTurn = (correction?: string) =>
         claude.messages.stream({
           model,
           max_tokens: 1024,
-          system,
+          system: correction
+            ? [...system, { type: 'text' as const, text: correction }]
+            : system,
           tools: [
             CAPTURE_LEAD,
             REPORT_UNANSWERED,
@@ -135,6 +139,34 @@ export function registerChat(app: FastifyInstance): void {
       const toolCalls: Array<{ name: string; input: unknown; ok: boolean }> = [];
       let answer = '';
 
+      // Охрана языка: держит начало ответа, пока не убедится, что он написан
+      // на языке посетителя. Повтор ровно один — вторая неудача отдаётся как
+      // есть и помечается в базе. Бесконечно переспрашивать модель дороже,
+      // чем один странный ответ, и посетитель всё это время ждёт.
+      // Допустимые языки ответа: тот, на котором написал посетитель, и тот,
+      // который просит виджет. Оба, а не один.
+      //
+      // Разница не теоретическая. Определить язык короткого вопроса нельзя —
+      // «Ce garanție oferiți?» это шесть слов с одним служебным. А locale
+      // приходит из настроек браузера, и румын с русским браузером присылает
+      // locale=ru, пишет по-румынски и получает правильный румынский ответ.
+      // Охрана, настаивающая на одном языке, отвергла бы его и заставила
+      // отвечать по-русски — то есть сломала бы то, что работало.
+      //
+      // Отклоняем только ответ, не попавший ни в один из допустимых: ровно
+      // тот случай, ради которого всё затевалось.
+      const acceptedLocales = [
+        ...new Set(
+          [detectLocale(body.message), body.locale, tenant.localeDefault].filter(
+            (l): l is string => Boolean(l),
+          ),
+        ),
+      ];
+      const replyLocale = acceptedLocales[0]!;
+      let guard = createStreamGuard(reply, acceptedLocales);
+      let languageFlag: 'retried' | 'leak' | null = null;
+      let retried = false;
+
       try {
         // Цикл инструментов (§6 п.5). Три оборота — потолок: дальше это уже не
         // уточнение контакта, а зацикливание, за которое платит клиент.
@@ -142,8 +174,40 @@ export function registerChat(app: FastifyInstance): void {
           for (; !step.done; step = await iterator.next()) {
             const event = step.value;
             if (event.type === 'content_block_delta' && event.delta.type === 'text_delta') {
-              reply.raw.write(`event: delta\ndata: ${JSON.stringify({ t: event.delta.text })}\n\n`);
+              if (!guard.push(event.delta.text)) break;
             }
+          }
+
+          // Текст оборота кончился. Если его было меньше пробы, решение
+          // всё ещё не принято — принимаем по тому, что есть, иначе короткий
+          // ответ навсегда останется в буфере и посетитель не увидит ничего.
+          guard.settle();
+
+          // Язык оказался чужим. Прерываем поток на месте: инструменты этого
+          // оборота ещё не выполнялись — они вызываются после finalMessage, —
+          // так что побочных действий отменять не нужно, а посетителю
+          // не ушло ни одного знака.
+          if (guard.rejected && !retried) {
+            retried = true;
+            languageFlag = 'retried';
+            request.log.warn(
+              { tenantId: tenant.id, conversationId, locale: replyLocale },
+              'ответ на чужом языке отброшен, генерируем заново',
+            );
+            stream.abort();
+            answer = '';
+            guard = createStreamGuard(reply, acceptedLocales);
+            stream = runTurn(languageCorrection(replyLocale));
+            iterator = stream[Symbol.asyncIterator]();
+            step = await iterator.next();
+            turn = -1; // следующий проход цикла начнёт оборот заново
+            continue;
+          }
+          if (guard.rejected) {
+            // Вторая попытка тоже не на том языке. Отдаём как есть: молчание
+            // посетителю хуже странного языка, — но помечаем, чтобы это
+            // попало в статистику пилота, а не растворилось.
+            languageFlag = 'leak';
           }
 
           const final = await stream.finalMessage();
@@ -205,6 +269,7 @@ export function registerChat(app: FastifyInstance): void {
           leads: pendingLeads,
           unanswered: pendingUnanswered,
           toolCalls,
+          languageFlag,
         });
 
         reply.raw.write('event: done\ndata: {}\n\n');
@@ -288,6 +353,8 @@ interface PersistArgs {
   }>;
   unanswered: Array<{ question: string; reason: string }>;
   toolCalls: Array<{ name: string; input: unknown; ok: boolean }>;
+  /** Протечка языка: поймана и исправлена, или обнаружена и отдана как есть. */
+  languageFlag: 'retried' | 'leak' | null;
 }
 
 async function persist(client: import('pg').PoolClient, a: PersistArgs): Promise<void> {
@@ -306,8 +373,8 @@ async function persist(client: import('pg').PoolClient, a: PersistArgs): Promise
   await client.query(
     `INSERT INTO messages (conversation_id, tenant_id, role, content,
                            tokens_in, tokens_out, cache_read_tokens, model, retrieval_chunk_ids,
-                           tool_calls)
-     VALUES ($1, $2, 'assistant', $3, $4, $5, $6, $7, $8, $9)`,
+                           tool_calls, language_flag)
+     VALUES ($1, $2, 'assistant', $3, $4, $5, $6, $7, $8, $9, $10)`,
     [
       a.conversationId,
       a.tenantId,
@@ -318,6 +385,7 @@ async function persist(client: import('pg').PoolClient, a: PersistArgs): Promise
       a.model,
       a.hits.map((h) => h.id),
       a.toolCalls.length > 0 ? JSON.stringify(a.toolCalls) : null,
+      a.languageFlag,
     ],
   );
 
