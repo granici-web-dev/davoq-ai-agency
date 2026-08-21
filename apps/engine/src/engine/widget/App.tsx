@@ -36,7 +36,7 @@ export function App({ base, publicKey }: { base: string; publicKey: string }): p
   }, []);
 
   const locale = useMemo(
-    () => pickLocale(navigator.language, config?.localeDefault ?? 'en'),
+    () => pickLocale(navigator.language, config?.localeDefault ?? 'en', config?.supportedLocales),
     [config],
   );
   const t = STRINGS[locale];

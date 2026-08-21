@@ -6,6 +6,8 @@ export interface WidgetConfig {
   aiDisclosureText: Record<string, string>;
   position: 'bottom-right' | 'bottom-left';
   localeDefault: string;
+  /** Языки, на которых клиент готов разговаривать. Пусто — только localeDefault. */
+  supportedLocales?: string[];
   avatarUrl: string | null;
   theme: Theme;
 }

@@ -35,6 +35,12 @@ export function registerWidget(app: FastifyInstance): void {
     const tenant = await resolveTenant(key);
     if (!tenant) return reply.code(404).send({ error: 'unknown key' });
 
+    const supported = await withTenant(tenant.id, async (client) => {
+      const { rows } = await client.query<{ supported_locales: string[] }>(
+        'SELECT supported_locales FROM tenants WHERE id = $1', [tenant.id]);
+      return rows[0]?.supported_locales ?? [];
+    });
+
     return withTenant(tenant.id, async (client) => {
       const { rows } = await client.query<{
         bot_name: string;
@@ -62,6 +68,9 @@ export function registerWidget(app: FastifyInstance): void {
         avatarUrl: cfg?.avatar_url ?? null,
         position: cfg?.position ?? 'bottom-right',
         localeDefault: tenant.localeDefault,
+        // Языки, на которых клиент готов разговаривать. Виджет не должен
+        // здороваться на языке, на котором бот не сможет ответить.
+        supportedLocales: supported.length > 0 ? supported : [tenant.localeDefault],
         theme: normalizeTheme(cfg?.theme as never),
         welcomeMessage: cfg?.welcome_message ?? {},
         // AI Act Art. 50(1): текст можно поменять, убрать — нельзя. Пустой объект

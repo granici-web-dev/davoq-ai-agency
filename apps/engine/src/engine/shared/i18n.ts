@@ -66,11 +66,31 @@ export const STRINGS: Record<Locale, Strings> = {
   },
 };
 
-/** navigator.language отдаёт «de-AT», «ru-MD» и подобное — интересует только базовый язык. */
-export function pickLocale(preferred: string | undefined, fallback: string): Locale {
-  for (const candidate of [preferred, fallback]) {
-    const base = candidate?.toLowerCase().split('-')[0];
-    if (base && (LOCALES as readonly string[]).includes(base)) return base as Locale;
+/**
+ * Язык виджета.
+ *
+ * navigator.language отдаёт «de-AT», «ru-MD» и подобное — интересует только
+ * базовый язык. Но выбирать из всех четырёх встроенных нельзя: клиент отвечает
+ * на тех языках, на которых у него есть материалы. Румынский производитель
+ * с русским приветствием получает посетителя, который спрашивает по-русски
+ * и не находит ничего — поиск одноязычен.
+ *
+ * Поэтому язык браузера учитывается, только если клиент его поддерживает.
+ */
+export function pickLocale(
+  preferred: string | undefined,
+  fallback: string,
+  supported?: readonly string[],
+): Locale {
+  const base = (v: string | undefined): string | undefined => v?.toLowerCase().split('-')[0];
+
+  const allowed = (supported && supported.length > 0 ? supported : LOCALES)
+    .map((l) => base(l)!)
+    .filter((l): l is Locale => (LOCALES as readonly string[]).includes(l));
+  const pool: readonly Locale[] = allowed.length > 0 ? allowed : LOCALES;
+
+  for (const candidate of [base(preferred), base(fallback)]) {
+    if (candidate && pool.includes(candidate as Locale)) return candidate as Locale;
   }
-  return 'en';
+  return pool[0]!;
 }

@@ -97,6 +97,7 @@ export async function applyClientConfig(
       `SELECT t.name, t.vertical, t.plan, t.locale_default, t.allowed_domains,
               t.price_guidance, t.quote_fields, t.lead_notify_email, t.lead_notify_from,
               t.hidden_screens, t.profile, t.retrieval_overrides, t.monthly_message_cap,
+              t.supported_locales,
               t.applied_config,
               w.bot_name, w.position, w.welcome_message, w.ai_disclosure_text
          FROM tenants t LEFT JOIN widget_configs w ON w.tenant_id = t.id
@@ -113,6 +114,7 @@ export async function applyClientConfig(
       { field: 'vertical', column: 'vertical', table: 'tenants', value: cfg.vertical },
       { field: 'plan', column: 'plan', table: 'tenants', value: cfg.plan },
       { field: 'locale', column: 'locale_default', table: 'tenants', value: cfg.locale.default },
+      { field: 'supportedLocales', column: 'supported_locales', table: 'tenants', value: cfg.locale.supported },
       { field: 'domains', column: 'allowed_domains', table: 'tenants', value: cfg.channels.web.domains },
       { field: 'priceGuidance', column: 'price_guidance', table: 'tenants', value: cfg.catalog.priceGuidance ?? '' },
       { field: 'quoteFields', column: 'quote_fields', table: 'tenants', value: quoteFields },
