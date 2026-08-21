@@ -5,6 +5,7 @@ import { enqueueLeadNotify } from '../ingest/queue.js';
 import { contactKey } from '../notify/contact.js';
 import { claude, modelFor } from '../llm/claude.js';
 import { planFor } from '../plans.js';
+import { entitlementOf } from '../billing/entitlement.js';
 import { loadTools, toClaudeTool } from '../llm/connector.js';
 import { buildQuoteTool, loadQuoteConfig } from '../llm/quote.js';
 import { CAPTURE_LEAD, REPORT_UNANSWERED, runTool, type ToolContext } from '../llm/tools.js';
@@ -88,6 +89,23 @@ export function registerChat(app: FastifyInstance): void {
 
     if (!originAllowed(request.headers.origin, tenant.allowedDomains)) {
       return reply.code(403).send({ error: 'origin not allowed' });
+    }
+
+    // Право отвечать: оплачено, идёт триал или отсрочка после неудачного
+    // платежа. Проверяется до всего остального — неоплаченный клиент не должен
+    // занимать ни место, ни соединение с базой.
+    //
+    // Отказ идёт тем же путём, что и исчерпанный месячный потолок: виджет
+    // показывает форму контакта. Выключить виджет совсем было бы хуже для
+    // клиента, чем для нас: он теряет обращения, а мы в этот момент выглядим
+    // сломанными, а не строгими.
+    const entitlement = entitlementOf(tenant);
+    if (!entitlement.active) {
+      request.log.info(
+        { tenantId: tenant.id, reason: entitlement.reason },
+        'подписка не даёт права отвечать',
+      );
+      return reply.code(402).send({ error: 'quota exceeded', reason: entitlement.reason });
     }
 
     // Место занимается до первого захода в базу и отпускается в самом конце.

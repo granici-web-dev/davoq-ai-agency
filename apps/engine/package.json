@@ -33,7 +33,9 @@
     "watchdog": "tsx src/engine/ops/watchdog.ts",
     "test:load": "tsx --env-file=.env scripts/load-test.mts",
     "cost": "tsx --env-file=.env src/platform/cli/cost.ts",
-    "test:plans": "tsx --env-file=.env scripts/plans-test.mts"
+    "test:plans": "tsx --env-file=.env scripts/plans-test.mts",
+    "test:billing": "tsx scripts/billing-test.mts",
+    "test:webhook": "tsx scripts/webhook-test.mts"
   },
   "dependencies": {
     "@anthropic-ai/bedrock-sdk": "^0.30.0",

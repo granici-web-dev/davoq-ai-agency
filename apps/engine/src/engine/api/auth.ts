@@ -10,6 +10,8 @@ export interface ResolvedTenant {
   /** Тариф. Он же задаёт модель, потолок сообщений и лимиты базы знаний. */
   plan: string;
   subscriptionStatus: string;
+  trialEndsAt: Date | null;
+  currentPeriodEnd: Date | null;
   /** Уже с учётом тарифа: null здесь больше не означает «без ограничений». */
   monthlyMessageCap: number;
 }
@@ -28,6 +30,8 @@ export async function resolveTenant(publicKey: string): Promise<ResolvedTenant |
       plan: string;
       status: string;
       subscription_status: string;
+      trial_ends_at: Date | null;
+      current_period_end: Date | null;
       monthly_message_cap: number | null;
     }>('SELECT * FROM resolve_tenant_by_public_key($1)', [publicKey]);
 
@@ -41,6 +45,8 @@ export async function resolveTenant(publicKey: string): Promise<ResolvedTenant |
       supportedLocales: row.supported_locales?.length ? row.supported_locales : [row.locale_default],
       plan: row.plan,
       subscriptionStatus: row.subscription_status,
+      trialEndsAt: row.trial_ends_at,
+      currentPeriodEnd: row.current_period_end,
       monthlyMessageCap: messageCapFor(row.plan, row.monthly_message_cap),
     };
   });

@@ -6,6 +6,7 @@ import { withOwner, withTenant } from '../../engine/db/pool.js';
 import { get as storageGet, put as storagePut } from '../../engine/ingest/storage.js';
 import { loadVertical } from '../../engine/prompt/vertical.js';
 import { PRESETS } from '../../engine/shared/theme.js';
+import { trialEndsAt } from '../../engine/billing/entitlement.js';
 import { clientDir, type ClientConfig } from './config.js';
 
 /**
@@ -141,10 +142,13 @@ export async function applyClientConfig(
     tenantId = await withOwner(async (client) => {
       const { rows } = await client.query<{ id: string }>(
         `INSERT INTO tenants (client_id, name, allowed_domains, locale_default, public_key,
-                              vertical, plan, applied_config)
-         VALUES ($1, $2, $3, $4, $5, $6, $7, $8) RETURNING id`,
+                              vertical, plan, subscription_status, trial_ends_at, applied_config)
+         VALUES ($1, $2, $3, $4, $5, $6, $7, 'trial', $8, $9) RETURNING id`,
         [cfg.id, cfg.name, cfg.channels.web.domains, cfg.locale.default, publicKey,
          cfg.vertical, cfg.plan,
+         // Пробный период отсчитывается от заведения, а не от первой оплаты:
+         // клиент должен успеть попробовать до того, как у него спросят карту.
+         trialEndsAt(),
          // Пометка «заведён, но не донастроен». Если следующие шаги упадут,
          // повторный запуск увидит её и не примет собственные же значения
          // за правки клиента.

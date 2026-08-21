@@ -5,6 +5,7 @@ import Fastify from 'fastify';
 import { registerAdmin } from './admin.js';
 import { registerChat } from './chat.js';
 import { registerWidget } from './widget.js';
+import { registerBilling } from './billing.js';
 import { readiness } from '../ops/health.js';
 
 const app = Fastify({ logger: true });
@@ -35,6 +36,9 @@ app.get('/health/ready', async (request, reply) => {
   const result = await readiness();
   return reply.code(result.ok ? 200 : 503).send(result);
 });
+// Приём вебхуков ставится ПЕРВЫМ: он меняет разбор тела запроса,
+// а хуки Fastify применяются в порядке регистрации.
+registerBilling(app);
 registerAdmin(app);
 registerWidget(app);
 registerChat(app);
