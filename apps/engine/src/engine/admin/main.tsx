@@ -1705,6 +1705,30 @@ function Subscription(): React.ReactElement {
 
   const mb = (v: number): string => `${Math.round(v / 1048576)} MB`;
 
+  /**
+   * Выбрать пакет. Что произойдёт — решает сервер, а не эта кнопка:
+   * оплата, смена действующей подписки или заявка нам, если оплата ещё
+   * не подключена. Панели знать эту разницу незачем, а ошибиться в ней
+   * она могла бы — и ошибка стоила бы клиенту двойного списания.
+   */
+  const choose = async (planId: string): Promise<void> => {
+    setPortalError('');
+    setBusy(planId);
+    try {
+      const r = await post<{ url?: string; changed?: boolean; requested?: boolean }>(
+        '/subscription/checkout', { plan: planId },
+      );
+      if (r.url) { location.href = r.url; return; }
+      if (r.requested) { setRequested(planId); setBusy(''); return; }
+      // Тариф сменился у действующей подписки — перечитываем, а не гадаем.
+      reload();
+      setBusy('');
+    } catch (e) {
+      setPortalError((e as Error).message);
+      setBusy('');
+    }
+  };
+
   // Состояние подписки словами, а не кодом. Читает директор по продажам,
   // а не мы: «past_due» ему не говорит ничего, «карта не прошла» — говорит.
   const state = (): { text: string; kind: 'ok' | 'warn' | 'err' } => {
@@ -1758,12 +1782,9 @@ function Subscription(): React.ReactElement {
               «Оплатить» рядом с «Активна» читается как просьба заплатить дважды.
               Ему нужна другая кнопка — карта и счета. */}
           {!data.canManageBilling && (
-          <button className="go" disabled={busy !== ''} onClick={() => {
-            setPortalError(''); setBusy('pay');
-            void post<{ url: string }>('/subscription/checkout')
-              .then((r) => { location.href = r.url; })
-              .catch((e: Error) => { setPortalError(e.message); setBusy(''); });
-          }}>{busy === 'pay' ? t('Se trimite…') : t('Plătește abonamentul')}</button>
+          <button className="go" disabled={busy !== ''} onClick={() => void choose(data.plan.id)}>
+            {busy === data.plan.id ? t('Se trimite…') : t('Plătește abonamentul')}
+          </button>
           )}
 
           {data.canManageBilling && (
@@ -1801,15 +1822,12 @@ function Subscription(): React.ReactElement {
               <ul className="ticks">
                 {p.highlights.map((h) => <li key={h}>{h}</li>)}
               </ul>
-              {p.current ? <span className="stamp ok">{t('Pachetul dumneavoastră')}</span>
-               : requested === p.id ? <span className="stamp ok">{t('Cererea a fost trimisă')}</span>
+              {requested === p.id ? <span className="stamp ok">{t('Cererea a fost trimisă')}</span>
+               : p.current ? <span className="stamp ok">{t('Pachetul dumneavoastră')}</span>
                : (
-                <button disabled={busy !== ''} onClick={() => {
-                  setPortalError(''); setBusy(p.id);
-                  void post('/subscription/request', { plan: p.id })
-                    .then(() => { setRequested(p.id); setBusy(''); })
-                    .catch((e: Error) => { setPortalError(e.message); setBusy(''); });
-                }}>{busy === p.id ? t('Se trimite…') : t('Vreau acest pachet')}</button>
+                <button disabled={busy !== ''} onClick={() => void choose(p.id)}>
+                  {busy === p.id ? t('Se trimite…') : t('Alege acest pachet')}
+                </button>
               )}
             </div>
           ))}

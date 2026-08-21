@@ -65,9 +65,9 @@ async function call(path: string, form: Record<string, string>): Promise<Record<
 /**
  * Ссылка на оплату.
  *
- * Клиент по ней платит, а тариф ему меняем мы — по решению из вопроса
- * «кто переключает». Поэтому ссылка создаётся нами и отправляется клиенту,
- * а не лежит кнопкой в панели: иначе он выберет Business сам и без нас.
+ * Создаётся только тогда, когда действующей подписки НЕТ. У кого она есть,
+ * тариф меняется через `changePlan`: вторая сессия оплаты завела бы вторую
+ * подписку и списала бы дважды.
  *
  * `tenantId` уезжает в метаданные и возвращается в вебхуке. Искать клиента
  * по email нельзя: он может отличаться от того, которым человек платит.
@@ -103,8 +103,9 @@ export async function createCheckout(args: {
 /**
  * Ссылка на управление подпиской: карта, счета, отмена.
  *
- * Это единственное самообслуживание, которое мы даём: менять карту и скачивать
- * счета клиент вправе сам, а менять тариф — через нас.
+ * Отмена подписки живёт там же. Своей кнопки «отменить» мы не делаем: у Stripe
+ * этот путь уже описан по-человечески и по закону, и повторять его своими
+ * словами — брать на себя ответственность за формулировки.
  */
 export async function createPortalLink(customerId: string, returnUrl: string): Promise<{ url: string }> {
   const session = await call('/billing_portal/sessions', {
@@ -112,6 +113,47 @@ export async function createPortalLink(customerId: string, returnUrl: string): P
     return_url: returnUrl,
   });
   return { url: String(session.url) };
+}
+
+async function get(path: string): Promise<Record<string, unknown>> {
+  const res = await fetch(`${API}${path}`, {
+    headers: { authorization: `Bearer ${secretKey()}` },
+    signal: AbortSignal.timeout(15_000),
+  });
+  const body = (await res.json()) as Record<string, unknown>;
+  if (!res.ok) {
+    const err = body.error as { message?: string } | undefined;
+    throw new Error(`Stripe ${res.status}: ${err?.message ?? 'ошибка'}`);
+  }
+  return body;
+}
+
+/**
+ * Смена тарифа у ДЕЙСТВУЮЩЕЙ подписки.
+ *
+ * Не вторая оплата. Это важно до денег: создать вторую сессию оплаты клиенту,
+ * у которого подписка уже есть, — значит завести ВТОРУЮ подписку и списать
+ * дважды. Он заметит это на выписке, а не в панели, и разбираться будет
+ * с банком, а не с нами.
+ *
+ * Правильный путь — заменить позицию в существующей подписке. Stripe сам
+ * посчитает разницу за остаток периода: при повышении спишет доплату,
+ * при понижении оставит остаток на счету.
+ */
+export async function changePlan(subscriptionId: string, plan: PlanId): Promise<void> {
+  const sub = await get(`/subscriptions/${subscriptionId}`);
+  const items = (sub.items as { data?: Array<{ id?: string }> } | undefined)?.data ?? [];
+  const itemId = items[0]?.id;
+  if (!itemId) throw new Error(`у подписки ${subscriptionId} нет позиций — менять нечего`);
+
+  await call(`/subscriptions/${subscriptionId}`, {
+    'items[0][id]': itemId,
+    'items[0][price]': priceIdFor(plan),
+    // Разница за остаток периода считается сразу: иначе повышение тарифа
+    // вступало бы в силу бесплатно до конца месяца.
+    proration_behavior: 'create_prorations',
+    'metadata[plan]': plan,
+  });
 }
 
 /**

@@ -457,4 +457,8 @@ export const RU: Record<string, string> = {
     "Сейчас принять заявку не можем. Напишите нам напрямую.",
   "Se trimite…":
     "Отправляется…",
+  "Alege acest pachet":
+    "Выбрать этот пакет",
+  "error.billing_unavailable":
+    "Оплата сейчас недоступна. Напишите нам, мы разберёмся.",
 };

@@ -457,4 +457,8 @@ export const EN: Record<string, string> = {
     "We cannot take the request right now. Please write to us directly.",
   "Se trimite…":
     "Sending…",
+  "Alege acest pachet":
+    "Choose this package",
+  "error.billing_unavailable":
+    "Payment is unavailable right now. Write to us and we will sort it out.",
 };
