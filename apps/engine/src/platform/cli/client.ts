@@ -6,7 +6,7 @@
  *   npm run client list
  */
 import '../../engine/env.js';
-import { closeOwnerPool, pool } from '../../engine/db/pool.js';
+import { closeOwnerPool, pool, withOwner } from '../../engine/db/pool.js';
 import { listVerticals } from '../../engine/prompt/vertical.js';
 import { applyClientConfig } from '../onboarding/apply.js';
 import { listClients, loadClientConfig } from '../onboarding/config.js';
@@ -83,6 +83,46 @@ try {
       break;
     }
 
+    case 'metrics': {
+      // Все метрики лежат с tenant_id, поэтому одна и та же выборка работает
+      // для любого клиента — и для сводки по всем сразу.
+      const days = Number(flag('days') ?? 30);
+      const { rows } = await withOwner((client) =>
+        client.query<{
+          name: string; conversations: string; contacts: string; leads: string;
+          messages: string; widget_loads: string;
+        }>(
+          `SELECT t.name,
+                  (SELECT count(*) FROM conversations c
+                    WHERE c.tenant_id = t.id AND c.started_at >= now() - ($1 || ' days')::interval)
+                    AS conversations,
+                  (SELECT count(*) FROM leads l
+                    WHERE l.tenant_id = t.id AND l.created_at >= now() - ($1 || ' days')::interval
+                      AND (l.email IS NOT NULL OR l.phone IS NOT NULL)) AS contacts,
+                  (SELECT count(*) FROM leads l
+                    WHERE l.tenant_id = t.id AND l.notified_at IS NOT NULL
+                      AND l.created_at >= now() - ($1 || ' days')::interval) AS leads,
+                  coalesce((SELECT sum(u.messages) FROM usage_daily u
+                    WHERE u.tenant_id = t.id AND u.date >= current_date - $1::int), 0) AS messages,
+                  coalesce((SELECT sum(u.widget_loads) FROM usage_daily u
+                    WHERE u.tenant_id = t.id AND u.date >= current_date - $1::int), 0) AS widget_loads
+             FROM tenants t WHERE t.status = 'active' ORDER BY t.created_at`,
+          [days],
+        ),
+      );
+      console.log(`\nза ${days} дн.\n`);
+      console.log('  клиент               показы  разговоры  контакты  переданы  сообщения');
+      for (const r of rows) {
+        console.log(
+          `  ${r.name.padEnd(20)} ${String(r.widget_loads).padStart(6)}` +
+          ` ${String(r.conversations).padStart(10)} ${String(r.contacts).padStart(9)}` +
+          ` ${String(r.leads).padStart(9)} ${String(r.messages).padStart(10)}`,
+        );
+      }
+      console.log();
+      break;
+    }
+
     case 'list': {
       const clients = listClients();
       if (clients.length === 0) {
@@ -101,7 +141,7 @@ try {
     }
 
     default:
-      console.error('команды: new | apply | list');
+      console.error('команды: new | apply | list | metrics');
       console.error(`вертикали: ${listVerticals().join(', ') || '—'}`);
       process.exitCode = 1;
   }
