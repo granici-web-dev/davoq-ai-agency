@@ -1,5 +1,6 @@
 import type pg from 'pg';
 import { callConnector, formatResult, type ConnectorTool } from './connector.js';
+import { sanitizeText } from '../shared/text.js';
 
 /**
  * Инструмент, доступный всегда (§6 п.5). Коннекторные инструменты тенанта добавятся
@@ -62,7 +63,6 @@ export const CAPTURE_LEAD = {
 };
 
 export interface ToolContext {
-  client: pg.PoolClient;
   tenantId: string;
   conversationId: string;
   /** Диалог ещё не записан в базу — лид складываем в буфер и пишем вместе с ним. */
@@ -145,5 +145,10 @@ export async function runTool(
   };
 }
 
+/**
+ * Значение поля инструмента. Чистится по той же причине, что и сообщение
+ * посетителя: модель пересказывает то, что он написал, и нулевой байт
+ * доезжает сюда вместе с пересказом.
+ */
 const str = (v: unknown): string | undefined =>
-  typeof v === 'string' && v.trim() ? v.trim() : undefined;
+  typeof v === 'string' ? (sanitizeText(v, 4000).trim() || undefined) : undefined;

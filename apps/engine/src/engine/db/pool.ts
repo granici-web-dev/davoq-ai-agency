@@ -10,7 +10,24 @@ const { Pool } = pg;
  */
 export const pool = new Pool({
   connectionString: process.env.DATABASE_URL,
-  max: 10,
+  max: Number(process.env.DB_POOL_MAX ?? 20),
+
+  // Ожидание соединения обязано кончаться. Без этого исчерпанный пул не даёт
+  // отказа — он даёт зависание: запрос стоит в очереди столько, сколько
+  // потребуется, посетитель смотрит на «Печатает…», а панель клиента не
+  // открывается вовсе. Отказ за пять секунд честнее бесконечного ожидания.
+  connectionTimeoutMillis: Number(process.env.DB_CONNECT_TIMEOUT_MS ?? 5_000),
+  idleTimeoutMillis: 30_000,
+
+  // Потолок на один запрос. Ошибка в условии или блокировка иначе держат
+  // соединение до перезапуска процесса — и уносят с собой остальные девятнадцать.
+  statement_timeout: Number(process.env.DB_STATEMENT_TIMEOUT_MS ?? 15_000),
+});
+
+// Соединение, умершее в простое (перезапуск базы, обрыв сети), иначе валит
+// процесс необработанной ошибкой: у pg это событие пула, а не запроса.
+pool.on('error', (err) => {
+  console.error('pool: соединение в простое умерло —', err.message);
 });
 
 /**
@@ -82,7 +99,10 @@ export async function withTenant<T>(
     await client.query('COMMIT');
     return result;
   } catch (err) {
-    await client.query('ROLLBACK');
+    // Откат не должен подменить собой причину: если соединение уже мертво,
+    // ROLLBACK бросит своё, и наверх уедет «connection terminated» вместо
+    // настоящей ошибки — а искать будут по ней.
+    await client.query('ROLLBACK').catch(() => undefined);
     throw err;
   } finally {
     client.release();

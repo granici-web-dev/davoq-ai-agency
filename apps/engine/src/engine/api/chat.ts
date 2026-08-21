@@ -11,8 +11,10 @@ import { verticalOf } from '../prompt/vertical.js';
 import { buildSystem, buildUserContent } from '../rag/prompt.js';
 import { retrieveAll } from '../rag/retrieve.js';
 import { originAllowed, resolveTenant } from './auth.js';
+import { acquireSlot, slotStats } from './concurrency.js';
 import { plausibleLocales } from '../rag/language.js';
 import { LOCALES, STRINGS, type Locale } from '../shared/i18n.js';
+import { MESSAGE_MAX_CHARS, sanitizeText } from '../shared/text.js';
 import { createStreamGuard, languageCorrection } from './stream-guard.js';
 
 /** Тип реплики выводим из самого клиента: путь к нему внутри пакета — не публичный контракт. */
@@ -54,8 +56,20 @@ interface ChatBody {
 
 export function registerChat(app: FastifyInstance): void {
   app.post<{ Body: ChatBody }>('/v1/chat', async (request, reply) => {
-    const body = request.body;
-    if (!body?.publicKey || !body.visitorId || !body.message?.trim()) {
+    const raw = request.body;
+    if (!raw?.publicKey || !raw.visitorId || !raw.message?.trim()) {
+      return reply.code(400).send({ error: 'publicKey, visitorId and message are required' });
+    }
+
+    // Чистка на входе, один раз. Дальше по всему обработчику ходит только
+    // очищенное значение: нулевой байт база отвергает, и падает не проверка,
+    // а запись — уже после того, как ответ сгенерирован, оплачен и отдан.
+    const body: ChatBody = {
+      ...raw,
+      visitorId: sanitizeText(raw.visitorId, 200),
+      message: sanitizeText(raw.message, MESSAGE_MAX_CHARS),
+    };
+    if (!body.message.trim() || !body.visitorId.trim()) {
       return reply.code(400).send({ error: 'publicKey, visitorId and message are required' });
     }
 
@@ -66,18 +80,39 @@ export function registerChat(app: FastifyInstance): void {
       return reply.code(403).send({ error: 'origin not allowed' });
     }
 
-    return withTenant(tenant.id, async (client) => {
-      if (await overQuota(client, tenant.id, tenant.monthlyMessageCap)) {
-        // Возвращаем осмысленный отказ, а не обрыв соединения: жалоба №1 на Chatbase
-        // в research.md — «the agent stops when they run out» без объяснения.
-        return reply.code(402).send({ error: 'quota exceeded', retryAfterMonthStart: true });
-      }
+    // Место занимается до первого захода в базу и отпускается в самом конце.
+    // Отказ здесь — не ошибка, а честный «сейчас занято»: виджет покажет
+    // повтор, и посетитель нажмёт его сам.
+    const slot = acquireSlot(tenant.id);
+    if (!slot) {
+      request.log.warn({ tenantId: tenant.id, ...slotStats() }, 'потолок одновременных диалогов');
+      return reply.code(503).header('retry-after', '5')
+        .send({ error: 'busy', retryAfterSeconds: 5 });
+    }
+
+    try {
+    /**
+     * Работа с базой и работа с моделью разнесены намеренно.
+     *
+     * Раньше весь запрос шёл внутри одного `withTenant`, то есть соединение из
+     * пула удерживалось с открытой транзакцией всё время, пока модель печатает
+     * ответ, — а это секунды, и до четырёх вызовов, и ещё вызовы коннекторов
+     * в чужую сеть. В пуле десять соединений на весь процесс. Дюжина
+     * одновременных диалогов исчерпывала пул, и вставали не только чат, но
+     * и панель — у ВСЕХ клиентов сразу.
+     *
+     * Поэтому три фазы: короткий заход за данными, работа с моделью без
+     * соединения вовсе, короткий заход на запись. Инструменты в базу не ходят,
+     * так что середина обходится без неё честно.
+     */
+    const QUOTA = Symbol('quota');
+    const prep = await withTenant(tenant.id, async (client) => {
+      if (await overQuota(client, tenant.id, tenant.monthlyMessageCap)) return QUOTA;
 
       // Существующий диалог ищем; новый не заводим до успешного ответа, иначе каждый
       // сбой апстрима оставляет в базе пустую беседу. Идентификатор генерируем заранее —
       // он нужен клиенту в meta-событии раньше, чем строка появится в таблице.
       const existing = await findConversation(client, body.conversationId);
-      const conversationId = existing ?? randomUUID();
       const history = existing ? await loadHistory(client, existing) : [];
       // Имя бота и компании берутся из настроек тенанта, а не из заглушки:
       // иначе бот представляется посетителю названием, которого клиент не выбирал.
@@ -109,257 +144,273 @@ export function registerChat(app: FastifyInstance): void {
 
       const quote = await loadQuoteConfig(client, tenant.id);
 
-      const requestLocale = safeLocale(body.locale, tenant);
+      return { existing, history, cfg: cfg[0], vertical, hits, approved, connectorTools, quote };
+    });
 
-      const model = modelFor(tenant.modelTier);
-      const system = buildSystem({
-        botName: cfg[0]?.bot_name ?? 'Assistant',
-        companyName: cfg[0]?.tenant_name ?? 'the company',
-        localeDefault: requestLocale,
-        priceGuidance: quote.priceGuidance,
-        quoteFields: quote.fields,
-        vertical,
-        profile: cfg[0]?.profile ?? {},
+    if (prep === QUOTA) {
+      // Возвращаем осмысленный отказ, а не обрыв соединения: жалоба №1 на Chatbase
+      // в research.md — «the agent stops when they run out» без объяснения.
+      return reply.code(402).send({ error: 'quota exceeded', retryAfterMonthStart: true });
+    }
+
+    const { existing, history, cfg: tenantCfg, vertical, hits, approved, connectorTools, quote } = prep;
+    const conversationId = existing ?? randomUUID();
+    const requestLocale = safeLocale(body.locale, tenant);
+
+    const model = modelFor(tenant.modelTier);
+    const system = buildSystem({
+      botName: tenantCfg?.bot_name ?? 'Assistant',
+      companyName: tenantCfg?.tenant_name ?? 'the company',
+      localeDefault: requestLocale,
+      priceGuidance: quote.priceGuidance,
+      quoteFields: quote.fields,
+      vertical,
+      profile: tenantCfg?.profile ?? {},
+    });
+    const convo: MessageParam[] = [
+      ...history,
+      { role: 'user', content: buildUserContent(body.message, hits, approved) },
+    ];
+
+    const runTurn = (correction?: string) =>
+      claude.messages.stream({
+        model,
+        max_tokens: 1024,
+        system: correction
+          ? [...system, { type: 'text' as const, text: correction }]
+          : system,
+        tools: [
+          CAPTURE_LEAD,
+          REPORT_UNANSWERED,
+          ...(quote.fields.length > 0 ? [buildQuoteTool(quote.fields)] : []),
+          ...[...connectorTools.values()].map(toClaudeTool),
+        ],
+        messages: convo,
       });
-      const convo: MessageParam[] = [
-        ...history,
-        { role: 'user', content: buildUserContent(body.message, hits, approved) },
-      ];
 
-      const runTurn = (correction?: string) =>
-        claude.messages.stream({
-          model,
-          max_tokens: 1024,
-          system: correction
-            ? [...system, { type: 'text' as const, text: correction }]
-            : system,
-          tools: [
-            CAPTURE_LEAD,
-            REPORT_UNANSWERED,
-            ...(quote.fields.length > 0 ? [buildQuoteTool(quote.fields)] : []),
-            ...[...connectorTools.values()].map(toClaudeTool),
-          ],
-          messages: convo,
-        });
+    let stream = runTurn();
+    let iterator = stream[Symbol.asyncIterator]();
+    let step: Awaited<ReturnType<typeof iterator.next>>;
 
-      let stream = runTurn();
-      let iterator = stream[Symbol.asyncIterator]();
-      let step: Awaited<ReturnType<typeof iterator.next>>;
+    // Первый шаг итератора и есть момент обращения к модели. Пока он не прошёл,
+    // заголовки не отправляем: иначе сбой апстрима превращается в честный 200
+    // с оборванным потоком, по которому клиент не отличит отказ от пустого ответа.
+    try {
+      step = await iterator.next();
+    } catch (err) {
+      request.log.error({ err }, 'llm stream failed before first token');
+      return reply.code(502).send({ error: 'assistant temporarily unavailable' });
+    }
 
-      // Первый шаг итератора и есть момент обращения к модели. Пока он не прошёл,
-      // заголовки не отправляем: иначе сбой апстрима превращается в честный 200
-      // с оборванным потоком, по которому клиент не отличит отказ от пустого ответа.
-      try {
-        step = await iterator.next();
-      } catch (err) {
-        request.log.error({ err }, 'llm stream failed before first token');
-        return reply.code(502).send({ error: 'assistant temporarily unavailable' });
-      }
+    openSse(reply);
+    reply.raw.write(`event: meta\ndata: ${JSON.stringify({ conversationId })}\n\n`);
 
-      openSse(reply);
-      reply.raw.write(`event: meta\ndata: ${JSON.stringify({ conversationId })}\n\n`);
+    const pendingLeads: ToolContext['pendingLeads'] = [];
+    const pendingUnanswered: ToolContext['pendingUnanswered'] = [];
+    const usage = { in: 0, out: 0, cache: 0 };
+    const toolCalls: Array<{ name: string; input: unknown; ok: boolean }> = [];
+    let answer = '';
 
-      const pendingLeads: ToolContext['pendingLeads'] = [];
-      const pendingUnanswered: ToolContext['pendingUnanswered'] = [];
-      const usage = { in: 0, out: 0, cache: 0 };
-      const toolCalls: Array<{ name: string; input: unknown; ok: boolean }> = [];
-      let answer = '';
+    // Охрана языка: держит начало ответа, пока не убедится, что он написан
+    // на языке посетителя. Повтор ровно один — вторая неудача отдаётся как
+    // есть и помечается в базе. Бесконечно переспрашивать модель дороже,
+    // чем один странный ответ, и посетитель всё это время ждёт.
+    // Допустимые языки ответа: тот, на котором написал посетитель, и тот,
+    // который просит виджет. Оба, а не один.
+    //
+    // Разница не теоретическая. Определить язык короткого вопроса нельзя —
+    // «Ce garanție oferiți?» это шесть слов с одним служебным. А locale
+    // приходит из настроек браузера, и румын с русским браузером присылает
+    // locale=ru, пишет по-румынски и получает правильный румынский ответ.
+    // Охрана, настаивающая на одном языке, отвергла бы его и заставила
+    // отвечать по-русски — то есть сломала бы то, что работало.
+    //
+    // Отклоняем только ответ, не попавший ни в один из допустимых: ровно
+    // тот случай, ради которого всё затевалось.
+    //
+    // Языки берутся из того, что посетитель НАПИСАЛ, — из этого сообщения и из
+    // его прежних реплик. Настройки браузера идут следом, а не вместо: пять
+    // английских слов определителю не по зубам, и раньше в этот момент
+    // побеждал browser locale, из-за чего англоязычный посетитель получал
+    // правильный английский ответ, который выбрасывался и переписывался
+    // по-румынски. Охрана ломала ровно то, что защищала.
+    const visitorSaid = [
+      body.message,
+      ...history.filter((m) => m.role === 'user').map((m) => m.content),
+    ].join('\n');
+    const acceptedLocales = [
+      ...new Set(
+        [
+          ...plausibleLocales(body.message),
+          ...plausibleLocales(visitorSaid),
+          requestLocale,
+          tenant.localeDefault,
+        ].filter((l): l is string => Boolean(l)),
+      ),
+    ];
+    const replyLocale = acceptedLocales[0]!;
+    let guard = createStreamGuard(reply, acceptedLocales);
+    let languageFlag: 'retried' | 'leak' | null = null;
+    let retried = false;
 
-      // Охрана языка: держит начало ответа, пока не убедится, что он написан
-      // на языке посетителя. Повтор ровно один — вторая неудача отдаётся как
-      // есть и помечается в базе. Бесконечно переспрашивать модель дороже,
-      // чем один странный ответ, и посетитель всё это время ждёт.
-      // Допустимые языки ответа: тот, на котором написал посетитель, и тот,
-      // который просит виджет. Оба, а не один.
-      //
-      // Разница не теоретическая. Определить язык короткого вопроса нельзя —
-      // «Ce garanție oferiți?» это шесть слов с одним служебным. А locale
-      // приходит из настроек браузера, и румын с русским браузером присылает
-      // locale=ru, пишет по-румынски и получает правильный румынский ответ.
-      // Охрана, настаивающая на одном языке, отвергла бы его и заставила
-      // отвечать по-русски — то есть сломала бы то, что работало.
-      //
-      // Отклоняем только ответ, не попавший ни в один из допустимых: ровно
-      // тот случай, ради которого всё затевалось.
-      //
-      // Языки берутся из того, что посетитель НАПИСАЛ, — из этого сообщения и из
-      // его прежних реплик. Настройки браузера идут следом, а не вместо: пять
-      // английских слов определителю не по зубам, и раньше в этот момент
-      // побеждал browser locale, из-за чего англоязычный посетитель получал
-      // правильный английский ответ, который выбрасывался и переписывался
-      // по-румынски. Охрана ломала ровно то, что защищала.
-      const visitorSaid = [
-        body.message,
-        ...history.filter((m) => m.role === 'user').map((m) => m.content),
-      ].join('\n');
-      const acceptedLocales = [
-        ...new Set(
-          [
-            ...plausibleLocales(body.message),
-            ...plausibleLocales(visitorSaid),
-            requestLocale,
-            tenant.localeDefault,
-          ].filter((l): l is string => Boolean(l)),
-        ),
-      ];
-      const replyLocale = acceptedLocales[0]!;
-      let guard = createStreamGuard(reply, acceptedLocales);
-      let languageFlag: 'retried' | 'leak' | null = null;
-      let retried = false;
+    try {
+      // Цикл инструментов (§6 п.5). Три оборота — потолок: дальше это уже не
+      // уточнение контакта, а зацикливание, за которое платит клиент.
+      for (let turn = 0; ; turn++) {
+        for (; !step.done; step = await iterator.next()) {
+          const event = step.value;
+          if (event.type === 'content_block_delta' && event.delta.type === 'text_delta') {
+            if (!guard.push(event.delta.text)) break;
+          }
+        }
 
-      try {
-        // Цикл инструментов (§6 п.5). Три оборота — потолок: дальше это уже не
-        // уточнение контакта, а зацикливание, за которое платит клиент.
-        for (let turn = 0; ; turn++) {
+        // Текст оборота кончился. Если его было меньше пробы, решение
+        // всё ещё не принято — принимаем по тому, что есть, иначе короткий
+        // ответ навсегда останется в буфере и посетитель не увидит ничего.
+        guard.settle();
+
+        // Язык оказался чужим. Прерываем поток на месте: инструменты этого
+        // оборота ещё не выполнялись — они вызываются после finalMessage, —
+        // так что побочных действий отменять не нужно, а посетителю
+        // не ушло ни одного знака.
+        if (guard.rejected && !retried) {
+          retried = true;
+          languageFlag = 'retried';
+          request.log.warn(
+            { tenantId: tenant.id, conversationId, locale: replyLocale },
+            'ответ на чужом языке отброшен, генерируем заново',
+          );
+          stream.abort();
+          answer = '';
+          guard = createStreamGuard(reply, acceptedLocales);
+          stream = runTurn(languageCorrection(replyLocale));
+          iterator = stream[Symbol.asyncIterator]();
+          step = await iterator.next();
+          // Оборот переигрывается, а не начинается заново: `turn--` гасит
+          // `turn++` в заголовке цикла. Прежде здесь стояло `turn = -1`,
+          // и это сбрасывало потолок в три оборота — до семи вызовов модели
+          // на одно сообщение, с дублями в журнале вызовов.
+          turn--;
+          continue;
+        }
+        if (guard.rejected) {
+          // Вторая попытка тоже не на том языке. Отдаём как есть: молчание
+          // посетителю хуже странного языка, — но помечаем, чтобы это
+          // попало в статистику пилота, а не растворилось.
+          languageFlag = 'leak';
+          guard.release();
+          // Поток был прерван на пробе, остаток ещё не прочитан. Без этого
+          // посетитель получил бы первые несколько десятков знаков и обрыв.
           for (; !step.done; step = await iterator.next()) {
             const event = step.value;
             if (event.type === 'content_block_delta' && event.delta.type === 'text_delta') {
-              if (!guard.push(event.delta.text)) break;
+              guard.push(event.delta.text);
             }
           }
-
-          // Текст оборота кончился. Если его было меньше пробы, решение
-          // всё ещё не принято — принимаем по тому, что есть, иначе короткий
-          // ответ навсегда останется в буфере и посетитель не увидит ничего.
-          guard.settle();
-
-          // Язык оказался чужим. Прерываем поток на месте: инструменты этого
-          // оборота ещё не выполнялись — они вызываются после finalMessage, —
-          // так что побочных действий отменять не нужно, а посетителю
-          // не ушло ни одного знака.
-          if (guard.rejected && !retried) {
-            retried = true;
-            languageFlag = 'retried';
-            request.log.warn(
-              { tenantId: tenant.id, conversationId, locale: replyLocale },
-              'ответ на чужом языке отброшен, генерируем заново',
-            );
-            stream.abort();
-            answer = '';
-            guard = createStreamGuard(reply, acceptedLocales);
-            stream = runTurn(languageCorrection(replyLocale));
-            iterator = stream[Symbol.asyncIterator]();
-            step = await iterator.next();
-            // Оборот переигрывается, а не начинается заново: `turn--` гасит
-            // `turn++` в заголовке цикла. Прежде здесь стояло `turn = -1`,
-            // и это сбрасывало потолок в три оборота — до семи вызовов модели
-            // на одно сообщение, с дублями в журнале вызовов.
-            turn--;
-            continue;
-          }
-          if (guard.rejected) {
-            // Вторая попытка тоже не на том языке. Отдаём как есть: молчание
-            // посетителю хуже странного языка, — но помечаем, чтобы это
-            // попало в статистику пилота, а не растворилось.
-            languageFlag = 'leak';
-            guard.release();
-            // Поток был прерван на пробе, остаток ещё не прочитан. Без этого
-            // посетитель получил бы первые несколько десятков знаков и обрыв.
-            for (; !step.done; step = await iterator.next()) {
-              const event = step.value;
-              if (event.type === 'content_block_delta' && event.delta.type === 'text_delta') {
-                guard.push(event.delta.text);
-              }
-            }
-          }
-
-          const final = await stream.finalMessage();
-          usage.in += final.usage.input_tokens;
-          usage.out += final.usage.output_tokens;
-          usage.cache += final.usage.cache_read_input_tokens ?? 0;
-          answer += final.content
-            .flatMap((block) => (block.type === 'text' ? [block.text] : []))
-            .join('');
-
-          if (final.stop_reason !== 'tool_use') break;
-
-          // Инструменты выполняются ВСЕГДА, в том числе на последнем разрешённом
-          // обороте. Прежде выход из цикла стоял до этого места, и вызовы третьего
-          // оборота выбрасывались молча: контакт, названный третьей репликой,
-          // не сохранялся — а именно ради контакта всё и делается.
-          convo.push({ role: 'assistant', content: final.content });
-          const results: Array<{
-            type: 'tool_result';
-            tool_use_id: string;
-            content: string;
-            is_error: boolean;
-          }> = [];
-          for (const block of final.content) {
-            if (block.type !== 'tool_use') continue;
-            const outcome = await runTool(
-              block.name,
-              block.input as Record<string, unknown>,
-              { client, tenantId: tenant.id, conversationId, pendingLeads, pendingUnanswered, connectorTools },
-            );
-            // Что именно вызвал бот — часть переписки, а не деталь реализации:
-            // без этого в «Диалогах» видно ответ, но не видно, откуда взялись цифры.
-            toolCalls.push({ name: block.name, input: block.input, ok: !outcome.isError });
-            results.push({
-              type: 'tool_result' as const,
-              tool_use_id: block.id,
-              content: outcome.content,
-              is_error: outcome.isError,
-            });
-          }
-          convo.push({ role: 'user', content: results });
-
-          // Потолок оборотов (§6 п.5). Четвёртый вызов модели ради вежливой
-          // фразы не делаем: побочные действия уже выполнены, а на ответ без
-          // единого знака текста есть отдельный случай ниже.
-          if (turn >= 2) break;
-
-          stream = runTurn();
-          iterator = stream[Symbol.asyncIterator]();
-          step = await iterator.next();
         }
 
-        // Ответ без единого знака текста — не ответ, а тишина. Так выходит, когда
-        // модель до последнего оборота только вызывала инструменты. Показать
-        // посетителю пустой пузырь плохо, но хуже другое: пустая реплика
-        // ассистента, попав в историю, отвергается моделью — и КАЖДОЕ следующее
-        // сообщение в этом разговоре падает в 502. Навсегда, до нового разговора.
-        if (answer.trim() === '') {
-          const uiLocale: Locale = (LOCALES as readonly string[]).includes(replyLocale)
-            ? (replyLocale as Locale)
-            : 'en';
-          answer = STRINGS[uiLocale].noAnswer;
-          guard.release();
-          guard.push(answer);
+        const final = await stream.finalMessage();
+        usage.in += final.usage.input_tokens;
+        usage.out += final.usage.output_tokens;
+        usage.cache += final.usage.cache_read_input_tokens ?? 0;
+        answer += final.content
+          .flatMap((block) => (block.type === 'text' ? [block.text] : []))
+          .join('');
+
+        if (final.stop_reason !== 'tool_use') break;
+
+        // Инструменты выполняются ВСЕГДА, в том числе на последнем разрешённом
+        // обороте. Прежде выход из цикла стоял до этого места, и вызовы третьего
+        // оборота выбрасывались молча: контакт, названный третьей репликой,
+        // не сохранялся — а именно ради контакта всё и делается.
+        convo.push({ role: 'assistant', content: final.content });
+        const results: Array<{
+          type: 'tool_result';
+          tool_use_id: string;
+          content: string;
+          is_error: boolean;
+        }> = [];
+        for (const block of final.content) {
+          if (block.type !== 'tool_use') continue;
+          const outcome = await runTool(
+            block.name,
+            block.input as Record<string, unknown>,
+            { tenantId: tenant.id, conversationId, pendingLeads, pendingUnanswered, connectorTools },
+          );
+          // Что именно вызвал бот — часть переписки, а не деталь реализации:
+          // без этого в «Диалогах» видно ответ, но не видно, откуда взялись цифры.
+          toolCalls.push({ name: block.name, input: block.input, ok: !outcome.isError });
+          results.push({
+            type: 'tool_result' as const,
+            tool_use_id: block.id,
+            content: outcome.content,
+            is_error: outcome.isError,
+          });
         }
+        convo.push({ role: 'user', content: results });
 
-        // Всё сохраняется одним куском после успеха. Записывать вопрос до вызова модели
-        // нельзя: упавший запрос оставил бы в истории висящую реплику пользователя
-        // без ответа, и следующий вызов ушёл бы с двумя user-репликами подряд.
-        await persist(client, {
-          tenantId: tenant.id,
-          conversationId,
-          isNewConversation: existing === null,
-          visitorId: body.visitorId,
-          locale: requestLocale,
-          question: body.message,
-          answer,
-          hits,
-          model,
-          tier: tenant.modelTier,
-          usage,
-          leads: pendingLeads,
-          unanswered: pendingUnanswered,
-          toolCalls,
-          languageFlag,
-        });
+        // Потолок оборотов (§6 п.5). Четвёртый вызов модели ради вежливой
+        // фразы не делаем: побочные действия уже выполнены, а на ответ без
+        // единого знака текста есть отдельный случай ниже.
+        if (turn >= 2) break;
 
-        reply.raw.write('event: done\ndata: {}\n\n');
-      } catch (err) {
-        // Заголовки уже ушли — сообщить о сбое можно только внутри самого потока.
-        // Бросать отсюда нельзя: Fastify попытается отправить 500 поверх открытого
-        // ответа и уронит процесс на ERR_HTTP_HEADERS_SENT.
-        request.log.error({ err }, 'llm stream failed mid-flight');
-        reply.raw.write('event: error\ndata: {"error":"stream interrupted"}\n\n');
-      } finally {
-        reply.raw.end();
+        stream = runTurn();
+        iterator = stream[Symbol.asyncIterator]();
+        step = await iterator.next();
       }
-      return reply;
-    });
+
+      // Ответ без единого знака текста — не ответ, а тишина. Так выходит, когда
+      // модель до последнего оборота только вызывала инструменты. Показать
+      // посетителю пустой пузырь плохо, но хуже другое: пустая реплика
+      // ассистента, попав в историю, отвергается моделью — и КАЖДОЕ следующее
+      // сообщение в этом разговоре падает в 502. Навсегда, до нового разговора.
+      if (answer.trim() === '') {
+        const uiLocale: Locale = (LOCALES as readonly string[]).includes(replyLocale)
+          ? (replyLocale as Locale)
+          : 'en';
+        answer = STRINGS[uiLocale].noAnswer;
+        guard.release();
+        guard.push(answer);
+      }
+
+      // Всё сохраняется одним куском после успеха. Записывать вопрос до вызова модели
+      // нельзя: упавший запрос оставил бы в истории висящую реплику пользователя
+      // без ответа, и следующий вызов ушёл бы с двумя user-репликами подряд.
+      // Фаза 3: короткий заход на запись. Соединение берётся здесь и здесь же
+      // отдаётся — на время работы модели его не существовало.
+      await withTenant(tenant.id, (client) => persist(client, {
+        tenantId: tenant.id,
+        conversationId,
+        isNewConversation: existing === null,
+        visitorId: body.visitorId,
+        locale: requestLocale,
+        question: body.message,
+        answer,
+        hits,
+        model,
+        tier: tenant.modelTier,
+        usage,
+        leads: pendingLeads,
+        unanswered: pendingUnanswered,
+        toolCalls,
+        languageFlag,
+      }));
+
+      reply.raw.write('event: done\ndata: {}\n\n');
+    } catch (err) {
+      // Заголовки уже ушли — сообщить о сбое можно только внутри самого потока.
+      // Бросать отсюда нельзя: Fastify попытается отправить 500 поверх открытого
+      // ответа и уронит процесс на ERR_HTTP_HEADERS_SENT.
+      request.log.error({ err }, 'llm stream failed mid-flight');
+      reply.raw.write('event: error\ndata: {"error":"stream interrupted"}\n\n');
+    } finally {
+      reply.raw.end();
+    }
+    return reply;
+
+    } finally {
+      slot.release();
+    }
   });
 }
 

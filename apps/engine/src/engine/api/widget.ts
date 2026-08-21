@@ -4,6 +4,7 @@ import { withPlatform, withTenant } from '../db/pool.js';
 import { STRINGS, type Locale } from '../shared/i18n.js';
 import { normalizeTheme } from '../shared/theme.js';
 import { originAllowed, resolveTenant } from './auth.js';
+import { sanitizeOptional } from '../shared/text.js';
 
 export function registerWidget(app: FastifyInstance): void {
   /**
@@ -35,11 +36,16 @@ export function registerWidget(app: FastifyInstance): void {
     const tenant = await resolveTenant(key);
     if (!tenant) return reply.code(404).send({ error: 'unknown key' });
 
-    const supported = await withTenant(tenant.id, async (client) => {
-      const { rows } = await client.query<{ supported_locales: string[] }>(
-        'SELECT supported_locales FROM tenants WHERE id = $1', [tenant.id]);
-      return rows[0]?.supported_locales ?? [];
-    });
+    // Языки берутся из резолва тенанта, а не отдельным запросом: прежде здесь
+    // было два захода в пул на один просмотр страницы, а соединений в пуле
+    // столько, что их стоит считать.
+    const supported = tenant.supportedLocales;
+
+    // Показ засчитывается только с разрешённого домена. Сама конфигурация
+    // отдаётся кому угодно — в ней нет ничего, чего нет в HTML клиента, — но
+    // счётчик показов это знаменатель конверсии, и накрутить его анонимным
+    // curl'ом означало бы показывать клиенту, что виджет работает хуже, чем есть.
+    const countable = originAllowed(request.headers.origin, tenant.allowedDomains);
 
     return withTenant(tenant.id, async (client) => {
       const { rows } = await client.query<{
@@ -54,13 +60,15 @@ export function registerWidget(app: FastifyInstance): void {
       // Показ засчитывается здесь: виджет запрашивает конфигурацию один раз
       // на просмотр страницы. Счёт грубый — сюда попадают и поисковые роботы, —
       // но порядок величины он даёт, а без порядка величины заявки не с чем сравнить.
-      await client.query(
-        `INSERT INTO usage_daily (tenant_id, date, widget_loads, model_tier)
-         VALUES ($1, current_date, 1, 'base')
-         ON CONFLICT (tenant_id, date, model_tier)
-         DO UPDATE SET widget_loads = usage_daily.widget_loads + 1`,
-        [tenant.id],
-      );
+      if (countable) {
+        await client.query(
+          `INSERT INTO usage_daily (tenant_id, date, widget_loads, model_tier)
+           VALUES ($1, current_date, 1, 'base')
+           ON CONFLICT (tenant_id, date, model_tier)
+           DO UPDATE SET widget_loads = usage_daily.widget_loads + 1`,
+          [tenant.id],
+        );
+      }
 
       const cfg = rows[0];
       return reply.send({
@@ -138,10 +146,10 @@ export function registerWidget(app: FastifyInstance): void {
         [
           tenant.id,
           linked,
-          b.name?.trim() || null,
-          b.email?.trim() || null,
-          b.phone?.trim() || null,
-          b.note?.trim() || null,
+          sanitizeOptional(b.name, 200),
+          sanitizeOptional(b.email, 320),
+          sanitizeOptional(b.phone, 60),
+          sanitizeOptional(b.note, 4000),
         ],
       );
     });

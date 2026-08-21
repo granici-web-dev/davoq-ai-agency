@@ -1,5 +1,6 @@
 import type { Block } from './extract.js';
 import { splitQa } from './qa.js';
+import { sanitizeText } from '../shared/text.js';
 
 export interface Chunk {
   seq: number;
@@ -46,7 +47,10 @@ export function chunkBlocks(blocks: Block[]): Chunk[] {
     for (const text of packGroup(group.blocks, flat)) {
       chunks.push({
         seq: chunks.length,
-        content: render(group.headingPath, text),
+        // Чистка здесь, а не у записи: PDF и .doc приносят нулевой байт
+        // регулярно, а база отвергает не строку, а всю команду вставки —
+        // то есть один такой фрагмент валил бы весь документ.
+        content: sanitizeText(render(group.headingPath, text)),
         tokenCount: estimateTokens(render(group.headingPath, text)),
         metadata: { headingPath: group.headingPath },
       });

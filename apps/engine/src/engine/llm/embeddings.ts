@@ -2,6 +2,9 @@ import { BedrockRuntimeClient, InvokeModelCommand } from '@aws-sdk/client-bedroc
 import { createHash } from 'node:crypto';
 
 /** Размерность зафиксирована схемой: chunks.embedding — vector(1024). */
+/** Потолок входа Titan v2: 8192 токена, с запасом по знакам. */
+const TITAN_MAX_CHARS = 20_000;
+
 export const EMBEDDING_DIMS = 1024;
 
 export type EmbeddingKind = 'document' | 'query';
@@ -89,13 +92,23 @@ class BedrockTitanEmbeddings implements EmbeddingProvider {
     return out;
   }
 
+  /**
+   * У Titan свой потолок на вход, и параметра «обрежь сам» у него нет —
+   * в отличие от Cohere. Без обрезки длинное сообщение посетителя роняло
+   * запрос в 500 ещё до обращения к модели. Обрезка молчаливая: смысл вопроса
+   * задаётся первыми абзацами, а отказать посетителю за длину — хуже.
+   */
   async #one(text: string): Promise<number[]> {
     const res = await this.#client.send(
       new InvokeModelCommand({
         modelId: this.model,
         contentType: 'application/json',
         accept: 'application/json',
-        body: JSON.stringify({ inputText: text, dimensions: EMBEDDING_DIMS, normalize: true }),
+        body: JSON.stringify({
+          inputText: text.slice(0, TITAN_MAX_CHARS),
+          dimensions: EMBEDDING_DIMS,
+          normalize: true,
+        }),
       }),
     );
     const parsed = JSON.parse(new TextDecoder().decode(res.body)) as { embedding: number[] };
