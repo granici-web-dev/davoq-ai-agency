@@ -461,4 +461,18 @@ export const RU: Record<string, string> = {
     "Выбрать этот пакет",
   "error.billing_unavailable":
     "Оплата сейчас недоступна. Напишите нам, мы разберёмся.",
+  "Ce se întâmplă cu datele":
+    "Что происходит с данными",
+  "Conversațiile se păstrează {n} zile, apoi se șterg.":
+    "Переписки хранятся {n} дней, потом удаляются.",
+  "Cererile de contact rămân — sunt datele clienților dumneavoastră, nu jurnalul nostru.":
+    "Заявки остаются — это данные ваших покупателей, а не наш журнал.",
+  "Dacă renunțați la abonament, păstrăm totul încă {n} zile — reveniți și găsiți totul la loc.":
+    "Если откажетесь от подписки, храним всё ещё {n} дней — вернётесь и найдёте всё на месте.",
+  "După aceste {n} zile ștergem definitiv: materiale, conversații, setări.":
+    "После этих {n} дней удаляем окончательно: материалы, переписки, настройки.",
+  "Abonamentul a fost anulat pe {date}. Datele se șterg definitiv după {n} zile de la această dată.":
+    "Подписка отменена {date}. Данные удалим окончательно через {n} дней после этой даты.",
+  "Renunțarea la abonament se face din «Card și facturi» — acolo puteți și descărca facturile.":
+    "Отказаться от подписки можно в «Карта и счета» — там же счета.",
 };

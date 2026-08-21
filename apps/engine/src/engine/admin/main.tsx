@@ -1670,6 +1670,8 @@ interface SubscriptionData {
     bytes: number; bytesCap: number;
   };
   canManageBilling: boolean;
+  retention: { conversationDays: number; canceledDays: number };
+  canceledAt: string | null;
 }
 
 /**
@@ -1807,6 +1809,25 @@ function Subscription(): React.ReactElement {
         <Meter label={t('Spațiu')} used={data.usage.bytes} cap={data.usage.bytesCap} format={mb} />
         <p className="note">
           {t('Când numărul de mesaje se epuizează, asistentul propune vizitatorului să lase datele de contact — cererile continuă să ajungă la dumneavoastră.')}
+        </p>
+      </section>
+
+      <section className="sheet stack">
+        <h2>{t('Ce se întâmplă cu datele')}</h2>
+        <ul className="ticks">
+          <li>{tf('Conversațiile se păstrează {n} zile, apoi se șterg.', { n: data.retention.conversationDays })}</li>
+          <li>{t('Cererile de contact rămân — sunt datele clienților dumneavoastră, nu jurnalul nostru.')}</li>
+          <li>{tf('Dacă renunțați la abonament, păstrăm totul încă {n} zile — reveniți și găsiți totul la loc.', { n: data.retention.canceledDays })}</li>
+          <li>{tf('După aceste {n} zile ștergem definitiv: materiale, conversații, setări.', { n: data.retention.canceledDays })}</li>
+        </ul>
+        {data.canceledAt && (
+          <p className="note err">
+            {tf('Abonamentul a fost anulat pe {date}. Datele se șterg definitiv după {n} zile de la această dată.',
+                { date: d(data.canceledAt), n: data.retention.canceledDays })}
+          </p>
+        )}
+        <p className="note">
+          {t('Renunțarea la abonament se face din «Card și facturi» — acolo puteți și descărca facturile.')}
         </p>
       </section>
 

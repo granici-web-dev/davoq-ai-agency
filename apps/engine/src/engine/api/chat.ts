@@ -171,7 +171,12 @@ export function registerChat(app: FastifyInstance): void {
       // Инструменты тенанта загружаются на каждый запрос: тенант мог поменять их
       // в админке минуту назад, а кешировать реестр эндпоинтов — значит какое-то
       // время ходить по адресам, которые он уже отозвал.
-      const connectorTools = new Map((await loadTools(client, tenant.id)).map((t) => [t.toolName, t]));
+      // Коннекторы входят не во все тарифы. Проверка здесь, а не только
+      // в панели: инструмент, оставленный в реестре после понижения тарифа,
+      // продолжал бы ходить в CRM клиента, за который он больше не платит.
+      const connectorTools = planFor(tenant.plan).features.connectors
+        ? new Map((await loadTools(client, tenant.id)).map((t) => [t.toolName, t]))
+        : new Map<string, Awaited<ReturnType<typeof loadTools>>[number]>();
 
       const quote = await loadQuoteConfig(client, tenant.id);
 

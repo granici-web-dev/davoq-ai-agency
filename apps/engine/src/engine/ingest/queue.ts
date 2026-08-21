@@ -215,3 +215,18 @@ export async function scheduleTrialNotices(): Promise<void> {
     removeOnComplete: true,
   });
 }
+
+/**
+ * Уборка по срокам хранения. Раз в сутки: сроки считаются днями, и проверять
+ * их чаще незачем — а вот пропустить сутки при перезапуске нельзя, поэтому
+ * расписание повторяемое, а не «в три часа ночи».
+ */
+export const purgeQueue = new Queue('retention-purge', { connection: redis });
+
+export async function schedulePurge(): Promise<void> {
+  await purgeQueue.add('purge', {}, {
+    repeat: { every: 24 * 60 * 60_000 },
+    jobId: 'retention-purge',
+    removeOnComplete: true,
+  });
+}

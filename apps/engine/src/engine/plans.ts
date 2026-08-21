@@ -38,7 +38,29 @@ export interface Plan {
   maxChunks: number;
   /** Цена в евро за месяц. */
   priceEur: number;
-  /** Строки для панели: что входит в тариф, на языке клиента. */
+  /**
+   * Что тариф ВКЛЮЧАЕТ на самом деле.
+   *
+   * Не украшение списка, а то, что проверяется на сервере. Пока этого поля
+   * не было, лестница была только текстом: Start получал и синхронизацию
+   * с Drive, и коннекторы — всё, что обещано Business. Обещание, за которым
+   * ничего не стоит, замечает первый же клиент, сравнивший два счёта.
+   */
+  features: {
+    /** Папка Google Drive как источник материалов. */
+    drive: boolean;
+    /** Вызовы во внешние системы: CRM, склад, статус заказа. */
+    connectors: boolean;
+  };
+
+  /**
+   * Строки для панели: что входит в тариф, на языке клиента.
+   *
+   * Каждая строка обязана быть либо верной для всех, либо закрытой в features.
+   * Отчёт о пробелах намеренно есть у всех: скрывать от клиента, на что бот
+   * не смог ответить, — значит делать его бота хуже и лишать себя же обратной
+   * связи. Тариф зарабатывает объёмом и Drive, а не спрятанной пользой.
+   */
   highlights: string[];
 }
 
@@ -52,10 +74,12 @@ export const PLANS: Record<PlanId, Plan> = {
     maxTotalBytes: 20 * 1024 * 1024,
     maxChunks: 2_000,
     priceEur: 49,
+    features: { drive: false, connectors: false },
     highlights: [
       '1 000 de mesaje pe lună',
       '10 documente în baza de cunoștințe',
       'Formular de contact și notificări pe email',
+      'Rapoarte despre întrebările fără răspuns',
     ],
   },
   pro: {
@@ -67,11 +91,12 @@ export const PLANS: Record<PlanId, Plan> = {
     maxTotalBytes: 100 * 1024 * 1024,
     maxChunks: 10_000,
     priceEur: 99,
+    features: { drive: true, connectors: false },
     highlights: [
+      'Tot ce include Start',
       '5 000 de mesaje pe lună',
       '50 de documente în baza de cunoștințe',
-      'Sincronizare cu Google Drive',
-      'Rapoarte despre întrebările fără răspuns',
+      'Sincronizare cu Google Drive — puneți fișierul în dosar și gata',
     ],
   },
   business: {
@@ -85,7 +110,9 @@ export const PLANS: Record<PlanId, Plan> = {
     maxTotalBytes: 500 * 1024 * 1024,
     maxChunks: 50_000,
     priceEur: 299,
+    features: { drive: true, connectors: true },
     highlights: [
+      'Tot ce include Pro',
       'Model avansat — răspunsuri mai precise la întrebări complexe',
       '8 000 de mesaje pe lună',
       '200 de documente în baza de cunoștințe',
@@ -116,3 +143,17 @@ export const planFor = (id: string | null | undefined): Plan =>
  */
 export const messageCapFor = (planId: string | null, override: number | null): number =>
   override ?? planFor(planId).monthlyMessages;
+
+/**
+ * Экраны панели, которых у тарифа нет.
+ *
+ * Скрытие в панели — только половина: экран, скрытый рисованием, остаётся
+ * доступен обычным запросом. Вторая половина — тот же список на сервере.
+ */
+export const screensNotInPlan = (planId: string | null | undefined): string[] => {
+  const f = planFor(planId).features;
+  const off: string[] = [];
+  if (!f.drive) off.push('drive');
+  if (!f.connectors) off.push('connectors');
+  return off;
+};

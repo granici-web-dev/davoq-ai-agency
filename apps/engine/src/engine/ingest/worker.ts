@@ -6,7 +6,7 @@ import { processDocument } from './index.js';
 import { WORKER_HEARTBEAT_KEY } from '../ops/health.js';
 import {
   driveQueue, enqueueRecheck, notifyQueue, recheckQueue, redis, scheduleDriveSync,
-  DRIVE_SYNC_MINUTES, scheduleTrialNotices, trialQueue,
+  DRIVE_SYNC_MINUTES, scheduleTrialNotices, trialQueue, schedulePurge, purgeQueue,
   type DriveSyncJob, type IngestJob, type NotifyJob, type RecheckJob,
 } from './queue.js';
 
@@ -98,17 +98,29 @@ notifyWorker.on('failed', (job, err) =>
   // по определению вне тенантного контекста. Рабочая роль под RLS такой запрос
   // видит пустым, и без пула владельца сверка молча перестала бы запускаться.
   const { rows } = await withOwner((client) =>
-    client.query<{ tenant_id: string }>(
-      `SELECT tenant_id FROM connectors WHERE type = 'google_drive' AND status = 'active'`,
+    client.query<{ tenant_id: string; plan: string }>(
+      `SELECT c.tenant_id, t.plan
+         FROM connectors c JOIN tenants t ON t.id = c.tenant_id
+        WHERE c.type = 'google_drive' AND c.status = 'active'`,
     ),
   );
-  for (const r of rows) await scheduleDriveSync(r.tenant_id);
-  console.log(`drive sync каждые ${DRIVE_SYNC_MINUTES} мин для ${rows.length} тенант(ов)`);
+  // Синхронизация ставится только тем, у кого Drive входит в тариф. Иначе
+  // клиент, понизивший пакет, продолжал бы получать её молча — и платил бы
+  // за Pro не он, а мы.
+  const { planFor } = await import('../plans.js');
+  const eligible = rows.filter((r) => planFor(r.plan).features.drive);
+  for (const r of eligible) await scheduleDriveSync(r.tenant_id);
+  console.log(`drive sync каждые ${DRIVE_SYNC_MINUTES} мин для ${eligible.length} из ${rows.length} тенант(ов)`);
 
   // Расписание одно на всю установку, а не на клиента: сам проход перебирает
   // тех, у кого триал заканчивается.
   await scheduleTrialNotices();
   console.log('напоминания о конце триала: проверка каждый час');
+
+  await schedulePurge();
+  const { CONVERSATION_DAYS, CANCELED_DAYS } = await import('../billing/retention.js');
+  console.log(`сроки хранения: переписки ${CONVERSATION_DAYS} дн., ` +
+              `данные отменивших ${CANCELED_DAYS} дн.`);
 }
 
 /**
@@ -139,6 +151,20 @@ const trialWorker = new Worker(
 );
 trialWorker.on('failed', (job, err) => console.error('trial notices failed', job?.id, err));
 
+const purgeWorker = new Worker(
+  'retention-purge',
+  async () => {
+    const { purge } = await import('../billing/retention.js');
+    const r = await purge();
+    if (r.conversations > 0 || r.tenants > 0) {
+      console.log(`уборка: переписок ${r.conversations}, клиентов ${r.tenants}`);
+    }
+    return r;
+  },
+  { connection: redis, concurrency: 1 },
+);
+purgeWorker.on('failed', (job, err) => console.error('retention purge failed', job?.id, err));
+
 const shutdown = async (): Promise<void> => {
   clearInterval(heartbeat);
   // Отметка убирается сразу: перезапуск воркера не должен три минуты выглядеть
@@ -151,10 +177,12 @@ const shutdown = async (): Promise<void> => {
   await recheckWorker.close();
   await notifyWorker.close();
   await trialWorker.close();
+  await purgeWorker.close();
   await driveQueue.close();
   await recheckQueue.close();
   await notifyQueue.close();
   await trialQueue.close();
+  await purgeQueue.close();
   await redis.quit();
   await pool.end();
   await closeOwnerPool();

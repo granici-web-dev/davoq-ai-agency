@@ -461,4 +461,18 @@ export const EN: Record<string, string> = {
     "Choose this package",
   "error.billing_unavailable":
     "Payment is unavailable right now. Write to us and we will sort it out.",
+  "Ce se întâmplă cu datele":
+    "What happens to your data",
+  "Conversațiile se păstrează {n} zile, apoi se șterg.":
+    "Conversations are kept for {n} days, then deleted.",
+  "Cererile de contact rămân — sunt datele clienților dumneavoastră, nu jurnalul nostru.":
+    "Contact requests stay — that is your buyers data, not our log.",
+  "Dacă renunțați la abonament, păstrăm totul încă {n} zile — reveniți și găsiți totul la loc.":
+    "If you cancel, we keep everything for {n} more days — come back and find it all in place.",
+  "După aceste {n} zile ștergem definitiv: materiale, conversații, setări.":
+    "After those {n} days we delete for good: materials, conversations, settings.",
+  "Abonamentul a fost anulat pe {date}. Datele se șterg definitiv după {n} zile de la această dată.":
+    "The subscription was canceled on {date}. Data is deleted for good {n} days after that.",
+  "Renunțarea la abonament se face din «Card și facturi» — acolo puteți și descărca facturile.":
+    "You can cancel from «Card and invoices» — invoices are there too.",
 };

@@ -66,7 +66,14 @@ export function registerBilling(app: FastifyInstance): void {
                 subscription_id     = coalesce($3, subscription_id),
                 billing_customer_id = coalesce($4, billing_customer_id),
                 current_period_end  = coalesce($5, current_period_end),
-                plan                = coalesce($6, plan)
+                plan                = coalesce($6, plan),
+                -- Дата отмены ставится при отмене и снимается при возврате.
+                -- От неё отсчитывается срок хранения данных, поэтому непустое
+                -- значение у действующего клиента — это тихий обратный отсчёт
+                -- до удаления его переписок.
+                canceled_at         = CASE WHEN $2 = 'canceled'
+                                           THEN coalesce(canceled_at, now())
+                                           ELSE NULL END
           WHERE id = $1`,
         [change.tenantId, change.status, change.subscriptionId ?? null,
          change.customerId ?? null, change.currentPeriodEnd ?? null, change.plan ?? null],

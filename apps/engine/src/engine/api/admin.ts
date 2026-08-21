@@ -12,7 +12,8 @@ import { callConnector, formatResult, loadTools } from '../llm/connector.js';
 import { encryptSecret } from '../llm/secrets.js';
 import { assertPublicUrl } from '../llm/ssrf.js';
 import { entitlementOf } from '../billing/entitlement.js';
-import { isPlanId, messageCapFor, planFor, PLANS, PLAN_IDS, type PlanId } from '../plans.js';
+import { CANCELED_DAYS, CONVERSATION_DAYS } from '../billing/retention.js';
+import { isPlanId, messageCapFor, planFor, screensNotInPlan, PLANS, PLAN_IDS, type PlanId } from '../plans.js';
 import { safeFetch } from '../net/safe-fetch.js';
 import { auditTheme, normalizeTheme, PRESETS, type Theme } from '../shared/theme.js';
 import {
@@ -176,9 +177,13 @@ export function registerAdmin(app: FastifyInstance): void {
     if (!session) return; // отказ по сессии выдаст сам обработчик
 
     const hidden = await withTenant(session.tenantId, async (client) => {
-      const { rows } = await client.query<{ hidden_screens: string[] }>(
-        'SELECT hidden_screens FROM tenants WHERE id = $1', [session.tenantId]);
-      return rows[0]?.hidden_screens ?? [];
+      const { rows } = await client.query<{ hidden_screens: string[]; plan: string }>(
+        'SELECT hidden_screens, plan FROM tenants WHERE id = $1', [session.tenantId]);
+      const row = rows[0];
+      if (!row) return [];
+      // Тариф проверяется здесь же, а не только в панели: экран, закрытый
+      // рисованием, остаётся доступен обычным запросом — это уже находили.
+      return [...row.hidden_screens, ...screensNotInPlan(row.plan)];
     });
     if (hidden.includes(screen)) {
       return reply.code(403)
@@ -236,8 +241,9 @@ export function registerAdmin(app: FastifyInstance): void {
       plan: string; subscription_status: string;
       trial_ends_at: Date | null; current_period_end: Date | null;
       monthly_message_cap: number | null; billing_customer_id: string | null;
+      canceled_at: Date | null;
     }>(`SELECT plan, subscription_status, trial_ends_at, current_period_end,
-               monthly_message_cap, billing_customer_id
+               monthly_message_cap, billing_customer_id, canceled_at
           FROM tenants WHERE id = $1`, [session.tenantId]);
     const t = rows[0];
     if (!t) throw clientError('tenant_missing', 'Contul nu a fost găsit');
@@ -289,6 +295,12 @@ export function registerAdmin(app: FastifyInstance): void {
       // Управлять картой и счетами клиент вправе сам. Кнопки не будет, пока
       // подписки нет вовсе или пока оплата не настроена.
       canManageBilling: Boolean(t.billing_customer_id) && Boolean(process.env.STRIPE_SECRET_KEY),
+      // Сроки хранения показываются ДО отмены, а не после. Человек, который
+      // думает уходить, должен знать, что будет с его данными, — иначе он
+      // узнаёт это письмом «мы всё удалили», и это худший из возможных дней
+      // для такого разговора.
+      retention: { conversationDays: CONVERSATION_DAYS, canceledDays: CANCELED_DAYS },
+      canceledAt: t.canceled_at,
     };
   }));
 
@@ -419,7 +431,11 @@ export function registerAdmin(app: FastifyInstance): void {
         // сутки, пока не истечёт кеш. Отпечаток меняет адрес вместе с логотипом.
         logo_url: t.logo_key ? `/admin/brand/logo?v=${logoTag(t.logo_key)}` : null,
         // Какие экраны показывать — решает запись тенанта, а не сборка панели.
-        hiddenScreens: t.hidden_screens,
+        // К скрытым руками добавляются те, которых нет в тарифе. Клиент
+        // не должен видеть экран, за который не платил, — и не должен думать,
+        // что мы его прячем по своей прихоти: в разделе «Abonament» видно,
+        // какой пакет его включает.
+        hiddenScreens: [...new Set([...t.hidden_screens, ...screensNotInPlan(t.plan)])],
         // Язык панели — язык клиента. Панель писалась по-румынски, но читать
         // её будет тот, кто работает с заявками, а он не обязан знать румынский.
         locale: t.locale_default,
