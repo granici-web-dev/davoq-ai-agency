@@ -77,7 +77,7 @@ export async function listConversations(
             -- Первая реплика посетителя в списке важнее даты: по ней узнают разговор.
             (SELECT m.content FROM messages m
               WHERE m.conversation_id = c.id AND m.role = 'user'
-              ORDER BY m.created_at LIMIT 1) AS first_question
+              ORDER BY m.seq LIMIT 1) AS first_question
        FROM conversations c ${where}
       ORDER BY c.started_at DESC
       LIMIT $${params.length - 1} OFFSET $${params.length}`,

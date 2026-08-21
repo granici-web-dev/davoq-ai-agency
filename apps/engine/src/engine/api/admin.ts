@@ -1,3 +1,4 @@
+import { createHash } from 'node:crypto';
 import { readFile } from 'node:fs/promises';
 import type { FastifyInstance, FastifyRequest } from 'fastify';
 import type pg from 'pg';
@@ -47,6 +48,10 @@ export function registerAdmin(app: FastifyInstance): void {
   // Имени файла в адресе нет намеренно. Логотип — файл клиента, лежит под
   // префиксом его тенанта, и какой именно — знает только запись в базе.
   // Адрес без имени невозможно подобрать, а сессия и так решает, чей он.
+  /** Короткий отпечаток ключа файла: адрес меняется вместе с логотипом. */
+  const logoTag = (key: string): string =>
+    createHash('sha256').update(key).digest('hex').slice(0, 12);
+
   app.get('/admin/brand/logo', async (request, reply) => {
     const session = await loadSession(request);
     if (!session) return reply.code(401).send({ error: 'unauthorized' });
@@ -114,6 +119,70 @@ export function registerAdmin(app: FastifyInstance): void {
   });
 
   /** Все маршруты ниже требуют сессии и работают строго в тенантном контексте. */
+  /**
+   * Какому экрану принадлежит адрес.
+   *
+   * Скрытые экраны были только рисованием: сервер о них не знал, и всё,
+   * что клиенту не показывали, оставалось доступно обычным запросом.
+   * Для пилота это значит, что материалы можно добавить в обход единственного
+   * согласованного источника — папки на Google Drive.
+   *
+   * Список явный, а не по догадке из пути: молчаливое совпадение по префиксу
+   * однажды закроет эндпоинт, которого никто не собирался закрывать.
+   */
+  const SCREEN_OF: Array<{ path: RegExp; screen: string; methods?: string[] }> = [
+    // Список документов читает и экран «Google Drive» — там показываются файлы
+    // из папки. Поэтому скрытая «База знаний» закрывает не чтение, а добавление
+    // и удаление: именно они и есть тот обход единственного согласованного
+    // источника материалов, ради которого экран прячут.
+    //
+    // Поймано браузером: первая версия правила закрывала /documents целиком
+    // и ломала рабочий экран Drive у пилотного клиента.
+    { path: /^\/admin\/api\/documents(\/|$)/, screen: 'kb', methods: ['POST', 'DELETE', 'PUT'] },
+    { path: /^\/admin\/api\/drive(\/|$)/, screen: 'drive' },
+    { path: /^\/admin\/api\/appearance(\/|$)/, screen: 'aspect' },
+    { path: /^\/admin\/api\/connectors(\/|$)/, screen: 'connectors' },
+    { path: /^\/admin\/api\/conversations(\/|$)/, screen: 'chats' },
+    { path: /^\/admin\/api\/insights(\/|$)/, screen: 'analytics' },
+    { path: /^\/admin\/api\/approved(\/|$)/, screen: 'analytics' },
+    { path: /^\/admin\/api\/install(\/|$)/, screen: 'install' },
+  ];
+
+  const screenOf = (url: string, method: string): string | null => {
+    const path = url.split('?')[0] ?? '';
+    const hit = SCREEN_OF.find(
+      (r) => r.path.test(path) && (!r.methods || r.methods.includes(method.toUpperCase())),
+    );
+    return hit?.screen ?? null;
+  };
+
+  /**
+   * Скрытый экран закрывается на входе, а не в каждом обработчике.
+   *
+   * Обработчики зарегистрированы по-разному: часть через `guarded`, часть
+   * напрямую — и проверка внутри `guarded` пропускала как раз POST /documents,
+   * то есть ровно то добавление материалов, ради запрета которого экран и прячут.
+   * Поймано браузером, а не чтением: в коде это выглядело закрытым.
+   */
+  app.addHook('preHandler', async (request, reply) => {
+    if (!request.url.startsWith('/admin/api/')) return;
+    const screen = screenOf(request.url, request.method);
+    if (!screen) return;
+
+    const session = await loadSession(request);
+    if (!session) return; // отказ по сессии выдаст сам обработчик
+
+    const hidden = await withTenant(session.tenantId, async (client) => {
+      const { rows } = await client.query<{ hidden_screens: string[] }>(
+        'SELECT hidden_screens FROM tenants WHERE id = $1', [session.tenantId]);
+      return rows[0]?.hidden_screens ?? [];
+    });
+    if (hidden.includes(screen)) {
+      return reply.code(403)
+        .send({ error: 'Această secțiune nu este disponibilă', code: 'screen_hidden' });
+    }
+  });
+
   const guarded = <B, Q>(
     handler: (args: {
       session: Session; client: pg.PoolClient; body: B; query: Q; request: FastifyRequest;
@@ -122,6 +191,7 @@ export function registerAdmin(app: FastifyInstance): void {
     async (request: FastifyRequest, reply: import('fastify').FastifyReply): Promise<unknown> => {
       const session = await loadSession(request);
       if (!session) return reply.code(401).send({ error: 'unauthorized' });
+
       try {
         return await withTenant(session.tenantId, (client) =>
           handler({
@@ -160,7 +230,10 @@ export function registerAdmin(app: FastifyInstance): void {
       email: session.email,
       tenant: t && {
         name: t.name, plan: t.plan, public_key: t.public_key,
-        logo_url: t.logo_key ? '/admin/brand/logo' : null,
+        // Адрес с отпечатком файла. Один общий адрес с приватным кешем показывал
+        // марку прошлого клиента после смены учётной записи в том же браузере —
+        // сутки, пока не истечёт кеш. Отпечаток меняет адрес вместе с логотипом.
+        logo_url: t.logo_key ? `/admin/brand/logo?v=${logoTag(t.logo_key)}` : null,
         // Какие экраны показывать — решает запись тенанта, а не сборка панели.
         hiddenScreens: t.hidden_screens,
         // Язык панели — язык клиента. Панель писалась по-румынски, но читать
@@ -548,7 +621,7 @@ export function registerAdmin(app: FastifyInstance): void {
       const [msgs, lead, gaps, fields] = await Promise.all([
         client.query(
           `SELECT role, content, created_at, model, tokens_in, tokens_out, tool_calls
-             FROM messages WHERE conversation_id = $1 ORDER BY created_at`,
+             FROM messages WHERE conversation_id = $1 ORDER BY seq`,
           [request.params.id]),
         client.query(
           `SELECT name, email, phone, payload, quote_completeness
@@ -605,7 +678,7 @@ export function registerAdmin(app: FastifyInstance): void {
                     WHERE u.conversation_id = c.id AND u.source = 'model') AS gaps,
                   l.name, l.email, l.phone, l.quote_completeness, l.payload,
                   (SELECT m.content FROM messages m WHERE m.conversation_id = c.id
-                    AND m.role = 'user' ORDER BY m.created_at LIMIT 1) AS first_question
+                    AND m.role = 'user' ORDER BY m.seq LIMIT 1) AS first_question
              FROM conversations c LEFT JOIN leads l ON l.conversation_id = c.id
              ${where} ORDER BY c.started_at DESC`;
 

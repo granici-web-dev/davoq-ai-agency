@@ -475,7 +475,7 @@ async function loadHistory(
   const { rows } = await client.query<{ role: 'user' | 'assistant'; content: string }>(
     `SELECT role, content FROM messages
       WHERE conversation_id = $1 AND role <> 'system'
-      ORDER BY created_at DESC LIMIT $2`,
+      ORDER BY seq DESC LIMIT $2`,
     [conversationId, HISTORY_LIMIT],
   );
   return rows.reverse();
@@ -526,15 +526,18 @@ async function persist(client: import('pg').PoolClient, a: PersistArgs): Promise
   }
 
   await client.query(
-    `INSERT INTO messages (conversation_id, tenant_id, role, content) VALUES ($1, $2, 'user', $3)`,
+    `INSERT INTO messages (conversation_id, tenant_id, role, content, seq)
+     VALUES ($1, $2, 'user', $3,
+             coalesce((SELECT max(seq) FROM messages WHERE conversation_id = $1), 0) + 1)`,
     [a.conversationId, a.tenantId, a.question],
   );
 
   await client.query(
     `INSERT INTO messages (conversation_id, tenant_id, role, content,
                            tokens_in, tokens_out, cache_read_tokens, model, retrieval_chunk_ids,
-                           tool_calls, language_flag)
-     VALUES ($1, $2, 'assistant', $3, $4, $5, $6, $7, $8, $9, $10)`,
+                           tool_calls, language_flag, seq)
+     VALUES ($1, $2, 'assistant', $3, $4, $5, $6, $7, $8, $9, $10,
+             coalesce((SELECT max(seq) FROM messages WHERE conversation_id = $1), 0) + 1)`,
     [
       a.conversationId,
       a.tenantId,

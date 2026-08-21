@@ -1,0 +1,24 @@
+- generic [ref=f44e3]:
+  - complementary [ref=f44e4]:
+    - img "SofaBelle" [ref=f44e6]
+    - paragraph [ref=f44e7]: plan business
+    - navigation "Secțiuni" [ref=f44e8]:
+      - button "Google Drive" [ref=f44e9] [cursor=pointer]
+      - button "Aspect" [ref=f44e13] [cursor=pointer]
+      - button "Conversații" [ref=f44e19] [cursor=pointer]
+      - button "Analize" [ref=f44e22] [cursor=pointer]
+      - button "Instalare" [ref=f44e25] [cursor=pointer]
+    - group "Tema panoului" [ref=f44e30]:
+      - button "Sistem" [ref=f44e31] [cursor=pointer]
+      - button "Deschis" [pressed] [ref=f44e32] [cursor=pointer]
+      - button "Întunecat" [ref=f44e33] [cursor=pointer]
+  - generic [ref=f44e34]:
+    - banner [ref=f44e35]:
+      - heading "Google Drive" [level=1] [ref=f44e36]
+      - searchbox "Caută în conversații" [ref=f44e38]
+      - generic [ref=f44e39]:
+        - generic [ref=f44e40]: admin@sofabelle.md
+        - button "Ieșire" [ref=f44e41] [cursor=pointer]
+    - generic [ref=f44e45]:
+      - status "Se încarcă" [ref=f44e46]
+      - generic [ref=f44e47]: Se încarcă…

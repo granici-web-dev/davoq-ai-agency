@@ -1,4 +1,4 @@
-import { StrictMode, useCallback, useEffect, useMemo, useState } from 'react';
+import { StrictMode, useCallback, useEffect, useMemo, useRef, useState } from 'react';
 import { createRoot } from 'react-dom/client';
 import { STRINGS, type Locale } from '../shared/i18n.js';
 import { auditTheme, type ContrastWarning, type Preset, type Theme } from '../shared/theme.js';
@@ -51,8 +51,19 @@ function takeDeepLink(): { screen: Screen; conversationId: string } | null {
 
 const DEEP_LINK = typeof location === 'undefined' ? null : takeDeepLink();
 
-const dt = (v: string): string => new Date(v).toLocaleString('ro-RO');
-const d = (v: string): string => new Date(v).toLocaleDateString('ro-RO');
+/**
+ * Даты в формате клиента, а не всегда румынском.
+ *
+ * Язык панели ставится после загрузки /me, поэтому здесь не константа,
+ * а чтение при каждом вызове: `05.03.2026` и `3/5/2026` — это разные даты
+ * для того, кто читает, и ошибиться тут стоит дороже, чем перевести подпись.
+ */
+let panelLocaleTag = 'ro-RO';
+export const setDateLocale = (locale: string): void => {
+  panelLocaleTag = { ro: 'ro-RO', ru: 'ru-RU', de: 'de-DE', en: 'en-GB' }[locale] ?? 'ro-RO';
+};
+const dt = (v: string): string => new Date(v).toLocaleString(panelLocaleTag);
+const d = (v: string): string => new Date(v).toLocaleDateString(panelLocaleTag);
 
 /**
  * Иконки. Свои, а не из библиотеки: Lucide и Feather — первый выбор
@@ -92,6 +103,57 @@ function Loading(): React.ReactElement {
   return <div className="sheet row"><Spinner /><span className="note">{t('Se încarcă…')}</span></div>;
 }
 
+/**
+ * Экран не загрузился.
+ *
+ * Прежде этого экрана не существовало: ни один загрузчик не имел `catch`,
+ * поэтому любая ошибка запроса — упавший сервер, обрыв сети, протухшая
+ * сессия — оставляла «Se încarcă…» навсегда. Директор по продажам смотрел
+ * на крутилку и звонил нам.
+ */
+function Failed({ error, onRetry }: { error: string; onRetry: () => void }): React.ReactElement {
+  return (
+    <div className="sheet stack">
+      <p className="err">{error}</p>
+      <div className="row">
+        <button onClick={onRetry}>{t('Încearcă din nou')}</button>
+      </div>
+    </div>
+  );
+}
+
+/**
+ * Загрузка данных экрана: данные, ошибка, повтор.
+ *
+ * Протухшая сессия обрабатывается отдельно: раньше она не возвращала к форме
+ * входа, а просто оставляла экран пустым — человек считал, что панель сломана,
+ * хотя ему было достаточно войти заново.
+ */
+function useResource<T>(load: () => Promise<T>, deps: unknown[]): {
+  data: T | null; error: string | null; reload: () => void;
+} {
+  const [data, setData] = useState<T | null>(null);
+  const [error, setError] = useState<string | null>(null);
+  const [attempt, setAttempt] = useState(0);
+
+  useEffect(() => {
+    let alive = true;
+    setData(null);
+    setError(null);
+    load().then(
+      (value) => { if (alive) setData(value); },
+      (err: Error) => {
+        if (err instanceof UnauthorizedError) { location.reload(); return; }
+        if (alive) setError(err.message || t('Ceva nu a funcționat.'));
+      },
+    );
+    return () => { alive = false; };
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [...deps, attempt]);
+
+  return { data, error, reload: () => setAttempt((n) => n + 1) };
+}
+
 function App(): React.ReactElement {
   const [me, setMe] = useState<{
     email: string;
@@ -101,6 +163,10 @@ function App(): React.ReactElement {
     };
   } | null>(null);
   const [screen, setScreen] = useState<Screen | null>(DEEP_LINK?.screen ?? null);
+  // Ссылка из письма срабатывает ОДИН раз. Прежде она читалась при каждом
+  // монтировании экрана переписок: нажал «Înapoi la listă» — и тебя тут же
+  // возвращало в тот же разговор, список был недостижим до перезагрузки.
+  const [deepLink, setDeepLink] = useState(DEEP_LINK?.conversationId ?? null);
   // Поиск из верхней строки — не украшение: он уводит в переписки
   // с уже применённым фильтром по тексту, то есть делает то, что обещает.
   const [query, setQuery] = useState('');
@@ -111,7 +177,7 @@ function App(): React.ReactElement {
       .then((data) => {
         // Язык ставится до первой отрисовки экранов: иначе панель успевает
         // мигнуть румынским у клиента, который его не знает.
-        if (data) setPanelLocale(data.tenant.locale);
+        if (data) { setPanelLocale(data.tenant.locale); setDateLocale(data.tenant.locale); }
         setMe(data);
       })
       .catch(() => setMe(null))
@@ -197,7 +263,8 @@ function App(): React.ReactElement {
       {current === 'connectors' && <Connectors />}
       {current === 'chats' && (
         <Chats key={query} locales={me.tenant.locales} initialQuery={query}
-               {...(DEEP_LINK ? { initialOpen: DEEP_LINK.conversationId } : {})} />
+               {...(deepLink ? { initialOpen: deepLink } : {})}
+               onOpened={() => setDeepLink(null)} />
       )}
       {current === 'analytics' && <Analytics />}
       {current === 'install' && <Install />}
@@ -320,7 +387,14 @@ function Knowledge(): React.ReactElement {
   const [busy, setBusy] = useState(false);
   const [error, setError] = useState('');
 
-  const load = useCallback(() => get<Doc[]>('/documents').then(setDocs), []);
+  // Первый заход под защитой: без него упавший запрос оставлял экран
+  // в «Se încarcă…» навсегда, а протухшая сессия не возвращала к форме входа.
+  const load = useCallback(
+    () => get<Doc[]>('/documents').then(setDocs).catch((err: Error) => {
+      if (err instanceof UnauthorizedError) { location.reload(); return; }
+      setError(err.message);
+      setDocs([]);
+    }), []);
   useEffect(() => void load(), [load]);
 
   // Procesarea are loc în fundal — reîmprospătăm doar cât timp ceva chiar lucrează.
@@ -597,20 +671,25 @@ const colorFields = (): Array<[keyof Theme, string]> => [
 ];
 
 function Aspect(): React.ReactElement {
-  const [data, setData] = useState<AspectData | null>(null);
   // Язык вкладки текстов — первый язык КЛИЕНТА, а не зашитый румынский.
   // Прежде тексты немецкого клиента сохранялись в ключ `ro`: панель показывала
   // «Salvat» и верный предпросмотр, а виджет открывался без приветствия.
   const [locale, setLocale] = useState<Locale | null>(null);
   const [saved, setSaved] = useState(false);
+  // Ошибка сохранения обязана быть видна. Прежде отказ сервера не оставлял
+  // ни штампа, ни сообщения: человек уходил с экрана уверенный, что сохранил.
+  const [saveError, setSaveError] = useState('');
 
-  useEffect(() => { void get<AspectData>('/appearance').then(setData); }, []);
+  const { data: loaded, error, reload } = useResource(() => get<AspectData>('/appearance'), []);
+  const [edited, setEdited] = useState<AspectData | null>(null);
+  const data = edited ?? loaded;
+  if (error) return <Failed error={error} onRetry={reload} />;
   if (!data) return <Loading />;
 
   const known = (data.locales as Locale[]).filter((l) => l in STRINGS);
   const active: Locale = locale && known.includes(locale) ? locale : (known[0] ?? 'en');
 
-  const patch = (next: Partial<AspectData>): void => { setData({ ...data, ...next }); setSaved(false); };
+  const patch = (next: Partial<AspectData>): void => { setEdited({ ...data, ...next }); setSaved(false); };
   const warnings = auditTheme(data.theme);
 
   const srcDoc = previewSrcDoc({
@@ -698,14 +777,16 @@ function Aspect(): React.ReactElement {
 
         <div className="row">
           <button className="go" onClick={() => {
+            setSaveError('');
             void put('/appearance', {
               botName: data.botName, avatarUrl: data.avatarUrl, position: data.position,
               theme: data.theme, welcomeMessage: data.welcomeMessage,
               aiDisclosureText: data.aiDisclosureText,
-            }).then(() => setSaved(true));
+            }).then(() => setSaved(true), (err: Error) => setSaveError(err.message));
           }}>{t('Salvează')}</button>
           {saved && <span className="stamp ok">{t('Salvat')}</span>}
         </div>
+        {saveError && <p className="note err">{saveError}</p>}
       </div>
 
       <section className="sheet">
@@ -751,9 +832,14 @@ function Connectors(): React.ReactElement {
   const [result, setResult] = useState<TestResult | null>(null);
 
   const load = useCallback(
-    () => get<{ connectors: Connector[]; tools: Tool[] }>('/connectors').then(setData), []);
+    () => get<{ connectors: Connector[]; tools: Tool[] }>('/connectors').then(setData)
+      .catch((err: Error) => {
+        if (err instanceof UnauthorizedError) { location.reload(); return; }
+        setError(err.message);
+        setData({ connectors: [], tools: [] });
+      }), []);
   useEffect(() => void load(), [load]);
-  if (!data) return <Loading />;
+  if (!data) return error ? <Failed error={error} onRetry={() => void load()} /> : <Loading />;
 
   const guard = async (fn: () => Promise<unknown>): Promise<void> => {
     setError('');
@@ -935,13 +1021,16 @@ const EMPTY_F = { from: '', to: '', q: '', locale: '', hasLead: false, hasGap: f
 const PER = 25;
 
 function Chats(
-  { initialOpen, locales, initialQuery }:
-  { initialOpen?: string; locales: string[]; initialQuery?: string },
+  { initialOpen, locales, initialQuery, onOpened }:
+  { initialOpen?: string; locales: string[]; initialQuery?: string; onOpened?: () => void },
 ): React.ReactElement {
   const [f, setF] = useState({ ...EMPTY_F, q: initialQuery ?? '' });
   const [data, setData] = useState<{ rows: Conv[]; total: number } | null>(null);
   const [page, setPage] = useState(0);
   const [open, setOpen] = useState<string | null>(initialOpen ?? null);
+  // Сообщаем наверх, что ссылку из письма уже отработали: второй раз она
+  // открываться не должна.
+  useEffect(() => { if (initialOpen) onOpened?.(); }, [initialOpen, onOpened]);
   const [detail, setDetail] = useState<Detail | null>(null);
   const [editing, setEditing] = useState<number | null>(null);
   const [draft, setDraft] = useState('');
@@ -961,20 +1050,37 @@ function Chats(
     return p;
   }, [f]);
 
+  // Запрос уходит на каждое нажатие клавиши, а отвечают они не по порядку:
+  // без отбрасывания устаревших ответов в поле было одно, а в таблице другое.
+  const seq = useRef(0);
+  const [listError, setListError] = useState<string | null>(null);
+  const [attempt, setAttempt] = useState(0);
+
   useEffect(() => {
     const p = new URLSearchParams(params);
     p.set('limit', String(PER));
     p.set('offset', String(page * PER));
     setData(null);
-    void get<{ rows: Conv[]; total: number }>(`/conversations?${p}`).then(setData);
-  }, [params, page]);
+    setListError(null);
+    const mine = ++seq.current;
+    void get<{ rows: Conv[]; total: number }>(`/conversations?${p}`).then(
+      (next) => { if (seq.current === mine) setData(next); },
+      (err: Error) => {
+        if (err instanceof UnauthorizedError) { location.reload(); return; }
+        if (seq.current === mine) setListError(err.message);
+      },
+    );
+  }, [params, page, attempt]);
 
   useEffect(() => {
     setEditing(null);
     setSaved(new Set());
-    if (open) void get<Detail>(`/conversations/${open}`).then(setDetail);
-    else setDetail(null);
-  }, [open]);
+    if (!open) { setDetail(null); return; }
+    void get<Detail>(`/conversations/${open}`).then(setDetail, (err: Error) => {
+      if (err instanceof UnauthorizedError) { location.reload(); return; }
+      setListError(err.message);
+    });
+  }, [open, attempt]);
 
   if (open) {
     return (
@@ -982,7 +1088,8 @@ function Chats(
         <div className="row" style={{ marginBottom: 14 }}>
           <button onClick={() => setOpen(null)}>{t('← Înapoi la listă')}</button>
         </div>
-        {!detail ? <Loading /> : (
+        {listError ? <Failed error={listError} onRetry={() => setAttempt((n) => n + 1)} />
+         : !detail ? <Loading /> : (
           <>
             {detail.lead && (
               <section className="sheet stack">
@@ -1129,7 +1236,8 @@ function Chats(
 
       <section className="sheet">
         <h2>{t('Conversații')}{data ? ` · ${data.total}` : ''}</h2>
-        {!data ? <Loading /> : (
+        {listError ? <Failed error={listError} onRetry={() => setAttempt((n) => n + 1)} />
+         : !data ? <Loading /> : (
           <div className="ledger-wrap">
             <table>
               <thead>
@@ -1439,6 +1547,7 @@ function Install(): React.ReactElement {
   const [draft, setDraft] = useState('');
   const [saved, setSaved] = useState(false);
   const [copied, setCopied] = useState(false);
+  const [saveError, setSaveError] = useState('');
   const [checkUrl, setCheckUrl] = useState('');
   const [verify, setVerify] = useState<VerifyResult | null>(null);
   const [checking, setChecking] = useState(false);
@@ -1510,13 +1619,17 @@ function Install(): React.ReactElement {
                   onChange={(e) => { setDraft(e.target.value); setSaved(false); }} />
         <div className="row">
           <button className="go" onClick={() => {
+            setSaveError('');
             const domains = draft.split('\n').map((s) => s.trim()).filter(Boolean);
             void put<{ domains: string[] }>('/install', { domains }).then((next) => {
               setDraft(next.domains.join('\n')); setSaved(true);
-            });
+            }, (err: Error) => setSaveError(err.message));
           }}>{t('Salvează')}</button>
           {saved && <span className="stamp ok">{t('Salvat')}</span>}
         </div>
+        {/* На этом экране проглоченная ошибка означает мёртвый виджет при
+            «сохранённых» доменах — то есть тихую поломку у клиента на сайте. */}
+        {saveError && <p className="note err">{saveError}</p>}
       </section>
     </>
   );

@@ -1,0 +1,67 @@
+- generic [ref=f47e3]:
+  - complementary [ref=f47e4]:
+    - img "SofaBelle" [ref=f47e6]
+    - paragraph [ref=f47e7]: plan business
+    - navigation "Secțiuni" [ref=f47e8]:
+      - button "Google Drive" [ref=f47e9] [cursor=pointer]
+      - button "Aspect" [ref=f47e13] [cursor=pointer]
+      - button "Conversații" [ref=f47e19] [cursor=pointer]
+      - button "Analize" [active] [ref=f47e22] [cursor=pointer]
+      - button "Instalare" [ref=f47e25] [cursor=pointer]
+    - group "Tema panoului" [ref=f47e30]:
+      - button "Sistem" [ref=f47e31] [cursor=pointer]
+      - button "Deschis" [pressed] [ref=f47e32] [cursor=pointer]
+      - button "Întunecat" [ref=f47e33] [cursor=pointer]
+  - generic [ref=f47e34]:
+    - banner [ref=f47e35]:
+      - heading "Analize" [level=1] [ref=f47e48]
+      - searchbox "Caută în conversații" [ref=f47e38]
+      - generic [ref=f47e39]:
+        - generic [ref=f47e40]: admin@sofabelle.md
+        - button "Ieșire" [ref=f47e41] [cursor=pointer]
+    - generic [ref=f47e49]:
+      - heading "Consum" [level=2] [ref=f47e50]
+      - generic [ref=f47e51]:
+        - paragraph [ref=f47e52]:
+          - text: "52"
+          - generic [ref=f47e53]: mesaje luna aceasta
+        - paragraph [ref=f47e54]:
+          - text: "52"
+          - generic [ref=f47e55]: în ultimele 30 de zile
+    - generic [ref=f47e56]:
+      - heading "Întrebări fără răspuns" [level=2] [ref=f47e57]
+      - paragraph [ref=f47e58]: Exact temele care lipsesc din materiale. Cel mai scurt drum spre un bot mai bun este să adaugi un document despre primele rânduri din listă.
+      - table [ref=f47e60]:
+        - rowgroup [ref=f47e61]:
+          - row [ref=f47e62]:
+            - columnheader "Întrebare" [ref=f47e63]
+            - columnheader "De câte ori" [ref=f47e64]
+            - columnheader "Ultima dată" [ref=f47e65]
+        - rowgroup [ref=f47e66]:
+          - row [ref=f47e67]:
+            - cell [ref=f47e68]:
+              - paragraph [ref=f47e69]: Toate întrebările și-au găsit răspunsul în materiale.
+    - generic [ref=f47e70]:
+      - heading "Cereri de ofertă" [level=2] [ref=f47e71]
+      - generic [ref=f47e72]: Trimitem fiecare cerere pe
+      - generic [ref=f47e73]:
+        - textbox "Trimitem fiecare cerere pe" [ref=f47e74]:
+          - /placeholder: vanzari@exemplu.ro
+          - text: designer.nefele@gmail.com
+        - button "Salvează" [ref=f47e75] [cursor=pointer]
+      - paragraph [ref=f47e76]: Anunțul pleacă la două minute după ce vizitatorul lasă un contact — atât cât îi ia asistentului să afle și restul detaliilor. Câmpul gol oprește anunțurile; cererile rămân oricum aici.
+      - table [ref=f47e78]:
+        - rowgroup [ref=f47e79]:
+          - row [ref=f47e80]:
+            - columnheader "Când" [ref=f47e81]
+            - columnheader "Nume" [ref=f47e82]
+            - columnheader "Email" [ref=f47e83]
+            - columnheader "Telefon" [ref=f47e84]
+            - columnheader "Cererea" [ref=f47e85]
+        - rowgroup [ref=f47e86]:
+          - row [ref=f47e87]:
+            - cell "20.08.2026" [ref=f47e88]
+            - cell "Maria" [ref=f47e89]
+            - cell [ref=f47e90]
+            - cell "0744 556 677" [ref=f47e91]
+            - cell [ref=f47e92]
