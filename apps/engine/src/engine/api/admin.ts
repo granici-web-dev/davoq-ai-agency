@@ -150,8 +150,9 @@ export function registerAdmin(app: FastifyInstance): void {
   app.get('/admin/api/me', guarded(async ({ session, client }) => {
     const { rows } = await client.query<{
       name: string; plan: string; public_key: string; logo_key: string | null;
-      hidden_screens: string[]; locale_default: string;
-    }>(`SELECT name, plan, public_key, logo_key, hidden_screens, locale_default
+      hidden_screens: string[]; locale_default: string; supported_locales: string[];
+    }>(`SELECT name, plan, public_key, logo_key, hidden_screens, locale_default,
+               supported_locales
           FROM tenants WHERE id = $1`, [session.tenantId]);
     const t = rows[0];
     return {
@@ -164,6 +165,7 @@ export function registerAdmin(app: FastifyInstance): void {
         // Язык панели — язык клиента. Панель писалась по-румынски, но читать
         // её будет тот, кто работает с заявками, а он не обязан знать румынский.
         locale: t.locale_default,
+        locales: t.supported_locales?.length ? t.supported_locales : [t.locale_default],
       },
     };
   }));
@@ -264,6 +266,15 @@ export function registerAdmin(app: FastifyInstance): void {
       ai_disclosure_text: Record<string, string>;
     }>('SELECT * FROM widget_configs WHERE tenant_id = $1', [session.tenantId]);
 
+    // Языки клиента, а не все встроенные: предлагать заполнить немецкое
+    // приветствие тому, у кого материалы только румынские, — значит просить
+    // работу, результат которой посетитель никогда не увидит.
+    const { rows: t } = await client.query<{ supported_locales: string[]; locale_default: string }>(
+      'SELECT supported_locales, locale_default FROM tenants WHERE id = $1', [session.tenantId]);
+    const locales = t[0]?.supported_locales?.length
+      ? t[0].supported_locales
+      : [t[0]?.locale_default ?? 'en'];
+
     const theme = normalizeTheme(rows[0]?.theme);
     return {
       botName: rows[0]?.bot_name ?? 'Assistant',
@@ -274,6 +285,7 @@ export function registerAdmin(app: FastifyInstance): void {
       aiDisclosureText: rows[0]?.ai_disclosure_text ?? {},
       warnings: auditTheme(theme),
       presets: PRESETS,
+      locales,
     };
   }));
 

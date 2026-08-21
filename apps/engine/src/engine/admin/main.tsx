@@ -67,7 +67,7 @@ function App(): React.ReactElement {
     email: string;
     tenant: {
       name: string; plan: string; logo_url: string | null;
-      hiddenScreens: string[]; locale: string;
+      hiddenScreens: string[]; locale: string; locales: string[];
     };
   } | null>(null);
   const [screen, setScreen] = useState<Screen | null>(DEEP_LINK?.screen ?? null);
@@ -128,7 +128,9 @@ function App(): React.ReactElement {
       {current === 'drive' && <Drive />}
       {current === 'aspect' && <Aspect />}
       {current === 'connectors' && <Connectors />}
-      {current === 'chats' && <Chats {...(DEEP_LINK ? { initialOpen: DEEP_LINK.conversationId } : {})} />}
+      {current === 'chats' && (
+        <Chats locales={me.tenant.locales} {...(DEEP_LINK ? { initialOpen: DEEP_LINK.conversationId } : {})} />
+      )}
       {current === 'analytics' && <Analytics />}
       {current === 'install' && <Install />}
     </div>
@@ -461,13 +463,15 @@ interface AspectData {
   theme: Theme; welcomeMessage: Record<string, string>;
   aiDisclosureText: Record<string, string>;
   warnings: ContrastWarning[]; presets: Preset[];
+  /** Языки клиента: заполнять тексты имеет смысл только на них. */
+  locales: string[];
 }
 
 const COLOR_FIELDS: Array<[keyof Theme, string]> = [
   ['primary', t('Culoare principală')],
-  ['bg', 'Fundalul panoului'],
-  ['text', 'Textul'],
-  ['userBubble', 'Replica vizitatorului'],
+  ['bg', t('Fundalul panoului')],
+  ['text', t('Textul')],
+  ['userBubble', t('Replica vizitatorului')],
   ['botBubble', t('Răspunsul botului')],
 ];
 
@@ -543,7 +547,7 @@ function Aspect(): React.ReactElement {
           <h2>Texte</h2>
           <div className="row">
             <span className="note">Limba:</span>
-            {(['ro', 'de', 'en', 'ru'] as Locale[]).map((l) => (
+            {(data.locales as Locale[]).map((l) => (
               <button key={l} className={locale === l ? 'go' : ''} onClick={() => setLocale(l)}>
                 {l.toUpperCase()}
               </button>
@@ -803,7 +807,7 @@ interface Detail {
 const EMPTY_F = { from: '', to: '', q: '', locale: '', hasLead: false, hasGap: false };
 const PER = 25;
 
-function Chats({ initialOpen }: { initialOpen?: string }): React.ReactElement {
+function Chats({ initialOpen, locales }: { initialOpen?: string; locales: string[] }): React.ReactElement {
   const [f, setF] = useState(EMPTY_F);
   const [data, setData] = useState<{ rows: Conv[]; total: number } | null>(null);
   const [page, setPage] = useState(0);
@@ -964,7 +968,7 @@ function Chats({ initialOpen }: { initialOpen?: string }): React.ReactElement {
           <label className="field">{t('Limba')}
             <select style={{ width: 150 }} value={f.locale} onChange={(e) => set({ locale: e.target.value })}>
               <option value="">toate</option>
-              {['ro', 'de', 'en', 'ru'].map((l) => <option key={l} value={l}>{l.toUpperCase()}</option>)}
+              {locales.map((l) => <option key={l} value={l}>{l.toUpperCase()}</option>)}
             </select>
           </label>
         </div>
@@ -1268,7 +1272,10 @@ function Install(): React.ReactElement {
             void navigator.clipboard.writeText(data.snippet).then(() => setCopied(true));
           }}>{t('Copiază')}</button>
           {copied && <span className="stamp ok">{t('Copiat')}</span>}
-          <span className="note">{t('Se pune înainte de eticheta &lt;/body&gt;.')}</span>
+          {/* Тег пишется как есть: JSX выводит текст буквально, и HTML-сущности
+              вида &lt; попадают на экран в сыром виде — клиент видел абракадабру
+              там, где должен быть закрывающий тег. */}
+          <span className="note">{t('Se pune înainte de eticheta </body>.')}</span>
         </div>
       </section>
 
@@ -1298,7 +1305,7 @@ function Install(): React.ReactElement {
                     : t('Codul widgetului nu apare pe pagină')}
                 </p>
                 <p className={verify.keyFound ? 'note' : 'note err'}>
-                  {verify.keyFound ? 'Cheia corespunde' : t('Cheia ta nu apare pe pagină')}
+                  {verify.keyFound ? t('Cheia corespunde') : t('Cheia ta nu apare pe pagină')}
                 </p>
               </>
             )}

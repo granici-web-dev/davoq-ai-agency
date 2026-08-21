@@ -179,8 +179,8 @@ export const EN: Record<string, string> = {
     "Save tool",
   "Se procesează":
     "Processing",
-  "Se pune înainte de eticheta &lt;/body&gt;.":
-    "Goes just before the &lt;/body&gt; tag.",
+  "Se pune înainte de eticheta </body>.":
+    "Goes just before the </body> tag.",
   "Se salvează…":
     "Saving…",
   "Se sincronizează…":
@@ -347,4 +347,12 @@ export const EN: Record<string, string> = {
     "Enter the page address.",
   "error.drive_not_connected":
     "Google Drive is not connected.",
+  "Fundalul panoului":
+    "Panel background",
+  "Replica vizitatorului":
+    "Visitor bubble",
+  "Textul":
+    "Text",
+  "Cheia corespunde":
+    "Key matches",
 };

@@ -90,7 +90,7 @@ try {
       const { rows } = await withOwner((client) =>
         client.query<{
           name: string; conversations: string; contacts: string; leads: string;
-          messages: string; widget_loads: string;
+          messages: string; widget_loads: string; lang_retried: string; lang_leak: string;
         }>(
           `SELECT t.name,
                   (SELECT count(*) FROM conversations c
@@ -105,7 +105,13 @@ try {
                   coalesce((SELECT sum(u.messages) FROM usage_daily u
                     WHERE u.tenant_id = t.id AND u.date >= current_date - $1::int), 0) AS messages,
                   coalesce((SELECT sum(u.widget_loads) FROM usage_daily u
-                    WHERE u.tenant_id = t.id AND u.date >= current_date - $1::int), 0) AS widget_loads
+                    WHERE u.tenant_id = t.id AND u.date >= current_date - $1::int), 0) AS widget_loads,
+                  (SELECT count(*) FROM messages m
+                    WHERE m.tenant_id = t.id AND m.language_flag = 'retried'
+                      AND m.created_at >= now() - ($1 || ' days')::interval) AS lang_retried,
+                  (SELECT count(*) FROM messages m
+                    WHERE m.tenant_id = t.id AND m.language_flag = 'leak'
+                      AND m.created_at >= now() - ($1 || ' days')::interval) AS lang_leak
              FROM tenants t WHERE t.status = 'active' ORDER BY t.created_at`,
           [days],
         ),
@@ -117,6 +123,19 @@ try {
           `  ${r.name.padEnd(20)} ${String(r.widget_loads).padStart(6)}` +
           ` ${String(r.conversations).padStart(10)} ${String(r.contacts).padStart(9)}` +
           ` ${String(r.leads).padStart(9)} ${String(r.messages).padStart(10)}`,
+        );
+      }
+
+      // Язык отдельной строкой, а не колонкой: это наша служебная цифра,
+      // а не показатель клиента. Ноль в обеих — то, как должно быть.
+      const retried = rows.reduce((s, r) => s + Number(r.lang_retried), 0);
+      const leaked = rows.reduce((s, r) => s + Number(r.lang_leak), 0);
+      const total = rows.reduce((s, r) => s + Number(r.messages), 0);
+      if (retried + leaked > 0) {
+        const share = total > 0 ? ((retried + leaked) / total * 100).toFixed(1) : '—';
+        console.log(
+          `\n  язык: перехвачено ${retried}, просочилось ${leaked}` +
+          ` — ${share}% от ${total} ответов`,
         );
       }
       console.log();

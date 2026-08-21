@@ -179,8 +179,8 @@ export const RU: Record<string, string> = {
     "Сохранить инструмент",
   "Se procesează":
     "Обрабатывается",
-  "Se pune înainte de eticheta &lt;/body&gt;.":
-    "Ставится перед тегом &lt;/body&gt;.",
+  "Se pune înainte de eticheta </body>.":
+    "Ставится перед тегом </body>.",
   "Se salvează…":
     "Сохраняем…",
   "Se sincronizează…":
@@ -347,4 +347,12 @@ export const RU: Record<string, string> = {
     "Укажите адрес страницы.",
   "error.drive_not_connected":
     "Google Drive не подключён.",
+  "Fundalul panoului":
+    "Фон панели",
+  "Replica vizitatorului":
+    "Реплика посетителя",
+  "Textul":
+    "Текст",
+  "Cheia corespunde":
+    "Ключ совпадает",
 };
