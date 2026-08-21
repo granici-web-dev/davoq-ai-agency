@@ -3,6 +3,7 @@ import type { FastifyInstance, FastifyRequest } from 'fastify';
 import type pg from 'pg';
 import { withPlatform, withTenant } from '../db/pool.js';
 import { createDocument } from '../ingest/index.js';
+import { get as storageGet } from '../ingest/storage.js';
 import { DRIVE_SYNC_MINUTES, enqueueDriveSyncNow, enqueueIngest, enqueueRecheck } from '../ingest/queue.js';
 import { parseQuoteFields } from '../llm/quote.js';
 import { listApproved, saveApproved } from '../rag/approved.js';
@@ -40,15 +41,25 @@ export function registerAdmin(app: FastifyInstance): void {
 
   // Логотип тоже с нашего сервера: панель не должна дёргать сайт клиента,
   // иначе его падение или смена CMS ломает шапку админки.
-  app.get<{ Params: { '*': string } }>('/admin/brand/*', async (request, reply) => {
-    const name = request.params['*'];
-    if (!/^[\w.-]+\.(svg|png|webp)$/.test(name)) return reply.code(400).send();
-    const type = name.endsWith('.svg') ? 'image/svg+xml'
-      : name.endsWith('.png') ? 'image/png' : 'image/webp';
+  //
+  // Имени файла в адресе нет намеренно. Логотип — файл клиента, лежит под
+  // префиксом его тенанта, и какой именно — знает только запись в базе.
+  // Адрес без имени невозможно подобрать, а сессия и так решает, чей он.
+  app.get('/admin/brand/logo', async (request, reply) => {
+    const session = await loadSession(request);
+    if (!session) return reply.code(401).send({ error: 'unauthorized' });
+    const brand = await withTenant(session.tenantId, async (client) => {
+      const { rows } = await client.query<{ logo_key: string | null; logo_mime: string | null }>(
+        'SELECT logo_key, logo_mime FROM tenants WHERE id = $1', [session.tenantId]);
+      return rows[0];
+    });
+    if (!brand?.logo_key) return reply.code(404).send();
     return reply
-      .type(type)
-      .header('cache-control', 'public, max-age=86400')
-      .send(await readFile(new URL(`../../../dist/brand/${name}`, import.meta.url)));
+      .type(brand.logo_mime ?? 'image/svg+xml')
+      // Приватный кеш: логотип отдаётся под сессией, и общему кешу его отдавать
+      // нельзя — иначе прокси покажет марку одного клиента другому.
+      .header('cache-control', 'private, max-age=86400')
+      .send(await storageGet(brand.logo_key));
   });
 
   app.get('/admin.js', async (_req, reply) =>
@@ -129,9 +140,16 @@ export function registerAdmin(app: FastifyInstance): void {
 
   app.get('/admin/api/me', guarded(async ({ session, client }) => {
     const { rows } = await client.query<{
-      name: string; plan: string; public_key: string; logo_url: string | null;
-    }>('SELECT name, plan, public_key, logo_url FROM tenants WHERE id = $1', [session.tenantId]);
-    return { email: session.email, tenant: rows[0] };
+      name: string; plan: string; public_key: string; logo_key: string | null;
+    }>('SELECT name, plan, public_key, logo_key FROM tenants WHERE id = $1', [session.tenantId]);
+    const t = rows[0];
+    return {
+      email: session.email,
+      tenant: t && {
+        name: t.name, plan: t.plan, public_key: t.public_key,
+        logo_url: t.logo_key ? '/admin/brand/logo' : null,
+      },
+    };
   }));
 
   // ── 1. База знаний ──────────────────────────────────────────────────────────

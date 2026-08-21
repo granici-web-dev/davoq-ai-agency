@@ -88,6 +88,25 @@ switch (cmd) {
     break;
   }
 
+  case 'set-logo': {
+    const [tenantId, path] = args;
+    if (!tenantId || !path) throw new Error('usage: set-logo <tenantId> <файл .svg|.png|.webp>');
+    const ext = extname(path).toLowerCase();
+    const mime = { '.svg': 'image/svg+xml', '.png': 'image/png', '.webp': 'image/webp' }[ext];
+    if (!mime) throw new Error(`логотип может быть .svg, .png или .webp, получено ${ext}`);
+
+    // Ключ фиксированный: у тенанта один логотип, и повторная установка
+    // должна заменять его, а не копить файлы под разными именами.
+    const { put } = await import('../../engine/ingest/storage.js');
+    const key = `${tenantId}/brand/logo${ext}`;
+    await put(key, await readFile(path));
+    await withTenant(tenantId, (client) =>
+      client.query('UPDATE tenants SET logo_key = $2, logo_mime = $3 WHERE id = $1',
+        [tenantId, key, mime]));
+    console.log(`логотип сохранён: ${key}`);
+    break;
+  }
+
   case 'create-user': {
     const [tenantId, email, password] = args;
     if (!tenantId || !email || !password) {
@@ -213,7 +232,10 @@ switch (cmd) {
   }
 
   default:
-    console.error('команды: create-tenant | create-user | crawl | ingest-url | ingest-file | drive-connect | search | rank');
+    console.error(
+      'команды: create-tenant | create-user | set-logo | crawl | ingest-url | ingest-file' +
+      ' | drive-connect | search | rank',
+    );
     process.exitCode = 1;
 }
 
