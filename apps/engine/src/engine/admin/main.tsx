@@ -18,15 +18,15 @@ const ALL_SCREENS: Array<[Screen, string]> = [
 ];
 
 /**
- * MVP: база знаний и коннекторы скрыты по решению 20.08.2026. Единственный
- * источник материалов — папка на Google Drive, и два лишних экрана только
- * заставляли бы директора выбирать, куда класть файл.
+ * Какие экраны видит клиент — свойство клиента, а не сборки. Пилотному
+ * скрыли базу знаний и коннекторы: единственный источник материалов у него —
+ * папка на Google Drive, и два лишних экрана только заставляли бы директора
+ * выбирать, куда класть файл. Другому клиенту с CRM коннекторы нужны.
  *
- * Скрыты, а не удалены: экраны рабочие, эндпоинты на месте, обход сайта и
- * коннекторы продолжают работать. Вернуть — убрать имя из этого списка.
+ * Скрыты, а не удалены: экраны рабочие, эндпоинты на месте.
  */
-const HIDDEN: Screen[] = ['kb', 'connectors'];
-const COUPONS = ALL_SCREENS.filter(([id]) => !HIDDEN.includes(id));
+const visibleScreens = (hidden: string[]): Array<[Screen, string]> =>
+  ALL_SCREENS.filter(([id]) => !hidden.includes(id));
 
 /**
  * Ссылка из письма о заявке: `#chats/<id>` открывает панель сразу на нужном
@@ -57,10 +57,11 @@ function Loading(): React.ReactElement {
 }
 
 function App(): React.ReactElement {
-  const [me, setMe] = useState<
-    { email: string; tenant: { name: string; plan: string; logo_url: string | null } } | null
-  >(null);
-  const [screen, setScreen] = useState<Screen>(DEEP_LINK?.screen ?? COUPONS[0]![0]);
+  const [me, setMe] = useState<{
+    email: string;
+    tenant: { name: string; plan: string; logo_url: string | null; hiddenScreens: string[] };
+  } | null>(null);
+  const [screen, setScreen] = useState<Screen | null>(DEEP_LINK?.screen ?? null);
   const [checking, setChecking] = useState(true);
 
   useEffect(() => {
@@ -69,6 +70,11 @@ function App(): React.ReactElement {
 
   if (checking) return <div className="shell"><Loading /></div>;
   if (!me) return <Login />;
+
+  // Первый видимый экран становится стартовым только после загрузки /me:
+  // до неё неизвестно, какие экраны у этого клиента вообще есть.
+  const screens = visibleScreens(me.tenant.hiddenScreens ?? []);
+  const current = screen && screens.some(([id]) => id === screen) ? screen : screens[0]![0];
 
   return (
     <div className="shell">
@@ -93,21 +99,21 @@ function App(): React.ReactElement {
       </header>
 
       <nav className="coupons" aria-label="Secțiuni">
-        {COUPONS.map(([id, label]) => (
+        {screens.map(([id, label]) => (
           <button key={id} className="coupon" onClick={() => setScreen(id)}
-                  {...(screen === id ? { 'aria-current': 'page' as const } : {})}>
+                  {...(current === id ? { 'aria-current': 'page' as const } : {})}>
             {label}
           </button>
         ))}
       </nav>
 
-      {screen === 'kb' && <Knowledge />}
-      {screen === 'drive' && <Drive />}
-      {screen === 'aspect' && <Aspect />}
-      {screen === 'connectors' && <Connectors />}
-      {screen === 'chats' && <Chats {...(DEEP_LINK ? { initialOpen: DEEP_LINK.conversationId } : {})} />}
-      {screen === 'analytics' && <Analytics />}
-      {screen === 'install' && <Install />}
+      {current === 'kb' && <Knowledge />}
+      {current === 'drive' && <Drive />}
+      {current === 'aspect' && <Aspect />}
+      {current === 'connectors' && <Connectors />}
+      {current === 'chats' && <Chats {...(DEEP_LINK ? { initialOpen: DEEP_LINK.conversationId } : {})} />}
+      {current === 'analytics' && <Analytics />}
+      {current === 'install' && <Install />}
     </div>
   );
 }

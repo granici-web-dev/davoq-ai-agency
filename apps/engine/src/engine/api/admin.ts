@@ -141,13 +141,17 @@ export function registerAdmin(app: FastifyInstance): void {
   app.get('/admin/api/me', guarded(async ({ session, client }) => {
     const { rows } = await client.query<{
       name: string; plan: string; public_key: string; logo_key: string | null;
-    }>('SELECT name, plan, public_key, logo_key FROM tenants WHERE id = $1', [session.tenantId]);
+      hidden_screens: string[];
+    }>(`SELECT name, plan, public_key, logo_key, hidden_screens
+          FROM tenants WHERE id = $1`, [session.tenantId]);
     const t = rows[0];
     return {
       email: session.email,
       tenant: t && {
         name: t.name, plan: t.plan, public_key: t.public_key,
         logo_url: t.logo_key ? '/admin/brand/logo' : null,
+        // Какие экраны показывать — решает запись тенанта, а не сборка панели.
+        hiddenScreens: t.hidden_screens,
       },
     };
   }));
