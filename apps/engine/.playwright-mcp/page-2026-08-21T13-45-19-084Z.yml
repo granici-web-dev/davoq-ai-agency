@@ -1,7 +1,0 @@
-- generic [active] [ref=f40e1]:
-  - heading "Страница клиента" [level=1] [ref=f40e2]
-  - paragraph [ref=f40e3]:
-    - text: Вторая страница.
-    - link "Назад" [ref=f40e4] [cursor=pointer]:
-      - /url: /live.html
-  - button "Proba" [ref=f40e6] [cursor=pointer]

@@ -345,7 +345,7 @@ function Login(): React.ReactElement {
         <div className="mark"><span className="carrier" aria-hidden="true">AW</span><b>AssistWidget</b></div>
       </header>
       <form className="sheet stack" onSubmit={submit}>
-        <h2>Autentificare</h2>
+        <h2>{t('Autentificare')}</h2>
         <label className="field">{t('Email')}
           <input type="email" value={form.email} autoComplete="username" required
                  onChange={(e) => setForm({ ...form, email: e.target.value })} />
@@ -421,7 +421,7 @@ function Knowledge(): React.ReactElement {
         <h2>{t('Adaugă materiale')}</h2>
         <div className="row">
           <input className="grow" placeholder="https://exemplu.ro/produse" value={url}
-                 onChange={(e) => setUrl(e.target.value)} aria-label="Adresa paginii" />
+                 onChange={(e) => setUrl(e.target.value)} aria-label={t('Adresa paginii')} />
           <button className="go" disabled={busy || !url.trim()}
                   onClick={() => void guard(async () => { await post('/documents', { url }); setUrl(''); })}>
             {t('Adaugă pagina')}
@@ -750,9 +750,9 @@ function Aspect(): React.ReactElement {
         </section>
 
         <section className="sheet stack">
-          <h2>Texte</h2>
+          <h2>{t('Texte')}</h2>
           <div className="row">
-            <span className="note">Limba:</span>
+            <span className="note">{t('Limba:')}</span>
             {known.map((l) => (
               <button key={l} className={active === l ? 'go' : ''} onClick={() => setLocale(l)}>
                 {l.toUpperCase()}
@@ -791,7 +791,7 @@ function Aspect(): React.ReactElement {
 
       <section className="sheet">
         <h2>{t('Previzualizare')}</h2>
-        <iframe title="Previzualizarea widgetului" srcDoc={srcDoc}
+        <iframe title={t('Previzualizarea widgetului')} srcDoc={srcDoc}
                 style={{ width: '100%', height: 560, border: 0, background: 'var(--muted)',
                          borderRadius: 'calc(var(--radius) - 2px)' }} />
       </section>
@@ -856,7 +856,7 @@ function Connectors(): React.ReactElement {
           {t('Adresa este verificată la salvare: cererile către rețele interne și către adresele de metadate ale furnizorului de cloud sunt respinse.')}
         </p>
         <label className="field">{t('Denumire')}
-          <input placeholder="CRM-ul companiei" value={c.name}
+          <input placeholder={t('CRM-ul companiei')} value={c.name}
                  onChange={(e) => setC({ ...c, name: e.target.value })} />
         </label>
         <label className="field">{t('Adresa de bază')}
@@ -901,7 +901,7 @@ function Connectors(): React.ReactElement {
 
             <div className="ledger-wrap">
               <table>
-                <thead><tr><th>{t('Instrument')}</th><th>{t('Metodă')}</th><th>Cale</th><th /></tr></thead>
+                <thead><tr><th>{t('Instrument')}</th><th>{t('Metodă')}</th><th>{t('Cale')}</th><th /></tr></thead>
                 <tbody>
                   {tools.length === 0 && (
                     <tr><td colSpan={4}><p className="note">{t('Niciun instrument încă.')}</p></td></tr>
@@ -989,7 +989,7 @@ function Connectors(): React.ReactElement {
             </p>
             <p className="note">{t('Răspunsul brut al serviciului:')}</p>
             <pre>{result.raw || '(gol)'}</pre>
-            <p className="note">Ce vede botul din el:</p>
+            <p className="note">{t('Ce vede botul din el:')}</p>
             <pre>{result.asModelSees}</pre>
           </>
         )}
@@ -1106,7 +1106,7 @@ function Chats(
                         </tr>
                       ))}
                       {Object.keys(detail.lead.payload ?? {}).length === 0 && (
-                        <tr><td><p className="note">Doar datele de contact.</p></td></tr>
+                        <tr><td><p className="note">{t('Doar datele de contact.')}</p></td></tr>
                       )}
                     </tbody>
                   </table>
@@ -1227,7 +1227,7 @@ function Chats(
         <div className="row">
           <span className="note">{t('Descarcă ce vezi acum:')}</span>
           <a href={exportUrl('conversation')}><button>{t('Pe conversații')}</button></a>
-          <a href={exportUrl('message')}><button>Pe replici</button></a>
+          <a href={exportUrl('message')}><button>{t('Pe replici')}</button></a>
         </div>
         <p className="note">
           {t('„Pe conversații” — un rând per discuție, cu cererea de ofertă și numărul de goluri; pentru situația de ansamblu. „Pe replici” — fiecare mesaj separat; pentru a citi și a marca unde botul a răspuns greșit.')}
@@ -1241,8 +1241,8 @@ function Chats(
           <div className="ledger-wrap">
             <table>
               <thead>
-                <tr><th>{t('Început')}</th><th>{t('Prima întrebare')}</th><th>Lb.</th><th>Replici</th>
-                  <th>{t('Ofertă')}</th><th>Goluri</th><th /></tr>
+                <tr><th>{t('Început')}</th><th>{t('Prima întrebare')}</th><th>Lb.</th><th>{t('Replici')}</th>
+                  <th>{t('Ofertă')}</th><th>{t('Goluri')}</th><th /></tr>
               </thead>
               <tbody>
                 {data.rows.length === 0 && (
@@ -1257,7 +1257,7 @@ function Chats(
                     <td className="num">{c.message_count}</td>
                     <td>{c.has_lead ? <span className="stamp lead">{t('Ofertă')}</span> : ''}</td>
                     <td>{c.gap_count > 0 ? <span className="stamp wait">{c.gap_count}</span> : ''}</td>
-                    <td><button onClick={() => setOpen(c.id)}>Deschide</button></td>
+                    <td><button onClick={() => setOpen(c.id)}>{t('Deschide')}</button></td>
                   </tr>
                 ))}
               </tbody>
@@ -1562,7 +1562,7 @@ function Install(): React.ReactElement {
   return (
     <>
       <section className="sheet stack">
-        <h2>Codul de instalat</h2>
+        <h2>{t('Codul de instalat')}</h2>
         <pre>{data.snippet}</pre>
         <div className="row">
           <button onClick={() => {
@@ -1581,7 +1581,7 @@ function Install(): React.ReactElement {
         <p className="note">{t('Deschidem pagina și căutăm pe ea codul cu cheia ta.')}</p>
         <div className="row">
           <input className="grow" placeholder="https://exemplu.ro/" value={checkUrl}
-                 onChange={(e) => setCheckUrl(e.target.value)} aria-label="Adresa paginii" />
+                 onChange={(e) => setCheckUrl(e.target.value)} aria-label={t('Adresa paginii')} />
           <button disabled={checking || !checkUrl.trim()} onClick={() => {
             setChecking(true); setVerify(null);
             void post<VerifyResult>('/install/verify', { url: checkUrl })
@@ -1615,7 +1615,7 @@ function Install(): React.ReactElement {
         <p className="note">
           {t('Widgetul răspunde doar pe aceste domenii — câte unul pe rând, subdomeniile sunt incluse automat. Lista goală înseamnă că widgetul nu funcționează nicăieri.')}
         </p>
-        <textarea rows={4} value={draft} aria-label="Domenii permise"
+        <textarea rows={4} value={draft} aria-label={t('Domenii permise')}
                   onChange={(e) => { setDraft(e.target.value); setSaved(false); }} />
         <div className="row">
           <button className="go" onClick={() => {

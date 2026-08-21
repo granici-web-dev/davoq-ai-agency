@@ -369,4 +369,36 @@ export const EN: Record<string, string> = {
     "Messages per day, peak {max}",
   "maxim {max} pe zi":
     "peak {max} a day",
+  "Autentificare":
+    "Sign in",
+  "Cale":
+    "Path",
+  "Ce vede botul din el:":
+    "What the bot sees in it:",
+  "Codul de instalat":
+    "Installation code",
+  "Deschide":
+    "Open",
+  "Doar datele de contact.":
+    "Contact details only.",
+  "Goluri":
+    "Gaps",
+  "Pe replici":
+    "By messages",
+  "Replici":
+    "Messages",
+  "Texte":
+    "Texts",
+  "Adresa paginii":
+    "Page address",
+  "Previzualizarea widgetului":
+    "Widget preview",
+  "CRM-ul companiei":
+    "The company's CRM",
+  "Încearcă din nou":
+    "Try again",
+  "Ceva nu a funcționat.":
+    "Something went wrong.",
+  "Toate ecranele sunt ascunse pentru acest cont. Contactați administratorul.":
+    "All screens are hidden for this account. Contact your administrator.",
 };

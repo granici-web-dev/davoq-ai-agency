@@ -1,5 +1,0 @@
-[      65ms] [ERROR] Failed to load resource: the server responded with a status of 403 (Forbidden) @ http://localhost:3779/admin/api/documents:0
-[      66ms] Error: Această secțiune nu este disponibilă
-    at oi (http://localhost:3779/admin.js:9:93891)
-    at async Promise.all (index 1)
-    at async http://localhost:3779/admin.js:109:11543

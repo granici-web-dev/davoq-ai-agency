@@ -369,4 +369,36 @@ export const RU: Record<string, string> = {
     "Сообщений в день, максимум {max}",
   "maxim {max} pe zi":
     "максимум {max} в день",
+  "Autentificare":
+    "Вход",
+  "Cale":
+    "Путь",
+  "Ce vede botul din el:":
+    "Что видит бот из него:",
+  "Codul de instalat":
+    "Код для установки",
+  "Deschide":
+    "Открыть",
+  "Doar datele de contact.":
+    "Только контактные данные.",
+  "Goluri":
+    "Пробелы",
+  "Pe replici":
+    "По репликам",
+  "Replici":
+    "Реплик",
+  "Texte":
+    "Тексты",
+  "Adresa paginii":
+    "Адрес страницы",
+  "Previzualizarea widgetului":
+    "Предпросмотр виджета",
+  "CRM-ul companiei":
+    "CRM компании",
+  "Încearcă din nou":
+    "Повторить",
+  "Ceva nu a funcționat.":
+    "Что-то пошло не так.",
+  "Toate ecranele sunt ascunse pentru acest cont. Contactați administratorul.":
+    "Все экраны скрыты для этой учётной записи. Обратитесь к администратору.",
 };
