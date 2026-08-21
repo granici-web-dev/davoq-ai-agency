@@ -11,6 +11,7 @@ import { buildSystem } from '../../engine/rag/prompt.js';
  *   npm run cost                       # 25 000 сообщений в месяц
  *   npm run cost -- --messages 25000
  *   npm run cost -- --visitors 25000 --engagement 4
+ *   npm run cost -- --visitors 25000 --clients 5
  *
  * Считается по ЗАМЕРЕННОМУ расходу токенов из базы, а не по прикидке
  * «символы делить на четыре». Прикидка используется только пока сообщений
@@ -31,11 +32,31 @@ const CACHE_WRITE_RATIO = 1.25;
 const PRICE_EMBED = Number(process.env.PRICE_EMBED_PER_MTOK ?? 0.02);
 
 // ── Инфраструктура, в долларах в месяц ──────────────────────────────────────
+// Общая на всех клиентов: второй клиент не удваивает эти строки.
 const INFRA: Array<[string, number]> = [
   ['сервер (Hetzner CX22, 2 ядра / 4 ГБ)', Number(process.env.COST_SERVER ?? 4.9)],
   ['копии вне сервера (Storage Box)', Number(process.env.COST_BACKUP ?? 4.1)],
   ['домен', Number(process.env.COST_DOMAIN ?? 1.0)],
   ['отправка писем', Number(process.env.COST_MAIL ?? 0)],
+];
+
+/**
+ * Инструменты разработки.
+ *
+ * Отдельной статьёй, и это не бухгалтерская придирка. Она ведёт себя иначе,
+ * чем всё остальное: не зависит ни от трафика, ни от числа клиентов. На одном
+ * клиенте она больше всей остальной себестоимости в несколько раз, на десяти
+ * почти незаметна. Спрятать её в общую кучу — значит не увидеть, что цену
+ * пилота определяет именно она, а не Bedrock.
+ *
+ * Делится на две части. Подписка на Claude нужна и тогда, когда продукт готов:
+ * им он и поддерживается. Остальное нужно, пока идёт стройка, — и когда она
+ * кончится, эти строки можно убрать.
+ */
+const TOOLS: Array<[string, number, 'всегда' | 'пока строим']> = [
+  ['подписка Claude', Number(process.env.COST_CLAUDE ?? 120), 'всегда'],
+  ['Figma', Number(process.env.COST_FIGMA ?? 25), 'пока строим'],
+  ['Higgsfield', Number(process.env.COST_HIGGSFIELD ?? 25), 'пока строим'],
 ];
 
 const args = process.argv.slice(2);
@@ -47,6 +68,9 @@ const flag = (name: string): number | null => {
 const visitors = flag('visitors');
 const engagementPct = flag('engagement') ?? 4;
 const msgsPerConversation = flag('per-conversation') ?? 4;
+
+/** Между сколькими клиентами делятся общие статьи. */
+const clients = Math.max(1, flag('clients') ?? 1);
 
 /**
  * Сколько сообщений в месяц. Из посетителей сайта считается так: доля тех, кто
@@ -170,19 +194,62 @@ console.log(`${pad('ИТОГО в месяц, без кеша', 38)}${money(tota
 console.log(`${pad('ИТОГО в месяц, с кешем', 38)}${money(totalCached).padStart(10)}`);
 console.log(`${pad('ИТОГО за год, с кешем', 38)}${money(totalCached * 12).padStart(10)}`);
 
+// ── Инструменты ─────────────────────────────────────────────────────────────
+console.log('\n── инструменты разработки (общие на всех клиентов) ──');
+for (const [name, v, when] of TOOLS) {
+  console.log(`${pad(name, 30)}${money(v).padStart(10)}   ${when}`);
+}
+const toolsAlways = TOOLS.filter(([, , w]) => w === 'всегда').reduce((a, [, v]) => a + v, 0);
+const toolsTotal = TOOLS.reduce((a, [, v]) => a + v, 0);
+console.log('─'.repeat(48));
+console.log(`${pad('всего', 30)}${money(toolsTotal).padStart(10)}` +
+            `   из них постоянно ${money(toolsAlways)}`);
+
+// ── Полная картина ──────────────────────────────────────────────────────────
+const perClientShared = (infraTotal + toolsTotal) / clients;
+const perClientAlways = (infraTotal + toolsAlways) / clients;
+const perClient = modelCached + embed + perClientShared;
+
+console.log(`\n── всё вместе, при ${clients} клиент(ах) ──`);
+console.log(`${pad('на клиента: модель и поиск', 38)}${money(modelCached + embed).padStart(10)}`);
+console.log(`${pad('доля общего (сервер + инструменты)', 38)}${money(perClientShared).padStart(10)}`);
+console.log('─'.repeat(48));
+console.log(`${pad('СЕБЕСТОИМОСТЬ КЛИЕНТА в месяц', 38)}${money(perClient).padStart(10)}`);
+console.log(`${pad('она же, когда стройка кончится', 38)}` +
+            `${money(modelCached + embed + perClientAlways).padStart(10)}`);
+console.log(`${pad('ВСЕГО расходов в месяц', 38)}` +
+            `${money((modelCached + embed) * clients + infraTotal + toolsTotal).padStart(10)}`);
+console.log(`${pad('ВСЕГО за год', 38)}` +
+            `${money(((modelCached + embed) * clients + infraTotal + toolsTotal) * 12).padStart(10)}`);
+
 console.log('\n── на что уходят деньги ──');
-const share = (v: number): string => `${Math.round((v / totalCached) * 100)}%`;
-console.log(`модель ${share(modelCached)} · инфраструктура ${share(infraTotal)} · ` +
-            `поиск ${share(embed)}`);
+const grand = perClient;
+const share = (v: number): string => `${Math.round((v / grand) * 100)}%`;
+console.log(`модель ${share(modelCached)} · инструменты ${share(toolsTotal / clients)} · ` +
+            `сервер ${share(infraTotal / clients)} · поиск ${share(embed)}`);
 console.log(`на один разговор (${msgsPerConversation} реплики): ` +
             `${money(perMsgCached * msgsPerConversation, 3)}`);
+
+// ── Сколько клиентов нужно ──────────────────────────────────────────────────
+console.log('\n── за сколько сдавать ──');
+console.log('клиентов   себестоимость клиента   всего в месяц   окупается при цене');
+for (const n of [1, 2, 3, 5, 10, 20]) {
+  const each = modelCached + embed + (infraTotal + toolsTotal) / n;
+  const all = (modelCached + embed) * n + infraTotal + toolsTotal;
+  // Цена, при которой сходится в ноль, с округлением вверх до полусотни:
+  // назначать цену впритык к себестоимости — значит работать бесплатно.
+  const breakeven = Math.ceil(each / 50) * 50;
+  console.log(`${String(n).padStart(6)}   ${money(each).padStart(18)}   ` +
+              `${money(all).padStart(11)}   ${money(breakeven).padStart(14)}`);
+}
 
 console.log('\n── о чём здесь легко ошибиться ──');
 console.log('Цены Bedrock и хостинга заданы константами и могут устареть:');
 console.log(`  вход ${money(PRICE_IN)}/млн, выход ${money(PRICE_OUT)}/млн, ` +
             `эмбеддинги ${money(PRICE_EMBED, 3)}/млн.`);
 console.log('Переопределяются переменными PRICE_IN_PER_MTOK, PRICE_OUT_PER_MTOK,');
-console.log('PRICE_EMBED_PER_MTOK, COST_SERVER, COST_BACKUP, COST_DOMAIN.');
+console.log('PRICE_EMBED_PER_MTOK, COST_SERVER, COST_BACKUP, COST_DOMAIN,');
+console.log('COST_CLAUDE, COST_FIGMA, COST_HIGGSFIELD.');
 console.log('');
 console.log('Доля попаданий в кеш — предположение, а не замер: кеш живёт пять минут,');
 console.log('и попадёт ли следующее сообщение в это окно, зависит от плотности');
@@ -191,8 +258,8 @@ console.log('в базе остаётся нулевым, кеш не работ
 console.log('строке. Задаётся переменной CACHE_HIT_RATE.');
 console.log('');
 console.log('Не учтено: НДС, исходящий трафик сервера (на таких объёмах он в тариф');
-console.log('входит), ваше время на поддержку. Последнее на пилоте — самая большая');
-console.log('статья, и она не здесь.');
+console.log('входит) и ваше собственное время. Последнее на пилоте — самая большая');
+console.log('статья, и в деньгах она здесь не выражена.');
 
 await pool.end();
 await closeOwnerPool();
