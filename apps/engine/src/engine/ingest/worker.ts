@@ -3,6 +3,7 @@ import '../env.js';
 import { Worker } from 'bullmq';
 import { closeOwnerPool, pool, withOwner } from '../db/pool.js';
 import { processDocument } from './index.js';
+import { WORKER_HEARTBEAT_KEY } from '../ops/health.js';
 import {
   driveQueue, enqueueRecheck, notifyQueue, recheckQueue, redis, scheduleDriveSync,
   DRIVE_SYNC_MINUTES,
@@ -105,7 +106,27 @@ notifyWorker.on('failed', (job, err) =>
   console.log(`drive sync каждые ${DRIVE_SYNC_MINUTES} мин для ${rows.length} тенант(ов)`);
 }
 
+/**
+ * Отметка «жив».
+ *
+ * Воркер молчалив по природе: он просыпается на задание и снова засыпает.
+ * Отличить «нечего делать» от «умер» снаружи нельзя никак, а умирает он
+ * незаметно — виджет при этом отвечает, панель открывается, и только документы
+ * не индексируются, а письма о заявках не уходят.
+ *
+ * Ключ с истечением, а не запись в базе: если воркер умрёт, отметка исчезнет
+ * сама, и наблюдателю не придётся отличать старую от свежей.
+ */
+const heartbeat = setInterval(() => {
+  void redis.set(WORKER_HEARTBEAT_KEY, String(Date.now()), 'EX', 600);
+}, 30_000);
+void redis.set(WORKER_HEARTBEAT_KEY, String(Date.now()), 'EX', 600);
+
 const shutdown = async (): Promise<void> => {
+  clearInterval(heartbeat);
+  // Отметка убирается сразу: перезапуск воркера не должен три минуты выглядеть
+  // как смерть, а остановка руками — выглядеть как работа.
+  await redis.del(WORKER_HEARTBEAT_KEY).catch(() => undefined);
   // Закрываем воркер до пула: незавершённое задание должно успеть записать
   // статус failed, а не оборваться на закрытом соединении с базой.
   await worker.close();

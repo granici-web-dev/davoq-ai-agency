@@ -28,7 +28,9 @@
     "build:static": "node scripts/build-static.mjs",
     "start": "node dist/engine/api/server.js",
     "start:worker": "node dist/engine/ingest/worker.js",
-    "migrate:built": "node dist/engine/db/migrate.js"
+    "migrate:built": "node dist/engine/db/migrate.js",
+    "start:watchdog": "node dist/engine/ops/watchdog.js",
+    "watchdog": "tsx src/engine/ops/watchdog.ts"
   },
   "dependencies": {
     "@anthropic-ai/bedrock-sdk": "^0.30.0",
