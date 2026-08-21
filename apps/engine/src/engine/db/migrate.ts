@@ -4,7 +4,7 @@ import { readdir, readFile } from 'node:fs/promises';
 import { join } from 'node:path';
 import pg from 'pg';
 
-const dir = new URL('../../migrations/', import.meta.url).pathname;
+const dir = new URL('../../../migrations/', import.meta.url).pathname;
 
 const client = new pg.Client({ connectionString: process.env.DATABASE_URL });
 await client.connect();

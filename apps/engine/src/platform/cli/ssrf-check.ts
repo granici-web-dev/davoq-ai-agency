@@ -1,4 +1,4 @@
-import { assertPublicUrl, blockedReason } from '../llm/ssrf.js';
+import { assertPublicUrl, blockedReason } from '../../engine/llm/ssrf.js';
 
 const CASES: Array<[string, boolean, string]> = [
   ['https://example.com/api',              true,  'обычный публичный хост'],

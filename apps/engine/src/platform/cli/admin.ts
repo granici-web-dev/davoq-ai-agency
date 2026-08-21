@@ -11,13 +11,13 @@
  */
 
 // Первым импортом: остальные модули создают пулы и клиентов на этапе загрузки.
-import '../env.js';
+import '../../engine/env.js';
 import { randomBytes } from 'node:crypto';
 import { readFile } from 'node:fs/promises';
 import { basename, extname } from 'node:path';
-import { pool, withPlatform, withTenant } from '../db/pool.js';
-import { ingestNow, ingestUrl } from '../ingest/index.js';
-import { retrieve } from '../rag/retrieve.js';
+import { pool, withPlatform, withTenant } from '../../engine/db/pool.js';
+import { ingestNow, ingestUrl } from '../../engine/ingest/index.js';
+import { retrieve } from '../../engine/rag/retrieve.js';
 
 const [cmd, ...args] = process.argv.slice(2);
 
@@ -93,7 +93,7 @@ switch (cmd) {
     if (!tenantId || !email || !password) {
       throw new Error('usage: create-user <tenantId> <email> <password>');
     }
-    const { hashPassword } = await import('../api/session.js');
+    const { hashPassword } = await import('../../engine/api/session.js');
     const hash = await hashPassword(password);
     await withPlatform((client) =>
       client.query(
@@ -110,7 +110,7 @@ switch (cmd) {
   case 'crawl': {
     const [tenantId, url, limit] = args;
     if (!tenantId || !url) throw new Error('usage: crawl <tenantId> <url> [limit]');
-    const { crawl } = await import('../ingest/crawl.js');
+    const { crawl } = await import('../../engine/ingest/crawl.js');
     const pages = await crawl(url, { maxPages: Number(limit ?? 60) });
     console.log(`найдено страниц: ${pages.length}`);
     let ok = 0;
@@ -134,8 +134,8 @@ switch (cmd) {
     const id = /[-\w]{25,}/.exec(folderUrl)?.[0];
     if (!id) throw new Error('не удалось выделить идентификатор папки из ссылки');
 
-    const { authorize } = await import('../drive/oauth.js');
-    const { encryptSecret } = await import('../llm/secrets.js');
+    const { authorize } = await import('../../engine/drive/oauth.js');
+    const { encryptSecret } = await import('../../engine/llm/secrets.js');
     const tokens = await authorize();
 
     // Refresh-токен шифруется тем же ключом, что и секреты коннекторов:
@@ -154,7 +154,7 @@ switch (cmd) {
   case 'drive-sync': {
     const [tenantId] = args;
     if (!tenantId) throw new Error('usage: drive-sync <tenantId>');
-    const { DriveClient } = await import('../drive/client.js');
+    const { DriveClient } = await import('../../engine/drive/client.js');
     const conn = await withTenant(tenantId, (c) => DriveClient.forTenant(c, tenantId));
     if (!conn) throw new Error('диск не подключён');
 
@@ -177,7 +177,7 @@ switch (cmd) {
   case 'drive-list': {
     const [tenantId] = args;
     if (!tenantId) throw new Error('usage: drive-list <tenantId>');
-    const { DriveClient } = await import('../drive/client.js');
+    const { DriveClient } = await import('../../engine/drive/client.js');
     const conn = await withTenant(tenantId, (c) => DriveClient.forTenant(c, tenantId));
     if (!conn) throw new Error('диск не подключён');
     const files = await conn.drive.list(conn.folderId);
@@ -196,7 +196,7 @@ switch (cmd) {
     const [tenantId, ...q] = args;
     const query = q.join(' ');
     if (!tenantId || !query) throw new Error('usage: rank <tenantId> <query>');
-    const { createEmbeddingProvider, toVectorLiteral } = await import('../llm/embeddings.js');
+    const { createEmbeddingProvider, toVectorLiteral } = await import('../../engine/llm/embeddings.js');
     const provider = createEmbeddingProvider();
     const [vector] = await provider.embed([query], 'query');
     await withTenant(tenantId, async (client) => {

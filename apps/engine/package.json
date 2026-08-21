@@ -7,15 +7,16 @@
     "node": ">=22"
   },
   "scripts": {
-    "dev": "tsx watch src/api/server.ts",
+    "dev": "tsx watch src/engine/api/server.ts",
     "build": "tsc -p tsconfig.json",
     "typecheck": "tsc -p tsconfig.json --noEmit",
-    "migrate": "tsx src/db/migrate.ts",
+    "migrate": "tsx src/engine/db/migrate.ts",
     "db:up": "docker compose up -d && sleep 3 && npm run migrate",
-    "build:widget": "esbuild src/widget/embed.tsx --bundle --minify --format=iife --target=es2020 --outfile=dist/widget.js",
-    "build:admin": "esbuild src/admin/main.tsx --bundle --minify --format=iife --target=es2020 --outfile=dist/admin.js",
-    "worker": "tsx src/ingest/worker.ts",
-    "smoke": "node scripts/smoke.mjs"
+    "build:widget": "esbuild src/engine/widget/embed.tsx --bundle --minify --format=iife --target=es2020 --outfile=dist/widget.js",
+    "build:admin": "esbuild src/engine/admin/main.tsx --bundle --minify --format=iife --target=es2020 --outfile=dist/admin.js",
+    "worker": "tsx src/engine/ingest/worker.ts",
+    "smoke": "node scripts/smoke.mjs",
+    "cli": "tsx --env-file=.env src/platform/cli/admin.ts"
   },
   "dependencies": {
     "@anthropic-ai/bedrock-sdk": "^0.30.0",

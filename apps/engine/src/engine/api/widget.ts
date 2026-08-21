@@ -21,7 +21,7 @@ export function registerWidget(app: FastifyInstance): void {
   app.options('/v1/*', async (_request, reply) => reply.code(204).send());
 
   app.get('/widget.js', async (_request, reply) => {
-    const bundle = await readFile(new URL('../../dist/widget.js', import.meta.url), 'utf8');
+    const bundle = await readFile(new URL('../../../dist/widget.js', import.meta.url), 'utf8');
     return reply
       .header('content-type', 'application/javascript; charset=utf-8')
       .header('cache-control', 'public, max-age=300')

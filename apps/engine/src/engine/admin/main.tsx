@@ -36,11 +36,11 @@ const COUPONS = ALL_SCREENS.filter(([id]) => !HIDDEN.includes(id));
  * Адрес читается один раз при загрузке и сразу стирается: иначе кнопка
  * «Înapoi la listă» возвращала бы обратно в тот же разговор.
  */
-function takeDeepLink(): { screen: Screen; conversationId?: string } | null {
-  const m = /^#chats\/([\w-]{8,})$/.exec(location.hash);
-  if (!m) return null;
+function takeDeepLink(): { screen: Screen; conversationId: string } | null {
+  const id = /^#chats\/([\w-]{8,})$/.exec(location.hash)?.[1];
+  if (!id) return null;
   history.replaceState(null, '', location.pathname + location.search);
-  return { screen: 'chats', conversationId: m[1] };
+  return { screen: 'chats', conversationId: id };
 }
 
 const DEEP_LINK = typeof location === 'undefined' ? null : takeDeepLink();
@@ -105,7 +105,7 @@ function App(): React.ReactElement {
       {screen === 'drive' && <Drive />}
       {screen === 'aspect' && <Aspect />}
       {screen === 'connectors' && <Connectors />}
-      {screen === 'chats' && <Chats initialOpen={DEEP_LINK?.conversationId} />}
+      {screen === 'chats' && <Chats {...(DEEP_LINK ? { initialOpen: DEEP_LINK.conversationId } : {})} />}
       {screen === 'analytics' && <Analytics />}
       {screen === 'install' && <Install />}
     </div>

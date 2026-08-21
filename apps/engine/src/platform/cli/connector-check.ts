@@ -4,8 +4,8 @@
  * в приватную сеть. Запускать с SSRF_ALLOW_LOOPBACK=1.
  */
 import { createServer } from 'node:http';
-import { callConnector, formatResult, type ConnectorTool } from '../llm/connector.js';
-import { encryptSecret } from '../llm/secrets.js';
+import { callConnector, formatResult, type ConnectorTool } from '../../engine/llm/connector.js';
+import { encryptSecret } from '../../engine/llm/secrets.js';
 
 const server = createServer((req, res) => {
   const url = new URL(req.url!, 'http://localhost');

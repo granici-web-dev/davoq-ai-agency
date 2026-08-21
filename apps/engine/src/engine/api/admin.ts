@@ -25,7 +25,7 @@ interface Session {
 
 export function registerAdmin(app: FastifyInstance): void {
   app.get('/admin', async (_req, reply) =>
-    reply.type('text/html').send(await readFile(new URL('../../dist/admin.html', import.meta.url), 'utf8')),
+    reply.type('text/html').send(await readFile(new URL('../../../dist/admin.html', import.meta.url), 'utf8')),
   );
   // Шрифт отдаётся с нашего сервера, а не с fonts.gstatic.com: продукт продаётся
   // как DSGVO-native, и обращение браузера к Google за шрифтом этому противоречит.
@@ -35,7 +35,7 @@ export function registerAdmin(app: FastifyInstance): void {
     return reply
       .type('font/woff2')
       .header('cache-control', 'public, max-age=31536000, immutable')
-      .send(await readFile(new URL(`../../dist/fonts/${name}`, import.meta.url)));
+      .send(await readFile(new URL(`../../../dist/fonts/${name}`, import.meta.url)));
   });
 
   // Логотип тоже с нашего сервера: панель не должна дёргать сайт клиента,
@@ -48,13 +48,13 @@ export function registerAdmin(app: FastifyInstance): void {
     return reply
       .type(type)
       .header('cache-control', 'public, max-age=86400')
-      .send(await readFile(new URL(`../../dist/brand/${name}`, import.meta.url)));
+      .send(await readFile(new URL(`../../../dist/brand/${name}`, import.meta.url)));
   });
 
   app.get('/admin.js', async (_req, reply) =>
     reply
       .type('application/javascript; charset=utf-8')
-      .send(await readFile(new URL('../../dist/admin.js', import.meta.url), 'utf8')),
+      .send(await readFile(new URL('../../../dist/admin.js', import.meta.url), 'utf8')),
   );
 
   app.post<{ Body: { email?: string; password?: string } }>(

@@ -1,6 +1,6 @@
 /** Прикидка себестоимости сообщения на фактическом системном промпте. */
-import { buildSystem } from '../rag/prompt.js';
-import { CAPTURE_LEAD } from '../llm/tools.js';
+import { buildSystem } from '../../engine/rag/prompt.js';
+import { CAPTURE_LEAD } from '../../engine/llm/tools.js';
 
 const est = (s: string): number => Math.ceil(s.length / 4);
 
