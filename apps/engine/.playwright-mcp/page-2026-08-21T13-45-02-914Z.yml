@@ -1,0 +1,14 @@
+- generic [ref=f39e1]:
+  - heading "Страница клиента" [level=1] [ref=f39e2]
+  - paragraph [ref=f39e3]:
+    - link "Перейти на вторую страницу" [ref=f39e4] [cursor=pointer]:
+      - /url: /live2.html
+  - dialog "Asistent" [ref=f39e6]:
+    - generic [ref=f39e7]:
+      - generic [ref=f39e8]: Proba
+      - button "Închide chatul" [ref=f39e9] [cursor=pointer]: ×
+    - generic [ref=f39e10]: Bună! Sunt asistentul de probă.
+    - generic [ref=f39e12]:
+      - textbox "Puneți o întrebare…" [ref=f39e13]
+      - button "Trimite" [disabled] [ref=f39e14]
+    - generic [ref=f39e15]: Discutați cu un asistent AI.

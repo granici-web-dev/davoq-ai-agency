@@ -1,21 +1,77 @@
 /** @jsxImportSource preact */
 import { useCallback, useEffect, useMemo, useRef, useState } from 'preact/hooks';
 import { pickLocale, STRINGS } from '../shared/i18n.js';
-import { resolveTheme, toCssVars } from '../shared/theme.js';
+import { DEFAULT_THEME, resolveTheme, toCssVars } from '../shared/theme.js';
 import { fetchConfig, streamChat, submitLead, visitorId, type WidgetConfig } from './api.js';
 
 type Msg = { role: 'user' | 'bot' | 'note'; text: string };
 type Phase = 'idle' | 'streaming' | 'error' | 'offline';
 
+/**
+ * Переписка в sessionStorage.
+ *
+ * Прежде диалог жил только в памяти вкладки: посетитель спрашивал про доставку,
+ * переходил на карточку товара — и всё начиналось с чистого листа. В панели
+ * у директора это выглядело как два разных обращения, а «Conversații · N»
+ * считала просмотры страниц.
+ *
+ * sessionStorage, а не куки: разговор кончается вместе с вкладкой, согласия
+ * на куки не требуется (§9). Приватный режим может запретить запись — тогда
+ * работаем без непрерывности, но работаем.
+ */
+const MSG_LIMIT = 60;
+
+function restoreMessages(publicKey: string): Msg[] {
+  try {
+    const raw = sessionStorage.getItem(`cw_log_${publicKey}`);
+    if (!raw) return [];
+    const parsed = JSON.parse(raw) as Msg[];
+    return Array.isArray(parsed) ? parsed.slice(-MSG_LIMIT) : [];
+  } catch {
+    return [];
+  }
+}
+
+function rememberMessages(publicKey: string, messages: Msg[]): void {
+  try {
+    if (messages.length === 0) sessionStorage.removeItem(`cw_log_${publicKey}`);
+    else sessionStorage.setItem(`cw_log_${publicKey}`, JSON.stringify(messages.slice(-MSG_LIMIT)));
+  } catch { /* приватный режим */ }
+}
+
 export function App({ base, publicKey }: { base: string; publicKey: string }): preact.JSX.Element | null {
   const [config, setConfig] = useState<WidgetConfig | null>(null);
   const [open, setOpen] = useState(false);
-  const [messages, setMessages] = useState<Msg[]>([]);
+  const [messages, setMessages] = useState<Msg[]>(() => restoreMessages(publicKey));
   const [draft, setDraft] = useState('');
   const [phase, setPhase] = useState<Phase>('idle');
   const [prefersDark, setPrefersDark] = useState(false);
 
-  const conversationId = useRef<string | undefined>(undefined);
+  // Идентификатор разговора переживает переход по страницам сайта.
+  //
+  // Прежде он жил только в памяти вкладки: посетитель спрашивал про доставку,
+  // переходил на карточку товара — и начинал разговор с чистого листа, а
+  // в панели у директора это выглядело как два разных обращения. «Conversații · N»
+  // считала просмотры страниц, а не разговоры.
+  //
+  // sessionStorage, а не localStorage и не куки: разговор кончается вместе
+  // с вкладкой, согласия на куки не требуется (§9).
+  const CONVO_KEY = `cw_convo_${publicKey}`;
+  const conversationId = useRef<string | undefined>(
+    (() => { try { return sessionStorage.getItem(CONVO_KEY) ?? undefined; } catch { return undefined; } })(),
+  );
+  const rememberConversation = (id: string): void => {
+    conversationId.current = id;
+    try { sessionStorage.setItem(CONVO_KEY, id); } catch { /* приватный режим */ }
+  };
+
+  /**
+   * Номер попытки. Ответ приходит кусками и асинхронно, а посетитель может
+   * начать заново, не дождавшись конца: без номера дельты прерванного ответа
+   * дописывались в пузырь нового — посетитель не получал ответ вовсе,
+   * хотя в панели директор его видел.
+   */
+  const generation = useRef(0);
   const lastQuestion = useRef('');
   const abort = useRef<AbortController | null>(null);
   const logRef = useRef<HTMLDivElement | null>(null);
@@ -56,6 +112,14 @@ export function App({ base, publicKey }: { base: string; publicKey: string }): p
   useEffect(() => {
     logRef.current?.scrollTo({ top: logRef.current.scrollHeight });
   }, [messages, phase]);
+
+  // Переписка переживает переход по сайту вместе с идентификатором разговора.
+  // Восстановить только идентификатор мало: бот помнил бы разговор, а посетитель
+  // видел бы пустое окно и здоровался заново.
+  useEffect(() => {
+    if (phase === 'streaming') return;
+    rememberMessages(publicKey, messages);
+  }, [publicKey, messages, phase]);
 
   // Фокус-ловушка (§9): Tab не должен уводить в страницу под панелью, Esc закрывает.
   useEffect(() => {
@@ -100,6 +164,8 @@ export function App({ base, publicKey }: { base: string; publicKey: string }): p
 
       abort.current?.abort();
       abort.current = new AbortController();
+      const mine = ++generation.current;
+      const current = (): boolean => generation.current === mine;
 
       await streamChat(
         base,
@@ -111,15 +177,18 @@ export function App({ base, publicKey }: { base: string; publicKey: string }): p
           locale,
         },
         {
-          onMeta: (id) => (conversationId.current = id),
-          onDelta: (text) =>
+          onMeta: (id) => { if (current()) rememberConversation(id); },
+          onDelta: (text) => {
+            if (!current()) return;
             setMessages((m) => {
               const next = [...m];
               const last = next[next.length - 1];
               if (last?.role === 'bot') next[next.length - 1] = { ...last, text: last.text + text };
               return next;
-            }),
+            });
+          },
           onError: (kind) => {
+            if (!current()) return;
             // Пустой пузырь бота убираем: оборванный ответ не должен выглядеть
             // как ответ, состоящий из пустоты.
             setMessages((m) => (m[m.length - 1]?.text === '' ? m.slice(0, -1) : m));
@@ -129,12 +198,39 @@ export function App({ base, publicKey }: { base: string; publicKey: string }): p
         abort.current.signal,
       );
 
-      setPhase((p) => (p === 'streaming' ? 'idle' : p));
+      if (current()) setPhase((p) => (p === 'streaming' ? 'idle' : p));
     },
     [base, publicKey, locale],
   );
 
-  if (!config || !theme) return null;
+  // Конфигурация не дошла. Прежде здесь стоял `return null` — ни кнопки,
+  // ни сообщения, ни строчки в консоли: клиент звонит «виджет пропал»,
+  // а смотреть нечего. Показываем то, ради чего виджет вообще стоит на сайте:
+  // способ оставить контакт.
+  if (!config || !theme) {
+    if (phase !== 'offline') return null;
+    const fallback = STRINGS[pickLocale(navigator.language, 'en')];
+    return (
+      <div class="root" data-pos="bottom-right" style={toCssVars(resolveTheme(DEFAULT_THEME, prefersDark))}>
+        {!open ? (
+          <button ref={launcherRef} class="launcher" onClick={() => setOpen(true)}>
+            {fallback.launcher}
+          </button>
+        ) : (
+          <div class="panel" ref={panelRef} role="dialog" aria-modal="true" aria-label={fallback.title}>
+            <div class="header">
+              <span class="name">{fallback.title}</span>
+              <button class="iconbtn" aria-label={fallback.close} onClick={() => setOpen(false)}>×</button>
+            </div>
+            {/* Текст «недоступен» рисует сама форма — второй раз его тут не надо. */}
+            <div class="log" />
+            <LeadForm base={base} publicKey={publicKey} conversationId={conversationId.current} t={fallback} />
+            <div class="disclosure">{fallback.disclosure}</div>
+          </div>
+        )}
+      </div>
+    );
+  }
 
   const send = (e: Event): void => {
     e.preventDefault();
@@ -218,16 +314,20 @@ function LeadForm({
   t: (typeof STRINGS)['en'];
 }): preact.JSX.Element {
   const [form, setForm] = useState({ name: '', email: '', phone: '' });
-  const [state, setState] = useState<'idle' | 'error' | 'sent'>('idle');
+  const [state, setState] = useState<'idle' | 'sending' | 'error' | 'sent'>('idle');
 
   if (state === 'sent') return <div class="lead"><span class="hint">{t.leadThanks}</span></div>;
 
   const submit = async (e: Event): Promise<void> => {
     e.preventDefault();
+    // Второй клик по «Trimite», пока идёт первый, давал две заявки, два письма
+    // и два контакта в метрике — то есть отдел продаж звонил человеку дважды.
+    if (state === 'sending') return;
     if (!form.email.trim() && !form.phone.trim()) {
       setState('error');
       return;
     }
+    setState('sending');
     const ok = await submitLead(base, { publicKey, conversationId, ...form });
     setState(ok ? 'sent' : 'error');
   };
@@ -249,7 +349,7 @@ function LeadForm({
       {field('email', t.leadEmail, 'email')}
       {field('phone', t.leadPhone, 'tel')}
       {state === 'error' && <span class="err">{t.leadNeedContact}</span>}
-      <button class="send" type="submit">{t.leadSubmit}</button>
+      <button class="send" type="submit" disabled={state === 'sending'}>{t.leadSubmit}</button>
     </form>
   );
 }

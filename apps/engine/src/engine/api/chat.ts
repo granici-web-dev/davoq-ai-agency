@@ -205,6 +205,23 @@ export function registerChat(app: FastifyInstance): void {
     openSse(reply);
     reply.raw.write(`event: meta\ndata: ${JSON.stringify({ conversationId })}\n\n`);
 
+    // Посетитель закрыл вкладку или начал заново — генерацию надо оборвать.
+    // Прежде обработчика закрытия не было ни одного: модель дописывала ответ
+    // до конца в пустоту, и токены за него платил клиент. На пилоте это копейки,
+    // на сотне сайтов — статья расхода, которую никто не увидит.
+    let visitorGone = false;
+    const onClose = (): void => {
+      // `close` у ответа приходит и при нормальном завершении, поэтому
+      // отличаем: если поток закрыли мы сами, `writableEnded` уже true.
+      // Слушать `request.raw` нельзя — у запроса с прочитанным телом это
+      // событие приходит только вместе с концом ответа, то есть никогда вовремя.
+      if (reply.raw.writableEnded) return;
+      visitorGone = true;
+      request.log.info({ tenantId: tenant.id, conversationId }, 'посетитель закрыл соединение');
+      try { stream.abort(); } catch { /* поток мог уже кончиться */ }
+    };
+    reply.raw.on('close', onClose);
+
     const pendingLeads: ToolContext['pendingLeads'] = [];
     const pendingUnanswered: ToolContext['pendingUnanswered'] = [];
     const usage = { in: 0, out: 0, cache: 0 };
@@ -401,9 +418,14 @@ export function registerChat(app: FastifyInstance): void {
       // Заголовки уже ушли — сообщить о сбое можно только внутри самого потока.
       // Бросать отсюда нельзя: Fastify попытается отправить 500 поверх открытого
       // ответа и уронит процесс на ERR_HTTP_HEADERS_SENT.
-      request.log.error({ err }, 'llm stream failed mid-flight');
-      reply.raw.write('event: error\ndata: {"error":"stream interrupted"}\n\n');
+      if (visitorGone) {
+        // Ушёл посетитель, а не сломались мы. Писать некуда и жаловаться не на что.
+      } else {
+        request.log.error({ err }, 'llm stream failed mid-flight');
+        reply.raw.write('event: error\ndata: {"error":"stream interrupted"}\n\n');
+      }
     } finally {
+      reply.raw.off('close', onClose);
       reply.raw.end();
     }
     return reply;

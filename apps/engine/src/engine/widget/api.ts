@@ -57,29 +57,49 @@ export async function streamChat(
   // пока не увидим разделитель блоков.
   let buffer = '';
 
-  for (;;) {
-    const { value, done } = await reader.read();
-    if (done) break;
-    buffer += value;
+  // Чтение под защитой целиком.
+  //
+  // Обрыв соединения на середине ответа — обычное дело: вкладку усыпили, вайфай
+  // моргнул, прокси закрыл долгий поток. Без этого перехвата исключение уходило
+  // наверх мимо всей обработки: `phase` навсегда оставался `streaming`,
+  // «Печатает…» крутилось, поле ввода было заблокировано, кнопки повтора не было.
+  // Лечилось только перезагрузкой страницы, и посетитель до неё не доходил.
+  try {
+    for (;;) {
+      const { value, done } = await reader.read();
+      if (done) break;
+      buffer += value;
 
-    let split: number;
-    while ((split = buffer.indexOf('\n\n')) !== -1) {
-      const block = buffer.slice(0, split);
-      buffer = buffer.slice(split + 2);
+      let split: number;
+      while ((split = buffer.indexOf('\n\n')) !== -1) {
+        const block = buffer.slice(0, split);
+        buffer = buffer.slice(split + 2);
 
-      let event = 'message';
-      let data = '';
-      for (const line of block.split('\n')) {
-        if (line.startsWith('event:')) event = line.slice(6).trim();
-        else if (line.startsWith('data:')) data += line.slice(5).trim();
+        let event = 'message';
+        let data = '';
+        for (const line of block.split('\n')) {
+          if (line.startsWith('event:')) event = line.slice(6).trim();
+          else if (line.startsWith('data:')) data += line.slice(5).trim();
+        }
+        if (!data) continue;
+
+        let parsed: Record<string, string>;
+        try {
+          parsed = JSON.parse(data) as Record<string, string>;
+        } catch {
+          // Битый блок — не повод обрывать весь ответ: остальные придут целыми.
+          continue;
+        }
+        if (event === 'meta' && parsed.conversationId) handlers.onMeta(parsed.conversationId);
+        else if (event === 'delta' && parsed.t !== undefined) handlers.onDelta(parsed.t);
+        else if (event === 'error') handlers.onError('network');
       }
-      if (!data) continue;
-
-      const parsed = JSON.parse(data) as Record<string, string>;
-      if (event === 'meta' && parsed.conversationId) handlers.onMeta(parsed.conversationId);
-      else if (event === 'delta' && parsed.t !== undefined) handlers.onDelta(parsed.t);
-      else if (event === 'error') handlers.onError('network');
     }
+  } catch {
+    // Отмена посетителем — не ошибка: он сам ушёл или начал заново.
+    if (!signal.aborted) handlers.onError('network');
+  } finally {
+    await reader.cancel().catch(() => undefined);
   }
 }
 

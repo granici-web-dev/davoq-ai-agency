@@ -1,0 +1,7 @@
+- generic [active] [ref=f38e1]:
+  - heading "Страница клиента" [level=1] [ref=f38e2]
+  - paragraph [ref=f38e3]:
+    - text: Вторая страница.
+    - link "Назад" [ref=f38e4] [cursor=pointer]:
+      - /url: /live.html
+  - button "Proba" [ref=f38e6] [cursor=pointer]

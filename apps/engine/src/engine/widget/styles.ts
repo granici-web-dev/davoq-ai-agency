@@ -17,6 +17,9 @@ export const CSS = `
   border-radius: 999px; font-size: 15px; font-weight: 500;
   background: var(--cw-primary); color: var(--cw-on-primary);
   box-shadow: 0 6px 24px rgb(0 0 0 / 18%);
+  /* То же имя стоит и на кнопке запуска: без потолка она уезжает за экран. */
+  max-width: calc(100vw - 40px);
+  overflow: hidden; text-overflow: ellipsis; white-space: nowrap;
 }
 .launcher:focus-visible, .iconbtn:focus-visible, .send:focus-visible,
 input:focus-visible, button:focus-visible {
@@ -36,7 +39,13 @@ input:focus-visible, button:focus-visible {
   display: flex; align-items: center; gap: 10px; padding: 14px 16px;
   background: var(--cw-primary); color: var(--cw-on-primary);
 }
-.header .name { font-weight: 600; font-size: 15px; flex: 1; }
+/* Имя бота задаёт клиент, и оно бывает длинным. Без обрезки длинное имя
+   выдавливало крестик за границу панели — посетитель не мог закрыть чат. */
+.header .name {
+  font-weight: 600; font-size: 15px; flex: 1; min-width: 0;
+  overflow: hidden; text-overflow: ellipsis; white-space: nowrap;
+}
+.header .iconbtn { flex: none; }
 .avatar { width: 28px; height: 28px; border-radius: 50%; object-fit: cover; }
 .iconbtn {
   background: transparent; border: 0; cursor: pointer; padding: 4px;

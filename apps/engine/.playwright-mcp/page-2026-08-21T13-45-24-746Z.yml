@@ -1,0 +1,18 @@
+- generic [ref=f40e1]:
+  - heading "Страница клиента" [level=1] [ref=f40e2]
+  - paragraph [ref=f40e3]:
+    - text: Вторая страница.
+    - link "Назад" [ref=f40e4] [cursor=pointer]:
+      - /url: /live.html
+  - dialog "Asistent" [ref=f40e7]:
+    - generic [ref=f40e8]:
+      - generic [ref=f40e9]: Proba
+      - button "Închide chatul" [ref=f40e10] [cursor=pointer]: ×
+    - generic [ref=f40e11]:
+      - generic [ref=f40e12]: Bună! Sunt asistentul de probă.
+      - generic [ref=f40e13]: Cât durează livrarea?
+      - generic [ref=f40e14]: Nu am la dispoziție termenul exact de livrare. Un manager va putea să-ți confirme cât durează, în funcție de configurația pe care o alegi. Vrei să ți las o persoană din echipă să-ți răspundă la această întrebare? Îmi dai un email sau un telefon?
+    - generic [ref=f40e15]:
+      - textbox "Puneți o întrebare…" [ref=f40e16]
+      - button "Trimite" [disabled] [ref=f40e17]
+    - generic [ref=f40e18]: Discutați cu un asistent AI.

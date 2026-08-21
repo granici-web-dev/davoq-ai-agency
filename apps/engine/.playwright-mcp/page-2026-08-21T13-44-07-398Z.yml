@@ -1,0 +1,5 @@
+- generic [active] [ref=f37e1]:
+  - heading "Страница клиента" [level=1] [ref=f37e2]
+  - paragraph [ref=f37e3]:
+    - link "Перейти на вторую страницу" [ref=f37e4] [cursor=pointer]:
+      - /url: /live2.html
