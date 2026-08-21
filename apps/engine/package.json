@@ -22,7 +22,8 @@
     "test:control": "tsx --env-file=.env scripts/control-set.mts",
     "test:guard": "tsx --env-file=.env scripts/prompt-guard-test.mts",
     "test:language": "tsx scripts/language-test.mts",
-    "test:ssrf": "tsx scripts/ssrf-test.mts"
+    "test:ssrf": "tsx scripts/ssrf-test.mts",
+    "test:onboarding": "tsx --env-file=.env scripts/onboarding-test.mts"
   },
   "dependencies": {
     "@anthropic-ai/bedrock-sdk": "^0.30.0",

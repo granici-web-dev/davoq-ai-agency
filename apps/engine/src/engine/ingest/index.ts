@@ -54,7 +54,7 @@ export async function createDocument(tenantId: string, doc: NewDocument): Promis
  */
 export async function processDocument(tenantId: string, documentId: string): Promise<void> {
   try {
-    const { blocks, filename } = await withTenant(tenantId, async (client) => {
+    const { blocks, filename, bytes } = await withTenant(tenantId, async (client) => {
       const { rows } = await client.query<{
         filename: string; mime: string; storage_key: string; source_url: string | null;
       }>('SELECT filename, mime, storage_key, source_url FROM documents WHERE id = $1', [documentId]);
@@ -67,11 +67,20 @@ export async function processDocument(tenantId: string, documentId: string): Pro
       // видеть актуальный сайт, а не слепок недельной давности.
       if (doc.source_url) {
         const page = await fetchPage(doc.source_url);
-        return { blocks: await extract(page.content, page.mime, doc.source_url), filename: doc.filename };
+        return {
+          blocks: await extract(page.content, page.mime, doc.source_url),
+          filename: doc.filename,
+          // Документ по ссылке записывался с size_bytes = 0 — то есть страницы
+          // не занимали в тарифе ничего вовсе, сколько бы их ни добавили.
+          // Настоящий размер известен только здесь, после загрузки.
+          bytes: Buffer.byteLength(page.content, 'utf8'),
+        };
       }
+      const raw = await storage.get(doc.storage_key);
       return {
-        blocks: await extract(await storage.get(doc.storage_key), doc.mime, doc.filename),
+        blocks: await extract(raw, doc.mime, doc.filename),
         filename: doc.filename,
+        bytes: raw.length,
       };
     });
 
@@ -87,8 +96,10 @@ export async function processDocument(tenantId: string, documentId: string): Pro
     await withTenant(tenantId, async (client) => {
       await insertChunks(client, tenantId, documentId, chunks, vectors);
       await client.query(
-        `UPDATE documents SET status = 'indexed', indexed_at = now(), error_text = NULL WHERE id = $1`,
-        [documentId],
+        `UPDATE documents SET status = 'indexed', indexed_at = now(), error_text = NULL,
+                size_bytes = $2
+          WHERE id = $1`,
+        [documentId, bytes],
       );
       // §7 п.4: старая версия удаляется только после успешной индексации новой
       // и в той же транзакции — упавшая переиндексация не оставит тенанта без базы.
@@ -162,6 +173,23 @@ async function insertChunks(
 ): Promise<void> {
   // Переиндексация того же документа: старые фрагменты уходят вместе с новой вставкой.
   await client.query('DELETE FROM chunks WHERE document_id = $1', [documentId]);
+
+  // Потолок фрагментов проверяется ЗДЕСЬ, а не только при регистрации документа.
+  // До разбора числа фрагментов не знает никто: проверка «сколько уже есть»
+  // пропускала любой один документ целиком, каким бы он ни был. Каталог на
+  // тысячу страниц проходил в тариф starter с потолком в две тысячи фрагментов.
+  const { rows: planRows } = await client.query<{ plan: string }>(
+    'SELECT plan FROM tenants WHERE id = $1', [tenantId],
+  );
+  const limits = limitsFor(planRows[0]?.plan ?? 'starter');
+  const { rows: countRows } = await client.query<{ n: string }>('SELECT count(*) AS n FROM chunks');
+  const already = Number(countRows[0]?.n ?? 0);
+  if (already + chunks.length > limits.maxChunks) {
+    throw clientError('plan_limit_chunks',
+      `Documentul depășește limita planului: ${limits.maxChunks} fragmente ` +
+      `(aveți ${already}, documentul adaugă ${chunks.length}).`,
+      { limit: limits.maxChunks });
+  }
 
   const values: unknown[] = [];
   const rows: string[] = [];

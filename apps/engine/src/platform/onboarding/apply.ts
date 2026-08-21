@@ -58,39 +58,14 @@ export async function applyClientConfig(
   // заведение здесь, а не оставить наполовину заведённого клиента.
   const vertical = loadVertical(cfg.vertical);
 
-  const existing = await withOwner(async (client) => {
-    const { rows } = await client.query<{ id: string }>(
-      'SELECT id FROM tenants WHERE name = $1', [cfg.name]);
-    return rows[0]?.id;
-  });
-
-  const created = !existing;
-  let tenantId = existing;
-  let publicKey: string | undefined;
-
-  if (!tenantId) {
-    if (dryRun) {
-      return {
-        tenantId: '(будет создан)', created: true,
-        applied: [{ field: 'tenant', from: null, to: cfg.name }], skipped: [],
-      };
-    }
-    publicKey = `pk_${randomBytes(16).toString('hex')}`;
-    tenantId = await withOwner(async (client) => {
-      const { rows } = await client.query<{ id: string }>(
-        `INSERT INTO tenants (name, allowed_domains, locale_default, public_key, vertical, plan)
-         VALUES ($1, $2, $3, $4, $5, $6) RETURNING id`,
-        [cfg.name, cfg.channels.web.domains, cfg.locale.default, publicKey, cfg.vertical, cfg.plan],
-      );
-      const id = rows[0]!.id;
-      await client.query(
-        `INSERT INTO widget_configs (tenant_id, bot_name) VALUES ($1, $2)`,
-        [id, cfg.channels.web.widget.botName ?? cfg.name],
-      );
-      return id;
-    });
-  }
-
+  // ── Всё, что может отказать, проверяется ДО создания тенанта ────────────
+  //
+  // Прежде проверки стояли после: неизвестный пресет, дубль поля квалификации
+  // или отсутствующий логотип оставляли наполовину заведённого клиента —
+  // тенант есть, снимок применённого пуст. Повторный запуск в такой ситуации
+  // объявлял значения, поставленные при создании, «правками клиента»
+  // и молча пропускал тему, приветствие, профиль и сценарий квалификации,
+  // сообщая при этом неверную причину.
   const quoteFields = mergeQualification(cfg, vertical);
 
   const presetId = cfg.channels.web.widget.preset;
@@ -99,6 +74,89 @@ export async function applyClientConfig(
     throw new Error(
       `тема «${presetId}» не найдена. Известные: ${PRESETS.map((p) => p.id).join(', ')}`,
     );
+  }
+
+  const logo = cfg.channels.web.widget.logo;
+  let logoPath: string | undefined;
+  let logoMime: string | undefined;
+  if (logo) {
+    logoPath = join(clientDir(cfg.id), logo);
+    if (!existsSync(logoPath)) throw new Error(`логотип не найден: ${logoPath}`);
+    logoMime = MIME_BY_EXT[extname(logoPath).toLowerCase()];
+    if (!logoMime) throw new Error(`логотип может быть .svg, .png или .webp: ${logo}`);
+  }
+
+  const desired = desiredFields(cfg, quoteFields, preset);
+
+  // ── Поиск тенанта ───────────────────────────────────────────────────────
+  //
+  // По устойчивому идентификатору клиента, а не по имени: имя не уникально
+  // и меняется. Поиск по имени остался только для тенантов, заведённых до
+  // появления этого столбца, и требует ровно одного совпадения — иначе
+  // выбирать за оператора значило бы перезаписать чужого клиента молча.
+  const existing = await withOwner(async (client) => {
+    const byId = await client.query<{ id: string }>(
+      'SELECT id FROM tenants WHERE client_id = $1', [cfg.id]);
+    if (byId.rows[0]) return byId.rows[0].id;
+
+    const byName = await client.query<{ id: string; client_id: string | null }>(
+      'SELECT id, client_id FROM tenants WHERE name = $1 AND client_id IS NULL', [cfg.name]);
+    if (byName.rows.length > 1) {
+      throw new Error(
+        `клиентов с именем «${cfg.name}» в базе ${byName.rows.length}, и ни у одного ` +
+        `не проставлен client_id. Проставьте его вручную тому, который соответствует ` +
+        `clients/${cfg.id}: UPDATE tenants SET client_id = '${cfg.id}' WHERE id = '…';`,
+      );
+    }
+    const match = byName.rows[0];
+    if (match) {
+      // Разовое присвоение: дальше клиент находится по нему.
+      await client.query('UPDATE tenants SET client_id = $2 WHERE id = $1', [match.id, cfg.id]);
+      return match.id;
+    }
+    return undefined;
+  });
+
+  const created = !existing;
+  let tenantId = existing;
+  let publicKey: string | undefined;
+
+  if (!tenantId) {
+    if (dryRun) {
+      // Полный список того, что будет записано, а не одна строчка «tenant».
+      // Прежде выход отсюда стоял до всех проверок вовсе: --dry-run на новом
+      // клиенте не ловил ни битого пресета, ни отсутствующего логотипа
+      // и не показывал диффа. Проверки выше уже отработали.
+      return {
+        tenantId: '(будет создан)', created: true,
+        applied: [
+          { field: 'tenant', from: null, to: cfg.name },
+          ...desired.map((d) => ({ field: d.field, from: null, to: d.value })),
+          ...(logo ? [{ field: 'logo', from: null, to: logo }] : []),
+        ],
+        skipped: [],
+      };
+    }
+    publicKey = `pk_${randomBytes(16).toString('hex')}`;
+    tenantId = await withOwner(async (client) => {
+      const { rows } = await client.query<{ id: string }>(
+        `INSERT INTO tenants (client_id, name, allowed_domains, locale_default, public_key,
+                              vertical, plan, applied_config)
+         VALUES ($1, $2, $3, $4, $5, $6, $7, $8) RETURNING id`,
+        [cfg.id, cfg.name, cfg.channels.web.domains, cfg.locale.default, publicKey,
+         cfg.vertical, cfg.plan,
+         // Пометка «заведён, но не донастроен». Если следующие шаги упадут,
+         // повторный запуск увидит её и не примет собственные же значения
+         // за правки клиента.
+         JSON.stringify({ __pending: true })],
+      );
+      const id = rows[0]!.id;
+      await client.query(
+        `INSERT INTO widget_configs (tenant_id, bot_name) VALUES ($1, $2)`,
+        [id, cfg.channels.web.widget.botName ?? cfg.name],
+      );
+      return id;
+    });
   }
 
   return withTenant(tenantId, async (client) => {
@@ -115,45 +173,17 @@ export async function applyClientConfig(
       [tenantId],
     );
     const now = rows[0] ?? {};
-    const last = (now.applied_config as Record<string, unknown> | null) ?? null;
+    const stored = (now.applied_config as Record<string, unknown> | null) ?? null;
 
-    // Что онбординг вообще имеет право писать. Всё, чего здесь нет, —
-    // территория клиента, и apply её не касается.
-    const desired: Array<{ field: string; column: string; table: 'tenants' | 'widget'; value: unknown }> = [
-      { field: 'name', column: 'name', table: 'tenants', value: cfg.name },
-      { field: 'vertical', column: 'vertical', table: 'tenants', value: cfg.vertical },
-      { field: 'plan', column: 'plan', table: 'tenants', value: cfg.plan },
-      { field: 'locale', column: 'locale_default', table: 'tenants', value: cfg.locale.default },
-      { field: 'supportedLocales', column: 'supported_locales', table: 'tenants', value: cfg.locale.supported },
-      { field: 'domains', column: 'allowed_domains', table: 'tenants', value: cfg.channels.web.domains },
-      { field: 'priceGuidance', column: 'price_guidance', table: 'tenants', value: cfg.catalog.priceGuidance ?? '' },
-      { field: 'quoteFields', column: 'quote_fields', table: 'tenants', value: quoteFields },
-      { field: 'leadEmail', column: 'lead_notify_email', table: 'tenants', value: cfg.notifications.leads.email ?? null },
-      { field: 'leadFrom', column: 'lead_notify_from', table: 'tenants', value: cfg.notifications.leads.from ?? null },
-      { field: 'hiddenScreens', column: 'hidden_screens', table: 'tenants', value: cfg.panel.hiddenScreens },
-      { field: 'profile', column: 'profile', table: 'tenants', value: cfg.profile },
-      { field: 'retrieval', column: 'retrieval_overrides', table: 'tenants', value: cfg.retrieval },
-      { field: 'messageCap', column: 'monthly_message_cap', table: 'tenants', value: cfg.monthlyMessageCap },
-      { field: 'botName', column: 'bot_name', table: 'widget', value: cfg.channels.web.widget.botName ?? cfg.name },
-      // Тема ставится пресетом, а не набором цветов: подобранные пары уже
-      // прошли проверку контраста, а шесть шестнадцатеричных значений
-      // в конфиге — приглашение получить нечитаемый виджет.
-      ...(preset
-        ? [
-            { field: 'preset', column: 'preset_id', table: 'widget' as const, value: preset.id },
-            { field: 'theme', column: 'theme', table: 'widget' as const, value: preset.theme },
-          ]
-        : []),
-      ...(cfg.channels.web.widget.position
-        ? [{ field: 'position', column: 'position', table: 'widget' as const, value: cfg.channels.web.widget.position }]
-        : []),
-      ...(cfg.channels.web.widget.welcome
-        ? [{ field: 'welcome', column: 'welcome_message', table: 'widget' as const, value: cfg.channels.web.widget.welcome }]
-        : []),
-      ...(cfg.channels.web.widget.aiDisclosure
-        ? [{ field: 'aiDisclosure', column: 'ai_disclosure_text', table: 'widget' as const, value: cfg.channels.web.widget.aiDisclosure }]
-        : []),
-    ];
+    // Пометка «заведён, но не донастроен». Ставится при создании тенанта и
+    // снимается только успешным завершением. Пока она стоит, правок клиента
+    // существовать не может — трогать было некому, — и защита от перезаписи
+    // не просто не нужна, а вредна: именно она молча пропускала тему,
+    // приветствие, профиль и сценарий квалификации после прерванного запуска.
+    const pending = stored?.__pending === true;
+    const last = pending ? null : stored;
+    const treatAsNew = created || pending;
+
 
     const applied: Change[] = [];
     const skipped: Change[] = [];
@@ -170,7 +200,7 @@ export async function applyClientConfig(
       // значение клиента, следующее применение решит, что это мы его и писали,
       // и спокойно затрёт. Проверено, именно так и происходило.
       const knownField = last !== null && d.field in last;
-      const clientEdited = !created && (
+      const clientEdited = !treatAsNew && (
         knownField
           // Мы это поле писали, а в базе теперь другое — трогал клиент.
           ? !same(current, last[d.field])
@@ -206,12 +236,10 @@ export async function applyClientConfig(
     }
 
     // Логотип — файл, а не поле: сравнивать нечего, кладём если указан.
-    const logo = cfg.channels.web.widget.logo;
-    if (logo) {
-      const path = join(clientDir(cfg.id), logo);
-      if (!existsSync(path)) throw new Error(`логотип не найден: ${path}`);
-      const mime = MIME_BY_EXT[extname(path).toLowerCase()];
-      if (!mime) throw new Error(`логотип может быть .svg, .png или .webp: ${logo}`);
+    // Существование и формат проверены до создания тенанта.
+    if (logo && logoPath && logoMime) {
+      const path = logoPath;
+      const mime = logoMime;
       // Логотип сверяется по содержимому, а не по имени: иначе каждое
       // применение сообщало бы об изменении файла, который не менялся.
       const key = `${tenantId}/brand/logo${extname(path).toLowerCase()}`;
@@ -240,6 +268,55 @@ export async function applyClientConfig(
       skipped,
     };
   });
+}
+
+/**
+ * Что онбординг вообще имеет право писать. Всё, чего здесь нет, — территория
+ * клиента, и apply её не касается.
+ *
+ * Вынесено из основного тела ради `--dry-run` на ещё не заведённом клиенте:
+ * список нужен до того, как тенант появится, иначе показать нечего.
+ */
+function desiredFields(
+  cfg: ClientConfig,
+  quoteFields: Array<{ key: string; label: string; description: string }>,
+  preset: (typeof PRESETS)[number] | undefined,
+): Array<{ field: string; column: string; table: 'tenants' | 'widget'; value: unknown }> {
+  return [
+  { field: 'name', column: 'name', table: 'tenants', value: cfg.name },
+  { field: 'vertical', column: 'vertical', table: 'tenants', value: cfg.vertical },
+  { field: 'plan', column: 'plan', table: 'tenants', value: cfg.plan },
+  { field: 'locale', column: 'locale_default', table: 'tenants', value: cfg.locale.default },
+  { field: 'supportedLocales', column: 'supported_locales', table: 'tenants', value: cfg.locale.supported },
+  { field: 'domains', column: 'allowed_domains', table: 'tenants', value: cfg.channels.web.domains },
+  { field: 'priceGuidance', column: 'price_guidance', table: 'tenants', value: cfg.catalog.priceGuidance ?? '' },
+  { field: 'quoteFields', column: 'quote_fields', table: 'tenants', value: quoteFields },
+  { field: 'leadEmail', column: 'lead_notify_email', table: 'tenants', value: cfg.notifications.leads.email ?? null },
+  { field: 'leadFrom', column: 'lead_notify_from', table: 'tenants', value: cfg.notifications.leads.from ?? null },
+  { field: 'hiddenScreens', column: 'hidden_screens', table: 'tenants', value: cfg.panel.hiddenScreens },
+  { field: 'profile', column: 'profile', table: 'tenants', value: cfg.profile },
+  { field: 'retrieval', column: 'retrieval_overrides', table: 'tenants', value: cfg.retrieval },
+  { field: 'messageCap', column: 'monthly_message_cap', table: 'tenants', value: cfg.monthlyMessageCap },
+  { field: 'botName', column: 'bot_name', table: 'widget', value: cfg.channels.web.widget.botName ?? cfg.name },
+  // Тема ставится пресетом, а не набором цветов: подобранные пары уже
+  // прошли проверку контраста, а шесть шестнадцатеричных значений
+  // в конфиге — приглашение получить нечитаемый виджет.
+  ...(preset
+    ? [
+        { field: 'preset', column: 'preset_id', table: 'widget' as const, value: preset.id },
+        { field: 'theme', column: 'theme', table: 'widget' as const, value: preset.theme },
+      ]
+    : []),
+  ...(cfg.channels.web.widget.position
+    ? [{ field: 'position', column: 'position', table: 'widget' as const, value: cfg.channels.web.widget.position }]
+    : []),
+  ...(cfg.channels.web.widget.welcome
+    ? [{ field: 'welcome', column: 'welcome_message', table: 'widget' as const, value: cfg.channels.web.widget.welcome }]
+    : []),
+  ...(cfg.channels.web.widget.aiDisclosure
+    ? [{ field: 'aiDisclosure', column: 'ai_disclosure_text', table: 'widget' as const, value: cfg.channels.web.widget.aiDisclosure }]
+    : []),
+  ];
 }
 
 /**
