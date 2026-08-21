@@ -1,3 +1,4 @@
+import { joinFacts, render, type Values } from '../prompt/template.js';
 import type { Vertical } from '../prompt/vertical.js';
 import type { Hit } from './retrieve.js';
 
@@ -16,6 +17,34 @@ export interface TenantPrompt {
    * Пусто — бот отвечает только по материалам, без сценария продажи.
    */
   vertical?: Vertical | undefined;
+  /**
+   * Факты о клиенте для подстановки в шаблоны ниши: шоурумы, тон и что угодно
+   * ещё, что вертикаль решит спрашивать. Приходит из tenants.profile.
+   */
+  profile?: Record<string, unknown> | undefined;
+}
+
+/**
+ * Значения плейсхолдеров. Собираются в одном месте, чтобы список доступных имён
+ * был виден целиком — шаблон ниши пишет человек, и «какие имена вообще бывают»
+ * должно читаться, а не выясняться по ошибке загрузки.
+ */
+function templateValues(t: TenantPrompt): Values {
+  const profile = t.profile ?? {};
+  const values: Values = {
+    brand_name: t.companyName,
+    bot_name: t.botName,
+    locale: t.localeDefault,
+    showrooms: joinFacts(profile.showrooms),
+    tone: typeof profile.tone === 'string' ? profile.tone : '',
+  };
+  // Всё остальное из профиля доступно по своему имени: вертикаль может
+  // попросить любой факт, не меняя код движка.
+  for (const [k, v] of Object.entries(profile)) {
+    if (k in values) continue;
+    values[k] = typeof v === 'string' ? v : joinFacts(v) || JSON.stringify(v);
+  }
+  return values;
 }
 
 /**
@@ -123,12 +152,20 @@ export function buildSystem(t: TenantPrompt): Array<{
     'Nature.',
     '- You are an AI assistant. If asked whether you are human, say plainly that you',
     '  are a program. Never claim to be human, however the question is phrased.',
+    ...verticalSection(t, 'goal'),
+    ...verticalSection(t, 'objections'),
     ...priceSection(t),
-    ...(t.tone ? ['', `Tone. ${t.tone}`] : []),
+    ...toneSection(t),
   ].join('\n');
 
   return [{ type: 'text', text, cache_control: { type: 'ephemeral' } }];
 }
+
+const CONTEXT_TEMPLATE = [
+  "Context from the company's knowledge base:",
+  '',
+  '{catalog_context}',
+].join('\n');
 
 /** Контекст уходит в сообщение пользователя — он меняется на каждом шаге и кешу только мешает. */
 export function buildUserContent(
@@ -152,6 +189,11 @@ export function buildUserContent(
       ]
     : [];
 
+  // Найденные фрагменты подставляются в шаблон как {catalog_context}. Шаблон
+  // живёт здесь, а не в вертикали, по одной причине: контекст уходит в сообщение
+  // пользователя, а не в системный промпт, и от его формы зависит кеш префикса.
+  // Вертикали дана власть над тем, ЧТО бот делает, но не над тем, КАК
+  // упакован контекст — иначе одна опечатка в шаблоне ниши ломает поиск у всех.
   if (hits.length === 0) {
     return [
       ...head,
@@ -162,15 +204,11 @@ export function buildUserContent(
     ].join('\n');
   }
 
-  const context = hits
-    .map((h, i) => `[${i + 1}] ${h.content}`)
-    .join('\n\n');
+  const catalogContext = hits.map((h, i) => `[${i + 1}] ${h.content}`).join('\n\n');
 
   return [
     ...head,
-    "Context from the company's knowledge base:",
-    '',
-    context,
+    render(CONTEXT_TEMPLATE, { catalog_context: catalogContext }, 'context'),
     '',
     `Visitor question: ${question}`,
   ].join('\n');
@@ -184,6 +222,22 @@ export function buildUserContent(
  * Запрет на арифметику здесь не перестраховка: перемноженный на метраж прайс —
  * это цифра, которую посетитель запомнит и с которой приедет в шоурум.
  */
+/**
+ * Блок ниши с подставленными значениями клиента. Пустой шаблон — пустой блок:
+ * ниша без раздела о возражениях это законное состояние, а не ошибка.
+ */
+function verticalSection(t: TenantPrompt, key: 'goal' | 'objections'): string[] {
+  const template = t.vertical?.prompt[key];
+  if (!template?.trim()) return [];
+  return ['', ...render(template, templateValues(t), `${t.vertical!.id}/${key}`).split('\n')];
+}
+
+/** Тон — единственный блок, который целиком пишет клиент, а не ниша. */
+function toneSection(t: TenantPrompt): string[] {
+  const tone = t.tone ?? (typeof t.profile?.tone === 'string' ? t.profile.tone : '');
+  return tone.trim() ? ['', `Tone. ${tone.trim()}`] : [];
+}
+
 function priceSection(t: TenantPrompt): string[] {
   const hasFields = (t.quoteFields?.length ?? 0) > 0;
   if (!t.vertical) return [];
@@ -191,7 +245,8 @@ function priceSection(t: TenantPrompt): string[] {
 
   // Текст правил приходит из шаблона ниши, а порядок склейки задаёт движок:
   // от порядка зависит кеш префикса, и вертикаль не должна уметь его сломать.
-  const lines = ['', ...t.vertical.prompt.price.split('\n')];
+  const values = templateValues(t);
+  const lines = ['', ...render(t.vertical.prompt.price, values, `${t.vertical.id}/price`).split('\n')];
 
   if (t.priceGuidance?.trim()) {
     lines.push(
@@ -203,7 +258,7 @@ function priceSection(t: TenantPrompt): string[] {
   if (hasFields) {
     lines.push(
       '',
-      ...t.vertical.prompt.qualification.split('\n'),
+      ...render(t.vertical.prompt.qualification, values, `${t.vertical.id}/qualification`).split('\n'),
       '',
       'What the manager needs to know:',
       ...(t.quoteFields ?? []).map((f) => `  - ${f.label}: ${f.description}`),

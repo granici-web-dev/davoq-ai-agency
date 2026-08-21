@@ -53,24 +53,33 @@ export function registerChat(app: FastifyInstance): void {
       const existing = await findConversation(client, body.conversationId);
       const conversationId = existing ?? randomUUID();
       const history = existing ? await loadHistory(client, existing) : [];
-      const { hits, approved } = await retrieveAll(client, tenant.id, body.message);
+      // Имя бота и компании берутся из настроек тенанта, а не из заглушки:
+      // иначе бот представляется посетителю названием, которого клиент не выбирал.
+      const { rows: cfg } = await client.query<{
+        bot_name: string; tenant_name: string; vertical: string | null;
+        retrieval_overrides: Record<string, number>; profile: Record<string, unknown>;
+      }>(
+        `SELECT coalesce(w.bot_name, 'Assistant') AS bot_name, t.name AS tenant_name,
+                t.vertical, t.retrieval_overrides, t.profile
+           FROM tenants t LEFT JOIN widget_configs w ON w.tenant_id = t.id
+          WHERE t.id = $1`,
+        [tenant.id],
+      );
+
+      const vertical = verticalOf(cfg[0]?.vertical);
+
+      // Пороги поиска: значение ниши, поверх него — переопределение клиента.
+      const overrides = cfg[0]?.retrieval_overrides ?? {};
+      const { hits, approved } = await retrieveAll(client, tenant.id, body.message, {
+        minSimilarity: overrides.min_similarity ?? vertical?.retrieval.minSimilarity,
+        approvedMinSimilarity:
+          overrides.approved_min_similarity ?? vertical?.retrieval.approvedMinSimilarity,
+      });
 
       // Инструменты тенанта загружаются на каждый запрос: тенант мог поменять их
       // в админке минуту назад, а кешировать реестр эндпоинтов — значит какое-то
       // время ходить по адресам, которые он уже отозвал.
       const connectorTools = new Map((await loadTools(client, tenant.id)).map((t) => [t.toolName, t]));
-
-      // Имя бота и компании берутся из настроек тенанта, а не из заглушки:
-      // иначе бот представляется посетителю названием, которого клиент не выбирал.
-      const { rows: cfg } = await client.query<{
-        bot_name: string; tenant_name: string; vertical: string | null;
-      }>(
-        `SELECT coalesce(w.bot_name, 'Assistant') AS bot_name, t.name AS tenant_name,
-                t.vertical
-           FROM tenants t LEFT JOIN widget_configs w ON w.tenant_id = t.id
-          WHERE t.id = $1`,
-        [tenant.id],
-      );
 
       const quote = await loadQuoteConfig(client, tenant.id);
 
@@ -81,7 +90,8 @@ export function registerChat(app: FastifyInstance): void {
         localeDefault: body.locale ?? tenant.localeDefault,
         priceGuidance: quote.priceGuidance,
         quoteFields: quote.fields,
-        vertical: verticalOf(cfg[0]?.vertical),
+        vertical,
+        profile: cfg[0]?.profile ?? {},
       });
       const convo: MessageParam[] = [
         ...history,

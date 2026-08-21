@@ -15,6 +15,12 @@ const TOP_K = 6;
  * консервативное для Cohere multilingual. У dev-заглушки абсолютные значения
  * не имеют смысла вовсе (она лексическая), сравнивать по ним порог бесполезно.
  */
+/**
+ * Запасные пороги. Рабочие приходят из вертикали и переопределяются клиентом:
+ * значение зависит от языка и характера корпуса, то есть это свойство ниши,
+ * а не процесса. Здесь остаётся только то, чем пользуются вызовы без контекста
+ * ниши — CLI-поиск и диагностика.
+ */
 const MIN_SIMILARITY = Number(process.env.RETRIEVAL_MIN_SIMILARITY ?? 0.35);
 
 export interface Hit {
@@ -53,10 +59,16 @@ export interface ApprovedMatch {
  * Поиск по базе знаний и по утверждённым ответам за один эмбеддинг вопроса.
  * Разделять их — значит платить за два вызова провайдера на каждое сообщение.
  */
+export interface Thresholds {
+  minSimilarity?: number | undefined;
+  approvedMinSimilarity?: number | undefined;
+}
+
 export async function retrieveAll(
   client: pg.PoolClient,
   tenantId: string,
   query: string,
+  thresholds: Thresholds = {},
 ): Promise<{ hits: Hit[]; approved: ApprovedMatch[] }> {
   const [vector] = await embeddings.embed([query], 'query');
   if (!vector) return { hits: [], approved: [] };
@@ -71,11 +83,12 @@ export async function retrieveAll(
         AND 1 - (embedding <=> $1::vector) >= $4
       ORDER BY embedding <=> $1::vector
       LIMIT $5`,
-    [literal, tenantId, embeddings.model, APPROVED_MIN_SIMILARITY, APPROVED_LIMIT],
+    [literal, tenantId, embeddings.model,
+     thresholds.approvedMinSimilarity ?? APPROVED_MIN_SIMILARITY, APPROVED_LIMIT],
   );
 
   return {
-    hits: await retrieve(client, tenantId, query, vector),
+    hits: await retrieve(client, tenantId, query, vector, thresholds.minSimilarity),
     approved: rows.map((r) => ({ ...r, similarity: Number(r.similarity) })),
   };
 }
@@ -85,6 +98,7 @@ export async function retrieve(
   tenantId: string,
   query: string,
   precomputed?: number[],
+  minSimilarity: number = MIN_SIMILARITY,
 ): Promise<Hit[]> {
   const vector = precomputed ?? (await embeddings.embed([query], 'query'))[0];
   if (!vector) return [];
@@ -106,7 +120,7 @@ export async function retrieve(
   );
 
   return rows
-    .filter((r) => r.similarity >= MIN_SIMILARITY)
+    .filter((r) => r.similarity >= minSimilarity)
     .map((r) => ({
       id: r.id,
       content: r.content,

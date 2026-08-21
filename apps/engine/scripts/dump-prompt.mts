@@ -15,9 +15,10 @@ if (!tenantId) throw new Error('usage: dump-prompt <tenantId>');
 const out = await withTenant(tenantId, async (client) => {
   const { rows } = await client.query<{
     bot_name: string; tenant_name: string; locale: string; vertical: string | null;
+    profile: Record<string, unknown>;
   }>(
     `SELECT coalesce(w.bot_name, 'Assistant') AS bot_name, t.name AS tenant_name,
-            t.locale_default AS locale, t.vertical
+            t.locale_default AS locale, t.vertical, t.profile
        FROM tenants t LEFT JOIN widget_configs w ON w.tenant_id = t.id
       WHERE t.id = $1`, [tenantId]);
   const quote = await loadQuoteConfig(client, tenantId);
@@ -28,6 +29,7 @@ const out = await withTenant(tenantId, async (client) => {
     priceGuidance: quote.priceGuidance,
     quoteFields: quote.fields,
     vertical: verticalOf(rows[0]!.vertical),
+    profile: rows[0]!.profile,
   });
 });
 

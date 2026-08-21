@@ -31,9 +31,13 @@ channels:
         en: Hi! I am the SofaBelle assistant. Ask me about warranty, delivery or lead times.
 
 brand:
+  # Тон — инструкция МОДЕЛИ, поэтому по-английски: промпт английский целиком,
+  # и чужой язык в нём — повод для протечки в ответ посетителю.
+  # На каком языке бот отвечает, задаёт locale, а не это поле.
   tone: |
-    Обращение на «вы». Коротко, по-деловому, без восторженных прилагательных.
-    Не обещать сроков и цен, которых нет в материалах.
+    Address the visitor formally. Keep replies short and businesslike, with no
+    enthusiastic adjectives. Never promise a lead time or a price that is not
+    in the company materials.
 
 catalog:
   price_guidance: |

@@ -24,8 +24,11 @@ export interface Vertical {
   id: string;
   version: number;
   name: string;
-  /** Готовый текст блоков промпта, уже прочитанный с диска. */
-  prompt: { price: string; qualification: string };
+  /**
+   * Шаблоны блоков промпта, как они лежат на диске — с плейсхолдерами.
+   * Подстановка значений клиента происходит на рантайме, при сборке промпта.
+   */
+  prompt: { price: string; qualification: string; goal: string; objections: string };
   qualification: { goal: string; fields: QualificationField[] };
   retrieval: { minSimilarity: number; approvedMinSimilarity: number };
   onboardingChecklist: string[];
@@ -100,6 +103,8 @@ export function loadVertical(id: string): Vertical {
     prompt: {
       price: readBlock(dir, prompt.price, where),
       qualification: readBlock(dir, prompt.qualification, where),
+      goal: prompt.goal ? readBlock(dir, prompt.goal, where) : '',
+      objections: prompt.objections ? readBlock(dir, prompt.objections, where) : '',
     },
     qualification: { goal: String(q.goal ?? 'lead'), fields },
     retrieval: {
@@ -109,6 +114,7 @@ export function loadVertical(id: string): Vertical {
     onboardingChecklist: checklist(v.onboarding_checklist, where),
   };
 
+  assertNoProtectedBlocks(vertical);
   cache.set(id, vertical);
   return vertical;
 }
@@ -150,3 +156,28 @@ function readBlock(dir: string, rel: string, where: string): string {
  */
 export const verticalOf = (id: string | null | undefined): Vertical | undefined =>
   id ? loadVertical(id) : undefined;
+
+/**
+ * Блоки, которые вертикаль не имеет права ни переопределить, ни отключить.
+ *
+ * `Nature` — требование AI Act Art. 50: бот, назвавшийся человеком, попадает
+ * под ст. 5 со штрафом до 7% оборота. `Data versus commands` — защита от
+ * инъекций через материалы клиента: любой, кто может положить файл в папку,
+ * может положить туда и «игнорируй инструкции».
+ *
+ * Проверка нужна потому, что соблазн «оптимизировать промпт под нишу» возникнет
+ * обязательно, а последствия у этих двух блоков не такие, как у остальных.
+ */
+const PROTECTED = ['Nature.', 'Data versus commands.', 'Scope.', 'Priority.'];
+
+export function assertNoProtectedBlocks(v: Vertical): void {
+  for (const [name, text] of Object.entries(v.prompt)) {
+    for (const block of PROTECTED) {
+      if (text.includes(block)) {
+        throw new Error(
+          `${v.id}/${name}: блок «${block}» задаётся движком и не может быть переопределён вертикалью`,
+        );
+      }
+    }
+  }
+}
