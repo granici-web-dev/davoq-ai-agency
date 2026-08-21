@@ -8,16 +8,6 @@ export interface QuoteField {
   required?: boolean;
 }
 
-/** Стартовый набор для мебельного производства — тенант правит его под себя. */
-export const FURNITURE_DEFAULTS: QuoteField[] = [
-  { key: 'product_type', label: 'Tipul produsului', description: 'Canapea, canapea de colț, pat, fotoliu, saltea' },
-  { key: 'dimensions', label: 'Dimensiuni', description: 'Metrajul canapelei sau dimensiunea patului, de exemplu 2.60 m sau 160×200' },
-  { key: 'filling', label: 'Umplutura', description: 'Dacă vizitatorul a menționat-o' },
-  { key: 'upholstery', label: 'Tapițeria', description: 'Țesătură sau piele, culoarea' },
-  { key: 'sleeping_function', label: 'Funcție de dormit', description: 'Dacă are nevoie de mecanism de extindere' },
-  { key: 'city', label: 'Orașul', description: 'Orașul vizitatorului sau cel mai apropiat showroom' },
-];
-
 export function parseQuoteFields(raw: unknown): QuoteField[] {
   if (!Array.isArray(raw) || raw.length === 0) return [];
   return raw.filter(

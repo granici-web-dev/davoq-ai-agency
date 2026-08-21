@@ -7,6 +7,7 @@ import { claude, modelFor } from '../llm/claude.js';
 import { loadTools, toClaudeTool } from '../llm/connector.js';
 import { buildQuoteTool, loadQuoteConfig } from '../llm/quote.js';
 import { CAPTURE_LEAD, REPORT_UNANSWERED, runTool, type ToolContext } from '../llm/tools.js';
+import { verticalOf } from '../prompt/vertical.js';
 import { buildSystem, buildUserContent } from '../rag/prompt.js';
 import { retrieveAll } from '../rag/retrieve.js';
 import { originAllowed, resolveTenant } from './auth.js';
@@ -61,8 +62,11 @@ export function registerChat(app: FastifyInstance): void {
 
       // Имя бота и компании берутся из настроек тенанта, а не из заглушки:
       // иначе бот представляется посетителю названием, которого клиент не выбирал.
-      const { rows: cfg } = await client.query<{ bot_name: string; tenant_name: string }>(
-        `SELECT coalesce(w.bot_name, 'Assistant') AS bot_name, t.name AS tenant_name
+      const { rows: cfg } = await client.query<{
+        bot_name: string; tenant_name: string; vertical: string | null;
+      }>(
+        `SELECT coalesce(w.bot_name, 'Assistant') AS bot_name, t.name AS tenant_name,
+                t.vertical
            FROM tenants t LEFT JOIN widget_configs w ON w.tenant_id = t.id
           WHERE t.id = $1`,
         [tenant.id],
@@ -77,6 +81,7 @@ export function registerChat(app: FastifyInstance): void {
         localeDefault: body.locale ?? tenant.localeDefault,
         priceGuidance: quote.priceGuidance,
         quoteFields: quote.fields,
+        vertical: verticalOf(cfg[0]?.vertical),
       });
       const convo: MessageParam[] = [
         ...history,

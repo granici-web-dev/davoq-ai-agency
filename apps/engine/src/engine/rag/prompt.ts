@@ -1,3 +1,4 @@
+import type { Vertical } from '../prompt/vertical.js';
 import type { Hit } from './retrieve.js';
 
 export interface TenantPrompt {
@@ -9,6 +10,12 @@ export interface TenantPrompt {
   priceGuidance?: string;
   /** Вопросы, которые продавец задаёт перед расчётом. Пусто — квалификации нет. */
   quoteFields?: Array<{ label: string; description: string }>;
+  /**
+   * Шаблон ниши. Отсюда приходят правила разговора о цене и о квалификации —
+   * то, что одинаково у всех клиентов ниши и различается между нишами.
+   * Пусто — бот отвечает только по материалам, без сценария продажи.
+   */
+  vertical?: Vertical | undefined;
 }
 
 /**
@@ -179,20 +186,12 @@ export function buildUserContent(
  */
 function priceSection(t: TenantPrompt): string[] {
   const hasFields = (t.quoteFields?.length ?? 0) > 0;
+  if (!t.vertical) return [];
   if (!t.priceGuidance?.trim() && !hasFields) return [];
 
-  const lines = ['', 'Price questions.'];
-
-  lines.push(
-    '- If an exact price appears in the context (for example "180×200 — 11.110 lei"),',
-    '  quote it verbatim, with its size and currency. That is a fact from company material.',
-    '- If no price is in the context, do not invent one and do not estimate.',
-    '- NEVER calculate a price yourself: do not multiply size by a rate, do not add up',
-    '  modules or options, do not convert currencies, do not apply discounts.',
-    '  Any figure you compute is an error.',
-    '- A price you name reaches the manager and the showroom. An error here costs more',
-    '  than a refusal: better "a manager will confirm" than a wrong number.',
-  );
+  // Текст правил приходит из шаблона ниши, а порядок склейки задаёт движок:
+  // от порядка зависит кеш префикса, и вертикаль не должна уметь его сломать.
+  const lines = ['', ...t.vertical.prompt.price.split('\n')];
 
   if (t.priceGuidance?.trim()) {
     lines.push(
@@ -204,22 +203,7 @@ function priceSection(t: TenantPrompt): string[] {
   if (hasFields) {
     lines.push(
       '',
-      '- THE MOMENT the visitor gives an email OR a phone number — one of the two is',
-      '  enough, you never need both — call request_quote in that same turn with',
-      '  everything you know so far. Before any other sentence. Before asking anything',
-      '  else. A field left blank the manager will fill in by phone; a request never',
-      '  handed over is lost for good, and that is the single worst thing you can do here.',
-      '- Keep clarifying afterwards, and call request_quote AGAIN every time you learn',
-      '  something new — one more detail, a correction, a second contact channel.',
-      '  Repeat calls never create a duplicate: they enrich the same request.',
-      '- The exact price is calculated by a manager. Until you have a contact, your job',
-      '  is to find out what the manager needs to know.',
-      '- Ask ONE question per reply, like a real conversation. Never dump a list and',
-      '  never ask the visitor to fill in a form — that is how visitors are lost.',
-      '- Never ask for a second contact channel. Having a phone number, do not ask for',
-      '  an email; having an email, do not ask for a phone number.',
-      '- If the visitor does not want to answer, do not insist: ask for a contact and',
-      '  hand the request over.',
+      ...t.vertical.prompt.qualification.split('\n'),
       '',
       'What the manager needs to know:',
       ...(t.quoteFields ?? []).map((f) => `  - ${f.label}: ${f.description}`),
