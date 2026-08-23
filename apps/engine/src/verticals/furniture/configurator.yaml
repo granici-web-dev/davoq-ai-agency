@@ -13,7 +13,7 @@ id: furniture
 offer:
   # Порядок блоков ниши. Типы блоков задаёт движок; свой тип завести нельзя —
   # это был бы код на клиента, то есть ровно то, чего мы избегаем.
-  blocks: [header, meta, customer, configuration, pricing, legal, footer]
+  blocks: [header, meta, customer, items, pricing, legal, footer]
 
   currency:
     code: RON
@@ -30,14 +30,18 @@ offer:
         name: Nume
         phone: Telefon
         email: Email
-      configuration:
-        heading: Configurație
-        option: Opțiune
-        value: Selecție
+      items:
+        heading: Produse și servicii
+        product: Produs sau serviciu
+        quantity: Cant.
+        unitPrice: Preț unitar
+        discount: Reducere
+        total: Total
       pricing:
         heading: Preț
-        list: Preț de listă
+        subtotal: Subtotal
         discount: Reducere
+        vat: TVA
         total: Total
         # Цена конфигурации мебели зависит от замера и ткани на складе.
         # Оферта без этой оговорки читается как твёрдое обязательство.
@@ -49,11 +53,18 @@ offer:
     ru:
       meta: { title: Коммерческое предложение, number: '№', date: Дата, validUntil: Действительно до }
       customer: { heading: Клиент, name: Имя, phone: Телефон, email: Email }
-      configuration: { heading: Конфигурация, option: Параметр, value: Выбор }
+      items:
+        heading: Товары и услуги
+        product: Наименование
+        quantity: Кол-во
+        unitPrice: Цена
+        discount: Скидка
+        total: Сумма
       pricing:
         heading: Цена
-        list: Цена по прайсу
+        subtotal: Подытог
         discount: Скидка
+        vat: НДС
         total: Итого
         disclaimer: >-
           Цена предварительная и подтверждается после замера и проверки наличия
@@ -62,11 +73,18 @@ offer:
     en:
       meta: { title: Quotation, number: 'No.', date: Date, validUntil: Valid until }
       customer: { heading: Customer, name: Name, phone: Phone, email: Email }
-      configuration: { heading: Configuration, option: Option, value: Selection }
+      items:
+        heading: Products and services
+        product: Product or service
+        quantity: Qty
+        unitPrice: Unit price
+        discount: Discount
+        total: Total
       pricing:
         heading: Price
-        list: List price
+        subtotal: Subtotal
         discount: Discount
+        vat: VAT
         total: Total
         disclaimer: >-
           The price is an estimate and is confirmed after measurement and fabric

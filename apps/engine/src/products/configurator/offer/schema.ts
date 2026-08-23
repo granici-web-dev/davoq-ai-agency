@@ -17,7 +17,7 @@ export const OFFER_BLOCKS = [
   'header',        // марка и реквизиты продавца
   'meta',          // номер, дата, срок действия
   'customer',      // кому
-  'configuration', // что выбрано
+  'items',         // позиции заказа: что выбрано и почём
   'pricing',       // разбивка цены, скидка, итог
   'legal',         // юртекст
   'footer',        // подпись страницы
@@ -38,7 +38,7 @@ const REQUIRED_TEXT: Record<BlockId, string[]> = {
   header: ['company'],
   meta: ['title', 'number', 'date', 'validUntil'],
   customer: ['heading'],
-  configuration: ['heading'],
+  items: ['heading'],
   pricing: ['heading', 'total'],
   legal: [],
   footer: [],
@@ -46,7 +46,10 @@ const REQUIRED_TEXT: Record<BlockId, string[]> = {
 
 export const OFFER_SHAPE: Shape = {
   blocks: true,
-  page: { size: true, margins: { top: true, right: true, bottom: true, left: true } },
+  page: {
+    size: true, orientation: true,
+    margins: { top: true, right: true, bottom: true, left: true },
+  },
   theme: {
     fontFamily: true,
     fonts: { '[]': { family: true, src: true, weight: true, style: true } },
@@ -60,8 +63,14 @@ export const OFFER_SHAPE: Shape = {
       header: { company: true, lines: true },
       meta: { title: true, number: true, date: true, validUntil: true },
       customer: { heading: true, name: true, phone: true, email: true },
-      configuration: { heading: true, option: true, value: true },
-      pricing: { heading: true, list: true, discount: true, total: true, disclaimer: true },
+      items: {
+        heading: true, product: true, quantity: true,
+        unitPrice: true, discount: true, total: true,
+      },
+      pricing: {
+        heading: true, subtotal: true, discount: true, vat: true,
+        total: true, disclaimer: true,
+      },
       legal: true,
       footer: true,
     },
@@ -74,15 +83,26 @@ export interface OfferText {
   header?: { company: string; lines?: string[] };
   meta?: { title: string; number: string; date: string; validUntil: string };
   customer?: { heading: string; name?: string; phone?: string; email?: string };
-  configuration?: { heading: string; option?: string; value?: string };
-  pricing?: { heading: string; list?: string; discount?: string; total: string; disclaimer?: string };
+  items?: {
+    heading: string; product?: string; quantity?: string;
+    unitPrice?: string; discount?: string; total?: string;
+  };
+  pricing?: {
+    heading: string; subtotal?: string; discount?: string; vat?: string;
+    total: string; disclaimer?: string;
+  };
   legal?: string;
   footer?: string;
 }
 
 export interface OfferTemplate {
   blocks: BlockId[];
-  page: { size: string; margins: { top: number; right: number; bottom: number; left: number } };
+  /** `size` — имя формата («A4») либо [ширина, высота] в пунктах: у бланка может быть свой. */
+  page: {
+    size: string | [number, number];
+    orientation?: 'portrait' | 'landscape';
+    margins: { top: number; right: number; bottom: number; left: number };
+  };
   theme: {
     fontFamily: string;
     fonts: FontFace[];
@@ -101,7 +121,7 @@ export interface OfferTemplate {
  */
 export const OFFER_DEFAULTS = {
   blocks: [...OFFER_BLOCKS],
-  page: { size: 'A4', margins: { top: 40, right: 40, bottom: 44, left: 40 } },
+  page: { size: 'A4', orientation: 'portrait', margins: { top: 40, right: 40, bottom: 44, left: 40 } },
   // Geist, а не встроенная Helvetica: встроенные шрифты PDF не содержат
   // румынской диакритики и молча выедают её из текста. См. fonts.ts.
   theme: {

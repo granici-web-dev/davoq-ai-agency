@@ -178,14 +178,26 @@ const proxy = await getDocumentProxy(new Uint8Array(pdf));
 const { text } = await extractText(proxy, { mergePages: true });
 const flat = (Array.isArray(text) ? text.join(' ') : text).replace(/\s+/g, ' ');
 
-for (const phrase of ['Ofertă de preț', 'Configurație', 'Țesătură antipată', 'SofaBelle SRL']) {
+for (const phrase of ['Ofertă de preț', 'Produse și servicii', 'Înălțime tetieră', 'SofaBelle SRL']) {
   flat.includes(phrase) ? ok(`в PDF есть «${phrase}» — диакритика дошла целой`)
                         : bad(`в PDF нет «${phrase}». Извлечено: ${flat.slice(0, 200)}`);
 }
 
 // Цена в бланке — ровно та, что передана: форматирование не должно её менять.
-flat.includes('16.605,00') ? ok('итог напечатан без потери копеек')
-                           : bad(`итога 16.605,00 нет в PDF. Извлечено: ${flat.slice(0, 300)}`);
+const sample = sampleOffer('ro');
+const expected = new Intl.NumberFormat('ro', {
+  style: 'currency', currency: 'RON', minimumFractionDigits: 2, maximumFractionDigits: 2,
+}).format(sample.pricing.totalBani / 100);
+flat.includes(expected.replace(/\s/g, ' ')) || flat.includes(expected.replace(/\u00a0/g, ' '))
+  ? ok(`итог ${expected} напечатан без потери копеек`)
+  : bad(`итога ${expected} нет в PDF. Извлечено: ${flat.slice(-200)}`);
+
+// Арифметика образца: подытог − скидка + НДС = итог. Если разойдётся,
+// значит счёт в бланке не сходится, а это первое, что проверит бухгалтер.
+const net = sample.pricing.subtotalBani - sample.pricing.discountBani;
+net + (sample.pricing.vatBani ?? 0) === sample.pricing.totalBani
+  ? ok('подытог − скидка + НДС = итог, в целых банях')
+  : bad('итог не сходится с разбивкой');
 
 const onlyMeta = buildOfferTemplate({
   verticalId: 'furniture',

@@ -17,11 +17,25 @@ import type { BlockId, OfferTemplate, OfferText } from './schema.js';
  * она никуда не уходит.
  */
 
-export interface OfferLine {
-  label: string;
-  value: string;
-  /** Надбавка за опцию, если её показывают в разбивке. */
-  priceBani?: number;
+/**
+ * Позиция заказа.
+ *
+ * Не «одна конфигурация». Оферта пилота, которую он показал, — это заказ
+ * на девять моделей плюс доставка и монтаж: покупатель обставляет квартиру,
+ * а не покупает диван. Бланк на одну позицию не покрыл бы ни одного их
+ * реального документа.
+ */
+export interface OfferItem {
+  title: string;
+  /** Спецификация позиции: то, что выбрано в конфигураторе. */
+  lines?: string[];
+  quantity?: number;
+  unitBani?: number;
+  discountBani?: number;
+  discountPercent?: number;
+  totalBani: number;
+  /** Фотография позиции, если есть. */
+  image?: string;
 }
 
 export interface OfferData {
@@ -30,10 +44,13 @@ export interface OfferData {
   date: Date;
   validUntil: Date;
   customer: { name?: string; phone?: string; email?: string };
-  configuration: OfferLine[];
+  items: OfferItem[];
   pricing: {
-    listBani: number;
+    subtotalBani: number;
     discountBani: number;
+    /** НДС отдельной строкой: у пилота он показан так, и это требование учёта. */
+    vatBani?: number;
+    vatRate?: number;
     totalBani: number;
     promo?: { label: string; validUntil?: Date };
   };
@@ -90,7 +107,13 @@ function styles(t: OfferTemplate) {
     rowLine: { borderBottomWidth: 1, borderBottomColor: colors.line },
     cellLabel: { width: '38%', color: colors.muted },
     cellValue: { flex: 1 },
-    cellPrice: { width: '22%', textAlign: 'right' },
+    rowHead: { borderBottomWidth: 1, borderBottomColor: colors.line, color: colors.muted, fontSize: fontSize.small },
+    cellNo: { width: 20, color: colors.muted },
+    cellItem: { flex: 1, paddingRight: 8 },
+    cellQty: { width: 40, textAlign: 'right' },
+    cellPrice: { width: 90, textAlign: 'right' },
+    spec: { fontSize: fontSize.small, color: colors.muted, lineHeight: 1.4 },
+    itemImage: { width: 110, marginTop: 6, objectFit: 'contain' },
     totals: { marginTop: 10, alignItems: 'flex-end' },
     totalRow: { flexDirection: 'row', justifyContent: 'space-between', width: '55%', paddingVertical: 3 },
     struck: { color: colors.muted, textDecoration: 'line-through' },
@@ -160,17 +183,35 @@ function block(id: BlockId, t: OfferTemplate, txt: OfferText, d: OfferData, s: S
       );
     }
 
-    case 'configuration': {
-      const c = txt.configuration;
+    case 'items': {
+      const c = txt.items;
       if (!c) return null;
       return (
         <View style={s.section} key={id}>
           <Text style={s.heading}>{c.heading}</Text>
-          {d.configuration.map((line, i) => (
-            <View style={[s.row, i < d.configuration.length - 1 ? s.rowLine : {}]} key={`${line.label}-${i}`}>
-              <Text style={s.cellLabel}>{line.label}</Text>
-              <Text style={s.cellValue}>{line.value}</Text>
-              <Text style={s.cellPrice}>{line.priceBani ? cur(line.priceBani) : ''}</Text>
+          <View style={[s.row, s.rowHead]}>
+            <Text style={s.cellNo}>#</Text>
+            <Text style={s.cellItem}>{c.product ?? ''}</Text>
+            <Text style={s.cellQty}>{c.quantity ?? ''}</Text>
+            <Text style={s.cellPrice}>{c.discount ?? ''}</Text>
+            <Text style={s.cellPrice}>{c.total ?? ''}</Text>
+          </View>
+          {d.items.map((item, i) => (
+            <View style={[s.row, s.rowLine]} key={`${item.title}-${i}`} wrap={false}>
+              <Text style={s.cellNo}>{i + 1}</Text>
+              <View style={s.cellItem}>
+                <Text>{item.title}</Text>
+                {(item.lines ?? []).map((line, j) => (
+                  <Text style={s.spec} key={j}>{line}</Text>
+                ))}
+                {item.image ? <Image src={item.image} style={s.itemImage} /> : null}
+              </View>
+              <Text style={s.cellQty}>{item.quantity ?? 1}</Text>
+              <View style={s.cellPrice}>
+                {item.discountPercent ? <Text>{item.discountPercent.toFixed(2)}%</Text> : null}
+                {item.discountBani ? <Text style={s.spec}>{cur(item.discountBani)}</Text> : null}
+              </View>
+              <Text style={s.cellPrice}>{cur(item.totalBani)}</Text>
             </View>
           ))}
         </View>
@@ -180,25 +221,30 @@ function block(id: BlockId, t: OfferTemplate, txt: OfferText, d: OfferData, s: S
     case 'pricing': {
       const p = txt.pricing;
       if (!p) return null;
-      const discounted = d.pricing.discountBani > 0;
+      const rows: Array<[string, string, boolean]> = [];
+      // Подытог не зачёркивается: зачёркнутая цена означает «было столько,
+      // стало столько», а здесь ниже идут вычитания — это разные вещи.
+      if (p.subtotal) rows.push([p.subtotal, cur(d.pricing.subtotalBani), false]);
+      if (p.discount && d.pricing.discountBani > 0) {
+        // Знак ставит форматтер валюты, а не мы: в разных локалях минус стоит
+        // в разных местах относительно символа валюты.
+        rows.push([p.discount, cur(-d.pricing.discountBani), false]);
+      }
+      if (p.vat && d.pricing.vatBani !== undefined) {
+        const label = d.pricing.vatRate !== undefined
+          ? `${p.vat} (${d.pricing.vatRate}%)` : p.vat;
+        rows.push([label, cur(d.pricing.vatBani), false]);
+      }
       return (
         <View style={s.section} key={id}>
           <Text style={s.heading}>{p.heading}</Text>
           <View style={s.totals}>
-            {discounted && p.list ? (
-              <View style={s.totalRow}>
-                <Text style={s.small}>{p.list}</Text>
-                <Text style={s.struck}>{cur(d.pricing.listBani)}</Text>
+            {rows.map(([label, value, struck]) => (
+              <View style={s.totalRow} key={label}>
+                <Text style={s.small}>{label}</Text>
+                <Text style={struck ? s.struck : {}}>{value}</Text>
               </View>
-            ) : null}
-            {discounted && p.discount ? (
-              <View style={s.totalRow}>
-                <Text style={s.small}>{p.discount}</Text>
-                {/* Знак ставит форматтер валюты, а не мы: в разных локалях
-                    минус стоит в разных местах относительно символа валюты. */}
-                <Text>{cur(-d.pricing.discountBani)}</Text>
-              </View>
-            ) : null}
+            ))}
             <View style={[s.totalRow, s.total]}>
               <Text>{p.total}</Text>
               <Text>{cur(d.pricing.totalBani)}</Text>
@@ -234,7 +280,11 @@ export function OfferDocument({ template, data }: { template: OfferTemplate; dat
 
   return (
     <Document>
-      <Page size={template.page.size as 'A4'} style={s.page}>
+      <Page
+        size={template.page.size as 'A4'}
+        orientation={template.page.orientation ?? 'portrait'}
+        style={s.page}
+      >
         {template.blocks.map((id) => block(id, template, txt, data, s))}
       </Page>
     </Document>
@@ -245,7 +295,7 @@ export async function renderOffer(template: OfferTemplate, data: OfferData): Pro
   registerFonts(template);
   warnUncoveredData(template, [
     data.number, data.customer.name ?? '', data.customer.phone ?? '', data.customer.email ?? '',
-    ...data.configuration.flatMap((l) => [l.label, l.value]),
+    ...data.items.flatMap((i) => [i.title, ...(i.lines ?? [])]),
     data.pricing.promo?.label ?? '',
   ]);
   return renderToBuffer(<OfferDocument template={template} data={data} />);

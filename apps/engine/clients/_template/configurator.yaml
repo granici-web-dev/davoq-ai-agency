@@ -38,14 +38,18 @@ offer:
         name: Nume
         phone: Telefon
         email: Email
-      configuration:
-        heading: Configurație
-        option: Opțiune
-        value: Selecție
+      items:
+        heading: Produse și servicii
+        product: Produs sau serviciu
+        quantity: Cant.
+        unitPrice: Preț unitar
+        discount: Reducere
+        total: Total
       pricing:
         heading: Preț
-        list: Preț de listă
+        subtotal: Subtotal
         discount: Reducere
+        vat: TVA
         total: Total
         disclaimer: Prețul este estimativ. Oferta nu constituie contract.
       legal: Oferta este valabilă până la data indicată mai sus.
@@ -61,11 +65,18 @@ offer:
           - www.example.com
       meta: { title: Quotation, number: 'No.', date: Date, validUntil: Valid until }
       customer: { heading: Customer, name: Name, phone: Phone, email: Email }
-      configuration: { heading: Configuration, option: Option, value: Selection }
+      items:
+        heading: Products and services
+        product: Product or service
+        quantity: Qty
+        unitPrice: Unit price
+        discount: Discount
+        total: Total
       pricing:
         heading: Price
-        list: List price
+        subtotal: Subtotal
         discount: Discount
+        vat: VAT
         total: Total
         disclaimer: The price is an estimate. This quotation is not a contract.
       legal: This quotation is valid until the date shown above.
