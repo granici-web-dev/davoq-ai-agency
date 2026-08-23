@@ -13,18 +13,26 @@ id: furniture
 offer:
   # Порядок блоков ниши. Типы блоков задаёт движок; свой тип завести нельзя —
   # это был бы код на клиента, то есть ровно то, чего мы избегаем.
-  blocks: [header, meta, customer, items, pricing, legal, footer]
+  # Порядок как в настоящей оферте мебельщика: обложка с фото и номером,
+  # позиции, цена, характеристики изделия, условия доставки, материалы.
+  # Отдельного блока «кому» нет намеренно — имя заказчика стоит на обложке,
+  # ровно как в бланке пилота.
+  blocks: [hero, meta, items, pricing, specs, notes, gallery, legal, footer]
 
   currency:
     code: RON
 
   text:
     ro:
+      hero:
+        title: Ofertă
+        numberLabel: 'OFERTA NR.'
       meta:
+        # Номер печатается на обложке — здесь он не нужен.
         title: Ofertă de preț
-        number: Nr.
         date: Data
         validUntil: Valabilă până la
+        consultant: Consilier
       customer:
         heading: Client
         name: Nume
@@ -48,10 +56,22 @@ offer:
         disclaimer: >-
           Prețul este estimativ și se confirmă după măsurătoare și verificarea
           disponibilității țesăturii. Oferta nu constituie contract.
+      specs:
+        heading: Descrierea produsului
+        label: Caracteristică
+        value: Valoare
+      notes:
+        heading: Atenție
+        # Условия доставки и подъёма у каждого клиента свои — здесь пусто
+        # намеренно: выдуманный прайс в оферте хуже отсутствующего.
+        items: []
+      gallery:
+        heading: Compoziție
       legal: file:offer/legal.ro.md
 
     ru:
-      meta: { title: Коммерческое предложение, number: '№', date: Дата, validUntil: Действительно до }
+      hero: { title: Коммерческое предложение, numberLabel: '№' }
+      meta: { title: Коммерческое предложение, date: Дата, validUntil: Действительно до, consultant: Менеджер }
       customer: { heading: Клиент, name: Имя, phone: Телефон, email: Email }
       items:
         heading: Товары и услуги
@@ -69,9 +89,13 @@ offer:
         disclaimer: >-
           Цена предварительная и подтверждается после замера и проверки наличия
           ткани. Предложение не является договором.
+      specs: { heading: Характеристики изделия, label: Параметр, value: Значение }
+      notes: { heading: Условия, items: [] }
+      gallery: { heading: Материалы }
 
     en:
-      meta: { title: Quotation, number: 'No.', date: Date, validUntil: Valid until }
+      hero: { title: Quotation, numberLabel: 'OFFER NO.' }
+      meta: { title: Quotation, date: Date, validUntil: Valid until, consultant: Consultant }
       customer: { heading: Customer, name: Name, phone: Phone, email: Email }
       items:
         heading: Products and services
@@ -89,3 +113,6 @@ offer:
         disclaimer: >-
           The price is an estimate and is confirmed after measurement and fabric
           availability check. This quotation is not a contract.
+      specs: { heading: Product description, label: Property, value: Value }
+      notes: { heading: Please note, items: [] }
+      gallery: { heading: Materials }

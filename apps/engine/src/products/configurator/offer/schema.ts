@@ -14,11 +14,15 @@ import { assertRequired, assertShape, type Shape } from '../config/shape.js';
  */
 
 export const OFFER_BLOCKS = [
-  'header',        // марка и реквизиты продавца
-  'meta',          // номер, дата, срок действия
+  'hero',          // обложка: фото, марка, кому, номер и дата поверх
+  'header',        // марка и реквизиты продавца (сухая альтернатива обложке)
+  'meta',          // номер, дата, срок действия, консультант
   'customer',      // кому
   'items',         // позиции заказа: что выбрано и почём
   'pricing',       // разбивка цены, скидка, итог
+  'specs',         // характеристики изделия парами
+  'notes',         // условия: доставка, подъём, монтаж
+  'gallery',       // материалы и фактуры фотографиями
   'legal',         // юртекст
   'footer',        // подпись страницы
 ] as const;
@@ -35,11 +39,17 @@ const isBlockId = (v: string): v is BlockId => (OFFER_BLOCKS as readonly string[
  * и замечает это покупатель, а не мы.
  */
 const REQUIRED_TEXT: Record<BlockId, string[]> = {
+  hero: ['title'],
   header: ['company'],
-  meta: ['title', 'number', 'date', 'validUntil'],
+  // `number` необязателен: если включена обложка, номер стоит на ней,
+  // и второй раз печатать его в строке реквизитов незачем.
+  meta: ['title', 'date', 'validUntil'],
   customer: ['heading'],
   items: ['heading'],
   pricing: ['heading', 'total'],
+  specs: ['heading'],
+  notes: ['heading'],
+  gallery: [],
   legal: [],
   footer: [],
 };
@@ -53,15 +63,18 @@ export const OFFER_SHAPE: Shape = {
   theme: {
     fontFamily: true,
     fonts: { '[]': { family: true, src: true, weight: true, style: true } },
-    colors: { text: true, muted: true, line: true, accent: true },
+    colors: { text: true, muted: true, line: true, accent: true, page: true, onAccent: true },
     fontSize: { title: true, heading: true, base: true, small: true },
   },
   logo: true,
+  hero: { image: true, height: true, logo: true },
+  gallery: true,
   currency: { code: true, decimals: true },
   text: {
     '*': {
+      hero: { title: true, numberLabel: true, lines: true },
       header: { company: true, lines: true },
-      meta: { title: true, number: true, date: true, validUntil: true },
+      meta: { title: true, number: true, date: true, validUntil: true, consultant: true },
       customer: { heading: true, name: true, phone: true, email: true },
       items: {
         heading: true, product: true, quantity: true,
@@ -71,6 +84,9 @@ export const OFFER_SHAPE: Shape = {
         heading: true, subtotal: true, discount: true, vat: true,
         total: true, disclaimer: true,
       },
+      specs: { heading: true, label: true, value: true },
+      notes: { heading: true, items: true },
+      gallery: { heading: true },
       legal: true,
       footer: true,
     },
@@ -80,8 +96,11 @@ export const OFFER_SHAPE: Shape = {
 export interface FontFace { family: string; src: string; weight?: number; style?: string }
 
 export interface OfferText {
+  hero?: { title: string; numberLabel?: string; lines?: string[] };
   header?: { company: string; lines?: string[] };
-  meta?: { title: string; number: string; date: string; validUntil: string };
+  meta?: {
+    title: string; number?: string; date: string; validUntil: string; consultant?: string;
+  };
   customer?: { heading: string; name?: string; phone?: string; email?: string };
   items?: {
     heading: string; product?: string; quantity?: string;
@@ -91,6 +110,10 @@ export interface OfferText {
     heading: string; subtotal?: string; discount?: string; vat?: string;
     total: string; disclaimer?: string;
   };
+  specs?: { heading: string; label?: string; value?: string };
+  /** `items` здесь — строки условий, а не позиции заказа: это статический текст клиента. */
+  notes?: { heading: string; items?: string[] };
+  gallery?: { heading?: string };
   legal?: string;
   footer?: string;
 }
@@ -106,10 +129,19 @@ export interface OfferTemplate {
   theme: {
     fontFamily: string;
     fonts: FontFace[];
-    colors: { text: string; muted: string; line: string; accent: string };
+    colors: {
+      text: string; muted: string; line: string; accent: string;
+      /** Фон страницы: у бланка пилота он бежевый, а не белый. */
+      page: string;
+      /** Текст поверх акцентной заливки. */
+      onAccent: string;
+    };
     fontSize: { title: number; heading: number; base: number; small: number };
   };
   logo?: string;
+  hero?: { image?: string; height?: number; logo?: string };
+  /** Фотографии материалов: пути к файлам в каталоге клиента. */
+  gallery?: string[];
   currency: { code: string; decimals: number };
   text: Record<string, OfferText>;
 }
@@ -120,14 +152,28 @@ export interface OfferTemplate {
  * повторять оформление целиком, а «нейтральный шаблон» жил бы копипастой.
  */
 export const OFFER_DEFAULTS = {
-  blocks: [...OFFER_BLOCKS],
+  /**
+   * Умолчание — СУХОЙ документ, а не все блоки подряд.
+   *
+   * `[...OFFER_BLOCKS]` здесь стояло с самого начала и было ошибкой: пока
+   * блоков было семь и все они нужны любому бланку, это сходило с рук.
+   * Стоило добавить обложку и галерею — и клиент без ниши начал требовать
+   * тексты для блоков, которые ему не нужны.
+   *
+   * Обложка, характеристики, условия и материалы — выбор ниши или клиента,
+   * а не то, что движок навязывает всем.
+   */
+  blocks: ['header', 'meta', 'customer', 'items', 'pricing', 'legal', 'footer'],
   page: { size: 'A4', orientation: 'portrait', margins: { top: 40, right: 40, bottom: 44, left: 40 } },
   // Geist, а не встроенная Helvetica: встроенные шрифты PDF не содержат
   // румынской диакритики и молча выедают её из текста. См. fonts.ts.
   theme: {
     fontFamily: 'Geist',
     fonts: [],
-    colors: { text: '#111111', muted: '#6b7280', line: '#e5e7eb', accent: '#111111' },
+    colors: {
+      text: '#111111', muted: '#6b7280', line: '#e5e7eb', accent: '#111111',
+      page: '#ffffff', onAccent: '#ffffff',
+    },
     fontSize: { title: 20, heading: 11, base: 10, small: 8 },
   },
   currency: { code: 'RON', decimals: 2 },

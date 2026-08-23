@@ -44,6 +44,20 @@ function resolvePaths(layer: Json | undefined, dir: string, where: string): Json
 
   if (typeof out.logo === 'string') out.logo = inside(dir, out.logo, where);
 
+  const hero = out.hero;
+  if (hero && typeof hero === 'object' && !Array.isArray(hero)) {
+    const h = { ...(hero as Record<string, Json>) };
+    for (const key of ['image', 'logo'] as const) {
+      if (typeof h[key] === 'string') h[key] = inside(dir, h[key] as string, `${where}: hero.${key}`);
+    }
+    out.hero = h;
+  }
+
+  if (Array.isArray(out.gallery)) {
+    out.gallery = out.gallery.map((file, i) =>
+      typeof file === 'string' ? inside(dir, file, `${where}: gallery[${i}]`) : file);
+  }
+
   const theme = out.theme;
   if (theme && typeof theme === 'object' && !Array.isArray(theme)) {
     const fonts = (theme as Record<string, Json>).fonts;

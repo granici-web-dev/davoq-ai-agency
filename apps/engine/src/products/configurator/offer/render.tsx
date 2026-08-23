@@ -44,6 +44,10 @@ export interface OfferData {
   date: Date;
   validUntil: Date;
   customer: { name?: string; phone?: string; email?: string };
+  /** Менеджер, от чьего имени оферта. У пилота он назван в бланке поимённо. */
+  consultant?: string;
+  /** Характеристики изделия парами. В фазе 3 приходят из выбора посетителя. */
+  specs?: Array<{ label: string; value: string }>;
   items: OfferItem[];
   pricing: {
     subtotalBani: number;
@@ -89,9 +93,40 @@ function styles(t: OfferTemplate) {
   return StyleSheet.create({
     page: {
       fontFamily, fontSize: fontSize.base, color: colors.text,
+      backgroundColor: colors.page,
       paddingTop: t.page.margins.top, paddingRight: t.page.margins.right,
       paddingBottom: t.page.margins.bottom, paddingLeft: t.page.margins.left,
     },
+    // Обложка вытянута под края листа: поля страницы её не касаются,
+    // иначе фотография висит в рамке, а в бланке клиента она в край.
+    hero: {
+      position: 'relative',
+      marginTop: -t.page.margins.top,
+      marginLeft: -t.page.margins.left,
+      marginRight: -t.page.margins.right,
+      marginBottom: 18,
+      backgroundColor: colors.accent,
+    },
+    heroImage: { position: 'absolute', width: '100%', height: '100%', objectFit: 'cover' },
+    heroPad: {
+      flex: 1, justifyContent: 'space-between',
+      paddingTop: 18, paddingBottom: 14,
+      paddingLeft: t.page.margins.left, paddingRight: t.page.margins.right,
+    },
+    heroTop: { flexDirection: 'row', justifyContent: 'space-between', alignItems: 'flex-start' },
+    heroTitle: { color: colors.onAccent, fontSize: fontSize.title, lineHeight: 1.15 },
+    heroLogo: { width: 74, maxHeight: 46, objectFit: 'contain' },
+    heroBottom: { flexDirection: 'row', justifyContent: 'space-between', alignItems: 'flex-end' },
+    heroRight: { alignItems: 'flex-end' },
+    heroSmall: { color: colors.onAccent, fontSize: fontSize.small, lineHeight: 1.5 },
+    bar: {
+      backgroundColor: colors.accent, color: colors.onAccent, fontSize: fontSize.heading,
+      paddingVertical: 5, paddingHorizontal: 8, marginBottom: 8,
+    },
+    bullet: { flexDirection: 'row', paddingVertical: 1.5 },
+    bulletDot: { width: 12, color: colors.muted },
+    galleryRow: { flexDirection: 'row', gap: 8, flexWrap: 'wrap' },
+    galleryImage: { width: 96, height: 72, objectFit: 'cover' },
     header: { flexDirection: 'row', justifyContent: 'space-between', alignItems: 'flex-start' },
     logo: { width: 120, maxHeight: 44, objectFit: 'contain' },
     company: { textAlign: 'right', color: colors.muted, fontSize: fontSize.small, lineHeight: 1.5 },
@@ -133,6 +168,37 @@ function block(id: BlockId, t: OfferTemplate, txt: OfferText, d: OfferData, s: S
   const cur = (bani: number): string => money(bani, t.currency.code, d.locale, t.currency.decimals);
 
   switch (id) {
+    case 'hero': {
+      const h = txt.hero;
+      if (!h) return null;
+      const cfg = t.hero ?? {};
+      // Без фотографии обложка короче: высокая пустая заливка читается
+      // как незагрузившаяся картинка, а не как приём.
+      return (
+        <View style={[s.hero, { height: cfg.height ?? (cfg.image ? 210 : 120) }]} key={id}>
+          {cfg.image ? <Image src={cfg.image} style={s.heroImage} /> : null}
+          <View style={s.heroPad}>
+            <View style={s.heroTop}>
+              <View>
+                <Text style={s.heroTitle}>{h.title}</Text>
+                {d.customer.name ? <Text style={s.heroTitle}>{d.customer.name}</Text> : null}
+              </View>
+              {cfg.logo ? <Image src={cfg.logo} style={s.heroLogo} /> : null}
+            </View>
+            <View style={s.heroBottom}>
+              <Text style={s.heroSmall}>{day(d.date, d.locale)}</Text>
+              <View style={s.heroRight}>
+                {(h.lines ?? []).map((line, i) => <Text style={s.heroSmall} key={i}>{line}</Text>)}
+                {h.numberLabel
+                  ? <Text style={s.heroSmall}>{h.numberLabel} {d.number}</Text>
+                  : null}
+              </View>
+            </View>
+          </View>
+        </View>
+      );
+    }
+
     case 'header': {
       const h = txt.header;
       if (!h) return null;
@@ -154,9 +220,10 @@ function block(id: BlockId, t: OfferTemplate, txt: OfferText, d: OfferData, s: S
         <View key={id}>
           <Text style={s.title}>{m.title}</Text>
           <View style={s.metaRow}>
-            <Text>{m.number} {d.number}</Text>
+            {m.number ? <Text>{m.number} {d.number}</Text> : null}
             <Text>{m.date}: {day(d.date, d.locale)}</Text>
             <Text>{m.validUntil}: {day(d.validUntil, d.locale)}</Text>
+            {m.consultant && d.consultant ? <Text>{m.consultant}: {d.consultant}</Text> : null}
           </View>
         </View>
       );
@@ -188,7 +255,9 @@ function block(id: BlockId, t: OfferTemplate, txt: OfferText, d: OfferData, s: S
       if (!c) return null;
       return (
         <View style={s.section} key={id}>
-          <Text style={s.heading}>{c.heading}</Text>
+          <View wrap={false}>
+            <Text style={s.heading}>{c.heading}</Text>
+          </View>
           <View style={[s.row, s.rowHead]}>
             <Text style={s.cellNo}>#</Text>
             <Text style={s.cellItem}>{c.product ?? ''}</Text>
@@ -236,7 +305,7 @@ function block(id: BlockId, t: OfferTemplate, txt: OfferText, d: OfferData, s: S
         rows.push([label, cur(d.pricing.vatBani), false]);
       }
       return (
-        <View style={s.section} key={id}>
+        <View style={s.section} key={id} wrap={false}>
           <Text style={s.heading}>{p.heading}</Text>
           <View style={s.totals}>
             {rows.map(([label, value, struck]) => (
@@ -257,6 +326,63 @@ function block(id: BlockId, t: OfferTemplate, txt: OfferText, d: OfferData, s: S
             </Text>
           ) : null}
           {p.disclaimer ? <Text style={[s.small, { marginTop: 10 }]}>{p.disclaimer}</Text> : null}
+        </View>
+      );
+    }
+
+    case 'specs': {
+      const c = txt.specs;
+      if (!c || !d.specs || d.specs.length === 0) return null;
+      return (
+        <View style={s.section} key={id}>
+          {/* Заголовок склеен с началом таблицы: одинокая плашка внизу
+              страницы читается как сбой вёрстки, а не как раздел. Держим
+              заголовок и две строки, остальное переносится свободно —
+              так длинная таблица не обрежется на второй странице. */}
+          {[d.specs.slice(0, 2), d.specs.slice(2)].map((chunk, part) => (
+            <View wrap={part === 1} key={part}>
+              {part === 0 ? <Text style={s.bar}>{c.heading}</Text> : null}
+              {chunk.map((row, i) => (
+                <View style={[s.row, part * 2 + i < d.specs!.length - 1 ? s.rowLine : {}]} key={row.label}>
+                  <Text style={s.cellLabel}>{row.label}</Text>
+                  <Text style={s.cellValue}>{row.value}</Text>
+                </View>
+              ))}
+            </View>
+          ))}
+        </View>
+      );
+    }
+
+    case 'notes': {
+      const c = txt.notes;
+      if (!c) return null;
+      return (
+        <View style={s.section} key={id}>
+          {[(c.items ?? []).slice(0, 2), (c.items ?? []).slice(2)].map((chunk, part) => (
+            <View wrap={part === 1} key={part}>
+              {part === 0 ? <Text style={s.bar}>{c.heading}</Text> : null}
+              {chunk.map((line, i) => (
+                <View style={s.bullet} key={i}>
+                  <Text style={s.bulletDot}>•</Text>
+                  <Text style={s.small}>{line}</Text>
+                </View>
+              ))}
+            </View>
+          ))}
+        </View>
+      );
+    }
+
+    case 'gallery': {
+      const files = t.gallery ?? [];
+      if (files.length === 0) return null;
+      return (
+        <View style={s.section} key={id}>
+          {txt.gallery?.heading ? <View minPresenceAhead={140}><Text style={s.bar}>{txt.gallery.heading}</Text></View> : null}
+          <View style={s.galleryRow}>
+            {files.map((file, i) => <Image src={file} style={s.galleryImage} key={i} />)}
+          </View>
         </View>
       );
     }

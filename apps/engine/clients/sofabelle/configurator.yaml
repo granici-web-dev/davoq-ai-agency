@@ -6,19 +6,33 @@
 schema: 1
 
 offer:
-  # TODO(онбординг): логотип для бланка нужен растром — в assets лежит SVG,
-  # а движок пока кладёт в PDF только PNG или JPG.
-  # logo: assets/logo-offer.png
+  # TODO(онбординг): обложка и логотип нужны растром — в assets лежит SVG,
+  # а движок кладёт в PDF только PNG и JPG.
+  # hero:
+  #   image: assets/hero.jpg
+  #   logo: assets/logo-white.png
 
   theme:
-    # Марка чёрно-белая — как и виджет (`preset: mono` в config.yaml).
+    # Цвета сняты с их собственной оферты: плашки и заливки #706155,
+    # фон листа #dad2c8. Белый лист у них не используется нигде.
     colors:
-      accent: '#111111'
+      accent: '#706155'
+      page: '#dad2c8'
+      text: '#3d342c'
+      muted: '#6b5e53'
+      line: '#c4b8aa'
+      onAccent: '#ffffff'
 
   text:
     ro:
       # TODO(онбординг): реквизиты взять из существующей оферты клиента,
       # а не из открытых источников — в бланке они должны совпадать до знака.
+      hero:
+        title: 'ANEXA 1'
+        numberLabel: 'OFERTA NR.'
+        lines:
+          - sofabelle.ro
+          - '+40 720 111 225'
       header:
         company: SofaBelle SRL
         lines:
@@ -26,4 +40,20 @@ offer:
           - Adresa —
           - Telefon —
           - sofabelle.ro
+      notes:
+        heading: Atenție
+        # Условия перенесены из их оферты дословно. Две опечатки источника
+        # («MINUPULARE», «APARTMANET») исправлены — в документе, который
+        # печатается сам, опечатка перестаёт быть разовой.
+        items:
+          - 'Livrare în zona Brașov — 150 lei'
+          - 'Manipulare până la casă sol sau apartament parter — 150 lei'
+          - 'Pentru fiecare etaj ridicat fără lift — +50 lei per etaj'
+          - 'Pentru ridicare la etaj cu lift manipularea va fi 150 lei'
+          - 'Livrare în raza de 25–100 km — 400 lei'
+          - 'Livrare în raza de 100–200 km — 600 lei'
+          - 'Livrare în raza de 200–250 km — 800 lei'
+          - 'Livrare în raza de 250–300 km — 1000 lei'
+          - 'Livrare în raza de 300–350 km — 1200 lei'
+          - 'Livrare în raza de 350–450 km — 1500 lei'
       footer: SofaBelle SRL · sofabelle.ro

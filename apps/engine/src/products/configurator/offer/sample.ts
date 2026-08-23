@@ -54,6 +54,45 @@ const DRAFTS: Record<string, Draft[]> = {
   ],
 };
 
+/**
+ * Характеристики изделия — те же поля, что в бланке пилота: они описывают
+ * главную позицию заказа, а не каждую. В фазе 3 приходят из выбора посетителя.
+ */
+const SPECS: Record<string, Array<[string, string]>> = {
+  ro: [
+    ['Dimensiuni', 'Conform schiței'],
+    ['Tip șezut', 'Spumă poliuretanică HR + memory foam'],
+    ['Tip tapițeria', 'SH 2327 #8'],
+    ['Model picioare', 'Lemn 5 cm, negru'],
+    ['Material structură', 'Lemn masiv + lemn stratificat'],
+    ['Extensibil', 'Nu'],
+    ['Depozitare', 'Nu'],
+    ['Garanție', '12 luni'],
+  ],
+  ru: [
+    ['Размеры', 'По схеме'],
+    ['Наполнитель', 'Пена HR + memory foam'],
+    ['Обивка', 'SH 2327 #8'],
+    ['Ножки', 'Дерево 5 см, чёрные'],
+    ['Каркас', 'Массив + клеёная фанера'],
+    ['Раскладывается', 'Нет'],
+    ['Короб для белья', 'Нет'],
+    ['Гарантия', '12 месяцев'],
+  ],
+  en: [
+    ['Dimensions', 'As per drawing'],
+    ['Seat type', 'HR polyurethane foam + memory foam'],
+    ['Upholstery', 'SH 2327 #8'],
+    ['Legs', 'Wood 5 cm, black'],
+    ['Frame material', 'Solid wood + laminated wood'],
+    ['Extendable', 'No'],
+    ['Storage', 'No'],
+    ['Warranty', '12 months'],
+  ],
+};
+
+const CONSULTANT = 'Trandafir Adriana';
+
 const PROMO: Record<string, string> = {
   ro: `Reducere de campanie −${DISCOUNT_PERCENT}%`,
   ru: `Скидка по акции −${DISCOUNT_PERCENT}%`,
@@ -89,7 +128,9 @@ export function sampleOffer(locale: string): OfferData {
     number: '2026-0148',
     date: new Date('2026-03-17T10:00:00Z'),
     validUntil: new Date('2026-04-16T10:00:00Z'),
-    customer: { name: 'Ion Popescu', phone: '+40 700 000 000', email: 'client@example.com' },
+    customer: { name: 'SC EXEMPLU SRL', phone: '+40 700 000 000', email: 'client@example.com' },
+    consultant: CONSULTANT,
+    specs: (SPECS[locale] ?? SPECS.ro!).map(([label, value]) => ({ label, value })),
     items,
     pricing: {
       subtotalBani, discountBani, vatBani, vatRate: VAT_RATE,

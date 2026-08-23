@@ -166,6 +166,17 @@ throws(
   'шрифт без румынской диакритики — ошибка на сборке, а не выеденные слова в PDF',
 );
 
+// Умолчание движка — сухой документ. Обложку и прочее включает ниша
+// или клиент; навязывать их всем значит требовать текстов, которых нет.
+const bare = buildOfferTemplate({
+  verticalId: null,
+  clientLayer: { text: { ro: { header: { company: 'X' }, meta: { title: 'O', date: 'D', validUntil: 'V' }, customer: { heading: 'C' }, items: { heading: 'I' }, pricing: { heading: 'P', total: 'T' } } } } as Json,
+  locales: ['ro'],
+});
+!bare.blocks.includes('hero') && !bare.blocks.includes('gallery')
+  ? ok('умолчание движка — сухой бланк, без обложки и галереи')
+  : bad(`умолчание тянет лишние блоки: ${bare.blocks.join(', ')}`);
+
 console.log('\nРендер');
 
 const template = buildOfferTemplate({ verticalId: 'furniture', clientLayer: pilot(), locales: ['ro'] });
@@ -178,7 +189,14 @@ const proxy = await getDocumentProxy(new Uint8Array(pdf));
 const { text } = await extractText(proxy, { mergePages: true });
 const flat = (Array.isArray(text) ? text.join(' ') : text).replace(/\s+/g, ' ');
 
-for (const phrase of ['Ofertă de preț', 'Produse și servicii', 'Înălțime tetieră', 'SofaBelle SRL']) {
+for (const phrase of [
+  'Ofertă de preț', 'Produse și servicii', 'Înălțime tetieră', 'SofaBelle SRL',
+  'ANEXA 1',                              // обложка: текст слоя клиента
+  'OFERTA NR. 2026-0148',                 // номер стоит на обложке, а не в реквизитах
+  'Consilier: Trandafir Adriana',         // именная оферта
+  'Descrierea produsului',                // характеристики изделия
+  'Livrare în zona Brașov — 150 lei',     // условия клиента дословно
+]) {
   flat.includes(phrase) ? ok(`в PDF есть «${phrase}» — диакритика дошла целой`)
                         : bad(`в PDF нет «${phrase}». Извлечено: ${flat.slice(0, 200)}`);
 }
@@ -198,6 +216,11 @@ const net = sample.pricing.subtotalBani - sample.pricing.discountBani;
 net + (sample.pricing.vatBani ?? 0) === sample.pricing.totalBani
   ? ok('подытог − скидка + НДС = итог, в целых банях')
   : bad('итог не сходится с разбивкой');
+
+// Номер не должен печататься дважды: он на обложке.
+(flat.match(/2026-0148/g) ?? []).length === 1
+  ? ok('номер оферты напечатан один раз')
+  : bad(`номер встречается ${(flat.match(/2026-0148/g) ?? []).length} раз(а)`);
 
 const onlyMeta = buildOfferTemplate({
   verticalId: 'furniture',
