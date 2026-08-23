@@ -1,0 +1,73 @@
+# Конфигуратор: слой ниши «кастомная мягкая мебель».
+#
+# Всё, что одинаково у любого мебельного клиента. Клиент переопределяет отсюда
+# по ключу только то, что у него правда своё: марку, реквизиты, палитру,
+# формулировки. Скопировать этот файл целиком ради двух правок — значит
+# не иметь слоя ниши вовсе.
+#
+# В фазе 2 здесь только бланк оферты. Флоу и промпт агента добавляются
+# в фазе 3 теми же двумя ключами: `flow:` и `agent:`.
+schema: 1
+id: furniture
+
+offer:
+  # Порядок блоков ниши. Типы блоков задаёт движок; свой тип завести нельзя —
+  # это был бы код на клиента, то есть ровно то, чего мы избегаем.
+  blocks: [header, meta, customer, configuration, pricing, legal, footer]
+
+  currency:
+    code: RON
+
+  text:
+    ro:
+      meta:
+        title: Ofertă de preț
+        number: Nr.
+        date: Data
+        validUntil: Valabilă până la
+      customer:
+        heading: Client
+        name: Nume
+        phone: Telefon
+        email: Email
+      configuration:
+        heading: Configurație
+        option: Opțiune
+        value: Selecție
+      pricing:
+        heading: Preț
+        list: Preț de listă
+        discount: Reducere
+        total: Total
+        # Цена конфигурации мебели зависит от замера и ткани на складе.
+        # Оферта без этой оговорки читается как твёрдое обязательство.
+        disclaimer: >-
+          Prețul este estimativ și se confirmă după măsurătoare și verificarea
+          disponibilității țesăturii. Oferta nu constituie contract.
+      legal: file:offer/legal.ro.md
+
+    ru:
+      meta: { title: Коммерческое предложение, number: '№', date: Дата, validUntil: Действительно до }
+      customer: { heading: Клиент, name: Имя, phone: Телефон, email: Email }
+      configuration: { heading: Конфигурация, option: Параметр, value: Выбор }
+      pricing:
+        heading: Цена
+        list: Цена по прайсу
+        discount: Скидка
+        total: Итого
+        disclaimer: >-
+          Цена предварительная и подтверждается после замера и проверки наличия
+          ткани. Предложение не является договором.
+
+    en:
+      meta: { title: Quotation, number: 'No.', date: Date, validUntil: Valid until }
+      customer: { heading: Customer, name: Name, phone: Phone, email: Email }
+      configuration: { heading: Configuration, option: Option, value: Selection }
+      pricing:
+        heading: Price
+        list: List price
+        discount: Discount
+        total: Total
+        disclaimer: >-
+          The price is an estimate and is confirmed after measurement and fabric
+          availability check. This quotation is not a contract.

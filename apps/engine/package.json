@@ -35,12 +35,15 @@
     "cost": "tsx --env-file=.env src/platform/cli/cost.ts",
     "test:plans": "tsx --env-file=.env scripts/plans-test.mts",
     "test:billing": "tsx scripts/billing-test.mts",
-    "test:webhook": "tsx scripts/webhook-test.mts"
+    "test:webhook": "tsx scripts/webhook-test.mts",
+    "offer:preview": "tsx scripts/offer-preview.mts",
+    "test:offer": "tsx scripts/offer-test.mts"
   },
   "dependencies": {
     "@anthropic-ai/bedrock-sdk": "^0.30.0",
     "@aws-sdk/client-bedrock-runtime": "^3.700.0",
     "@fastify/multipart": "^10.1.1",
+    "@react-pdf/renderer": "^4.7.0",
     "@types/nodemailer": "^8.0.1",
     "bullmq": "^5.0.0",
     "cheerio": "^1.2.0",

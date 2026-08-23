@@ -1,0 +1,29 @@
+# Конфигуратор: слой клиента поверх ниши `furniture`.
+#
+# Здесь только то, что у этого клиента правда своё. Порядок блоков, тексты
+# по локалям и юртекст приходят из `src/verticals/furniture/configurator.yaml`
+# и обновляются вместе с ним.
+schema: 1
+
+offer:
+  # TODO(онбординг): логотип для бланка нужен растром — в assets лежит SVG,
+  # а движок пока кладёт в PDF только PNG или JPG.
+  # logo: assets/logo-offer.png
+
+  theme:
+    # Марка чёрно-белая — как и виджет (`preset: mono` в config.yaml).
+    colors:
+      accent: '#111111'
+
+  text:
+    ro:
+      # TODO(онбординг): реквизиты взять из существующей оферты клиента,
+      # а не из открытых источников — в бланке они должны совпадать до знака.
+      header:
+        company: SofaBelle SRL
+        lines:
+          - CUI —
+          - Adresa —
+          - Telefon —
+          - sofabelle.ro
+      footer: SofaBelle SRL · sofabelle.ro
