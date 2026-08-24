@@ -279,49 +279,9 @@
     },
     "pricing": {
       "eyebrow": "Prețuri",
-      "title": "Abonament lunar, nu proiect de implementare",
-      "lead": "Plătiți pentru agentul care rulează. Configurarea inițială se plătește o singură dată, la început.",
-      "perMonth": "/ lună",
-      "recommended": "Recomandat",
-      "setupNote": "Configurarea inițială — {fee}, o singură dată: discuția, citirea listei de prețuri rând cu rând, scenariul nișei și brandul pe ofertă. Fără ea agentul ar răspunde din texte generale, nu din prețurile dumneavoastră.",
-      "compare": "Comparați planurile",
-      "plans": {
-        "starter": {
-          "name": "Starter",
-          "for": "Pentru un singur agent, pe un singur site. De aici începe majoritatea.",
-          "cta": "Cere o demonstrație",
-          "features": {
-            "oneAgent": "Un agent la alegere",
-            "oneSite": "Un site",
-            "branding": "Configurat pe materialele dumneavoastră",
-            "email": "Suport pe e-mail"
-          }
-        },
-        "pro": {
-          "name": "Pro",
-          "for": "Când agentul trebuie să și calculeze, nu doar să răspundă.",
-          "cta": "Cere o demonstrație",
-          "features": {
-            "moreAgents": "Mai mulți agenți pe același cont",
-            "configurator": "Configurator de cerere",
-            "offerPdf": "Ofertă PDF cu brandul dumneavoastră",
-            "crm": "Cererile ajung în CRM-ul dumneavoastră",
-            "priority": "Suport prioritar"
-          }
-        },
-        "enterprise": {
-          "name": "Enterprise",
-          "priceOnRequest": "La cerere",
-          "for": "Volume mari, mai multe branduri sau cerințe proprii de securitate.",
-          "cta": "Discutați cu noi",
-          "features": {
-            "volume": "Volume fără plafon fix",
-            "ownRules": "Reguli de preț proprii, oricât de complicate",
-            "contract": "Contract și facturare pe firmă",
-            "sla": "Termene de răspuns agreate"
-          }
-        }
-      }
+      "title": "Trei pachete, componență fixă",
+      "lead": "Plătiți lunar pentru agenții care rulează. Configurarea inițială se plătește o singură dată, la început.",
+      "compare": "Comparați planurile"
     },
     "portal": {
       "eyebrow": "Portalul",
@@ -707,5 +667,151 @@
         "scale": "Ziua, ora cu oră"
       }
     }
+  },
+  "plans": {
+    "perMonth": "/ lună",
+    "setup": "Taxă unică de configurare {fee} €",
+    "setupCustom": "Taxă de configurare convenită individual",
+    "recommended": "Recomandat",
+    "priceOnRequest": "Preț individual",
+    "soon": "În curând",
+    "includedIn": "Inclus în {plan}",
+    "start": {
+      "name": "Start",
+      "subtitle": "Asistent AI",
+      "tagline": "Un agent care răspunde în locul dumneavoastră, non-stop.",
+      "cta": "Cere o demonstrație",
+      "features": {
+        "chatbot": "Chatbot AI pentru site: răspunsuri 24/7 din baza de cunoștințe",
+        "qualify": "Calificarea lead-urilor după scenariul nișei",
+        "contacts": "Colectare contacte, transmitere pe e-mail sau în CRM",
+        "limit": "Până la 500 de conversații pe lună",
+        "language": "O limbă, scenariu standard al industriei"
+      }
+    },
+    "growth": {
+      "name": "Growth",
+      "subtitle": "Vânzări AI",
+      "tagline": "Când agentul trebuie să și calculeze, nu doar să răspundă.",
+      "cta": "Cere o demonstrație",
+      "features": {
+        "inherits": "Tot din Start, până la 2 000 de conversații pe lună",
+        "configurator": "Configurator AI de cereri: specificație structurată pentru echipa de vânzări",
+        "crm": "Asistent CRM: completare automată a fișelor din corespondență",
+        "followUp": "Agent follow-up: reveniri automate la lead-urile indecise",
+        "priority": "Suport prioritar"
+      }
+    },
+    "platform": {
+      "name": "Platformă",
+      "subtitle": "Custom",
+      "tagline": "Volume mari, mai multe branduri, cerințe proprii.",
+      "cta": "Discută cu noi",
+      "features": {
+        "inherits": "Tot din Growth, limite convenite individual",
+        "orderStatus": "Statusuri comenzi pentru clienți: notificări automate pe etape",
+        "content": "Motor de conținut pentru social media",
+        "integrations": "Integrări custom și adaptarea scenariilor",
+        "sla": "Însoțire dedicată, SLA"
+      }
+    },
+    "soonNote": "Agenții marcați «în curând» sunt incluși în pachet: îl puteți conecta acum, la prețul de azi, iar agenții se activează pe măsură ce ies. Prețul rămâne cel de la conectare.",
+    "pilot": {
+      "text": "Program pilot: taxă de configurare 0 € pentru primii clienți din fiecare industrie.",
+      "cta": "Scrieți-ne"
+    },
+    "matrix": {
+      "title": "Ce intră în fiecare pachet",
+      "lead": "Pentru cei care compară în detaliu. Rândurile marcate «în curând» sunt incluse în pachet, dar agentul încă nu a ieșit.",
+      "feature": "Ce include",
+      "yes": "Inclus",
+      "no": "Nu este inclus",
+      "rows": {
+        "conversations": {
+          "label": "Conversații pe lună",
+          "start": "500",
+          "growth": "2 000",
+          "platform": "Convenit individual"
+        },
+        "chatbot": {
+          "label": "Chatbot AI 24/7 din baza de cunoștințe"
+        },
+        "qualify": {
+          "label": "Calificarea lead-urilor după scenariul nișei"
+        },
+        "contacts": {
+          "label": "Contacte pe e-mail sau în CRM"
+        },
+        "scenario": {
+          "label": "Scenariu",
+          "start": "Standard al industriei",
+          "growth": "Standard al industriei",
+          "platform": "Adaptat"
+        },
+        "configurator": {
+          "label": "Configurator AI de cereri"
+        },
+        "crm": {
+          "label": "Asistent CRM"
+        },
+        "followUp": {
+          "label": "Agent follow-up"
+        },
+        "priority": {
+          "label": "Suport prioritar"
+        },
+        "orderStatus": {
+          "label": "Statusuri comenzi pentru clienți"
+        },
+        "content": {
+          "label": "Motor de conținut"
+        },
+        "integrations": {
+          "label": "Integrări custom"
+        },
+        "sla": {
+          "label": "Însoțire dedicată, SLA"
+        },
+        "setup": {
+          "label": "Taxă unică de configurare",
+          "start": "490 €",
+          "growth": "890 €",
+          "platform": "Individual"
+        }
+      }
+    },
+    "faq": [
+      {
+        "q": "Ce se consideră o conversație?",
+        "a": "Un dialog cu un vizitator, indiferent câte mesaje conține. Dacă omul revine peste câteva zile și scrie din nou, este o conversație nouă. Mesajele dumneavoastră de test nu se numără."
+      },
+      {
+        "q": "Ce intră în taxa de configurare?",
+        "a": "Discuția, citirea materialelor rând cu rând, transformarea listei de prețuri în regulile după care agentul calculează, scenariul nișei, brandul pe ofertă și verificarea împreună cu dumneavoastră înainte de lansare. Se plătește o singură dată, la început."
+      },
+      {
+        "q": "Pot schimba pachetul?",
+        "a": "Da, în ambele direcții, de la începutul lunii următoare. La trecerea în sus se plătește diferența de configurare, dacă pachetul nou cere mai multă muncă."
+      },
+      {
+        "q": "Ce se întâmplă dacă depășesc limita de conversații?",
+        "a": "Agentul nu se oprește și clienții nu rămân fără răspuns. Depășirea se acoperă cu un pachet suplimentar de conversații, iar dacă se repetă lună de lună vă propunem trecerea la pachetul următor — de obicei iese mai ieftin."
+      },
+      {
+        "q": "Există un termen minim de contract?",
+        "a": "Nu. Abonamentul este lunar și se poate opri de la luna următoare. Ce se întâmplă după oprire cu datele și cu ofertele deja emise este scris în contract, și îl citiți înainte să semnați."
+      }
+    ]
+  },
+  "pricingPage": {
+    "metaTitle": "Prețuri — agenți AI pe abonament lunar",
+    "metaDescription": "Trei pachete: Start de la 199 €/lună, Growth 449 €/lună și Platformă cu preț individual. Configurarea inițială se plătește o singură dată. Fără termen minim de contract.",
+    "eyebrow": "Prețuri",
+    "title": "Trei pachete, componență fixă",
+    "lead": "Plătiți lunar pentru agenții care rulează. Configurarea inițială — citirea materialelor și transformarea listei de prețuri în reguli de calcul — se plătește o singură dată, la început.",
+    "faqEyebrow": "Întrebări despre prețuri",
+    "faqTitle": "Ce se întreabă înainte de a alege",
+    "closingTitle": "Nu sunteți sigur ce pachet vă trebuie?",
+    "closingLead": "La demonstrație ne uităm la ce vindeți și la câte întrebări primiți, și vă spunem de care pachet aveți nevoie — inclusiv dacă acela este Start."
   }
 }

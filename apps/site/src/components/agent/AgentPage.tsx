@@ -9,6 +9,7 @@ import { SectionHead } from './SectionHead';
 import { WidgetChat } from './WidgetChat';
 import { FeatureIcon } from './FeatureIcon';
 import { INDUSTRIES, industriesForAgent, type Agent } from '@/lib/catalog';
+import { PLAN_FOR_AGENT } from '@/lib/pricing';
 import agentChatbot from '@/../public/images/agent-chatbot.webp';
 
 /** Кадр есть пока только у доступного агента. Остальные ждут своей очереди. */
@@ -37,6 +38,7 @@ export function AgentPage({ agent }: { agent: Agent }) {
   const tStatus = useTranslations('status');
   const tNav = useTranslations('nav');
   const tHomeIndustries = useTranslations('home.industries');
+  const tPlans = useTranslations('plans');
 
   const available = agent.status === 'available';
   const visual = VISUALS[agent.slug];
@@ -88,6 +90,16 @@ export function AgentPage({ agent }: { agent: Agent }) {
               )}
               {available ? tStatus('available') : tStatus('soon')}
             </span>
+
+            {/* С какого пакета агент доступен. Стоит рядом со статусом,
+                а не внизу страницы: «в разработке» без пакета звучит как
+                «когда-нибудь», а с пакетом — как «уже оплачено, ждём». */}
+            <Link
+              href="/pricing"
+              className="rounded-pill border border-white/12 px-3 py-1 font-mono text-[10px] tracking-wider text-chalk-dim uppercase transition-colors hover:border-white/25 hover:text-chalk"
+            >
+              {tPlans('includedIn', { plan: tPlans(`${PLAN_FOR_AGENT[agent.slug]}.name`) })}
+            </Link>
           </div>
 
           <h1 className="enter mt-6 max-w-3xl text-h1 font-medium" style={{ animationDelay: '560ms' }}>

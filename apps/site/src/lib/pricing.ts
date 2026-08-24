@@ -1,44 +1,128 @@
+import type { AgentSlug } from './catalog';
+
 /**
- * Цены.
+ * Тарифы.
  *
- * Единственное место в проекте, где стоят суммы. Не в `messages`: число
- * одинаково по-румынски и по-английски, а лежащее в двух файлах сразу оно
- * однажды разъедется — и разъедется молча, потому что второй язык
- * открывают редко.
+ * Единственное место, где живут суммы, состав пакетов и связь агентов
+ * с пакетами. Карточки на главной, полная страница цен, матрица сравнения
+ * и бейджи «входит в Growth» на страницах агентов читают отсюда. Написанные
+ * в четырёх местах, они разойдутся на первой же правке цены — и разойдутся
+ * молча, потому что все четыре одновременно никто не открывает.
  *
- * Сейчас вместо сумм заглушки `{PRICE}`. Они видны на странице намеренно:
- * забытая заглушка бросается в глаза, забытый ноль — нет.
- *
- * Порядок массива — порядок колонок на странице и на `/pricing`.
+ * Названия и описания пунктов лежат в `messages`: они переводятся. Суммы
+ * не переводятся и потому здесь.
  */
+export type PlanId = 'start' | 'growth' | 'platform';
+
+export interface PlanFeature {
+  /** Ключ строки в `messages.plans.<plan>.features.<key>`. */
+  key: string;
+  /** Агент ещё не вышел. Пакет подключается, агент включается позже. */
+  soon?: boolean;
+}
+
 export interface Plan {
-  id: 'starter' | 'pro' | 'enterprise';
-  /** `null` — цены нет, показывается «по запросу» из messages. */
-  price: string | null;
-  /** Выделенная колонка. Ровно одна: две рекомендации — это уже не совет. */
+  id: PlanId;
+  /** Евро в месяц. `null` — цена по запросу. */
+  price: number | null;
+  /** Разовая настройка, евро. `null` — по договорённости. */
+  setup: number | null;
+  /** Выделенный пакет. Ровно один: две рекомендации — уже не совет. */
   featured?: boolean;
-  /** Ключи строк в `messages.pricing.plans.<id>.features.*`. */
-  features: string[];
+  features: PlanFeature[];
 }
 
 export const PLANS: Plan[] = [
   {
-    id: 'starter',
-    price: '{PRICE}',
-    features: ['oneAgent', 'oneSite', 'branding', 'email'],
+    id: 'start',
+    price: 199,
+    setup: 490,
+    features: [
+      { key: 'chatbot' },
+      { key: 'qualify' },
+      { key: 'contacts' },
+      { key: 'limit' },
+      { key: 'language' },
+    ],
   },
   {
-    id: 'pro',
-    price: '{PRICE}',
+    id: 'growth',
+    price: 449,
+    setup: 890,
     featured: true,
-    features: ['moreAgents', 'configurator', 'offerPdf', 'crm', 'priority'],
+    features: [
+      { key: 'inherits' },
+      { key: 'configurator', soon: true },
+      { key: 'crm', soon: true },
+      { key: 'followUp', soon: true },
+      { key: 'priority' },
+    ],
   },
   {
-    id: 'enterprise',
+    id: 'platform',
     price: null,
-    features: ['volume', 'ownRules', 'contract', 'sla'],
+    setup: null,
+    features: [
+      { key: 'inherits' },
+      { key: 'orderStatus', soon: true },
+      { key: 'content', soon: true },
+      { key: 'integrations' },
+      { key: 'sla' },
+    ],
   },
 ];
 
-/** Разовая плата за настройку. Берётся с плана `pro` и выше. */
-export const SETUP_FEE = '{PRICE}';
+/**
+ * С какого пакета агент доступен.
+ *
+ * Пакеты вложены друг в друга, поэтому хранится нижняя ступень: агент из
+ * `growth` есть и в `platform`. Хранить полный список пакетов у каждого
+ * агента значило бы повторять вложенность шесть раз и однажды ошибиться
+ * в одном месте из шести.
+ */
+export const PLAN_FOR_AGENT: Record<AgentSlug, PlanId> = {
+  chatbot: 'start',
+  configurator: 'growth',
+  'crm-assistant': 'growth',
+  'follow-up': 'growth',
+  'order-status': 'platform',
+  'content-engine': 'platform',
+};
+
+/** Порядок ступеней — для сравнения «доступен начиная с». */
+const ORDER: PlanId[] = ['start', 'growth', 'platform'];
+
+export const planIncludesAgent = (plan: PlanId, agent: AgentSlug) =>
+  ORDER.indexOf(plan) >= ORDER.indexOf(PLAN_FOR_AGENT[agent]);
+
+/**
+ * Строки матрицы сравнения.
+ *
+ * `true` — есть, `false` — нет, строка — значение. `soon` помечает то,
+ * что входит в пакет, но ещё не вышло: пакет подключается сегодня по
+ * сегодняшней цене, агент включается по мере готовности.
+ */
+export interface MatrixRow {
+  key: string;
+  start: boolean | 'value';
+  growth: boolean | 'value';
+  platform: boolean | 'value';
+  soon?: boolean;
+}
+
+export const MATRIX: MatrixRow[] = [
+  { key: 'conversations', start: 'value', growth: 'value', platform: 'value' },
+  { key: 'chatbot', start: true, growth: true, platform: true },
+  { key: 'qualify', start: true, growth: true, platform: true },
+  { key: 'contacts', start: true, growth: true, platform: true },
+  { key: 'scenario', start: 'value', growth: 'value', platform: 'value' },
+  { key: 'configurator', start: false, growth: true, platform: true, soon: true },
+  { key: 'crm', start: false, growth: true, platform: true, soon: true },
+  { key: 'followUp', start: false, growth: true, platform: true, soon: true },
+  { key: 'priority', start: false, growth: true, platform: true },
+  { key: 'orderStatus', start: false, growth: false, platform: true, soon: true },
+  { key: 'content', start: false, growth: false, platform: true, soon: true },
+  { key: 'integrations', start: false, growth: false, platform: true },
+  { key: 'sla', start: false, growth: false, platform: true },
+  { key: 'setup', start: 'value', growth: 'value', platform: 'value' },
+];

@@ -279,49 +279,9 @@
     },
     "pricing": {
       "eyebrow": "Pricing",
-      "title": "A monthly subscription, not an implementation project",
-      "lead": "You pay for the agent that runs. The initial setup is paid once, at the start.",
-      "perMonth": "/ month",
-      "recommended": "Recommended",
-      "setupNote": "Initial setup — {fee}, once: the conversation, reading your price list line by line, the script for your niche and your brand on the quote. Without it the agent would answer from general copy rather than from your prices.",
-      "compare": "Compare the plans",
-      "plans": {
-        "starter": {
-          "name": "Starter",
-          "for": "For a single agent on a single site. This is where most people start.",
-          "cta": "Book a demo",
-          "features": {
-            "oneAgent": "One agent of your choice",
-            "oneSite": "One site",
-            "branding": "Configured on your own materials",
-            "email": "Email support"
-          }
-        },
-        "pro": {
-          "name": "Pro",
-          "for": "For when the agent has to price things, not just answer.",
-          "cta": "Book a demo",
-          "features": {
-            "moreAgents": "Several agents on one account",
-            "configurator": "Request configurator",
-            "offerPdf": "PDF quotes in your brand",
-            "crm": "Requests land in your CRM",
-            "priority": "Priority support"
-          }
-        },
-        "enterprise": {
-          "name": "Enterprise",
-          "priceOnRequest": "On request",
-          "for": "Large volumes, several brands, or your own security requirements.",
-          "cta": "Talk to us",
-          "features": {
-            "volume": "No fixed volume cap",
-            "ownRules": "Your own pricing rules, however complicated",
-            "contract": "Contract and company invoicing",
-            "sla": "Agreed response times"
-          }
-        }
-      }
+      "title": "Three packages, fixed contents",
+      "lead": "You pay monthly for the agents that run. The initial setup is paid once, at the start.",
+      "compare": "Compare the plans"
     },
     "portal": {
       "eyebrow": "The portal",
@@ -707,5 +667,151 @@
         "scale": "The day, hour by hour"
       }
     }
+  },
+  "plans": {
+    "perMonth": "/ month",
+    "setup": "One-off setup fee of €{fee}",
+    "setupCustom": "Setup fee agreed individually",
+    "recommended": "Recommended",
+    "priceOnRequest": "Custom pricing",
+    "soon": "Coming soon",
+    "includedIn": "Included in {plan}",
+    "start": {
+      "name": "Start",
+      "subtitle": "AI assistant",
+      "tagline": "One agent that answers on your behalf, around the clock.",
+      "cta": "Book a demo",
+      "features": {
+        "chatbot": "AI chatbot for your site: 24/7 answers from your knowledge base",
+        "qualify": "Lead qualification following your niche's script",
+        "contacts": "Contact capture, delivered by email or into your CRM",
+        "limit": "Up to 500 conversations a month",
+        "language": "One language, standard industry script"
+      }
+    },
+    "growth": {
+      "name": "Growth",
+      "subtitle": "AI sales",
+      "tagline": "For when the agent has to price things, not just answer.",
+      "cta": "Book a demo",
+      "features": {
+        "inherits": "Everything in Start, up to 2,000 conversations a month",
+        "configurator": "AI request configurator: a structured specification for your sales team",
+        "crm": "CRM assistant: records filled automatically from the correspondence",
+        "followUp": "Follow-up agent: automatic returns to undecided leads",
+        "priority": "Priority support"
+      }
+    },
+    "platform": {
+      "name": "Platform",
+      "subtitle": "Custom",
+      "tagline": "Large volumes, several brands, requirements of your own.",
+      "cta": "Talk to us",
+      "features": {
+        "inherits": "Everything in Growth, with limits agreed individually",
+        "orderStatus": "Order status for customers: automatic notifications at each stage",
+        "content": "Content engine for social media",
+        "integrations": "Custom integrations and adapted scripts",
+        "sla": "Dedicated support, SLA"
+      }
+    },
+    "soonNote": "Agents marked \"coming soon\" are included in the package: you can connect it now, at today's price, and the agents switch on as they are released. The price stays the one you joined at.",
+    "pilot": {
+      "text": "Pilot programme: €0 setup fee for the first clients in each industry.",
+      "cta": "Write to us"
+    },
+    "matrix": {
+      "title": "What each package includes",
+      "lead": "For those comparing in detail. Rows marked \"coming soon\" are included in the package, but the agent has not been released yet.",
+      "feature": "What is included",
+      "yes": "Included",
+      "no": "Not included",
+      "rows": {
+        "conversations": {
+          "label": "Conversations a month",
+          "start": "500",
+          "growth": "2,000",
+          "platform": "Agreed individually"
+        },
+        "chatbot": {
+          "label": "AI chatbot, 24/7, from your knowledge base"
+        },
+        "qualify": {
+          "label": "Lead qualification by niche script"
+        },
+        "contacts": {
+          "label": "Contacts by email or into your CRM"
+        },
+        "scenario": {
+          "label": "Script",
+          "start": "Standard for the industry",
+          "growth": "Standard for the industry",
+          "platform": "Adapted"
+        },
+        "configurator": {
+          "label": "AI request configurator"
+        },
+        "crm": {
+          "label": "CRM assistant"
+        },
+        "followUp": {
+          "label": "Follow-up agent"
+        },
+        "priority": {
+          "label": "Priority support"
+        },
+        "orderStatus": {
+          "label": "Order status for customers"
+        },
+        "content": {
+          "label": "Content engine"
+        },
+        "integrations": {
+          "label": "Custom integrations"
+        },
+        "sla": {
+          "label": "Dedicated support, SLA"
+        },
+        "setup": {
+          "label": "One-off setup fee",
+          "start": "€490",
+          "growth": "€890",
+          "platform": "Individual"
+        }
+      }
+    },
+    "faq": [
+      {
+        "q": "What counts as a conversation?",
+        "a": "One dialogue with a visitor, however many messages it contains. If the person comes back a few days later and writes again, that is a new conversation. Your own test messages are not counted."
+      },
+      {
+        "q": "What does the setup fee cover?",
+        "a": "The conversation, reading your materials line by line, turning your price list into the rules the agent prices by, the script for your niche, your brand on the quote, and checking it together with you before launch. It is paid once, at the start."
+      },
+      {
+        "q": "Can I change package?",
+        "a": "Yes, in both directions, from the start of the following month. Moving up, you pay the difference in setup if the new package takes more work."
+      },
+      {
+        "q": "What happens if I exceed the conversation limit?",
+        "a": "The agent does not stop and customers are not left without an answer. The excess is covered by an additional conversation pack, and if it repeats month after month we suggest moving to the next package — it usually works out cheaper."
+      },
+      {
+        "q": "Is there a minimum contract term?",
+        "a": "No. The subscription is monthly and can be stopped from the following month. What happens to your data and to quotes already issued after you stop is written in the contract, and you read it before signing."
+      }
+    ]
+  },
+  "pricingPage": {
+    "metaTitle": "Pricing — AI agents on a monthly subscription",
+    "metaDescription": "Three packages: Start from €199/month, Growth at €449/month and Platform with custom pricing. The initial setup is paid once. No minimum contract term.",
+    "eyebrow": "Pricing",
+    "title": "Three packages, fixed contents",
+    "lead": "You pay monthly for the agents that run. The initial setup — reading your materials and turning your price list into pricing rules — is paid once, at the start.",
+    "faqEyebrow": "Pricing questions",
+    "faqTitle": "What people ask before choosing",
+    "closingTitle": "Not sure which package you need?",
+    "closingLead": "In the demo we look at what you sell and how many enquiries you get, and tell you which package you need — including when that is Start."
   }
 }
