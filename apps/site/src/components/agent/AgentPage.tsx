@@ -10,6 +10,7 @@ import { WidgetChat } from './WidgetChat';
 import { SpecSheet } from './SpecSheet';
 import { CrmRecord } from './CrmRecord';
 import { FollowUpPlan } from './FollowUpPlan';
+import { OrderStatus } from './OrderStatus';
 import { FeatureIcon } from './FeatureIcon';
 import { INDUSTRIES, industriesForAgent, type Agent } from '@/lib/catalog';
 import { PLAN_FOR_AGENT } from '@/lib/pricing';
@@ -32,6 +33,7 @@ const HERO_VISUAL: Partial<Record<string, (p: { namespace: string }) => React.Re
   configurator: SpecSheet,
   'crm-assistant': CrmRecord,
   'follow-up': FollowUpPlan,
+  'order-status': OrderStatus,
 };
 
 /**

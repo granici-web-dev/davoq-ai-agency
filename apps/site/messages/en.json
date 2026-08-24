@@ -895,6 +895,124 @@
       ],
       "closingTitle": "See how many of your quotes went quiet",
       "closingLead": "At the demo we look at the quotes you sent over the last few months and show you what the agent would have written, when — and at which point it would have stopped."
+    },
+    "order-status": {
+      "metaTitle": "Order status for customers — automatic updates at each stage",
+      "metaDescription": "An AI agent that tells your customer at every stage of the order and gives them a page showing where it stands. It announces delays too, in time. Included in the Growth package.",
+      "title": "Your customer finds out where the order is without phoning",
+      "lead": "At every stage you mark, a short message goes out with a link to the order page. Delays are announced the same way, and whatever you marked as internal stays internal.",
+      "order": {
+        "title": "Order",
+        "number": "No. 4118",
+        "etaLabel": "Estimated delivery",
+        "eta": "12 – 14 November",
+        "stages": [
+          {
+            "name": "Confirmed",
+            "state": "done"
+          },
+          {
+            "name": "Production",
+            "state": "current"
+          },
+          {
+            "name": "Finishing",
+            "state": "next"
+          },
+          {
+            "name": "Delivery",
+            "state": "next"
+          }
+        ],
+        "currentLabel": "Now",
+        "updated": "12 Nov, 09:40",
+        "current": "In production",
+        "text": "The carcasses are assembled. The fronts go for painting next.",
+        "nextLabel": "Next update",
+        "next": "When the order goes into finishing",
+        "note": "This is how your customer sees their order, from a link received by SMS or email. The stages are the ones in your own process, not generic ones."
+      },
+      "featuresTitle": "What it does, concretely",
+      "features": {
+        "stage": {
+          "title": "It tells them at every stage",
+          "text": "The order went into production, came out of finishing, ships tomorrow. The customer finds out when it happens, not when they decide to call."
+        },
+        "task": {
+          "title": "It also says when the date moves",
+          "text": "A delay announced in time costs one phone call. A delay the customer discovers on delivery day costs the next order."
+        },
+        "read": {
+          "title": "On the channel your customer actually reads",
+          "text": "SMS, email, chat. A short message and a link to the order page, which opens with no account and no password."
+        },
+        "handoff": {
+          "title": "When the customer asks, a person answers",
+          "text": "A reply to the message reaches the salesperson who owns the order, with the full context. The agent does not hold that conversation in their place."
+        },
+        "rules": {
+          "title": "What is communicated, and what stays internal",
+          "text": "You choose which stages the customer sees. Costs, suppliers and the real reasons behind a delay go nowhere."
+        },
+        "portal": {
+          "title": "You see it too, in the portal",
+          "text": "What was sent, when, and which orders have been sitting on the same stage too long. The same data the customer sees, plus the part that stays with you."
+        }
+      },
+      "sourcesEyebrow": "How it knows",
+      "sourcesTitle": "How it knows where the order is — and what it does not do",
+      "sourcesYes": {
+        "title": "It finds out from",
+        "items": [
+          "The stages you mark: gone into production, in finishing, ready to ship.",
+          "The system you keep orders in, if it has an API or can send data out.",
+          "The spreadsheet the records live in, if that is where they live — marked in one place only.",
+          "The date in the order and any changes to it, the moment you record them."
+        ]
+      },
+      "sourcesNo": {
+        "title": "It never",
+        "items": [
+          "It does not guess where the order is. If a stage was not marked, the agent says nothing — it does not invent a move that did not happen.",
+          "It does not promise a date you did not give. The date communicated is the one in your order.",
+          "It does not send the customer what you marked as internal: costs, suppliers, the real reasons behind a delay.",
+          "It does not answer questions about the order in your place. It hands them to the person who owns it."
+        ]
+      },
+      "platformsTitle": "It reaches the customer where they read",
+      "platformsLead": "A short message and a link to the order page. The page opens with no account and no password: one order, one link, nothing for the customer to install.",
+      "platforms": [
+        "SMS",
+        "Email",
+        "The chat on your site",
+        "Messaging, where it is connected",
+        "The order page, by link"
+      ],
+      "faqTitle": "What people ask about order status",
+      "faq": [
+        {
+          "q": "How does the agent know where the order is?",
+          "a": "From what you mark. If you keep orders in a system with an API, it reads them from there; if you keep them in a spreadsheet, they are marked there; if you keep them nowhere, they are marked in the portal, from a single screen. What was not marked is not communicated — the agent has no way of knowing on its own what is happening on the shop floor."
+        },
+        {
+          "q": "What happens when an order runs late?",
+          "a": "The delay is announced, if that is what you chose. You either write the reason or you do not: the customer learns that the date moved and what the new one is, not why it moved. What is internal stays internal."
+        },
+        {
+          "q": "Can the customer reply to the message?",
+          "a": "Yes, and the reply reaches the person who owns the order, with the full context. An automatic message you cannot reply to is worse than no message at all."
+        },
+        {
+          "q": "Does the workshop have to learn a new program?",
+          "a": "No. Marking a stage is one tap, from a phone or from the portal. If you already have a system where stages are marked, nothing changes in the way you work."
+        },
+        {
+          "q": "When will it be ready?",
+          "a": "We do not give a date we cannot keep. It is included in the Growth package: connect it now and the order status agent switches on in your account at launch, at the price you joined at."
+        }
+      ],
+      "closingTitle": "See what your order looks like to your customer",
+      "closingLead": "At the demo we take the real stages from your process and show you what messages the customer would get and what they would see on the order page."
     }
   },
   "industryPage": {

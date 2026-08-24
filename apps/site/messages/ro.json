@@ -895,6 +895,124 @@
       ],
       "closingTitle": "Vedeți câte oferte tac în urma dumneavoastră",
       "closingLead": "La demonstrație ne uităm la ofertele trimise în ultimele luni și vă arătăm ce ar fi scris agentul, când — și în ce moment s-ar fi oprit."
+    },
+    "order-status": {
+      "metaTitle": "Statusuri comenzi pentru clienți — anunțuri automate pe etape",
+      "metaDescription": "Agent AI care anunță clientul la fiecare etapă a comenzii și îi dă o pagină cu starea ei. Anunță și întârzierile, la timp. Inclus în pachetul Growth.",
+      "title": "Clientul află unde e comanda fără să sune",
+      "lead": "La fiecare etapă marcată pleacă un mesaj scurt și un link către pagina comenzii. Întârzierile se anunță la fel, iar ce ați marcat ca intern rămâne intern.",
+      "order": {
+        "title": "Comanda",
+        "number": "№ 4118",
+        "etaLabel": "Livrare estimată",
+        "eta": "12 – 14 noiembrie",
+        "stages": [
+          {
+            "name": "Confirmată",
+            "state": "done"
+          },
+          {
+            "name": "Producție",
+            "state": "current"
+          },
+          {
+            "name": "Finisare",
+            "state": "next"
+          },
+          {
+            "name": "Livrare",
+            "state": "next"
+          }
+        ],
+        "currentLabel": "Acum",
+        "updated": "12 nov, 09:40",
+        "current": "În producție",
+        "text": "Corpurile sunt asamblate. Urmează vopsirea fronturilor.",
+        "nextLabel": "Următoarea știre",
+        "next": "Când comanda intră la finisare",
+        "note": "Așa vede clientul comanda lui, după un link primit prin SMS sau e-mail. Etapele sunt cele din procesul dumneavoastră, nu unele generice."
+      },
+      "featuresTitle": "Ce face, concret",
+      "features": {
+        "stage": {
+          "title": "Anunță la fiecare etapă",
+          "text": "Comanda a intrat în producție, a ieșit la finisare, pleacă mâine. Clientul află când se întâmplă, nu când se hotărăște să sune."
+        },
+        "task": {
+          "title": "Spune și când termenul se mută",
+          "text": "O întârziere anunțată la timp costă un telefon. Una descoperită de client în ziua livrării costă comanda următoare."
+        },
+        "read": {
+          "title": "Pe canalul pe care îl citește clientul",
+          "text": "SMS, e-mail, chat. Un mesaj scurt și un link către pagina comenzii, care se deschide fără cont și fără parolă."
+        },
+        "handoff": {
+          "title": "Când clientul întreabă, răspunde un om",
+          "text": "Răspunsul la mesaj ajunge la vânzătorul care ține comanda, cu tot contextul. Agentul nu poartă discuția în locul lui."
+        },
+        "rules": {
+          "title": "Ce se comunică și ce rămâne intern",
+          "text": "Etapele pe care le arătați clientului le alegeți dumneavoastră. Costuri, furnizori și motivele reale ale unei întârzieri nu pleacă nicăieri."
+        },
+        "portal": {
+          "title": "Se vede și la dumneavoastră, în portal",
+          "text": "Ce a fost trimis, când și ce comenzi stau prea mult pe aceeași etapă. Aceleași date pe care le vede clientul, plus cele care rămân la dumneavoastră."
+        }
+      },
+      "sourcesEyebrow": "De unde știe",
+      "sourcesTitle": "De unde știe unde e comanda — și ce nu face",
+      "sourcesYes": {
+        "title": "Află din",
+        "items": [
+          "Etapele pe care le marcați: intrată în producție, la finisare, gata de livrare.",
+          "Sistemul în care țineți comenzile, dacă are un API sau poate trimite date.",
+          "Foaia de calcul în care se ține evidența, dacă acolo se ține — se marchează dintr-un singur loc.",
+          "Termenul din comandă și schimbările lui, în momentul în care le înregistrați."
+        ]
+      },
+      "sourcesNo": {
+        "title": "Nu face",
+        "items": [
+          "Nu ghicește unde e comanda. Dacă etapa nu a fost marcată, agentul tace — nu inventează o mișcare care nu s-a întâmplat.",
+          "Nu promite o dată pe care nu ați dat-o. Termenul comunicat este cel din comanda dumneavoastră.",
+          "Nu trimite clientului ce ați marcat ca intern: costuri, furnizori, motivele reale ale unei întârzieri.",
+          "Nu răspunde în locul dumneavoastră la întrebări despre comandă. Le predă omului care o ține."
+        ]
+      },
+      "platformsTitle": "Ajunge la client acolo unde citește",
+      "platformsLead": "Un mesaj scurt și un link către pagina comenzii. Pagina se deschide fără cont și fără parolă: o comandă, un link, nimic de instalat pentru client.",
+      "platforms": [
+        "SMS",
+        "E-mail",
+        "Chatul de pe site",
+        "Mesagerie, unde este conectată",
+        "Pagina comenzii, prin link"
+      ],
+      "faqTitle": "Ce se întreabă despre statusuri",
+      "faq": [
+        {
+          "q": "De unde știe agentul unde e comanda?",
+          "a": "Din ce marcați dumneavoastră. Dacă țineți comenzile într-un sistem cu API, le citește de acolo; dacă le țineți într-o foaie de calcul, se marchează acolo; dacă nu le țineți nicăieri, se marchează în portal, dintr-un singur ecran. Ce nu a fost marcat nu se comunică — agentul nu are de unde ști singur ce se întâmplă în atelier."
+        },
+        {
+          "q": "Ce se întâmplă când comanda întârzie?",
+          "a": "Se anunță întârzierea, dacă ați ales asta. Motivul îl scrieți dumneavoastră sau nu îl scrieți deloc: clientul află că termenul s-a mutat și data nouă, nu de ce s-a mutat. Ce e intern rămâne intern."
+        },
+        {
+          "q": "Clientul poate răspunde la mesaj?",
+          "a": "Da, iar răspunsul ajunge la omul care ține comanda, cu tot contextul. Un mesaj automat la care nu se poate răspunde este mai rău decât niciun mesaj."
+        },
+        {
+          "q": "Trebuie ca atelierul să învețe un program nou?",
+          "a": "Nu. Marcarea unei etape este o singură apăsare, din telefon sau din portal. Dacă aveți deja un sistem în care se marchează, nu se schimbă nimic în felul în care lucrați."
+        },
+        {
+          "q": "Când este gata?",
+          "a": "Nu dăm o dată pe care nu o putem ține. Este inclus în pachetul Growth: dacă îl conectați acum, agentul de statusuri se activează pe contul dumneavoastră la lansare, la prețul de la conectare."
+        }
+      ],
+      "closingTitle": "Vedeți cum arată comanda dumneavoastră pentru client",
+      "closingLead": "La demonstrație luăm etapele reale din procesul dumneavoastră și vă arătăm ce mesaje ar primi clientul și ce ar vedea în pagina comenzii."
     }
   },
   "industryPage": {
