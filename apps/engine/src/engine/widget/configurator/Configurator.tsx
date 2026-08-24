@@ -314,13 +314,24 @@ function Price({
 }): preact.JSX.Element {
   if (!price) return <span class="cfg-price">{pricing ? t.calculating : ''}</span>;
   const { code, decimals } = config.currency;
+  // Старая цена зачёркнутой: «дешевле» без «чем было» ничего не сообщает.
+  // Пересчитывается от общей суммы, чтобы зачёркнутое и новое были одной
+  // природы — обе с НДС, а не одна с ним, другая без.
+  const wasBani = price.discountBani > 0
+    ? Math.round(price.totalBani * (price.listPriceBani / (price.listPriceBani - price.discountBani)))
+    : 0;
+  const promoLabel = price.promo?.label[locale] ?? (price.promo && Object.values(price.promo.label)[0]);
   // Показывается СУММА К ОПЛАТЕ, и она содержит НДС в обоих режимах: при
   // `add` он к ней прибавлен, при `included` уже сидел внутри. Первая версия
   // подписывала её «plus TVA» — то есть посетитель ждал бы сверху ещё 21%
   // от числа, в котором эти 21% уже есть.
   return (
     <span class="cfg-price">
-      <b>{money(price.totalBani, code, locale, decimals)}</b>
+      <span class="cfg-sum">
+        {wasBani > 0 && <s>{money(wasBani, code, locale, decimals)}</s>}
+        <b>{money(price.totalBani, code, locale, decimals)}</b>
+      </span>
+      {promoLabel && <i class="cfg-promo">{promoLabel}</i>}
       {config.vat.rate > 0 && <i>{t.vatIncluded}</i>}
     </span>
   );

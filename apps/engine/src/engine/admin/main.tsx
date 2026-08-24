@@ -22,6 +22,7 @@ const allScreens = (): Array<[Screen, string]> => [
   ['connectors', t('Conectori')],
   ['chats', t('Conversații')],
   ['analytics', t('Analize')],
+  ['promotions', t('Promoții')],
   ['install', t('Instalare')],
   ['subscription', t('Abonament')],
 ];
@@ -278,10 +279,135 @@ function App(): React.ReactElement {
                onOpened={() => setDeepLink(null)} />
       )}
       {current === 'analytics' && <Analytics />}
+      {current === 'promotions' && <Promotions />}
       {current === 'install' && <Install />}
       {current === 'subscription' && <Subscription />}
       </div>
     </div>
+  );
+}
+
+interface Promotion {
+  id: string; source: 'config' | 'scrape'; state: 'pending' | 'active' | 'rejected' | 'expired';
+  label: Record<string, string>; scope: 'sitewide' | 'models'; modelIds: string[];
+  discount: { percent?: number; bani?: number };
+  validUntil: string | null; sourceUrl?: string; createdAt: string;
+}
+
+/**
+ * Акции.
+ *
+ * Подтверждение — не техническая проверка «парсер прав», а коммерческое
+ * решение: «да, эту скидку ставить в оферты». Поэтому здесь показаны
+ * УСЛОВИЯ, а не то, откуда они взялись: процент, на что распространяется
+ * и до какого числа. Ошибку вида «акция на диваны применена к креслу»
+ * человек видит за секунду, а схема не видит вовсе.
+ *
+ * Пока акция не подтверждена, оферты уходят без скидки. Это правильное
+ * умолчание: оферта без скидки исправима письмом, оферта с чужой скидкой —
+ * уже обязательство.
+ */
+function Promotions(): React.ReactElement {
+  const [items, setItems] = useState<Promotion[] | null>(null);
+  const [busy, setBusy] = useState<string | null>(null);
+  const [error, setError] = useState('');
+
+  const load = useCallback(() => {
+    get<Promotion[]>('/promotions').then(setItems).catch((e: Error) => setError(e.message));
+  }, []);
+  useEffect(load, [load]);
+
+  const decide = async (id: string, state: string): Promise<void> => {
+    setBusy(id);
+    setError('');
+    try {
+      await post(`/promotions/${id}`, { state });
+      load();
+    } catch (e) {
+      setError((e as Error).message);
+    } finally {
+      setBusy(null);
+    }
+  };
+
+  if (!items) return <section className="sheet"><p className="note">{t('Se încarcă…')}</p></section>;
+
+  const pending = items.filter((p) => p.state === 'pending');
+  const rest = items.filter((p) => p.state !== 'pending');
+
+  return (
+    <section className="sheet stack">
+      <h2>{t('Promoții')}</h2>
+      <p className="note">
+        {t('Până la confirmare, reducerea nu intră în oferte — acestea pleacă fără ea.')}
+      </p>
+      {error && <p className="err">{error}</p>}
+
+      {pending.length === 0 && rest.length === 0 && (
+        <p className="note">{t('Nicio promoție încă.')}</p>
+      )}
+
+      {pending.map((p) => (
+        <PromoCard key={p.id} promo={p} busy={busy === p.id} onDecide={decide} />
+      ))}
+      {rest.map((p) => (
+        <PromoCard key={p.id} promo={p} busy={busy === p.id} onDecide={decide} />
+      ))}
+    </section>
+  );
+}
+
+function PromoCard({ promo, busy, onDecide }: {
+  promo: Promotion;
+  busy: boolean;
+  onDecide: (id: string, state: string) => void;
+}): React.ReactElement {
+  const label = Object.values(promo.label)[0] ?? '—';
+  const amount = promo.discount.percent !== undefined
+    ? `−${promo.discount.percent / 100}%`
+    : `−${((promo.discount.bani ?? 0) / 100).toFixed(2)}`;
+  const state = {
+    pending: t('Așteaptă confirmarea'), active: t('Activă'),
+    rejected: t('Respinsă'), expired: t('Expirată'),
+  }[promo.state];
+
+  return (
+    <article className={`promo promo-${promo.state}`}>
+      <div className="promo-head">
+        <b>{label}</b>
+        <span className="tag">{state}</span>
+      </div>
+      <div className="promo-terms">
+        <span className="promo-amount">{amount}</span>
+        {' · '}
+        {promo.scope === 'sitewide' ? t('Toate produsele') : promo.modelIds.join(', ')}
+        {' · '}
+        {promo.validUntil ? `${t('Până la')} ${promo.validUntil}` : t('Fără termen')}
+      </div>
+      <div className="promo-origin">
+        {promo.source === 'scrape' ? t('Găsită pe site') : t('Din configurație')}
+        {promo.sourceUrl && <> · <a href={promo.sourceUrl} target="_blank" rel="noreferrer">{t('Sursa')}</a></>}
+      </div>
+      {promo.state !== 'expired' && (
+        <div className="promo-actions">
+          {promo.state !== 'active' && (
+            <button disabled={busy} onClick={() => onDecide(promo.id, 'active')}>
+              {t('Confirmați')}
+            </button>
+          )}
+          {promo.state === 'pending' && (
+            <button className="ghost" disabled={busy} onClick={() => onDecide(promo.id, 'rejected')}>
+              {t('Respingeți')}
+            </button>
+          )}
+          {promo.state === 'active' && (
+            <button className="ghost" disabled={busy} onClick={() => onDecide(promo.id, 'rejected')}>
+              {t('Opriți')}
+            </button>
+          )}
+        </div>
+      )}
+    </article>
   );
 }
 

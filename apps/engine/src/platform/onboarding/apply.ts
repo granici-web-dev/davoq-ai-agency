@@ -5,6 +5,7 @@ import { randomBytes } from 'node:crypto';
 import { withOwner, withTenant } from '../../engine/db/pool.js';
 import { get as storageGet, put as storagePut } from '../../engine/ingest/storage.js';
 import { configuratorLayer } from '../../products/configurator/onboarding.js';
+import { syncConfigPromotions } from '../../products/configurator/promo/store.js';
 import { loadVertical } from '../../engine/prompt/vertical.js';
 import { PRESETS } from '../../engine/shared/theme.js';
 import { trialEndsAt } from '../../engine/billing/entitlement.js';
@@ -288,6 +289,27 @@ export async function applyClientConfig(
           from: null,
           to: `${Object.keys(configurator.layer).join(', ')} (+${configurator.assets.length} файл(ов))`,
         });
+      }
+
+      /**
+       * Акции из конфига — сразу подтверждённые: YAML правит человек, и
+       * спрашивать его о том же второй раз в панели не за чем. Скрейп кладёт
+       * черновики, и его решает панель.
+       *
+       * Синхронизация идёт всегда, а не только при изменении конфига: акция
+       * могла истечь по сроку, и повторный apply — законный способ вернуть
+       * в строй ту, у которой срок продлили.
+       */
+      const promos = (configurator.layer.promotions ?? {}) as { items?: unknown };
+      if (!dryRun && Array.isArray(promos.items) && promos.items.length > 0) {
+        const r = await syncConfigPromotions(tenantId!, promos.items as never);
+        if (r.created > 0 || r.expired > 0) {
+          applied.push({
+            field: 'promotions',
+            from: null,
+            to: `подтверждено ${r.created}, погашено ${r.expired}`,
+          });
+        }
       }
     }
 

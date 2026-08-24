@@ -138,6 +138,9 @@ input {
 .cfg-price { flex: 1; display: flex; flex-direction: column; align-items: center;
              font-size: 14px; line-height: 1.2; }
 .cfg-price i { font-style: normal; font-size: 11px; opacity: .7; }
+.cfg-sum { display: flex; align-items: baseline; gap: 6px; }
+.cfg-sum s { font-size: 12px; opacity: .55; }
+.cfg-promo { color: var(--cw-primary); opacity: 1; }
 .send.wide { flex: 1; }
 
 .cfg-list { margin: 0; display: flex; flex-direction: column; gap: 6px; }

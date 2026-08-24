@@ -159,6 +159,7 @@ export function configuratorLayer(
   }
 
   if (raw.pricing !== undefined) layer.pricing = raw.pricing;
+  if (raw.promotions !== undefined) layer.promotions = raw.promotions;
 
   // ── Агент ────────────────────────────────────────────────────────────────
   //

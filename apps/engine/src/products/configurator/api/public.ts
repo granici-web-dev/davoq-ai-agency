@@ -10,6 +10,7 @@ import { resolveSelections, type Selections } from '../flow/select.js';
 import { issueOffer, summaryOf } from '../offer/issue.js';
 import { notifyOffer } from '../offer/notify.js';
 import { priceOf } from '../pricing/engine.js';
+import { priceWithPromotion } from '../promo/apply.js';
 import { tenantConfigurator, type TenantConfigurator } from '../tenant.js';
 
 /**
@@ -72,12 +73,18 @@ export function registerConfigurator(app: FastifyInstance): void {
       if (!found) return reply.code(404).send({ error: 'no configurator' });
       const { cfg } = found;
       try {
-        const r = priceOf(cfg.configurator.flow, cfg.configurator.pricing, request.body?.selections ?? {});
+        const { price, promo } = await priceWithPromotion(
+          found.tenant.id, cfg.configurator, request.body?.selections ?? {},
+        );
         return {
-          finalPriceBani: r.finalPriceBani,
-          vatBani: r.vatBani,
-          totalBani: r.totalBani,
-          discountBani: r.discountBani,
+          // Цена до скидки — чтобы виджет мог зачеркнуть старую, а не просто
+          // показать новую: «дешевле» без «чем было» ничего не сообщает.
+          listPriceBani: price.listPriceBani,
+          finalPriceBani: price.finalPriceBani,
+          vatBani: price.vatBani,
+          totalBani: price.totalBani,
+          discountBani: price.discountBani,
+          ...(promo ? { promo: { label: promo.label, validUntil: promo.validUntil } } : {}),
         };
       } catch (err) {
         return reply.code(422).send({ error: (err as Error).message });
@@ -170,6 +177,18 @@ export function registerConfigurator(app: FastifyInstance): void {
     }
 
     const locale = pickLocale(body.locale, tenant.localeDefault, tenant.supportedLocales);
+
+    // Акция выбирается ЗДЕСЬ, на сервере, из подтверждённых и не истёкших.
+    // Виджет о ней не сообщает: он показывает то, что мы ему прислали.
+    let promo;
+    try {
+      ({ promo } = await priceWithPromotion(
+        tenant.id, cfg.configurator, body.selections ?? {}, 'оферта',
+      ));
+    } catch (err) {
+      return reply.code(422).send({ error: (err as Error).message });
+    }
+
     let issued;
     try {
       issued = await issueOffer(cfg.configurator, cfg.offer, {
@@ -178,6 +197,14 @@ export function registerConfigurator(app: FastifyInstance): void {
         contact,
         consentMarketing: body.consentMarketing === true,
         conversationId: body.conversationId,
+        ...(promo ? {
+          discount: 'percent' in promo.discount
+            ? { percent: promo.discount.percent / 100 }
+            : { bani: promo.discount.bani },
+          promoLabel: promo.label[locale] ?? Object.values(promo.label)[0],
+          promoId: promo.id,
+          promoValidUntil: promo.validUntil,
+        } : {}),
       });
     } catch (err) {
       // Неверный выбор — вина запроса; всё остальное — наша.

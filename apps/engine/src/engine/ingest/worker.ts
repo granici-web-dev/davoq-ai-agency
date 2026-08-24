@@ -7,6 +7,7 @@ import { WORKER_HEARTBEAT_KEY } from '../ops/health.js';
 import {
   driveQueue, enqueueRecheck, notifyQueue, recheckQueue, redis, scheduleDriveSync,
   DRIVE_SYNC_MINUTES, scheduleTrialNotices, trialQueue, schedulePurge, purgeQueue,
+  promoQueue, schedulePromoScrape, unschedulePromoScrape, type PromoScrapeJob,
   type DriveSyncJob, type IngestJob, type NotifyJob, type RecheckJob,
 } from './queue.js';
 
@@ -121,6 +122,36 @@ notifyWorker.on('failed', (job, err) =>
   const { CONVERSATION_DAYS, CANCELED_DAYS } = await import('../billing/retention.js');
   console.log(`сроки хранения: переписки ${CONVERSATION_DAYS} дн., ` +
               `данные отменивших ${CANCELED_DAYS} дн.`);
+
+  await schedulePromoScrapes();
+}
+
+/**
+ * Расписание скрейпа акций — по тенантам, у которых он настроен.
+ *
+ * Снятие тоже здесь: клиент убрал `promotions.scrape` из конфига, а джоб
+ * остался бы в Redis и продолжал ходить на его сайт по расписанию, о котором
+ * договорённости больше нет.
+ */
+async function schedulePromoScrapes(): Promise<void> {
+  const { rows } = await withOwner((client) =>
+    client.query<{ id: string; configurator: { promotions?: { scrape?: { everyHours?: number } } } }>(
+      `SELECT id, configurator FROM tenants
+        WHERE status = 'active' AND configurator <> '{}'::jsonb`,
+    ),
+  );
+
+  let scheduled = 0;
+  for (const t of rows) {
+    const hours = t.configurator?.promotions?.scrape?.everyHours;
+    if (typeof hours === 'number') {
+      await schedulePromoScrape(t.id, hours);
+      scheduled += 1;
+    } else {
+      await unschedulePromoScrape(t.id);
+    }
+  }
+  console.log(`скрейп акций настроен у ${scheduled} из ${rows.length} тенант(ов) с конфигуратором`);
 }
 
 /**
@@ -150,6 +181,26 @@ const trialWorker = new Worker(
   { connection: redis, concurrency: 1 },
 );
 trialWorker.on('failed', (job, err) => console.error('trial notices failed', job?.id, err));
+
+/**
+ * Скрейп акций. Одна попытка, а не три: сайт клиента либо отвечает, либо нет,
+ * и повторять запрос к модели за деньги ради того же ответа незачем —
+ * следующий проход всё равно через шесть часов.
+ */
+const promoWorker = new Worker<PromoScrapeJob>(
+  'promo-scrape',
+  async (job) => {
+    const { runPromoScrape } = await import('../../products/configurator/promo/run.js');
+    const r = await runPromoScrape(job.data.tenantId);
+    if (r.failed) console.error(`акции ${job.data.tenantId}: ${r.failed}`);
+    else if (r.created > 0 || r.expired > 0) {
+      console.log(`акции ${job.data.tenantId}: новых ${r.created}, погашено ${r.expired}`);
+    }
+    return r;
+  },
+  { connection: redis, concurrency: 2 },
+);
+promoWorker.on('failed', (job, err) => console.error('promo scrape failed', job?.id, err));
 
 const purgeWorker = new Worker(
   'retention-purge',
@@ -181,11 +232,13 @@ const shutdown = async (): Promise<void> => {
   await notifyWorker.close();
   await trialWorker.close();
   await purgeWorker.close();
+  await promoWorker.close();
   await driveQueue.close();
   await recheckQueue.close();
   await notifyQueue.close();
   await trialQueue.close();
   await purgeQueue.close();
+  await promoQueue.close();
   await redis.quit();
   await pool.end();
   await closeOwnerPool();

@@ -217,6 +217,42 @@ export async function scheduleTrialNotices(): Promise<void> {
 }
 
 /**
+ * Скрейп акций. Период — из конфига тенанта, поэтому расписание заводится
+ * на тенанта, а не одно на всех: у одного распродажа меняется по понедельникам,
+ * у другого — трижды в день перед праздниками.
+ *
+ * Ключ повторения — tenantId: повторный вызов при старте воркера обновляет
+ * расписание, а не заводит второе.
+ */
+export interface PromoScrapeJob { tenantId: string }
+
+export const promoQueue = new Queue<PromoScrapeJob>('promo-scrape', {
+  connection: redis,
+  defaultJobOptions: { attempts: 1, removeOnComplete: { count: 50 }, removeOnFail: { count: 100 } },
+});
+
+export async function schedulePromoScrape(tenantId: string, everyHours: number): Promise<void> {
+  await promoQueue.add('scrape', { tenantId }, {
+    repeat: { every: Math.max(1, everyHours) * 60 * 60_000 },
+    jobId: `promo-${tenantId}`,
+  });
+}
+
+/**
+ * Снятие расписания. Клиент убрал скрейп из конфига — джоб обязан исчезнуть,
+ * иначе он продолжает ходить на сайт, о котором договорённости больше нет.
+ */
+export async function unschedulePromoScrape(tenantId: string): Promise<void> {
+  const repeatable = await promoQueue.getRepeatableJobs();
+  for (const job of repeatable) {
+    if (job.id === `promo-${tenantId}`) await promoQueue.removeRepeatableByKey(job.key);
+  }
+}
+
+export const enqueuePromoScrapeNow = (tenantId: string): Promise<unknown> =>
+  promoQueue.add('scrape', { tenantId });
+
+/**
  * Уборка по срокам хранения. Раз в сутки: сроки считаются днями, и проверять
  * их чаще незачем — а вот пропустить сутки при перезапуске нельзя, поэтому
  * расписание повторяемое, а не «в три часа ночи».

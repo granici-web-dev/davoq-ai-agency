@@ -277,6 +277,20 @@ td.quiet{color:var(--muted-fg);white-space:nowrap}
 .lead-offer b{color:var(--fg)}
 .lead-lines{margin:4px 0 0;padding-left:16px;line-height:1.5}
 
+/* Акции. Карточкой, а не строкой таблицы: подтверждают их редко и вдумчиво,
+   и условия должны читаться целиком, а не помещаться в колонку. */
+.promo{border:1px solid var(--border);border-radius:12px;padding:14px 16px;
+       display:flex;flex-direction:column;gap:6px}
+.promo-expired,.promo-rejected{opacity:.55}
+.promo-head{display:flex;align-items:center;gap:10px}
+.promo-head b{font-size:15px}
+.promo-terms{font-size:14px}
+.promo-amount{font-weight:600;font-variant-numeric:tabular-nums}
+.promo-origin{font-size:12px;color:var(--muted-fg)}
+.promo-actions{display:flex;gap:8px;margin-top:6px}
+/* Подтверждённая обведена акцентом: в списке из десяти видно, какие работают. */
+.promo-active{border-color:var(--accent,var(--fg))}
+
 /* Закрытый пробел — это пара «вопрос-ответ», а не строка таблицы: ответ
    абзацем, и в трёх колонках он либо переносится по два слова, либо уезжает
    за правый край. Список даёт тексту нормальную ширину строки. */

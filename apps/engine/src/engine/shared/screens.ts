@@ -8,7 +8,12 @@
  * Названия здесь не лежат: они переводятся, а перевод — дело панели.
  */
 export const SCREENS = [
-  'kb', 'drive', 'aspect', 'connectors', 'chats', 'analytics', 'install', 'subscription',
+  'kb', 'drive', 'aspect', 'connectors', 'chats', 'analytics',
+  // Акции: экран есть только у тенантов с конфигуратором. Скрывается не
+  // тарифом, а наличием конфигуратора — подтверждать нечего там, где нечего
+  // и применять.
+  'promotions',
+  'install', 'subscription',
 ] as const;
 
 export type Screen = (typeof SCREENS)[number];

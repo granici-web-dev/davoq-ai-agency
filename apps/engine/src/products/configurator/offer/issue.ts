@@ -37,6 +37,8 @@ export interface IssueRequest {
   /** Подтверждённая человеком акция, если есть. */
   discount?: Discount | undefined;
   promoLabel?: string | undefined;
+  promoId?: string | undefined;
+  promoValidUntil?: string | null | undefined;
   now?: Date;
 }
 
@@ -109,7 +111,19 @@ export async function issueOffer(
             totalBani: price.totalBani,
             locale: req.locale,
             consent: { required: true, marketing: req.consentMarketing, at: now.toISOString() },
-            ...(req.promoLabel ? { appliedPromo: req.promoLabel } : {}),
+            /**
+             * Условия акции НА МОМЕНТ РАСЧЁТА, а не ссылка на неё.
+             * Акция потом изменится или истечёт, а оферта останется, и
+             * объяснять покупателю придётся ту скидку, которую он видел.
+             */
+            ...(req.promoLabel ? {
+              appliedPromo: {
+                id: req.promoId ?? null,
+                label: req.promoLabel,
+                validUntil: req.promoValidUntil ?? null,
+                discountBani: price.discountBani,
+              },
+            } : {}),
           }),
         ],
       );

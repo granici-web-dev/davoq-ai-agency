@@ -6,6 +6,7 @@ import { validateFlow, type FlowConfig } from './flow/schema.js';
 import {
   PRICING_DEFAULTS, assertPriceable, validatePricing, type PricingConfig,
 } from './pricing/schema.js';
+import { PROMO_DEFAULTS, validatePromoConfig, type PromoConfig } from './promo/schema.js';
 
 /**
  * Сборка конфигуратора из слоёв: умолчания движка → вертикаль → клиент.
@@ -24,6 +25,8 @@ export interface Configurator {
   pricing: PricingConfig;
   /** Промпт агента. Ниша задаёт, клиент может переопределить своим файлом. */
   agent: AgentConfig;
+  /** Акции: потолок скидки, откуда их читать и заведённые руками. */
+  promotions: PromoConfig;
 }
 
 export interface ConfiguratorSource {
@@ -110,13 +113,21 @@ export function buildConfigurator(src: ConfiguratorSource): Configurator {
   validatePricing(pricing, flow, where);
   assertPriceable(flow, where);
 
+  const promotions = mergeLayers(
+    mergeLayers(PROMO_DEFAULTS as unknown as Json, vertical?.raw.promotions),
+    src.clientLayer !== undefined
+      ? layerSection(src.clientLayer, 'promotions')
+      : client?.raw.promotions,
+  ) as Record<string, unknown>;
+  validatePromoConfig(promotions, where);
+
   const agent = (mergeLayers(
     agentOf(vertical),
     src.clientLayer !== undefined ? layerSection(src.clientLayer, 'agent') : agentOf(client),
   ) ?? {}) as AgentConfig;
   assertAgentPrompt(agent, where);
 
-  return { flow, pricing, agent };
+  return { flow, pricing, agent, promotions };
 }
 
 function layerSection(layer: Json | undefined, key: string): Json | undefined {

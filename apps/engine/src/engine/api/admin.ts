@@ -177,13 +177,20 @@ export function registerAdmin(app: FastifyInstance): void {
     if (!session) return; // отказ по сессии выдаст сам обработчик
 
     const hidden = await withTenant(session.tenantId, async (client) => {
-      const { rows } = await client.query<{ hidden_screens: string[]; plan: string }>(
-        'SELECT hidden_screens, plan FROM tenants WHERE id = $1', [session.tenantId]);
+      const { rows } = await client.query<{
+        hidden_screens: string[]; plan: string; has_configurator: boolean;
+      }>(`SELECT hidden_screens, plan, configurator <> '{}'::jsonb AS has_configurator
+            FROM tenants WHERE id = $1`, [session.tenantId]);
       const row = rows[0];
       if (!row) return [];
       // Тариф проверяется здесь же, а не только в панели: экран, закрытый
       // рисованием, остаётся доступен обычным запросом — это уже находили.
-      return [...row.hidden_screens, ...screensNotInPlan(row.plan)];
+      return [
+        ...row.hidden_screens,
+        ...screensNotInPlan(row.plan),
+        // Акции без конфигуратора подтверждать не для чего: применять их негде.
+        ...(row.has_configurator ? [] : ['promotions']),
+      ];
     });
     if (hidden.includes(screen)) {
       return reply.code(403)
@@ -938,6 +945,32 @@ export function registerAdmin(app: FastifyInstance): void {
       .header('content-disposition', `inline; filename="oferta-${offer.number}.pdf"`)
       .send(pdf);
   });
+
+  /**
+   * Акции.
+   *
+   * Подтверждение — коммерческое решение клиента, а не техническая проверка
+   * «парсер прав». Поэтому кнопки в его панели, а не у нас в конфиге.
+   */
+  app.get('/admin/api/promotions', guarded(async ({ session }) =>
+    (await import('../../products/configurator/promo/store.js'))
+      .listPromotions(session.tenantId)));
+
+  app.post<{ Params: { id: string }; Body: { state?: string } }>(
+    '/admin/api/promotions/:id', guarded(async ({ session, client, request, body }) => {
+      const state = (body as { state?: string }).state;
+      if (state !== 'active' && state !== 'rejected' && state !== 'expired') {
+        throw clientError('promo_bad_state', 'состояние — active, rejected или expired');
+      }
+      const id = (request.params as { id: string }).id;
+      const { decidePromotion } = await import('../../products/configurator/promo/store.js');
+      const done = await decidePromotion(session.tenantId, id, state, session.userId);
+      if (!done) throw clientError('promo_not_found', 'акция не найдена или уже истекла');
+      // Решение по скидке попадает в оферты — оно обязано быть в журнале.
+      await audit(client, session, 'promotion.decide', id, { state });
+      return { ok: true };
+    }),
+  );
 
   // ── 4б. Утверждённые ответы ─────────────────────────────────────────────────
   app.get('/admin/api/approved', guarded(async ({ client }) => listApproved(client)));

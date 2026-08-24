@@ -18,11 +18,14 @@ export interface ConfiguratorConfig {
 }
 
 export interface PriceView {
+  /** Цена до скидки: нужна, чтобы зачеркнуть старую. */
+  listPriceBani: number;
   finalPriceBani: number;
   vatBani: number;
   totalBani: number;
   discountBani: number;
-  promo?: { label: string };
+  /** Подтверждённая акция. Выбирает её сервер — виджет только показывает. */
+  promo?: { label: Record<string, string>; validUntil: string | null };
 }
 
 export type Answers = Record<string, string | string[] | number>;
