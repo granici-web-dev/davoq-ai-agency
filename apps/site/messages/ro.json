@@ -687,6 +687,11 @@
             "text": "A răspuns în ce grupă de preț intră țesătura dintr-o poză de pe Instagram."
           },
           {
+            "time": "16:20",
+            "agent": "Follow-up",
+            "text": "A revenit la clientul care a cerut ofertă acum două săptămâni și a tăcut."
+          },
+          {
             "time": "18:30",
             "agent": "Statusul comenzii",
             "text": "A anunțat clientul că bucătăria a intrat în montaj."
@@ -695,13 +700,9 @@
             "time": "22:14",
             "agent": "Chatbot",
             "text": "A adunat dimensiunile pentru o bucătărie de 3,2 m și a lăsat cererea vânzătorului."
-          },
-          {
-            "time": "Vineri",
-            "agent": "Follow-up",
-            "text": "A revenit la clientul care a cerut ofertă acum două săptămâni și a tăcut."
           }
-        ]
+        ],
+        "scale": "Ziua, ora cu oră"
       }
     }
   }

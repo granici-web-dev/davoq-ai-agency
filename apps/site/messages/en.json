@@ -687,6 +687,11 @@
             "text": "Answered which price group a fabric from an Instagram photo falls into."
           },
           {
+            "time": "16:20",
+            "agent": "Follow-up",
+            "text": "Came back to the customer who asked for a quote two weeks ago and went quiet."
+          },
+          {
             "time": "18:30",
             "agent": "Order status",
             "text": "Told the customer their kitchen had gone into installation."
@@ -695,13 +700,9 @@
             "time": "22:14",
             "agent": "Chatbot",
             "text": "Collected the dimensions for a 3.2 m kitchen and left the request for sales."
-          },
-          {
-            "time": "Friday",
-            "agent": "Follow-up",
-            "text": "Came back to the customer who asked for a quote two weeks ago and went quiet."
           }
-        ]
+        ],
+        "scale": "The day, hour by hour"
       }
     }
   }
