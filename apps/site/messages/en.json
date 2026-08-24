@@ -727,10 +727,6 @@
       }
     },
     "soonNote": "Agents marked \"coming soon\" are included in the package: you can connect it now, at today's price, and the agents switch on as they are released. The price stays the one you joined at.",
-    "pilot": {
-      "text": "Pilot programme: €0 setup fee for the first clients in each industry.",
-      "cta": "Write to us"
-    },
     "matrix": {
       "title": "What each package includes",
       "lead": "For those comparing in detail. Rows marked \"coming soon\" are included in the package, but the agent has not been released yet.",

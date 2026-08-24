@@ -1,7 +1,6 @@
 import { useTranslations } from 'next-intl';
 import { Link } from '@/i18n/routing';
 import { PlanCards } from '@/components/pricing/PlanCards';
-import { DemoButton } from '@/components/ui/DemoButton';
 
 /**
  * Тарифы на главной.
@@ -29,17 +28,15 @@ export function Pricing() {
           <PlanCards />
         </div>
 
+        {/* Оговорка про «в курând» и ссылка на полное сравнение. На
+            главной человек ещё решает, нужен ли ему агент, поэтому
+            матрицы здесь нет — только дверь к ней. */}
         <div className="mt-8 flex flex-col gap-6 lg:flex-row lg:items-start lg:justify-between">
-          <p className="flex flex-wrap items-center gap-x-3 gap-y-2 rounded-card border border-aurora-warm/25 bg-aurora-warm/4 px-5 py-4 text-sm text-chalk">
-            {tPlans('pilot.text')}
-            <DemoButton variant="ghost" size="sm">
-              {tPlans('pilot.cta')}
-            </DemoButton>
-          </p>
+          <p className="max-w-2xl text-sm leading-relaxed text-chalk-dim">{tPlans('soonNote')}</p>
 
           <Link
             href="/pricing"
-            className="group shrink-0 self-start font-mono text-[11px] tracking-wider text-chalk-dim uppercase transition-colors hover:text-chalk lg:self-center"
+            className="group shrink-0 self-start font-mono text-[11px] tracking-wider text-chalk-dim uppercase transition-colors hover:text-chalk"
           >
             {t('compare')}{' '}
             <span className="inline-block transition-transform group-hover:translate-x-1">→</span>

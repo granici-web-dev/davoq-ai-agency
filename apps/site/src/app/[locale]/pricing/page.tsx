@@ -63,23 +63,15 @@ export default async function Page({ params }: { params: Promise<{ locale: strin
             <PlanCards />
           </div>
 
-          {/* Строка про пилот и оговорка про «в курând» стоят сразу под
-              пакетами: обе меняют решение о покупке, и обе должны
-              попасться на глаза до того, как человек уйдёт сравнивать. */}
-          <div
-            className="enter mt-8 flex flex-col gap-6 lg:flex-row lg:items-start lg:justify-between"
+          {/* Оговорка про «в курând» стоит сразу под пакетами: она меняет
+              решение о покупке и должна попасться на глаза до того, как
+              человек уйдёт сравнивать. */}
+          <p
+            className="enter mt-8 max-w-2xl text-sm leading-relaxed text-chalk-dim"
             style={{ animationDelay: '560ms' }}
           >
-            <p className="max-w-2xl text-sm leading-relaxed text-chalk-dim">
-              {tPlans('soonNote')}
-            </p>
-            <p className="flex shrink-0 flex-wrap items-center gap-x-3 gap-y-2 rounded-card border border-aurora-warm/25 bg-aurora-warm/4 px-5 py-4 text-sm text-chalk">
-              {tPlans('pilot.text')}
-              <DemoButton variant="ghost" size="sm">
-                {tPlans('pilot.cta')}
-              </DemoButton>
-            </p>
-          </div>
+            {tPlans('soonNote')}
+          </p>
         </div>
       </section>
 

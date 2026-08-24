@@ -727,10 +727,6 @@
       }
     },
     "soonNote": "Agenții marcați «în curând» sunt incluși în pachet: îl puteți conecta acum, la prețul de azi, iar agenții se activează pe măsură ce ies. Prețul rămâne cel de la conectare.",
-    "pilot": {
-      "text": "Program pilot: taxă de configurare 0 € pentru primii clienți din fiecare industrie.",
-      "cta": "Scrieți-ne"
-    },
     "matrix": {
       "title": "Ce intră în fiecare pachet",
       "lead": "Pentru cei care compară în detaliu. Rândurile marcate «în curând» sunt incluse în pachet, dar agentul încă nu a ieșit.",
