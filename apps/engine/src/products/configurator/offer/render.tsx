@@ -215,8 +215,13 @@ function block(id: BlockId, t: OfferTemplate, txt: OfferText, d: OfferData, s: S
       const scrim = cfg.scrim ?? 0.35;
       // Без фотографии обложка короче: высокая пустая заливка читается
       // как незагрузившаяся картинка, а не как приём.
+      //
+      // 180 pt под фотографию — не вкус, а бюджет страницы: на 210 блок цены
+      // переставал влезать на первый лист и уезжал наверх второго, оставляя
+      // внизу первого пустое место. Клиенту, которому нужна обложка крупнее,
+      // достаточно задать `hero.height`.
       return (
-        <View style={[s.hero, { height: cfg.height ?? (cfg.image ? 210 : 120) }]} key={id}>
+        <View style={[s.hero, { height: cfg.height ?? (cfg.image ? 180 : 120) }]} key={id}>
           {cfg.image ? <Image src={cfg.image} style={s.heroImage} /> : null}
           {cfg.image && scrim > 0
             ? <View style={[s.heroScrim, { backgroundColor: `rgba(0, 0, 0, ${scrim})` }]} />
