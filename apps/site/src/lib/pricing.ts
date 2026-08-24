@@ -52,6 +52,8 @@ export const PLANS: Plan[] = [
       { key: 'configurator', soon: true },
       { key: 'crm', soon: true },
       { key: 'followUp', soon: true },
+      { key: 'orderStatus', soon: true },
+      { key: 'content', soon: true },
       { key: 'priority' },
     ],
   },
@@ -61,10 +63,11 @@ export const PLANS: Plan[] = [
     setup: null,
     features: [
       { key: 'inherits' },
-      { key: 'orderStatus', soon: true },
-      { key: 'content', soon: true },
-      { key: 'integrations' },
-      { key: 'custom' },
+      { key: 'customAgent' },
+      { key: 'automation' },
+      { key: 'website' },
+      { key: 'seo' },
+      { key: 'marketing' },
       { key: 'sla' },
     ],
   },
@@ -77,14 +80,18 @@ export const PLANS: Plan[] = [
  * `growth` есть и в `platform`. Хранить полный список пакетов у каждого
  * агента значило бы повторять вложенность шесть раз и однажды ошибиться
  * в одном месте из шести.
+ *
+ * Все шесть готовых агентов помещаются в первые два пакета. Третий — не
+ * следующая ступень по количеству агентов, а другая работа: заказная
+ * разработка, сайт, SEO, маркетинг.
  */
 export const PLAN_FOR_AGENT: Record<AgentSlug, PlanId> = {
   chatbot: 'start',
   configurator: 'growth',
   'crm-assistant': 'growth',
   'follow-up': 'growth',
-  'order-status': 'platform',
-  'content-engine': 'platform',
+  'order-status': 'growth',
+  'content-engine': 'growth',
 };
 
 /** Порядок ступеней — для сравнения «доступен начиная с». */
@@ -111,18 +118,21 @@ export interface MatrixRow {
 export const MATRIX: MatrixRow[] = [
   { key: 'conversations', start: 'value', growth: 'value', platform: 'value' },
   { key: 'chatbot', start: true, growth: true, platform: true },
+  { key: 'scenario', start: 'value', growth: 'value', platform: 'value' },
   { key: 'qualify', start: false, growth: true, platform: true },
   { key: 'contacts', start: false, growth: true, platform: true },
   { key: 'portal', start: false, growth: true, platform: true },
-  { key: 'scenario', start: 'value', growth: 'value', platform: 'value' },
   { key: 'configurator', start: false, growth: true, platform: true, soon: true },
   { key: 'crm', start: false, growth: true, platform: true, soon: true },
   { key: 'followUp', start: false, growth: true, platform: true, soon: true },
+  { key: 'orderStatus', start: false, growth: true, platform: true, soon: true },
+  { key: 'content', start: false, growth: true, platform: true, soon: true },
   { key: 'priority', start: false, growth: true, platform: true },
-  { key: 'orderStatus', start: false, growth: false, platform: true, soon: true },
-  { key: 'content', start: false, growth: false, platform: true, soon: true },
-  { key: 'integrations', start: false, growth: false, platform: true },
-  { key: 'custom', start: false, growth: false, platform: true },
+  { key: 'customAgent', start: false, growth: false, platform: true },
+  { key: 'automation', start: false, growth: false, platform: true },
+  { key: 'website', start: false, growth: false, platform: true },
+  { key: 'seo', start: false, growth: false, platform: true },
+  { key: 'marketing', start: false, growth: false, platform: true },
   { key: 'sla', start: false, growth: false, platform: true },
   { key: 'setup', start: 'value', growth: 'value', platform: 'value' },
 ];

@@ -690,7 +690,7 @@
     "growth": {
       "name": "Growth",
       "subtitle": "AI sales",
-      "tagline": "For when the agent has to price things, not just answer.",
+      "tagline": "All of our agents, on one account.",
       "cta": "Book a demo",
       "features": {
         "inherits": "Everything in Start, up to 2,000 conversations a month",
@@ -700,20 +700,23 @@
         "configurator": "AI request configurator: a structured specification for your sales team",
         "crm": "CRM assistant: records filled automatically from the correspondence",
         "followUp": "Follow-up agent: automatic returns to undecided leads",
+        "orderStatus": "Order status for customers: automatic notifications at each stage",
+        "content": "Content engine for social media",
         "priority": "Priority support"
       }
     },
     "platform": {
       "name": "Platform",
       "subtitle": "Custom",
-      "tagline": "Large volumes, several brands, requirements of your own.",
+      "tagline": "For when you need something that does not exist yet.",
       "cta": "Talk to us",
       "features": {
         "inherits": "Everything in Growth, with limits agreed individually",
-        "orderStatus": "Order status for customers: automatic notifications at each stage",
-        "content": "Content engine for social media",
-        "integrations": "Custom integrations and adapted scripts",
-        "custom": "Custom agents, any automation — including a new website, built by us",
+        "customAgent": "Any agent, built to your order",
+        "automation": "Bespoke automations and integrations with the systems you already use",
+        "website": "A new website, or a rebuild of the one you have",
+        "seo": "SEO: structure, copy, speed, rankings",
+        "marketing": "Digital marketing: campaigns, content, analytics",
         "sla": "Dedicated support, SLA"
       }
     },
@@ -738,6 +741,12 @@
         "chatbot": {
           "label": "AI chatbot, 24/7, from your knowledge base"
         },
+        "scenario": {
+          "label": "Script",
+          "start": "Standard for the industry",
+          "growth": "Standard for the industry",
+          "platform": "Adapted"
+        },
         "qualify": {
           "label": "Lead qualification by niche script"
         },
@@ -746,12 +755,6 @@
         },
         "portal": {
           "label": "Portal with leads, quotes and statistics"
-        },
-        "scenario": {
-          "label": "Script",
-          "start": "Standard for the industry",
-          "growth": "Standard for the industry",
-          "platform": "Adapted"
         },
         "configurator": {
           "label": "AI request configurator"
@@ -762,20 +765,29 @@
         "followUp": {
           "label": "Follow-up agent"
         },
-        "priority": {
-          "label": "Priority support"
-        },
         "orderStatus": {
           "label": "Order status for customers"
         },
         "content": {
           "label": "Content engine"
         },
-        "integrations": {
-          "label": "Custom integrations"
+        "priority": {
+          "label": "Priority support"
         },
-        "custom": {
-          "label": "Custom agents, automations, a new website"
+        "customAgent": {
+          "label": "Agent built to order"
+        },
+        "automation": {
+          "label": "Bespoke automations and integrations"
+        },
+        "website": {
+          "label": "New or rebuilt website"
+        },
+        "seo": {
+          "label": "SEO"
+        },
+        "marketing": {
+          "label": "Digital marketing"
         },
         "sla": {
           "label": "Dedicated support, SLA"

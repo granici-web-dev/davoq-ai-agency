@@ -690,7 +690,7 @@
     "growth": {
       "name": "Growth",
       "subtitle": "Vânzări AI",
-      "tagline": "Când agentul trebuie să și calculeze, nu doar să răspundă.",
+      "tagline": "Toți agenții noștri, pe un singur cont.",
       "cta": "Cere o demonstrație",
       "features": {
         "inherits": "Tot din Start, până la 2 000 de conversații pe lună",
@@ -700,20 +700,23 @@
         "configurator": "Configurator AI de cereri: specificație structurată pentru echipa de vânzări",
         "crm": "Asistent CRM: completare automată a fișelor din corespondență",
         "followUp": "Agent follow-up: reveniri automate la lead-urile indecise",
+        "orderStatus": "Statusuri comenzi pentru clienți: notificări automate pe etape",
+        "content": "Motor de conținut pentru social media",
         "priority": "Suport prioritar"
       }
     },
     "platform": {
       "name": "Platformă",
       "subtitle": "Custom",
-      "tagline": "Volume mari, mai multe branduri, cerințe proprii.",
+      "tagline": "Când aveți nevoie de ceva ce nu există încă.",
       "cta": "Discută cu noi",
       "features": {
         "inherits": "Tot din Growth, limite convenite individual",
-        "orderStatus": "Statusuri comenzi pentru clienți: notificări automate pe etape",
-        "content": "Motor de conținut pentru social media",
-        "integrations": "Integrări custom și adaptarea scenariilor",
-        "custom": "Agenți personalizați, orice automatizare — inclusiv un site nou, construit de noi",
+        "customAgent": "Orice agent, construit pe comanda dumneavoastră",
+        "automation": "Automatizări la comandă și integrări cu sistemele pe care le folosiți",
+        "website": "Site nou sau refacerea celui existent",
+        "seo": "SEO: structură, texte, viteză, poziții",
+        "marketing": "Marketing digital: campanii, conținut, analitică",
         "sla": "Însoțire dedicată, SLA"
       }
     },
@@ -738,6 +741,12 @@
         "chatbot": {
           "label": "Chatbot AI 24/7 din baza de cunoștințe"
         },
+        "scenario": {
+          "label": "Scenariu",
+          "start": "Standard al industriei",
+          "growth": "Standard al industriei",
+          "platform": "Adaptat"
+        },
         "qualify": {
           "label": "Calificarea lead-urilor după scenariul nișei"
         },
@@ -746,12 +755,6 @@
         },
         "portal": {
           "label": "Portal cu lead-uri, oferte și statistici"
-        },
-        "scenario": {
-          "label": "Scenariu",
-          "start": "Standard al industriei",
-          "growth": "Standard al industriei",
-          "platform": "Adaptat"
         },
         "configurator": {
           "label": "Configurator AI de cereri"
@@ -762,20 +765,29 @@
         "followUp": {
           "label": "Agent follow-up"
         },
-        "priority": {
-          "label": "Suport prioritar"
-        },
         "orderStatus": {
           "label": "Statusuri comenzi pentru clienți"
         },
         "content": {
           "label": "Motor de conținut"
         },
-        "integrations": {
-          "label": "Integrări custom"
+        "priority": {
+          "label": "Suport prioritar"
         },
-        "custom": {
-          "label": "Agenți personalizați, automatizări, site nou"
+        "customAgent": {
+          "label": "Agent construit pe comandă"
+        },
+        "automation": {
+          "label": "Automatizări și integrări la comandă"
+        },
+        "website": {
+          "label": "Site nou sau refăcut"
+        },
+        "seo": {
+          "label": "SEO"
+        },
+        "marketing": {
+          "label": "Marketing digital"
         },
         "sla": {
           "label": "Însoțire dedicată, SLA"
