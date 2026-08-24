@@ -266,32 +266,32 @@
     },
     "onboarding": {
       "eyebrow": "Cum începe",
-      "title": "De la cerere la agent pe site, în patru pași",
+      "title": "De la prima discuție la agent pe site",
       "lead": "Nu este un proiect de implementare. Nu aveți nevoie de programator, de departament IT sau de un site nou — agentul se așază peste ce aveți acum.",
       "timeLabel": "Timpul dumneavoastră",
       "steps": {
-        "request": {
-          "title": "Lăsați o cerere",
-          "text": "Un formular scurt: ce vindeți și pe ce site. Vă răspundem cu pașii pentru nișa dumneavoastră, nu cu o broșură.",
-          "time": "Două minute"
+        "talk": {
+          "title": "Discuția",
+          "text": "Ce vindeți, cum se calculează prețul la dumneavoastră și ce vă întreabă oamenii cel mai des. Nu trebuie să pregătiți nimic dinainte.",
+          "time": "30–40 de minute"
         },
-        "checklist": {
-          "title": "Primiți checklistul",
-          "text": "O listă concretă: lista de prețuri, fișele de produs, termenele, condițiile de livrare și garanție. Le încărcați așa cum sunt — Excel, PDF, Word, poze.",
-          "time": "O oră, în ritmul dumneavoastră"
+        "materials": {
+          "title": "Materialele",
+          "text": "Site, fișe de produs, lista de prețuri, condiții. În forma în care există — Excel, PDF, Word, poze. Să le punem în ordine este treaba noastră.",
+          "time": "Cât durează un e-mail"
         },
-        "portal": {
-          "title": "Primiți acces în portal",
-          "text": "Acolo vedeți agentul deja configurat pe materialele dumneavoastră. Îl testați ca un client obișnuit și corectați ce nu sună a dumneavoastră. Tot acolo ajung cererile și ofertele.",
+        "config": {
+          "title": "Configurarea",
+          "text": "Scenariul nișei, regulile de preț, brandul pe ofertă. Vedeți agentul înainte să îl vadă clienții și corectați ce nu sună a dumneavoastră.",
           "time": "O jumătate de oră de verificat"
         },
-        "script": {
-          "title": "Copiați scriptul din portal",
-          "text": "O linie de cod, pe care o puneți pe site. Widgetul rulează izolat de stilurile paginii, deci nu strică nimic din ce aveți. Dacă nu aveți cui, îl punem noi.",
+        "embed": {
+          "title": "O linie de cod",
+          "text": "Un script pe site. Widgetul rulează izolat de stilurile paginii, deci nu strică nimic din ce aveți. Dacă nu aveți cui, îl punem noi.",
           "time": "Câteva minute"
         }
       },
-      "total": "În total, aproximativ două ore din timpul dumneavoastră. Partea grea — să transformăm lista de prețuri în regulile după care agentul calculează — rămâne la noi.",
+      "total": "În total, de obicei sub două ore din timpul dumneavoastră. Restul este la noi — inclusiv partea neplăcută, în care lista de prețuri trebuie citită rând cu rând.",
       "priceLink": "Costul configurării inițiale"
     }
   }
