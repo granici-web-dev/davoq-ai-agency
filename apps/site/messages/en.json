@@ -125,6 +125,13 @@
         "text": "Tell us what the agent should do in your business and we will tell you whether it can be done.",
         "cta": "Write to us"
       }
+    },
+    "industries": {
+      "eyebrow": "Industries",
+      "title": "Configured for your niche, not \"for any business\".",
+      "lead": "The same agent, a different script: different questions, different materials, a different route to the price. Pick your industry and see what the conversation looks like.",
+      "otherText": "We work in niches that are not on this list too. If the price has to be calculated, the script can be configured.",
+      "otherCta": "Write to us"
     }
   }
 }

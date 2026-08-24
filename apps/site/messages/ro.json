@@ -125,6 +125,13 @@
         "text": "Spuneți-ne ce ar trebui să facă agentul în afacerea dumneavoastră și vă spunem dacă se poate.",
         "cta": "Scrieți-ne"
       }
+    },
+    "industries": {
+      "eyebrow": "Industrii",
+      "title": "Configurat pentru nișa dumneavoastră, nu «pentru orice afacere».",
+      "lead": "Același agent, alt scenariu: alte întrebări, alte materiale, alt mod de a ajunge la preț. Alegeți industria și vedeți cum arată conversația.",
+      "otherText": "Lucrăm și în nișe care nu sunt în listă. Dacă prețul se calculează, scenariul se poate configura.",
+      "otherCta": "Scrieți-ne"
     }
   }
 }

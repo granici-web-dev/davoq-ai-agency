@@ -2,6 +2,7 @@ import { setRequestLocale } from 'next-intl/server';
 import { Hero } from '@/components/home/Hero';
 import { Problem } from '@/components/home/Problem';
 import { Agents } from '@/components/home/Agents';
+import { Industries } from '@/components/home/Industries';
 
 /**
  * Главная — сборка секций, и только.
@@ -23,6 +24,7 @@ export default async function HomePage({
       <Hero />
       <Problem />
       <Agents />
+      <Industries />
     </>
   );
 }
