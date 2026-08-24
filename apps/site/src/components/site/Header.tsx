@@ -4,6 +4,7 @@ import { useEffect, useState } from 'react';
 import { useLocale, useTranslations } from 'next-intl';
 import { Link, usePathname } from '@/i18n/routing';
 import { AGENTS, INDUSTRIES } from '@/lib/catalog';
+import { Cta } from '@/components/ui/Cta';
 
 /**
  * Шапка.
@@ -158,12 +159,15 @@ export function Header() {
 
         <div className="flex items-center gap-2">
           <LocaleSwitch />
-          <Link
-            href="/contact"
-            className="hidden rounded-pill bg-chalk px-5 py-2.5 text-sm font-medium text-ink-950 transition-transform hover:scale-[1.03] sm:inline-flex"
-          >
-            {t('cta')}
-          </Link>
+          {/* Прячем обёрткой, а не классом на самой кнопке: `hidden` из
+              пропса конкурировал бы с `inline-flex` внутри компонента,
+              и кто победит — решает порядок правил в собранном CSS,
+              а не порядок слов в строке классов. */}
+          <div className="hidden sm:block">
+            <Cta href="/contact" size="sm">
+              {t('cta')}
+            </Cta>
+          </div>
           <button
             type="button"
             aria-label={mobile ? t('closeMenu') : t('openMenu')}
@@ -208,12 +212,9 @@ export function Header() {
                 </Link>
               ))}
             </div>
-            <Link
-              href="/contact"
-              className="mt-4 block rounded-pill bg-chalk px-5 py-3 text-center text-sm font-medium text-ink-950"
-            >
+            <Cta href="/contact" className="mt-4 w-full">
               {t('cta')}
-            </Link>
+            </Cta>
           </div>
         </div>
       )}

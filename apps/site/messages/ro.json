@@ -90,5 +90,30 @@
     "learnMore": "Află mai multe",
     "seeAll": "Vezi toate",
     "language": "Limbă"
+  },
+  "home": {
+    "hero": {
+      "title": "Agenți AI pentru afaceri unde prețul se calculează",
+      "lead": "Închiriați agentul de care aveți nevoie — configurat pentru nișa și brandul dumneavoastră, pe abonament lunar. Fără proiect de implementare și fără echipă tehnică.",
+      "ctaPrimary": "Cere o demonstrație",
+      "ctaSecondary": "Vezi agenții",
+      "note": "Chatbot AI — disponibil acum. Ceilalți cinci agenți — în curând."
+    },
+    "problem": {
+      "eyebrow": "Problema",
+      "title": "Oferta se calculează. Clientul, între timp, întreabă în altă parte.",
+      "afterHours": {
+        "title": "Întrebarea vine după program",
+        "text": "Cele mai multe cereri ajung seara și în weekend. Răspunsul pleacă a doua zi dimineața — când omul a scris deja la încă trei firme și compară."
+      },
+      "everyRequestDiffers": {
+        "title": "Fiecare cerere e altfel",
+        "text": "Dimensiuni, materiale, termene, buget. Până nu le aveți pe toate, nu aveți ce calcula — și fiecare clarificare mai costă o zi."
+      },
+      "sameAnswers": {
+        "title": "Vânzătorul repetă aceleași zece răspunsuri",
+        "text": "Timpul lui pleacă în întrebări la care răspunsul e mereu același, nu în ofertele care chiar se închid."
+      }
+    }
   }
 }

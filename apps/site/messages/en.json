@@ -90,5 +90,30 @@
     "learnMore": "Learn more",
     "seeAll": "See all",
     "language": "Language"
+  },
+  "home": {
+    "hero": {
+      "title": "AI agents for businesses where the price is calculated",
+      "lead": "Rent the agent you need — configured for your niche and your brand, on a monthly subscription. No implementation project, no technical team.",
+      "ctaPrimary": "Book a demo",
+      "ctaSecondary": "See the agents",
+      "note": "AI chatbot — available now. The other five agents — coming soon."
+    },
+    "problem": {
+      "eyebrow": "The problem",
+      "title": "The quote is being worked out. Meanwhile the customer is asking somewhere else.",
+      "afterHours": {
+        "title": "The question arrives after hours",
+        "text": "Most enquiries land in the evening and at weekends. The answer goes out the next morning — by which time the person has written to three other firms and is comparing."
+      },
+      "everyRequestDiffers": {
+        "title": "Every enquiry is different",
+        "text": "Dimensions, materials, lead times, budget. Until you have all of them there is nothing to price — and each round of clarification costs another day."
+      },
+      "sameAnswers": {
+        "title": "Your salesperson repeats the same ten answers",
+        "text": "Their time goes into questions whose answer never changes, instead of the quotes that actually close."
+      }
+    }
   }
 }
