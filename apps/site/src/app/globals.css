@@ -173,3 +173,38 @@
     color: var(--color-chalk-faint);
   }
 }
+
+@layer components {
+  /**
+   * Затемнение поверх фотографии героя.
+   *
+   * Два градиента, а не один. Вертикальный гасит небо в правом верхнем углу —
+   * самое светлое место кадра — и растворяет нижнюю кромку в фоне страницы,
+   * чтобы секция не обрывалась линией. Горизонтальный держит контраст под
+   * заголовком слева независимо от того, что попало в кадр.
+   *
+   * Свечение `.aurora` под фотографию не ставится: источник света в кадре
+   * уже есть, и второй начинает с ним спорить. Аврора остаётся для секций
+   * без фотографии.
+   */
+  .hero-scrim {
+    position: absolute;
+    inset: 0;
+    pointer-events: none;
+    background:
+      linear-gradient(
+        180deg,
+        var(--color-ink-950) 0%,
+        color-mix(in oklab, var(--color-ink-950) 72%, transparent) 28%,
+        color-mix(in oklab, var(--color-ink-950) 20%, transparent) 52%,
+        color-mix(in oklab, var(--color-ink-950) 88%, transparent) 88%,
+        var(--color-ink-950) 100%
+      ),
+      linear-gradient(
+        90deg,
+        color-mix(in oklab, var(--color-ink-950) 82%, transparent) 0%,
+        color-mix(in oklab, var(--color-ink-950) 30%, transparent) 45%,
+        transparent 70%
+      );
+  }
+}
