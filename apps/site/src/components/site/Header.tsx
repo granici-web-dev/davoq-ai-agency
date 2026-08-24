@@ -73,6 +73,19 @@ export function Header() {
 
   return (
     <header className="fixed inset-x-0 top-0 z-50 px-4 pt-4 sm:pt-5">
+      {/* Затемнение под шапкой. Капсула висит над страницей, и без него
+          содержимое въезжает в верхнюю кромку экрана и режется пополам:
+          видно нижнюю половину строки, которой сверху нет.
+
+          Появляется только при прокрутке. На первом экране затемнять
+          нечего — там уже стоит своё, под кадром героя. */}
+      <div
+        className={`pointer-events-none fixed inset-x-0 top-0 -z-10 h-32 bg-linear-to-b from-ink-950 via-ink-950/80 to-transparent transition-opacity duration-300 ${
+          scrolled ? 'opacity-100' : 'opacity-0'
+        }`}
+        aria-hidden
+      />
+
       <a
         href="#main"
         className="sr-only focus:not-sr-only focus:absolute focus:left-6 focus:top-6 focus:z-50 focus:rounded-full focus:bg-ink-800 focus:px-4 focus:py-2 focus:text-sm"
@@ -92,8 +105,8 @@ export function Header() {
             она висит над героем и не должна его загораживать. */}
         <nav
           aria-label={t('agents')}
-          className={`hidden items-center rounded-pill border border-white/8 px-2 py-1.5 backdrop-blur-xl transition-colors duration-300 lg:flex ${
-            scrolled ? 'bg-ink-900/80' : 'bg-white/4'
+          className={`glass hidden items-center rounded-pill px-2 py-1.5 transition-colors duration-300 lg:flex ${
+            scrolled ? 'glass-dense' : ''
           }`}
           onMouseLeave={() => setOpen(null)}
         >
@@ -112,31 +125,31 @@ export function Header() {
               </Link>
 
               {open === key && (
-                <div className="absolute left-1/2 top-full w-[min(30rem,80vw)] -translate-x-1/2 pt-3">
-                  <div className="card overflow-hidden p-2">
-                    <ul className="grid gap-0.5">
+                <div className="absolute left-1/2 top-full w-[min(34rem,86vw)] -translate-x-1/2 pt-3">
+                  <div className="glass-panel overflow-hidden rounded-card p-3">
+                    <ul className="grid gap-1">
                       {menus[key].items.map((item) => (
                         <li key={item.href}>
                           <Link
                             href={item.href}
-                            className="group flex flex-col gap-0.5 rounded-xl px-3 py-2.5 transition-colors hover:bg-white/5"
+                            className="group flex flex-col gap-1.5 rounded-xl px-4 py-3.5 transition-colors hover:bg-white/6"
                           >
-                            <span className="flex items-center gap-2 text-sm text-chalk">
+                            <span className="flex items-center gap-2.5 text-sm text-chalk">
                               {item.name}
                               {item.badge && (
-                                <span className="rounded-pill border border-white/12 px-2 py-0.5 font-mono text-[10px] tracking-wider uppercase text-chalk-faint">
+                                <span className="rounded-pill border border-white/15 px-2.5 py-0.5 font-mono text-[10px] tracking-wider uppercase text-chalk-faint">
                                   {item.badge}
                                 </span>
                               )}
                             </span>
-                            <span className="text-xs leading-relaxed text-chalk-faint">{item.short}</span>
+                            <span className="text-xs leading-relaxed text-chalk-dim">{item.short}</span>
                           </Link>
                         </li>
                       ))}
                     </ul>
                     <Link
                       href={menus[key].href}
-                      className="mt-1 block rounded-xl px-3 py-2 font-mono text-[11px] tracking-wider uppercase text-chalk-dim transition-colors hover:bg-white/5 hover:text-chalk"
+                      className="mt-2 block rounded-xl border-t border-white/8 px-4 pt-4 pb-2 font-mono text-[11px] tracking-wider uppercase text-chalk-dim transition-colors hover:text-chalk"
                     >
                       {menus[key].all} →
                     </Link>
@@ -171,7 +184,7 @@ export function Header() {
             aria-label={mobile ? t('closeMenu') : t('openMenu')}
             aria-expanded={mobile}
             onClick={() => setMobile((v) => !v)}
-            className="flex size-10 items-center justify-center rounded-pill border border-white/10 bg-white/4 backdrop-blur-xl lg:hidden"
+            className="glass flex size-10 items-center justify-center rounded-pill lg:hidden"
           >
             <span className="relative block h-3 w-4">
               <span className={`absolute inset-x-0 top-0 h-px bg-chalk transition-transform ${mobile ? 'translate-y-1.5 rotate-45' : ''}`} />
@@ -183,14 +196,14 @@ export function Header() {
 
       {mobile && (
         <div className="mx-auto mt-3 max-w-7xl lg:hidden">
-          <div className="card max-h-[70vh] overflow-y-auto p-4">
+          <div className="glass-panel max-h-[70vh] overflow-y-auto rounded-card p-5">
             {(['agents', 'industries'] as const).map((key) => (
               <div key={key} className="mb-5">
                 <p className="eyebrow mb-2">{menus[key].label}</p>
                 <ul className="grid gap-1">
                   {menus[key].items.map((item) => (
                     <li key={item.href}>
-                      <Link href={item.href} className="flex items-center gap-2 rounded-lg px-2 py-2 text-sm text-chalk-dim hover:text-chalk">
+                      <Link href={item.href} className="flex items-center gap-2.5 rounded-lg px-3 py-2.5 text-sm text-chalk-dim hover:bg-white/6 hover:text-chalk">
                         {item.name}
                         {item.badge && (
                           <span className="rounded-pill border border-white/12 px-2 py-0.5 font-mono text-[10px] uppercase text-chalk-faint">
@@ -205,7 +218,7 @@ export function Header() {
             ))}
             <div className="grid gap-1 border-t border-white/8 pt-4">
               {(['pricing', 'about', 'contact'] as const).map((key) => (
-                <Link key={key} href={`/${key}`} className="rounded-lg px-2 py-2 text-sm text-chalk-dim hover:text-chalk">
+                <Link key={key} href={`/${key}`} className="rounded-lg px-3 py-2.5 text-sm text-chalk-dim hover:bg-white/6 hover:text-chalk">
                   {t(key)}
                 </Link>
               ))}
@@ -228,7 +241,7 @@ function LocaleSwitch() {
   const pathname = usePathname();
   const active = useLocale();
   return (
-    <div className="flex items-center rounded-pill border border-white/8 bg-white/4 p-0.5 font-mono text-[11px] uppercase backdrop-blur-xl">
+    <div className="glass flex items-center rounded-pill p-0.5 font-mono text-[11px] uppercase">
       {(['ro', 'en'] as const).map((code) => (
         <Link
           key={code}
