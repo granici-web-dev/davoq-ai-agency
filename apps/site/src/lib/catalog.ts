@@ -27,41 +27,15 @@ export type AgentStatus = 'available' | 'soon';
 export interface Agent {
   slug: AgentSlug;
   status: AgentStatus;
-  /** Индустрии, где сценарий агента отработан лучше всего. Не ограничение. */
-  industries: IndustrySlug[];
 }
 
 export const AGENTS: Agent[] = [
-  {
-    slug: 'chatbot',
-    status: 'available',
-    industries: ['mobilier', 'constructii', 'imobiliare', 'auto', 'energie', 'clinici'],
-  },
-  {
-    slug: 'configurator',
-    status: 'soon',
-    industries: ['mobilier', 'constructii', 'energie'],
-  },
-  {
-    slug: 'crm-assistant',
-    status: 'soon',
-    industries: ['imobiliare', 'auto', 'constructii'],
-  },
-  {
-    slug: 'follow-up',
-    status: 'soon',
-    industries: ['mobilier', 'imobiliare', 'auto', 'clinici'],
-  },
-  {
-    slug: 'order-status',
-    status: 'soon',
-    industries: ['mobilier', 'constructii', 'energie'],
-  },
-  {
-    slug: 'content-engine',
-    status: 'soon',
-    industries: ['mobilier', 'imobiliare', 'clinici'],
-  },
+  { slug: 'chatbot', status: 'available' },
+  { slug: 'configurator', status: 'soon' },
+  { slug: 'crm-assistant', status: 'soon' },
+  { slug: 'follow-up', status: 'soon' },
+  { slug: 'order-status', status: 'soon' },
+  { slug: 'content-engine', status: 'soon' },
 ];
 
 export const INDUSTRY_SLUGS = [
@@ -82,13 +56,31 @@ export interface Industry {
 }
 
 export const INDUSTRIES: Industry[] = [
-  { slug: 'mobilier', agents: ['chatbot', 'configurator', 'follow-up', 'order-status'] },
+  {
+    slug: 'mobilier',
+    agents: ['chatbot', 'configurator', 'follow-up', 'order-status', 'crm-assistant', 'content-engine'],
+  },
   { slug: 'constructii', agents: ['chatbot', 'configurator', 'crm-assistant'] },
   { slug: 'imobiliare', agents: ['chatbot', 'crm-assistant', 'follow-up'] },
   { slug: 'auto', agents: ['chatbot', 'crm-assistant', 'follow-up'] },
   { slug: 'energie', agents: ['chatbot', 'configurator', 'order-status'] },
   { slug: 'clinici', agents: ['chatbot', 'follow-up', 'content-engine'] },
 ];
+
+/**
+ * Ниши, в которых работает агент.
+ *
+ * Считается из `INDUSTRIES`, а не хранится у агента вторым списком.
+ * Пока списка было два, они разошлись молча: `content-engine` считал
+ * мебель своей нишей, а мебель его своим агентом — нет. Страница агента
+ * и страница ниши показывали разное, и заметить это можно было, только
+ * открыв обе подряд.
+ *
+ * Теперь связь одна и лежит у ниши: порядок в её списке — это порядок
+ * приоритета именно для неё, и он у каждой ниши свой.
+ */
+export const industriesForAgent = (slug: AgentSlug): IndustrySlug[] =>
+  INDUSTRIES.filter((i) => (i.agents as readonly AgentSlug[]).includes(slug)).map((i) => i.slug);
 
 export const agentBySlug = (slug: string): Agent | undefined =>
   AGENTS.find((a) => a.slug === slug);

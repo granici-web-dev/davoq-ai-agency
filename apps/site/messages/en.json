@@ -615,7 +615,9 @@
         "chatbot": "Answers questions about price and materials from your own list, at any hour.",
         "configurator": "The customer picks dimensions, fronts and fabric; the price follows the workshop's rules.",
         "follow-up": "Comes back to the customer who asked for a quote and went quiet — at the moment it still makes sense.",
-        "order-status": "Reports at every production stage, without anyone writing the message."
+        "order-status": "Reports at every production stage, without anyone writing the message.",
+        "crm-assistant": "Fills the customer record from the conversation — dimensions, material, budget — and the salesperson only confirms it.",
+        "content-engine": "Turns the same finished job into posts for Instagram and Pinterest, where furniture is actually searched for."
       },
       "leadTitle": "Your salesperson gets this, not \"someone wrote in\"",
       "leadLead": "The whole conversation collects into one record. Your salesperson opens it and can price the job, without ringing back to find out what the person wanted.",

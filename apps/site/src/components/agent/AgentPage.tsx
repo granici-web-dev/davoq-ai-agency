@@ -8,7 +8,7 @@ import { Reveal } from '@/components/ui/Reveal';
 import { SectionHead } from './SectionHead';
 import { WidgetChat } from './WidgetChat';
 import { FeatureIcon } from './FeatureIcon';
-import { INDUSTRIES, type Agent } from '@/lib/catalog';
+import { INDUSTRIES, industriesForAgent, type Agent } from '@/lib/catalog';
 import agentChatbot from '@/../public/images/agent-chatbot.webp';
 
 /** Кадр есть пока только у доступного агента. Остальные ждут своей очереди. */
@@ -218,7 +218,7 @@ export function AgentPage({ agent }: { agent: Agent }) {
                 />
 
                 <ul className="mt-14 grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
-                  {INDUSTRIES.filter((i) => agent.industries.includes(i.slug)).map((industry) => (
+                  {INDUSTRIES.filter((i) => industriesForAgent(agent.slug).includes(i.slug)).map((industry) => (
                     <li key={industry.slug}>
                       <Link
                         href={`/industries/${industry.slug}`}

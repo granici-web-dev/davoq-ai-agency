@@ -615,7 +615,9 @@
         "chatbot": "Răspunde la întrebările de preț și materiale din lista dumneavoastră, la orice oră.",
         "configurator": "Clientul alege dimensiuni, fronturi și țesătură; prețul se calculează după regulile atelierului.",
         "follow-up": "Revine la clientul care a cerut ofertă și a tăcut — la momentul în care mai are sens.",
-        "order-status": "Anunță la fiecare etapă a producției, fără ca cineva să scrie mesajul."
+        "order-status": "Anunță la fiecare etapă a producției, fără ca cineva să scrie mesajul.",
+        "crm-assistant": "Completează fișa clientului din conversație — dimensiuni, material, buget — și vânzătorul doar confirmă.",
+        "content-engine": "Din aceeași lucrare finisată face postări pentru Instagram și Pinterest, acolo unde se caută mobila."
       },
       "leadTitle": "Vânzătorul primește asta, nu «a scris cineva»",
       "leadLead": "Toată conversația se strânge într-o fișă. Vânzătorul o deschide și poate calcula, fără să sune ca să afle ce voia omul.",

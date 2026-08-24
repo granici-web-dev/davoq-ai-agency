@@ -1,6 +1,6 @@
 import { useTranslations } from 'next-intl';
 import { Link } from '@/i18n/routing';
-import { AGENTS } from '@/lib/catalog';
+import { AGENTS, industriesForAgent } from '@/lib/catalog';
 
 /**
  * Витрина агентов.
@@ -82,7 +82,7 @@ export function Agents() {
                       здесь, не отправляя человека на страницу агента. */}
                   {available && (
                     <p className="relative mt-6 font-mono text-[10px] leading-relaxed tracking-wider text-chalk-faint uppercase">
-                      {agent.industries
+                      {industriesForAgent(agent.slug)
                         .map((slug) => tIndustries(`${slug}.name`))
                         .join(' · ')}
                     </p>
