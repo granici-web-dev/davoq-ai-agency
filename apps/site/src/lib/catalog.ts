@@ -42,7 +42,7 @@ export interface Agent {
 export const AGENTS: Agent[] = [
   { slug: 'chatbot', status: 'available', full: true },
   { slug: 'configurator', status: 'soon', full: true },
-  { slug: 'crm-assistant', status: 'soon' },
+  { slug: 'crm-assistant', status: 'soon', full: true },
   { slug: 'follow-up', status: 'soon' },
   { slug: 'order-status', status: 'soon' },
   { slug: 'content-engine', status: 'soon' },

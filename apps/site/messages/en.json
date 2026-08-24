@@ -411,7 +411,7 @@
     "soonTitle": "This agent is still being built",
     "soonText": "We are not selling it yet. If it interests you, write to us: in a demo we show what it already does and tell you when it will be ready.",
     "soonInPlanTitle": "This agent has not shipped yet",
-    "soonInPlanText": "It is included in the Growth package: you can connect it now, at today's price, and the configurator switches on in your account at launch. What you read below is what it will do, written as such. We do not sell as finished something that is still being written.",
+    "soonInPlanText": "It is included in the Growth package: you can connect it now, at today's price, and the agent switches on in your account at launch. What you read below is what it will do, written as such. We do not sell as finished something that is still being written.",
     "backToAgents": "All agents",
     "featuresEyebrow": "What it does",
     "sourcesEyebrow": "What it answers from",
@@ -662,6 +662,123 @@
       ],
       "closingTitle": "See what sheet it would collect from your own requests",
       "closingLead": "At the demo we take one product from your catalogue, write the questions for it, and show you the sheet your salesperson would receive."
+    },
+    "crm-assistant": {
+      "metaTitle": "CRM assistant — records filled from the correspondence",
+      "metaDescription": "An AI agent that reads the correspondence with your customer and fills in the CRM record: stage, budget, deadline, who decides, the next task. Included in the Growth package.",
+      "title": "CRM records filled from the correspondence, not from the salesperson's memory",
+      "lead": "It reads the conversation with the customer and puts what changed into the record: the stage, the budget, the deadline, who else decides. Your salesperson confirms rather than types.",
+      "record": {
+        "title": "Customer record",
+        "number": "C-318",
+        "source": "Updated from the email received at 14:02",
+        "changes": [
+          {
+            "k": "Stage",
+            "from": "Quote sent",
+            "to": "Negotiation"
+          },
+          {
+            "k": "Budget",
+            "from": "",
+            "to": "€18,000 – 22,000"
+          },
+          {
+            "k": "Deadline",
+            "from": "",
+            "to": "December"
+          },
+          {
+            "k": "Who decides",
+            "from": "One person",
+            "to": "Two: procurement and technical"
+          }
+        ],
+        "taskLabel": "Task created",
+        "task": "Follow up Friday, after their budget meeting",
+        "note": "This is how the record looks after one incoming email. The fields and stages are the ones in your own CRM, not ones we invented."
+      },
+      "featuresTitle": "What it does, concretely",
+      "features": {
+        "read": {
+          "title": "It reads the correspondence, not just the forms",
+          "text": "Email, the chat on your site, the messages. That is where the data lives that never reaches a field, because nobody has time to move it by hand."
+        },
+        "spec": {
+          "title": "It fills the record, field by field",
+          "text": "Budget, deadline, the product discussed, the person who decides. The fields are your CRM's; we do not invent extra ones just to have something to fill in."
+        },
+        "stage": {
+          "title": "It moves the deal to the stage it is actually at",
+          "text": "Once the customer has asked for a quote, the deal no longer sits at \"new contact\". The stage changes from what happened, not from what somebody remembered on Friday evening."
+        },
+        "task": {
+          "title": "It sets the next task",
+          "text": "\"Follow up Friday, after their budget meeting\" — with a date, on the person who owns the customer. Without a task, the follow-up depends on memory."
+        },
+        "gaps": {
+          "title": "It does not overwrite what a person wrote",
+          "text": "When what the customer says contradicts what is already in the record, the agent flags the difference and leaves the decision to the salesperson."
+        },
+        "handoff": {
+          "title": "It stays inside your CRM",
+          "text": "We do not move you onto another system and we do not sell you a CRM. The agent writes where you already work."
+        }
+      },
+      "sourcesEyebrow": "What it fills from",
+      "sourcesTitle": "What it fills the record from — and what it does not do",
+      "sourcesYes": {
+        "title": "It fills from",
+        "items": [
+          "The correspondence with the customer: email, the chat on your site, the messages from the channels you connect.",
+          "The conversation the chatbot held, if it is already working on your site.",
+          "The structure of your own record: the same fields, the same stages, the same names.",
+          "The rules for when a new stage begins — written by you, once."
+        ]
+      },
+      "sourcesNo": {
+        "title": "It never",
+        "items": [
+          "It does not delete or overwrite what a person wrote. The difference is flagged; the salesperson decides.",
+          "It does not connect to employees' personal mailboxes, and what does not concern the customer in the record does not reach the record.",
+          "It does not decide in the salesperson's place: it does not change prices, promise deadlines or close deals.",
+          "It does not replace your CRM. It writes into yours; if you do not have one, the records live in the portal."
+        ]
+      },
+      "platformsTitle": "It writes where you keep your customers",
+      "platformsLead": "If your system has an API or can receive data through a webhook, the agent writes into it. At the first conversation you tell us what you use and we check before promising.",
+      "platforms": [
+        "CRM through its API",
+        "Webhook into your own system",
+        "A shared spreadsheet",
+        "CSV export",
+        "The portal, if you have no CRM yet"
+      ],
+      "faqTitle": "What people ask about the CRM assistant",
+      "faq": [
+        {
+          "q": "Which CRM does it work with?",
+          "a": "The one that has an API or can receive data through a webhook — which covers most systems in use today. We do not print a list of names to look bigger: you tell us what you use and we check before promising. If you have no CRM, the records live in the portal and export when you move to one."
+        },
+        {
+          "q": "Does the agent see all the company's correspondence?",
+          "a": "No. It receives only the channels you give it: the sales address, the chat on your site, the messages from connected channels. An employee's personal mailbox is not connected, and what does not concern the customer in the record does not reach the record."
+        },
+        {
+          "q": "What happens if it gets a field wrong?",
+          "a": "You correct it in the record, like any field. The correction stays in the history: you can see what the agent wrote and what the person changed. If one kind of mistake repeats, we change the rule — not the records, one by one."
+        },
+        {
+          "q": "Do salespeople have to work differently?",
+          "a": "No. They write to customers exactly as they do now. The difference is that the record is filled in when they open it rather than empty — and that the next task exists without anyone writing it on paper."
+        },
+        {
+          "q": "When will it be ready?",
+          "a": "We do not give a date we cannot keep. It is included in the Growth package: connect it now and the CRM assistant switches on in your account at launch, at the price you joined at."
+        }
+      ],
+      "closingTitle": "See what it would fill in from your own correspondence",
+      "closingLead": "At the demo we take a few real customer conversations — anonymised, if you prefer — and show you what would have reached the record without anyone typing."
     }
   },
   "industryPage": {

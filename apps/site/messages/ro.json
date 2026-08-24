@@ -411,7 +411,7 @@
     "soonTitle": "Agentul acesta este în lucru",
     "soonText": "Nu îl vindem încă. Dacă vă interesează, scrieți-ne: la demonstrație vă arătăm ce face deja și vă spunem când e gata.",
     "soonInPlanTitle": "Agentul acesta încă nu a ieșit",
-    "soonInPlanText": "Este inclus în pachetul Growth: îl puteți conecta acum, la prețul de azi, iar configuratorul se activează pe contul dumneavoastră la lansare. Ce citiți mai jos este ce va face — scris ca atare. Nu vindem ca gata ceva ce încă se scrie.",
+    "soonInPlanText": "Este inclus în pachetul Growth: îl puteți conecta acum, la prețul de azi, iar agentul se activează pe contul dumneavoastră la lansare. Ce citiți mai jos este ce va face — scris ca atare. Nu vindem ca gata ceva ce încă se scrie.",
     "backToAgents": "Toți agenții",
     "featuresEyebrow": "Ce face",
     "sourcesEyebrow": "Din ce răspunde",
@@ -662,6 +662,123 @@
       ],
       "closingTitle": "Vedeți ce fișă ar strânge din cererile dumneavoastră",
       "closingLead": "La demonstrație luăm un produs din catalogul dumneavoastră, scriem întrebările pentru el și vă arătăm fișa pe care ar primi-o vânzătorul."
+    },
+    "crm-assistant": {
+      "metaTitle": "Asistent CRM — fișele se completează din corespondență",
+      "metaDescription": "Agent AI care citește corespondența cu clientul și completează fișa din CRM: etapă, buget, termen, cine decide, sarcina următoare. Inclus în pachetul Growth.",
+      "title": "Fișele din CRM se completează din corespondență, nu din memoria vânzătorului",
+      "lead": "Citește discuția cu clientul și pune în fișă ce s-a schimbat: etapa, bugetul, termenul, cine mai decide. Vânzătorul confirmă, nu tastează.",
+      "record": {
+        "title": "Fișă client",
+        "number": "C-318",
+        "source": "Actualizat din e-mailul primit la 14:02",
+        "changes": [
+          {
+            "k": "Etapă",
+            "from": "Ofertă trimisă",
+            "to": "Negociere"
+          },
+          {
+            "k": "Buget",
+            "from": "",
+            "to": "18 000 – 22 000 €"
+          },
+          {
+            "k": "Termen",
+            "from": "",
+            "to": "Decembrie"
+          },
+          {
+            "k": "Cine decide",
+            "from": "O persoană",
+            "to": "Două: achiziții și tehnic"
+          }
+        ],
+        "taskLabel": "Sarcină creată",
+        "task": "Revenire vineri, după ședința lor de buget",
+        "note": "Așa va arăta fișa după un e-mail primit. Câmpurile și etapele sunt cele din CRM-ul dumneavoastră, nu unele inventate de noi."
+      },
+      "featuresTitle": "Ce face, concret",
+      "features": {
+        "read": {
+          "title": "Citește corespondența, nu doar formularele",
+          "text": "E-mail, chatul de pe site, mesajele. De acolo vin datele care nu ajung niciodată într-un câmp, pentru că nimeni nu are timp să le mute cu mâna."
+        },
+        "spec": {
+          "title": "Completează fișa, câmp cu câmp",
+          "text": "Buget, termen, produs discutat, persoana care decide. Câmpurile sunt ale CRM-ului dumneavoastră; nu inventăm altele ca să avem ce completa."
+        },
+        "stage": {
+          "title": "Mută afacerea pe etapa reală",
+          "text": "Când clientul a cerut oferta, afacerea nu mai stă la «contact nou». Etapa se schimbă din ce s-a întâmplat, nu din ce și-a amintit cineva vineri seara."
+        },
+        "task": {
+          "title": "Pune sarcina următoare",
+          "text": "«Revenire vineri, după ședința lor de buget» — cu dată, pe omul care ține clientul. Fără sarcină, urmarea depinde de memorie."
+        },
+        "gaps": {
+          "title": "Nu suprascrie ce a scris omul",
+          "text": "Când ce spune clientul intră în contradicție cu ce e deja în fișă, agentul marchează diferența și lasă decizia la vânzător."
+        },
+        "handoff": {
+          "title": "Rămâne în CRM-ul dumneavoastră",
+          "text": "Nu vă mutăm pe alt sistem și nu vă vindem un CRM. Agentul scrie acolo unde lucrați deja."
+        }
+      },
+      "sourcesEyebrow": "Din ce completează",
+      "sourcesTitle": "Din ce completează fișa — și ce nu face",
+      "sourcesYes": {
+        "title": "Completează din",
+        "items": [
+          "Corespondența cu clientul: e-mail, chatul de pe site, mesajele din canalele pe care le conectați.",
+          "Discuția purtată de chatbot, dacă lucrează deja pe site-ul dumneavoastră.",
+          "Structura fișei dumneavoastră: aceleași câmpuri, aceleași etape, aceleași denumiri.",
+          "Regulile de la care începe o etapă nouă — scrise de dumneavoastră, o singură dată."
+        ]
+      },
+      "sourcesNo": {
+        "title": "Nu face",
+        "items": [
+          "Nu șterge și nu suprascrie ce a scris un om. Diferența se marchează, decide vânzătorul.",
+          "Nu se conectează la cutiile poștale personale ale angajaților și nu citește ce nu ține de clientul din fișă.",
+          "Nu ia decizii în locul vânzătorului: nu schimbă prețul, nu promite termene, nu închide afaceri.",
+          "Nu înlocuiește CRM-ul. Scrie în al dumneavoastră; dacă nu aveți unul, fișele stau în portal."
+        ]
+      },
+      "platformsTitle": "Scrie acolo unde țineți clienții",
+      "platformsLead": "Dacă sistemul dumneavoastră are un API sau poate primi date printr-un webhook, agentul scrie în el. La prima discuție ne spuneți ce folosiți și verificăm înainte să promitem.",
+      "platforms": [
+        "CRM prin API",
+        "Webhook către sistemul propriu",
+        "Foaie de calcul partajată",
+        "Export CSV",
+        "Portalul, dacă încă nu aveți CRM"
+      ],
+      "faqTitle": "Ce se întreabă despre asistentul CRM",
+      "faq": [
+        {
+          "q": "Cu ce CRM funcționează?",
+          "a": "Cu cel care are un API sau poate primi date printr-un webhook — asta acoperă majoritatea sistemelor folosite azi. Nu dăm o listă de nume ca să pară mai mult: ne spuneți ce folosiți și verificăm înainte să promitem. Dacă nu aveți CRM, fișele stau în portal și se exportă când vă mutați pe unul."
+        },
+        {
+          "q": "Vede agentul toată corespondența firmei?",
+          "a": "Nu. Primește doar canalele pe care i le dați: adresa de vânzări, chatul de pe site, mesajele din canalele conectate. Cutia poștală personală a unui angajat nu se conectează, iar ce nu ține de clientul din fișă nu ajunge în fișă."
+        },
+        {
+          "q": "Ce se întâmplă dacă greșește un câmp?",
+          "a": "Se corectează în fișă, ca orice câmp. Corecția rămâne în istoric: se vede ce a scris agentul și ce a schimbat omul. Dacă un tip de greșeală se repetă, se schimbă regula — nu fișele, una câte una."
+        },
+        {
+          "q": "Vânzătorii trebuie să lucreze altfel?",
+          "a": "Nu. Scriu clienților exact cum scriu acum. Diferența este că fișa e completată când o deschid, nu goală — și că sarcina următoare există fără să și-o noteze pe hârtie."
+        },
+        {
+          "q": "Când este gata?",
+          "a": "Nu dăm o dată pe care nu o putem ține. Este inclus în pachetul Growth: dacă îl conectați acum, asistentul CRM se activează pe contul dumneavoastră la lansare, la prețul de la conectare."
+        }
+      ],
+      "closingTitle": "Vedeți ce ar completa din corespondența dumneavoastră",
+      "closingLead": "La demonstrație luăm câteva discuții reale cu clienți — anonimizate, dacă preferați — și vă arătăm ce ar fi ajuns în fișă fără ca cineva să tasteze."
     }
   },
   "industryPage": {
