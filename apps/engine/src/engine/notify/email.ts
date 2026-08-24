@@ -34,6 +34,12 @@ export interface Mail {
   subject: string;
   text: string;
   html: string;
+  /**
+   * Вложения. Оферта уходит покупателю PDF-ом, а не ссылкой: письмо со ссылкой
+   * читается через неделю, когда ссылка уже могла протухнуть, а документ,
+   * который лежит в почте, покупатель показывает жене и находит через год.
+   */
+  attachments?: Array<{ filename: string; content: Buffer; contentType: string }> | undefined;
 }
 
 /**

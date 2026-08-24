@@ -166,6 +166,11 @@ offer:
   # ровно как в бланке пилота.
   blocks: [hero, meta, items, pricing, specs, notes, gallery, legal, footer]
 
+  # «OFERTA VALABILA 14 ZILE» — из оферты пилота. Цены на ткани и поролон
+  # меняются поставщиками чаще, чем месяц, и месячный срок мебельщик
+  # подтверждать не готов.
+  validDays: 14
+
   currency:
     code: RON
 

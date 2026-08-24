@@ -22,7 +22,7 @@ import { retrieve } from '../src/engine/rag/retrieve.js';
 const TABLES = [
   'chunks', 'documents', 'conversations', 'messages', 'leads',
   'approved_answers', 'unanswered_log', 'usage_daily', 'widget_configs',
-  'connectors', 'connector_tools', 'audit_log',
+  'connectors', 'connector_tools', 'audit_log', 'offers',
 ];
 
 let failures = 0;

@@ -156,8 +156,11 @@ const purgeWorker = new Worker(
   async () => {
     const { purge } = await import('../billing/retention.js');
     const r = await purge();
-    if (r.conversations > 0 || r.tenants > 0) {
-      console.log(`уборка: переписок ${r.conversations}, клиентов ${r.tenants}`);
+    if (r.conversations > 0 || r.leads > 0 || r.tenants > 0 || r.offerFiles > 0) {
+      console.log(
+        `уборка: переписок ${r.conversations}, заявок ${r.leads}, ` +
+        `файлов ${r.offerFiles}, клиентов ${r.tenants}`,
+      );
     }
     return r;
   },

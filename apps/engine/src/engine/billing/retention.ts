@@ -28,7 +28,10 @@ export const CANCELED_DAYS = Number(process.env.CANCELED_RETENTION_DAYS ?? 30);
 
 export interface PurgeResult {
   conversations: number;
+  leads: number;
   tenants: number;
+  /** Сколько файлов оферт удалено — их легко потерять из виду, они не в `documents`. */
+  offerFiles: number;
 }
 
 export async function purge(): Promise<PurgeResult> {
@@ -44,6 +47,42 @@ export async function purge(): Promise<PurgeResult> {
       [String(CONVERSATION_DAYS)],
     );
 
+    // ── Старые заявки ─────────────────────────────────────────────────────
+    //
+    // Заявка с офертой — это уже не имя и телефон, а ещё конфигурация, цена
+    // и PDF. Срок у каждого клиента свой; 0 означает «не удалять».
+    //
+    // PDF удаляется ВМЕСТЕ с заявкой. Убрать контакт из базы и оставить на
+    // диске документ, где то же имя стоит в шапке рядом с адресом доставки, —
+    // это не удаление персональных данных, а видимость удаления.
+    //
+    // Сама оферта остаётся: номер, сумма и дата — бухгалтерский факт и
+    // непрерывность ряда. Ссылка на заявку обнулится внешним ключом сама.
+    const { rows: staleOffers } = await client.query<{ id: string; storage_key: string }>(
+      `SELECT o.id, o.storage_key
+         FROM offers o
+         JOIN leads l   ON l.id = o.lead_id
+         JOIN tenants t ON t.id = l.tenant_id
+        WHERE t.lead_retention_days > 0
+          AND l.created_at < now() - (t.lead_retention_days || ' days')::interval
+          AND o.storage_key <> ''`,
+    );
+    let offerFiles = await removeFiles(staleOffers.map((o) => o.storage_key));
+    if (staleOffers.length > 0) {
+      await client.query(
+        `UPDATE offers SET storage_key = '' WHERE id = ANY($1::uuid[])`,
+        [staleOffers.map((o) => o.id)],
+      );
+    }
+
+    const { rowCount: leads } = await client.query(
+      `DELETE FROM leads l
+        USING tenants t
+        WHERE l.tenant_id = t.id
+          AND t.lead_retention_days > 0
+          AND l.created_at < now() - (t.lead_retention_days || ' days')::interval`,
+    );
+
     // ── Данные отменивших ─────────────────────────────────────────────────
     //
     // Сначала забираем ключи файлов: после удаления тенанта строк не останется,
@@ -57,23 +96,43 @@ export async function purge(): Promise<PurgeResult> {
     );
 
     for (const t of doomed) {
+      // Материалы И оферты. Оферты не в `documents`, и цикл удаления про них
+      // не знал бы: после ухода клиента на диске остались бы PDF с именами,
+      // телефонами и ценами его покупателей.
       const { rows: keys } = await client.query<{ storage_key: string }>(
-        `SELECT storage_key FROM documents
-          WHERE tenant_id = $1 AND storage_key <> ''`, [t.id],
+        `SELECT storage_key FROM documents WHERE tenant_id = $1 AND storage_key <> ''
+         UNION ALL
+         SELECT storage_key FROM offers    WHERE tenant_id = $1 AND storage_key <> ''`,
+        [t.id],
       );
-      for (const k of keys) {
-        // Неудача на файле не должна останавливать удаление: строку в базе
-        // убрать важнее, чем байты на диске, и оставшийся файл безопаснее
-        // оставшейся переписки.
-        await storageRemove(k.storage_key).catch((err: Error) =>
-          console.error(`не удалось удалить файл ${k.storage_key}: ${err.message}`));
-      }
+      offerFiles += await removeFiles(keys.map((k) => k.storage_key));
 
       // Всё остальное уходит каскадом от tenants.
       await client.query('DELETE FROM tenants WHERE id = $1', [t.id]);
       console.log(`удалён клиент ${t.name}: срок хранения после отмены истёк`);
     }
 
-    return { conversations: conversations ?? 0, tenants: doomed.length };
+    return {
+      conversations: conversations ?? 0,
+      leads: leads ?? 0,
+      tenants: doomed.length,
+      offerFiles,
+    };
   });
+}
+
+/**
+ * Удаление файлов пачкой.
+ *
+ * Неудача на файле не останавливает проход: строку в базе убрать важнее,
+ * чем байты на диске, и оставшийся файл безопаснее оставшейся переписки.
+ */
+async function removeFiles(keys: string[]): Promise<number> {
+  let removed = 0;
+  for (const key of keys) {
+    await storageRemove(key)
+      .then(() => { removed += 1; })
+      .catch((err: Error) => console.error(`не удалось удалить файл ${key}: ${err.message}`));
+  }
+  return removed;
 }

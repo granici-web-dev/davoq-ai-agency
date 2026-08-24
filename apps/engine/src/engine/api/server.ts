@@ -6,6 +6,7 @@ import { registerAdmin } from './admin.js';
 import { registerChat } from './chat.js';
 import { registerWidget } from './widget.js';
 import { registerBilling } from './billing.js';
+import { registerConfigurator } from '../../products/configurator/api/public.js';
 import { readiness } from '../ops/health.js';
 
 const app = Fastify({ logger: true });
@@ -42,6 +43,8 @@ registerBilling(app);
 registerAdmin(app);
 registerWidget(app);
 registerChat(app);
+// После registerWidget: CORS и OPTIONS для /v1/* ставит он.
+registerConfigurator(app);
 
 const port = Number(process.env.PORT ?? 3000);
 await app.listen({ port, host: '0.0.0.0' });

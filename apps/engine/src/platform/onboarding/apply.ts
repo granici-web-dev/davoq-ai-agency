@@ -4,6 +4,7 @@ import { extname, join } from 'node:path';
 import { randomBytes } from 'node:crypto';
 import { withOwner, withTenant } from '../../engine/db/pool.js';
 import { get as storageGet, put as storagePut } from '../../engine/ingest/storage.js';
+import { configuratorLayer } from '../../products/configurator/onboarding.js';
 import { loadVertical } from '../../engine/prompt/vertical.js';
 import { PRESETS } from '../../engine/shared/theme.js';
 import { trialEndsAt } from '../../engine/billing/entitlement.js';
@@ -256,6 +257,37 @@ export async function applyClientConfig(
             [tenantId, key, mime]);
         }
         applied.push({ field: 'logo', from: stored ? '(другой файл)' : null, to: logo });
+      }
+    }
+
+    /**
+     * Конфигуратор: секция целиком, вместе с картинками и шрифтами.
+     *
+     * Не по полям, как остальное. Флоу, прайс и бланк — один связный документ:
+     * шаг ссылается на вариант, правило цены ссылается на шаг, бланк — на
+     * шрифт. Применять его по частям значит уметь оказаться в состоянии,
+     * где половина ссылок ведёт в никуда.
+     *
+     * Клиент этот раздел в панели не правит, так что затирать здесь нечего —
+     * в отличие от приветствия и адреса для заявок.
+     */
+    const configurator = configuratorLayer(clientDir(cfg.id), tenantId!);
+    if (configurator) {
+      const next = JSON.stringify(configurator.layer);
+      const { rows: current } = await client.query<{ configurator: unknown }>(
+        'SELECT configurator FROM tenants WHERE id = $1', [tenantId],
+      );
+      if (JSON.stringify(current[0]?.configurator ?? {}) !== next) {
+        if (!dryRun) {
+          for (const a of configurator.assets) await storagePut(a.key, a.content);
+          await client.query('UPDATE tenants SET configurator = $2 WHERE id = $1',
+            [tenantId, next]);
+        }
+        applied.push({
+          field: 'configurator',
+          from: null,
+          to: `${Object.keys(configurator.layer).join(', ')} (+${configurator.assets.length} файл(ов))`,
+        });
       }
     }
 

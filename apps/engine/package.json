@@ -39,7 +39,8 @@
     "offer:preview": "tsx scripts/offer-preview.mts",
     "test:offer": "tsx scripts/offer-test.mts",
     "test:configurator": "tsx scripts/configurator-test.mts",
-    "configurator:preview": "tsx --env-file-if-exists=.env scripts/configurator-preview.mts"
+    "configurator:preview": "tsx --env-file-if-exists=.env scripts/configurator-preview.mts",
+    "test:offers": "tsx --env-file=.env scripts/offers-test.mts"
   },
   "dependencies": {
     "@anthropic-ai/bedrock-sdk": "^0.30.0",

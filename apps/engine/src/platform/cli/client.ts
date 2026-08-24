@@ -4,6 +4,7 @@
  *   npm run client new <id> --name "…" --vertical furniture --domain example.com --locale ro
  *   npm run client apply <id> [--dry-run] [--force]
  *   npm run client list
+ *   npm run client offers <id> --next 987 [--format '{n}']
  */
 import '../../engine/env.js';
 import { closeOwnerPool, pool, withOwner } from '../../engine/db/pool.js';
@@ -140,6 +141,52 @@ try {
         );
       }
       console.log();
+      break;
+    }
+
+    /**
+     * Нумерация оферт.
+     *
+     * Отдельной командой, а не полем конфига. Номер — это СОСТОЯНИЕ счётчика:
+     * если бы его переносил `apply`, повторное применение конфига через месяц
+     * откатывало бы нумерацию к начальному значению, и клиент выдал бы вторую
+     * оферту с номером уже выданной. У покупателя на руках оказались бы два
+     * разных документа под одним номером.
+     *
+     * Ставится один раз при заведении — продолжением ряда, который у клиента
+     * уже есть.
+     */
+    case 'offers': {
+      const id = positional[0];
+      const next = flag('next');
+      if (!id || !next) {
+        throw new Error("usage: client offers <id> --next 987 [--format '{n}']");
+      }
+      const n = Number(next);
+      if (!Number.isInteger(n) || n < 1) throw new Error('--next — целое число ≥ 1');
+      const format = flag('format');
+      if (format && !format.includes('{n}')) {
+        throw new Error("--format обязан содержать {n}: без счётчика номера не уникальны");
+      }
+
+      const updated = await withOwner(async (client) => {
+        const { rows } = await client.query<{ name: string; offer_number_next: number; offer_number_format: string }>(
+          `UPDATE tenants
+              SET offer_number_next = $2,
+                  offer_number_format = COALESCE($3, offer_number_format)
+            WHERE client_id = $1
+        RETURNING name, offer_number_next, offer_number_format`,
+          [id, n, format ?? null],
+        );
+        return rows[0];
+      });
+      if (!updated) throw new Error(`клиент «${id}» не заведён в базе — сначала apply`);
+
+      console.log(
+        `\n${updated.name}: следующая оферта — ` +
+        `${updated.offer_number_format.replace('{n}', String(updated.offer_number_next))}\n`,
+      );
+      console.log('Проверьте у клиента, что номер продолжает его ряд, а не начинает второй.\n');
       break;
     }
 

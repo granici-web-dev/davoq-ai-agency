@@ -1,4 +1,4 @@
-import { existsSync, readFileSync } from 'node:fs';
+import { existsSync, readFileSync, statSync } from 'node:fs';
 import { join, resolve } from 'node:path';
 import { parse } from 'yaml';
 import type { Json } from './layers.js';
@@ -50,10 +50,27 @@ export function clientLayer(clientDir: string): Layer | undefined {
   return read(clientDir, `${clientDir}/configurator.yaml`);
 }
 
+/**
+ * Разбор кешируется по времени правки файла.
+ *
+ * Слой ниши читается на КАЖДЫЙ пересчёт цены, то есть на каждый тап
+ * посетителя по карточке. Разбор YAML на горячем пути — это работа, которую
+ * никто не заказывал; правка файла кеш сбрасывает, так что в разработке
+ * ничего не залипает.
+ */
+const cache = new Map<string, { mtime: number; layer: Layer }>();
+
 function read(dir: string, where: string): Layer | undefined {
   const file = join(dir, 'configurator.yaml');
   if (!existsSync(file)) return undefined;
+
+  const mtime = statSync(file).mtimeMs;
+  const hit = cache.get(file);
+  if (hit && hit.mtime === mtime) return hit.layer;
+
   const raw = (parse(readFileSync(file, 'utf8')) ?? {}) as Record<string, Json>;
   if (raw.schema !== 1) throw new Error(`${where}: поддерживается только schema: 1`);
-  return { raw, dir, where };
+  const layer = { raw, dir, where };
+  cache.set(file, { mtime, layer });
+  return layer;
 }

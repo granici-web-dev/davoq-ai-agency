@@ -70,6 +70,7 @@ export const OFFER_SHAPE: Shape = {
   hero: { image: true, height: true, logo: true, scrim: true },
   gallery: true,
   currency: { code: true, decimals: true },
+  validDays: true,
   text: {
     '*': {
       hero: { title: true, numberLabel: true, lines: true },
@@ -157,6 +158,12 @@ export interface OfferTemplate {
   /** Фотографии материалов: пути к файлам в каталоге клиента. */
   gallery?: string[];
   currency: { code: string; decimals: number };
+  /**
+   * Сколько дней действует оферта. В бланке пилота — «OFERTA VALABILA 14 ZILE»;
+   * умолчание движка мягче, потому что 14 дней — это решение продавца,
+   * а не свойство документа.
+   */
+  validDays: number;
   text: Record<string, OfferText>;
 }
 
@@ -191,6 +198,7 @@ export const OFFER_DEFAULTS = {
     fontSize: { title: 20, heading: 11, base: 10, small: 8 },
   },
   currency: { code: 'RON', decimals: 2 },
+  validDays: 30,
   text: {},
 } as const;
 
@@ -241,6 +249,11 @@ export function validateOffer(
   const gallery = value.gallery;
   if (Array.isArray(gallery)) {
     gallery.forEach((file, i) => assetKind(file, RASTER, `offer.gallery[${i}]`, where));
+  }
+
+  const validDays = value.validDays;
+  if (typeof validDays !== 'number' || !Number.isInteger(validDays) || validDays < 1) {
+    throw new Error(`${where}: offer.validDays — целое число дней ≥ 1`);
   }
 
   const scrim = hero.scrim;
