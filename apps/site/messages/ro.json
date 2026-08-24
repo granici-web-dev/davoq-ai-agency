@@ -114,6 +114,17 @@
         "title": "Vânzătorul repetă aceleași zece răspunsuri",
         "text": "Timpul lui pleacă în întrebări la care răspunsul e mereu același, nu în ofertele care chiar se închid."
       }
+    },
+    "agents": {
+      "eyebrow": "Agenții",
+      "title": "Șase agenți. Închiriați doar pe cei de care aveți nevoie.",
+      "lead": "Fiecare agent este un produs separat, configurat pentru nișa și brandul dumneavoastră. Începeți cu unul, adăugați altul când primul își arată rezultatul.",
+      "open": "Vezi agentul",
+      "custom": {
+        "title": "Aveți nevoie de altceva?",
+        "text": "Spuneți-ne ce ar trebui să facă agentul în afacerea dumneavoastră și vă spunem dacă se poate.",
+        "cta": "Scrieți-ne"
+      }
     }
   }
 }

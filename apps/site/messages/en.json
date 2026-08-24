@@ -114,6 +114,17 @@
         "title": "Your salesperson repeats the same ten answers",
         "text": "Their time goes into questions whose answer never changes, instead of the quotes that actually close."
       }
+    },
+    "agents": {
+      "eyebrow": "The agents",
+      "title": "Six agents. Rent only the ones you need.",
+      "lead": "Each agent is a separate product, configured for your niche and your brand. Start with one, add another once the first has shown its result.",
+      "open": "See the agent",
+      "custom": {
+        "title": "Need something else?",
+        "text": "Tell us what the agent should do in your business and we will tell you whether it can be done.",
+        "cta": "Write to us"
+      }
     }
   }
 }
