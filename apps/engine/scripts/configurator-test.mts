@@ -13,6 +13,7 @@ import type { Json } from '../src/products/configurator/config/layers.js';
 import { buildConfigurator } from '../src/products/configurator/load.js';
 import { resolveSelections } from '../src/products/configurator/flow/select.js';
 import { priceOf } from '../src/products/configurator/pricing/engine.js';
+import { publicFlow } from '../src/products/configurator/flow/public.js';
 
 let failed = 0;
 const ok = (m: string): void => console.log(`  ✓ ${m}`);
@@ -239,6 +240,41 @@ real.finalPriceBani + real.vatBani === real.totalBani
 throws(() => buildConfigurator({ verticalId: 'furniture', clientLayer: undefined, locales: ['ro'] }),
   'без вариантов выбора',
   'ниша без слоя клиента не собирается: форму дала она, содержимое — нет');
+
+console.log('\nЧто видит браузер');
+
+const seen = publicFlow(pilot.flow, 'ro', (file) => `/asset/${file.length}`);
+const wire = JSON.stringify(seen);
+
+// Прайс клиента наружу не уходит ни в каком виде. Проверка грубая нарочно:
+// белый список в `public.ts` защищает от нового поля, а этот тест — от того,
+// что белый список однажды перепишут в чёрный.
+for (const leak of ['priceEffect', 'bani', 'factor', 'multiplier', 'aiHint']) {
+  wire.includes(leak)
+    ? bad(`в публичный флоу утекло «${leak}»`)
+    : ok(`«${leak}» в браузер не уходит`);
+}
+// Ниша пишет подсказки агенту — если бы они не удалялись, проверка выше
+// прошла бы на конфиге, где их просто нет.
+pilot.flow.steps.some((s) => s.aiHint)
+  ? ok('подсказки агенту в конфиге есть — значит проверка выше не пустая')
+  : bad('в конфиге пилота нет ни одной aiHint: проверка на утечку ничего не проверяет');
+
+eq(seen.steps.find((s) => s.id === 'seat')?.options?.map((o) => o.label),
+  ['Spumă poliuretanică HR', 'Spumă HR + memory foam', 'Puf natural'],
+  'подписи развёрнуты в локаль тенанта');
+eq(seen.steps.find((s) => s.id === 'extras')?.multiple, true,
+  'множественный выбор доезжает до браузера');
+eq(seen.steps.find((s) => s.id === 'notes')?.optional, true,
+  'необязательность шага доезжает до браузера');
+
+const withImage = publicFlow(
+  { steps: [{ id: 'a', type: 'cards', title: { ro: 'A' },
+    options: [{ id: 'x', label: { ro: 'X' }, image: '/var/uploads/t/opt.jpg' }] }] },
+  'ro', () => '/asset/0',
+);
+eq(withImage.steps[0]?.options?.[0]?.image, '/asset/0',
+  'путь файла на диске наружу не уходит — только адрес');
 
 console.log(failed === 0 ? '\nВсё сошлось.\n' : `\nНе сошлось: ${failed}\n`);
 process.exit(failed === 0 ? 0 : 1);

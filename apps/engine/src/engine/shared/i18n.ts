@@ -115,3 +115,82 @@ export function pickLocale(
   }
   return pool[0]!;
 }
+
+/**
+ * Строки конфигуратора. Отдельным словарём, а не внутри `Strings`: чат-бот
+ * без конфигуратора не должен тащить их в свой словарь, а конфигуратор
+ * без чата — наоборот. Тенанту с одним продуктом второй набор ни к чему.
+ *
+ * `{n}` и `{total}` подставляются в `step`: собирать «Pasul » + n + « din »
+ * значит зашить порядок слов английского в четыре языка сразу.
+ */
+export interface ConfiguratorStrings {
+  start: string;
+  step: string;
+  back: string;
+  next: string;
+  skip: string;
+  calculating: string;
+  price: string;
+  vatIncluded: string;
+  summary: string;
+  change: string;
+  contactIntro: string;
+  consentRequired: string;
+  consentMarketing: string;
+  needConsent: string;
+  getOffer: string;
+  offerSent: string;
+  notePlaceholder: string;
+}
+
+export const CONFIGURATOR_STRINGS: Record<Locale, ConfiguratorStrings> = {
+  en: {
+    start: 'Configure and see the price', step: 'Step {n} of {total}',
+    back: 'Back', next: 'Next', skip: 'Skip', calculating: 'Calculating…',
+    price: 'Estimated price', vatIncluded: 'VAT included',
+    summary: 'Your configuration', change: 'Change',
+    contactIntro: 'Where should we send the quote?',
+    consentRequired: 'I agree to my data being processed so that a quote can be prepared.',
+    consentMarketing: 'You may send me offers and news.',
+    needConsent: 'Consent is required to prepare a quote.',
+    getOffer: 'Get the quote', offerSent: 'The quote is on its way to you.',
+    notePlaceholder: 'Anything we should know?',
+  },
+  de: {
+    start: 'Konfigurieren und Preis sehen', step: 'Schritt {n} von {total}',
+    back: 'Zurück', next: 'Weiter', skip: 'Überspringen', calculating: 'Wird berechnet…',
+    price: 'Richtpreis', vatIncluded: 'inkl. MwSt.',
+    summary: 'Ihre Konfiguration', change: 'Ändern',
+    contactIntro: 'Wohin sollen wir das Angebot schicken?',
+    consentRequired: 'Ich bin mit der Verarbeitung meiner Daten zur Angebotserstellung einverstanden.',
+    consentMarketing: 'Sie dürfen mir Angebote und Neuigkeiten senden.',
+    needConsent: 'Für ein Angebot ist die Einwilligung erforderlich.',
+    getOffer: 'Angebot erhalten', offerSent: 'Das Angebot ist auf dem Weg zu Ihnen.',
+    notePlaceholder: 'Gibt es etwas, das wir wissen sollten?',
+  },
+  ro: {
+    start: 'Configurați și aflați prețul', step: 'Pasul {n} din {total}',
+    back: 'Înapoi', next: 'Continuați', skip: 'Omiteți', calculating: 'Se calculează…',
+    price: 'Preț estimativ', vatIncluded: 'TVA inclus',
+    summary: 'Configurația dumneavoastră', change: 'Modificați',
+    contactIntro: 'Unde vă trimitem oferta?',
+    consentRequired: 'Sunt de acord cu prelucrarea datelor mele pentru întocmirea ofertei.',
+    consentMarketing: 'Îmi puteți trimite oferte și noutăți.',
+    needConsent: 'Fără acord nu putem întocmi oferta.',
+    getOffer: 'Primiți oferta', offerSent: 'Oferta este pe drum către dumneavoastră.',
+    notePlaceholder: 'Aveți ceva de adăugat?',
+  },
+  ru: {
+    start: 'Собрать и узнать цену', step: 'Шаг {n} из {total}',
+    back: 'Назад', next: 'Далее', skip: 'Пропустить', calculating: 'Считаем…',
+    price: 'Ориентировочная цена', vatIncluded: 'НДС включён',
+    summary: 'Ваша конфигурация', change: 'Изменить',
+    contactIntro: 'Куда отправить оферту?',
+    consentRequired: 'Согласен на обработку моих данных для подготовки оферты.',
+    consentMarketing: 'Можно присылать мне предложения и новости.',
+    needConsent: 'Без согласия оферту подготовить нельзя.',
+    getOffer: 'Получить оферту', offerSent: 'Оферта уже едет к вам.',
+    notePlaceholder: 'Что-нибудь важное для нас?',
+  },
+};

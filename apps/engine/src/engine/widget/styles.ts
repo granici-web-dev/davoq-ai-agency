@@ -89,4 +89,71 @@ input {
 .disclosure { padding: 7px 12px 10px; font-size: 11px; opacity: .7; text-align: center; }
 .retry { background: transparent; border: 1px solid currentColor; border-radius: 8px;
          padding: 6px 12px; font-size: 13px; cursor: pointer; color: inherit; }
+
+/* Конфигуратор. Цвета — те же переменные, что у чата: у тенанта одна марка,
+   и второй набор ручек означал бы два разных виджета на одном сайте. */
+.cfg { display: flex; flex-direction: column; flex: 1; min-height: 0; }
+.cfg-top { padding: 12px 16px 0; }
+.cfg-count { font-size: 12px; opacity: .7; }
+.cfg-bar { height: 3px; margin-top: 6px; border-radius: 2px; background: rgb(128 128 128 / 22%); }
+.cfg-bar i { display: block; height: 100%; border-radius: 2px; background: var(--cw-primary);
+             transition: width .2s ease; }
+@media (prefers-reduced-motion: reduce) { .cfg-bar i { transition: none } }
+
+.cfg-body { flex: 1; overflow-y: auto; padding: 14px 16px; display: flex;
+            flex-direction: column; gap: 10px; }
+.cfg-title { margin: 0 0 2px; font-size: 15px; font-weight: 600; }
+
+.cfg-cards { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; }
+.cfg-swatches { display: grid; grid-template-columns: repeat(4, 1fr); gap: 8px; }
+.cfg-opt {
+  display: flex; flex-direction: column; gap: 6px; align-items: flex-start;
+  padding: 10px; cursor: pointer; text-align: left; font: inherit; font-size: 13px;
+  color: inherit; background: transparent;
+  border: 1px solid rgb(128 128 128 / 30%); border-radius: 12px;
+}
+.cfg-opt img { width: 100%; aspect-ratio: 4 / 3; object-fit: cover; border-radius: 8px; }
+.cfg-swatches .cfg-opt { padding: 6px; align-items: center; text-align: center; font-size: 11px; }
+.cfg-swatches .cfg-opt img { aspect-ratio: 1; }
+/* Выбранное отмечено рамкой И заливкой: одна рамка в цвете марки неразличима
+   на монохромной палитре, а такую палитру выбрал первый же клиент. */
+.cfg-opt.on { border-color: var(--cw-primary); box-shadow: inset 0 0 0 1px var(--cw-primary);
+              background: color-mix(in srgb, var(--cw-primary) 10%, transparent); }
+
+.cfg-number { display: flex; align-items: center; gap: 8px; }
+.cfg-number input { flex: 1; }
+.cfg-unit { font-size: 13px; opacity: .7; }
+.cfg-text {
+  min-height: 84px; padding: 10px 12px; font: inherit; font-size: 14px; resize: vertical;
+  border: 1px solid rgb(128 128 128 / 35%); border-radius: 10px;
+  background: transparent; color: inherit;
+}
+
+.cfg-nav { display: flex; align-items: center; gap: 8px; padding: 12px;
+           border-top: 1px solid rgb(128 128 128 / 22%); }
+.cfg-ghost { background: transparent; border: 1px solid rgb(128 128 128 / 35%);
+             border-radius: 10px; padding: 10px 14px; font-size: 14px; cursor: pointer;
+             color: inherit; }
+.cfg-ghost[disabled] { opacity: .4; cursor: default; }
+.cfg-price { flex: 1; display: flex; flex-direction: column; align-items: center;
+             font-size: 14px; line-height: 1.2; }
+.cfg-price i { font-style: normal; font-size: 11px; opacity: .7; }
+.send.wide { flex: 1; }
+
+.cfg-list { margin: 0; display: flex; flex-direction: column; gap: 6px; }
+.cfg-list div { display: flex; justify-content: space-between; gap: 12px; font-size: 13px; }
+.cfg-list dt { opacity: .7; }
+.cfg-list dd { margin: 0; text-align: right; }
+.cfg-link { background: transparent; border: 0; padding: 0 0 0 8px; cursor: pointer;
+            font: inherit; font-size: 12px; color: var(--cw-primary); text-decoration: underline; }
+.cfg-total { display: flex; justify-content: space-between; align-items: center; margin: 6px 0 2px;
+             padding-top: 10px; border-top: 1px solid rgb(128 128 128 / 22%); font-size: 14px; }
+.cfg-total .cfg-price { flex: none; align-items: flex-end; }
+.cfg-total b { font-size: 17px; }
+.cfg-check { display: flex; gap: 8px; align-items: flex-start; font-size: 12px; line-height: 1.4; }
+.cfg-check input { flex: none; width: 16px; height: 16px; margin-top: 1px; }
+.cfg-summary .hint { font-size: 13px; opacity: .8; margin-top: 4px; }
+.cfg-summary .err { font-size: 12px; color: #b91c1c; }
+.cfg-done { flex: 1; display: flex; align-items: center; justify-content: center; padding: 24px;
+            text-align: center; font-size: 14px; }
 `;
