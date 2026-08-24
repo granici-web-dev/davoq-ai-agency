@@ -288,7 +288,7 @@
       "title": "One place where you see everything the agent did",
       "lead": "The agent works on your site. What comes out of that work — requests, quotes, numbers — waits for you in the portal, not scattered across an inbox.",
       "panelTitle": "Your account, not ours",
-      "panelText": "Every client has their own portal with their own data. You do not ask us for a report and wait until we send it — you log in and look. Included from the Growth package upwards.",
+      "panelText": "Every client has their own portal with their own data. You do not ask us for a report and wait until we send it — you log in and look. Included in every package, from Start upwards.",
       "capabilities": {
         "leads": "Leads — every request, with everything the customer said",
         "offers": "Quotes — every PDF issued, with its number and date",
@@ -679,11 +679,13 @@
     "start": {
       "name": "Start",
       "subtitle": "AI assistant",
-      "tagline": "One agent that answers on your behalf, around the clock.",
+      "tagline": "One agent that answers around the clock and brings you qualified leads.",
       "cta": "Book a demo",
       "features": {
         "chatbot": "AI chatbot for your site: 24/7 answers from your knowledge base",
         "contacts": "Contact capture, delivered by email or into your CRM",
+        "qualify": "Lead qualification following your niche's script",
+        "portal": "Portal: leads, issued quotes, statistics and agent settings",
         "limit": "Up to 500 conversations a month",
         "language": "One language, standard industry script"
       }
@@ -695,8 +697,6 @@
       "cta": "Book a demo",
       "features": {
         "inherits": "Everything in Start, up to 2,000 conversations a month",
-        "qualify": "Lead qualification following your niche's script",
-        "portal": "Portal: leads, issued quotes, statistics and agent settings",
         "configurator": "AI request configurator: a structured specification for your sales team",
         "crm": "CRM assistant: records filled automatically from the correspondence",
         "followUp": "Follow-up agent: automatic returns to undecided leads",

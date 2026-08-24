@@ -288,7 +288,7 @@
       "title": "Un loc unde vedeți tot ce a făcut agentul",
       "lead": "Agentul lucrează pe site. Ce a ieșit din munca lui — cereri, oferte, cifre — vă așteaptă în portal, nu împrăștiat printre e-mailuri.",
       "panelTitle": "Contul dumneavoastră, nu al nostru",
-      "panelText": "Fiecare client are portalul lui, cu datele lui. Nu ne cereți un raport și nu așteptați până vi-l trimitem — intrați și vă uitați. Inclus începând cu pachetul Growth.",
+      "panelText": "Fiecare client are portalul lui, cu datele lui. Nu ne cereți un raport și nu așteptați până vi-l trimitem — intrați și vă uitați. Inclus în toate pachetele, de la Start.",
       "capabilities": {
         "leads": "Lead-uri — fiecare cerere, cu tot ce a spus clientul",
         "offers": "Oferte — fiecare PDF emis, cu număr și dată",
@@ -679,11 +679,13 @@
     "start": {
       "name": "Start",
       "subtitle": "Asistent AI",
-      "tagline": "Un agent care răspunde în locul dumneavoastră, non-stop.",
+      "tagline": "Un agent care răspunde non-stop și vă aduce lead-urile gata calificate.",
       "cta": "Cere o demonstrație",
       "features": {
         "chatbot": "Chatbot AI pentru site: răspunsuri 24/7 din baza de cunoștințe",
         "contacts": "Colectare contacte, transmitere pe e-mail sau în CRM",
+        "qualify": "Calificarea lead-urilor după scenariul nișei",
+        "portal": "Portal: lead-uri, oferte emise, statistici și setările agenților",
         "limit": "Până la 500 de conversații pe lună",
         "language": "O limbă, scenariu standard al industriei"
       }
@@ -695,8 +697,6 @@
       "cta": "Cere o demonstrație",
       "features": {
         "inherits": "Tot din Start, până la 2 000 de conversații pe lună",
-        "qualify": "Calificarea lead-urilor după scenariul nișei",
-        "portal": "Portal: lead-uri, oferte emise, statistici și setările agenților",
         "configurator": "Configurator AI de cereri: specificație structurată pentru echipa de vânzări",
         "crm": "Asistent CRM: completare automată a fișelor din corespondență",
         "followUp": "Agent follow-up: reveniri automate la lead-urile indecise",
