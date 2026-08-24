@@ -1,0 +1,94 @@
+{
+  "brand": {
+    "name": "AssistWidget",
+    "tagline": "Agenți AI pentru afaceri cu ofertă calculată individual"
+  },
+  "nav": {
+    "agents": "Agenți",
+    "industries": "Industrii",
+    "pricing": "Prețuri",
+    "about": "Despre",
+    "contact": "Contact",
+    "cta": "Cere o demonstrație",
+    "allAgents": "Toți agenții",
+    "allIndustries": "Toate industriile",
+    "openMenu": "Deschide meniul",
+    "closeMenu": "Închide meniul",
+    "skipToContent": "Sari la conținut"
+  },
+  "status": {
+    "available": "Disponibil",
+    "soon": "În curând"
+  },
+  "agents": {
+    "chatbot": {
+      "name": "Chatbot AI",
+      "short": "Răspunde 24/7 din materialele companiei și califică lead-ul după scenariul nișei."
+    },
+    "configurator": {
+      "name": "Configurator de cerere",
+      "short": "Pune întrebările, adună specificația, predă vânzărilor o cerere gata de calculat."
+    },
+    "crm-assistant": {
+      "name": "Asistent CRM",
+      "short": "Completează fișa lead-ului din conversație. Vânzătorul doar confirmă."
+    },
+    "follow-up": {
+      "name": "Follow-up automat",
+      "short": "Readuce lead-urile care s-au gândit și au tăcut, la momentul potrivit."
+    },
+    "order-status": {
+      "name": "Statusul comenzii",
+      "short": "Anunță clientul la fiecare etapă, fără ca cineva să scrie mesajul."
+    },
+    "content-engine": {
+      "name": "Motor de conținut",
+      "short": "O sursă, adaptată pentru Instagram, TikTok și Pinterest."
+    }
+  },
+  "industries": {
+    "mobilier": {
+      "name": "Mobilă și bucătării la comandă",
+      "short": "Preț pe schiță, țesături, termene de producție."
+    },
+    "constructii": {
+      "name": "Renovări și design interior",
+      "short": "Deviz pe metraj, etape, echipe."
+    },
+    "imobiliare": {
+      "name": "Dezvoltatori și agenții imobiliare",
+      "short": "Cerere, buget, programare la vizionare."
+    },
+    "auto": {
+      "name": "Dealeri auto",
+      "short": "Configurație, test drive, finanțare."
+    },
+    "energie": {
+      "name": "Panouri solare și HVAC",
+      "short": "Consum, acoperiș, calcul de rentabilitate."
+    },
+    "clinici": {
+      "name": "Stomatologie și medicină estetică",
+      "short": "Procedură, programare, întrebări delicate."
+    },
+    "other": {
+      "name": "Altă industrie?",
+      "short": "Configurăm agentul pentru nișa dumneavoastră."
+    }
+  },
+  "footer": {
+    "productsTitle": "Agenți",
+    "industriesTitle": "Industrii",
+    "companyTitle": "Companie",
+    "legalTitle": "Legal",
+    "privacy": "Confidențialitate",
+    "terms": "Termeni",
+    "rights": "Toate drepturile rezervate.",
+    "note": "Fiecare agent este configurat pentru nișa și brandul clientului. Datele fiecărui client rămân izolate."
+  },
+  "common": {
+    "learnMore": "Află mai multe",
+    "seeAll": "Vezi toate",
+    "language": "Limbă"
+  }
+}

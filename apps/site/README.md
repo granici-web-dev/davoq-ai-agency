@@ -1,36 +1,47 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# Site de prezentare — agenți AI
 
-## Getting Started
+Витрина продуктов: платформа AI-агентов для бизнесов с индивидуально
+рассчитываемой ценой. Статика, без бэкенда (кроме формы контакта).
 
-First, run the development server:
+## Стек
 
-```bash
-npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
-```
+Next.js 16 (App Router) · TypeScript · Tailwind v4 · next-intl · Vercel
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+## Языки
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+`ro` — основной, живёт в корне (`/`, `/pricing`).
+`en` — под префиксом (`/en`, `/en/pricing`).
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+Автоопределение языка по браузеру **выключено намеренно**: оно уводило бы
+с корня всех, чей браузер по-английски, включая Googlebot — и румынская
+версия перестала бы быть той, которую индексируют.
 
-## Learn More
+## Что где
 
-To learn more about Next.js, take a look at the following resources:
+    src/lib/catalog.ts      структура агентов и индустрий: слаги, статусы,
+                            связи. Один источник для навигации, гридов,
+                            перелинковки и sitemap
+    messages/{ro,en}.json   ВСЕ тексты. В компонентах строк нет
+    src/app/globals.css     дизайн-токены и три составных класса:
+                            .aurora, .card, .eyebrow
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+## Марка
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
+Имя `AssistWidget` стоит в `messages/*.json` под ключом `brand.name`
+и больше нигде. Другое имя — правка двух строк.
 
-## Deploy on Vercel
+## Разработка
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
+    npm run dev      локально
+    npm run build    проверка статической сборки
 
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+## Этапы
+
+- [x] 1 — скелет: токены, layout, навигация, подвал
+- [ ] 2 — ASSETS.md, утверждение до генерации визуалов
+- [ ] 3 — главная
+- [ ] 4 — /agents/chatbot как эталон продуктовой страницы
+- [ ] 5 — /industries/mobilier как эталон страницы индустрии
+- [ ] 6 — остальные страницы
+- [ ] 7 — перевод en
+- [ ] 8 — polish и audit

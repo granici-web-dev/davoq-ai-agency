@@ -1,26 +1,175 @@
 @import "tailwindcss";
 
-:root {
-  --background: #ffffff;
-  --foreground: #171717;
+/**
+ * Дизайн-токены.
+ *
+ * Тёмная база, а не «тёмная тема»: у сайта одно состояние. Светлого варианта
+ * нет намеренно — вся драматургия строится на свечении, а на белом свечения
+ * не бывает.
+ *
+ * Акценты живут ТОЛЬКО в градиентах, свечении и рамках. Ни одна кнопка,
+ * ни один заголовок не красится в акцент: как только цвет становится
+ * заливкой, экран превращается в презентацию, а не в продукт.
+ */
+@theme {
+  /* Основа. Почти чёрный с холодным уклоном — чистый #000 на OLED
+     «проваливается», и карточки на нём висят без опоры. */
+  --color-ink-950: #060607;
+  --color-ink-900: #0a0b0d;
+  --color-ink-850: #101114;
+  --color-ink-800: #16181c;
+  --color-ink-700: #22252b;
+
+  --color-chalk: #f5f5f7;
+  --color-chalk-dim: #a4a5ad;
+  --color-chalk-faint: #6e6f78;
+
+  /* Аврора: три источника света, из которых собираются все градиенты.
+     Больше трёх — и фон начинает спорить с содержимым. */
+  --color-aurora-warm: #f0a04b;
+  --color-aurora-cool: #4d8ff5;
+  --color-aurora-deep: #7b5cf0;
+
+  --font-sans: var(--font-instrument), ui-sans-serif, system-ui, sans-serif;
+  --font-mono: var(--font-mono-face), ui-monospace, SFMono-Regular, monospace;
+
+  /* Шкала заголовков с плавным ростом: clamp вместо брейкпоинтов —
+     на планшете между двумя ступенями иначе всегда получается провал. */
+  --text-display: clamp(2.75rem, 6.5vw, 5.25rem);
+  --text-h1: clamp(2.25rem, 4.6vw, 3.75rem);
+  --text-h2: clamp(1.75rem, 3.2vw, 2.75rem);
+  --text-h3: clamp(1.25rem, 1.8vw, 1.5rem);
+
+  --radius-card: 1.25rem;
+  --radius-pill: 999px;
+
+  /* Ритм секций. Одно значение на весь сайт: разнобой вертикальных отступов
+     читается как небрежность быстрее, чем любая ошибка в цвете. */
+  --spacing-section: clamp(5rem, 10vw, 8.5rem);
 }
 
-@theme inline {
-  --color-background: var(--background);
-  --color-foreground: var(--foreground);
-  --font-sans: var(--font-geist-sans);
-  --font-mono: var(--font-geist-mono);
-}
+@layer base {
+  html {
+    scroll-behavior: smooth;
+    -webkit-text-size-adjust: 100%;
+  }
 
-@media (prefers-color-scheme: dark) {
-  :root {
-    --background: #0a0a0a;
-    --foreground: #ededed;
+  @media (prefers-reduced-motion: reduce) {
+    html { scroll-behavior: auto; }
+    *, *::before, *::after {
+      animation-duration: 0.01ms !important;
+      animation-iteration-count: 1 !important;
+      transition-duration: 0.01ms !important;
+    }
+  }
+
+  body {
+    background-color: var(--color-ink-950);
+    color: var(--color-chalk);
+    font-family: var(--font-sans);
+    -webkit-font-smoothing: antialiased;
+    text-rendering: optimizeLegibility;
+  }
+
+  /* Заголовки набираются плотно: на крупном кегле дефолтный трекинг
+     рассыпает строку, и она перестаёт читаться как одно высказывание. */
+  h1, h2, h3 {
+    letter-spacing: -0.03em;
+    text-wrap: balance;
+    line-height: 1.05;
+  }
+
+  p { text-wrap: pretty; }
+
+  ::selection {
+    background: color-mix(in oklab, var(--color-aurora-cool) 40%, transparent);
+    color: var(--color-chalk);
+  }
+
+  /* Фокус виден всегда и одинаково: клавиатурная навигация не должна
+     зависеть от того, вспомнил ли автор компонента про :focus-visible. */
+  :focus-visible {
+    outline: 2px solid var(--color-aurora-cool);
+    outline-offset: 3px;
+    border-radius: 4px;
   }
 }
 
-body {
-  background: var(--background);
-  color: var(--foreground);
-  font-family: Arial, Helvetica, sans-serif;
+@layer components {
+  /**
+   * Свечение секции. Мягкое пятно света за содержимым — единственный способ
+   * получить глубину на тёмном фоне, не рисуя рамок вокруг всего подряд.
+   */
+  .aurora {
+    position: absolute;
+    inset: 0;
+    overflow: hidden;
+    pointer-events: none;
+    z-index: 0;
+  }
+  .aurora::before {
+    content: "";
+    position: absolute;
+    left: 50%;
+    /* Свет приходит СНИЗУ, из-за горизонта, а не сверху: сверху он читается
+       как засветка объектива, снизу — как источник, к которому идёшь. */
+    bottom: -45%;
+    width: min(110rem, 150%);
+    aspect-ratio: 16 / 9;
+    translate: -50% 0;
+    background:
+      radial-gradient(38% 46% at 18% 62%, color-mix(in oklab, var(--color-aurora-warm) 55%, transparent), transparent 68%),
+      radial-gradient(34% 42% at 48% 52%, color-mix(in oklab, var(--color-aurora-deep) 45%, transparent), transparent 68%),
+      radial-gradient(42% 50% at 82% 60%, color-mix(in oklab, var(--color-aurora-cool) 55%, transparent), transparent 68%);
+    filter: blur(90px);
+    opacity: 0.85;
+  }
+  /* Верхняя кромка гасится в фон: без неё свечение обрывается линией
+     и выдаёт, что это градиент, а не свет. */
+  .aurora::after {
+    content: "";
+    position: absolute;
+    inset: 0;
+    background: linear-gradient(180deg, var(--color-ink-950) 12%, transparent 55%);
+  }
+
+  /**
+   * Карточка. Рамка в 1px по белому с низкой альфой, а не серая линия:
+   * серая на тёмном выглядит грязной, полупрозрачная белая подхватывает
+   * свечение фона и держится с ним заодно.
+   */
+  .card {
+    position: relative;
+    border-radius: var(--radius-card);
+    border: 1px solid rgb(255 255 255 / 8%);
+    background:
+      linear-gradient(180deg, rgb(255 255 255 / 4%), rgb(255 255 255 / 1%)),
+      var(--color-ink-900);
+    transition: border-color 0.3s ease, transform 0.3s ease;
+  }
+  .card:hover {
+    border-color: rgb(255 255 255 / 16%);
+  }
+  /* Свечение по верхней кромке: имитация источника света сверху, из-за
+     которой карточка выглядит объёмной, а не наклеенной. */
+  .card::after {
+    content: "";
+    position: absolute;
+    inset: 0;
+    border-radius: inherit;
+    padding: 1px;
+    background: linear-gradient(180deg, rgb(255 255 255 / 18%), transparent 40%);
+    mask: linear-gradient(#000 0 0) content-box, linear-gradient(#000 0 0);
+    mask-composite: exclude;
+    pointer-events: none;
+  }
+
+  /** Mono-лейбл над заголовком секции. */
+  .eyebrow {
+    font-family: var(--font-mono);
+    font-size: 0.6875rem;
+    letter-spacing: 0.18em;
+    text-transform: uppercase;
+    color: var(--color-chalk-faint);
+  }
 }

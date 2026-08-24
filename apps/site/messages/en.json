@@ -1,0 +1,94 @@
+{
+  "brand": {
+    "name": "AssistWidget",
+    "tagline": "AI agents for businesses whose price is quoted, not listed"
+  },
+  "nav": {
+    "agents": "Agents",
+    "industries": "Industries",
+    "pricing": "Pricing",
+    "about": "About",
+    "contact": "Contact",
+    "cta": "Book a demo",
+    "allAgents": "All agents",
+    "allIndustries": "All industries",
+    "openMenu": "Open menu",
+    "closeMenu": "Close menu",
+    "skipToContent": "Skip to content"
+  },
+  "status": {
+    "available": "Available",
+    "soon": "Coming soon"
+  },
+  "agents": {
+    "chatbot": {
+      "name": "AI chatbot",
+      "short": "Answers 24/7 from your own materials and qualifies the lead the way your niche does."
+    },
+    "configurator": {
+      "name": "Request configurator",
+      "short": "Asks the questions, collects the specification, hands sales a request ready to price."
+    },
+    "crm-assistant": {
+      "name": "CRM assistant",
+      "short": "Fills the lead record from the conversation. The rep only confirms it."
+    },
+    "follow-up": {
+      "name": "Automatic follow-up",
+      "short": "Brings back the leads who said they would think about it and went quiet."
+    },
+    "order-status": {
+      "name": "Order status",
+      "short": "Tells the customer at every stage, without anyone writing the message."
+    },
+    "content-engine": {
+      "name": "Content engine",
+      "short": "One source, adapted for Instagram, TikTok and Pinterest."
+    }
+  },
+  "industries": {
+    "mobilier": {
+      "name": "Custom furniture and kitchens",
+      "short": "Priced from a sketch: fabrics, finishes, lead times."
+    },
+    "constructii": {
+      "name": "Renovation and interior design",
+      "short": "Quoted by area: stages, crews, schedules."
+    },
+    "imobiliare": {
+      "name": "Developers and estate agencies",
+      "short": "Requirements, budget, a viewing in the calendar."
+    },
+    "auto": {
+      "name": "Car dealerships",
+      "short": "Configuration, test drive, financing."
+    },
+    "energie": {
+      "name": "Solar and HVAC",
+      "short": "Consumption, roof, payback calculation."
+    },
+    "clinici": {
+      "name": "Dental and aesthetic medicine",
+      "short": "Procedure, appointment, the awkward questions."
+    },
+    "other": {
+      "name": "A different industry?",
+      "short": "We configure the agent for your niche."
+    }
+  },
+  "footer": {
+    "productsTitle": "Agents",
+    "industriesTitle": "Industries",
+    "companyTitle": "Company",
+    "legalTitle": "Legal",
+    "privacy": "Privacy",
+    "terms": "Terms",
+    "rights": "All rights reserved.",
+    "note": "Every agent is configured for the client's niche and brand. Each client's data stays isolated."
+  },
+  "common": {
+    "learnMore": "Learn more",
+    "seeAll": "See all",
+    "language": "Language"
+  }
+}
