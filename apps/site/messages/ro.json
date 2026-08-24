@@ -280,7 +280,7 @@
     "pricing": {
       "eyebrow": "Prețuri",
       "title": "Trei pachete, componență fixă",
-      "lead": "Plătiți lunar pentru agenții care rulează. Configurarea inițială se plătește o singură dată, la început.",
+      "lead": "Plătiți lunar pentru agenții care rulează. Separat, o singură dată la început, se plătește configurarea: citirea materialelor dumneavoastră și transformarea listei de prețuri în regulile după care agentul calculează.",
       "compare": "Comparați planurile"
     },
     "portal": {
@@ -333,6 +333,10 @@
         "timeline": {
           "q": "Cât durează până agentul e pe site?",
           "a": "Din partea dumneavoastră — o discuție și materialele pe care le aveți deja. Termenul depinde de forma în care e lista de prețuri: un tabel în Excel este una, un catalog scanat este alta. Vă spunem un termen concret după prima discuție, nu înainte."
+        },
+        "setup": {
+          "q": "Ce este taxa de configurare și de ce se plătește separat?",
+          "a": "Este munca de la început, care se face o singură dată: citim materialele dumneavoastră rând cu rând, transformăm lista de prețuri în regulile după care agentul calculează, scriem scenariul nișei și verificăm totul împreună cu dumneavoastră înainte de lansare. Abonamentul lunar acoperă agentul care rulează, nu această muncă. Suma depinde de pachet și este scrisă sub preț."
         },
         "unknown": {
           "q": "Ce face agentul când nu știe răspunsul?",

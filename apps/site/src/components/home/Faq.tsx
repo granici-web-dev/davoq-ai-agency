@@ -4,6 +4,7 @@ import { Link } from '@/i18n/routing';
 /** Порядок — от «сколько ждать» к «почему у вас нет отзывов». */
 const QUESTIONS = [
   'timeline',
+  'setup',
   'unknown',
   'data',
   'site',

@@ -280,7 +280,7 @@
     "pricing": {
       "eyebrow": "Pricing",
       "title": "Three packages, fixed contents",
-      "lead": "You pay monthly for the agents that run. The initial setup is paid once, at the start.",
+      "lead": "You pay monthly for the agents that run. Separately, once at the start, you pay for the setup: reading your materials and turning your price list into the rules the agent prices by.",
       "compare": "Compare the plans"
     },
     "portal": {
@@ -333,6 +333,10 @@
         "timeline": {
           "q": "How long until the agent is on my site?",
           "a": "From your side — one conversation and the materials you already have. The timeline depends on the shape your price list is in: a spreadsheet is one thing, a scanned catalogue is another. We give you a concrete date after the first conversation, not before."
+        },
+        "setup": {
+          "q": "What is the setup fee, and why is it paid separately?",
+          "a": "It is the work at the start, done once: we read your materials line by line, turn your price list into the rules the agent prices by, write the script for your niche and check it all together with you before launch. The monthly subscription covers the agent running, not that work. The amount depends on the package and is written under the price."
         },
         "unknown": {
           "q": "What does the agent do when it does not know the answer?",
