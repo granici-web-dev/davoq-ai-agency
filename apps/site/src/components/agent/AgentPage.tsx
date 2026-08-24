@@ -7,6 +7,7 @@ import { FaqList } from '@/components/ui/FaqList';
 import { Reveal } from '@/components/ui/Reveal';
 import { SectionHead } from './SectionHead';
 import { WidgetChat } from './WidgetChat';
+import { FeatureIcon } from './FeatureIcon';
 import { INDUSTRIES, type Agent } from '@/lib/catalog';
 import agentChatbot from '@/../public/images/agent-chatbot.webp';
 
@@ -128,10 +129,14 @@ export function AgentPage({ agent }: { agent: Agent }) {
               <div className="mx-auto max-w-7xl">
                 <SectionHead eyebrow={tPage('featuresEyebrow')} title={t('featuresTitle')} />
 
+                {/* Ключи берутся из текстов, а не перечислены руками:
+                    у следующего агента возможности будут свои, и список
+                    не должен требовать правки кода. */}
                 <ul className="mt-14 grid gap-px overflow-hidden rounded-card border border-white/8 bg-white/8 sm:grid-cols-2 lg:grid-cols-3">
-                  {['always', 'sources', 'qualify', 'languages', 'install', 'portal'].map((key) => (
+                  {Object.keys(t.raw('features') as Record<string, unknown>).map((key) => (
                     <li key={key} className="bg-ink-950 px-7 py-8">
-                      <h3 className="text-h3 font-medium">{t(`features.${key}.title`)}</h3>
+                      <FeatureIcon name={key} />
+                      <h3 className="mt-5 text-h3 font-medium">{t(`features.${key}.title`)}</h3>
                       <p className="mt-3 text-sm leading-relaxed text-chalk-dim">
                         {t(`features.${key}.text`)}
                       </p>
