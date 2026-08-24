@@ -385,9 +385,35 @@
     "finalCta": {
       "title": "Vedeți agentul pe produsele dumneavoastră, nu pe un demo generic",
       "lead": "La demonstrație luăm câteva produse din catalogul dumneavoastră și vă arătăm exact ce ar răspunde agentul unui client real.",
-      "primary": "Cere o demonstrație",
-      "secondary": "Vezi prețurile",
-      "note": "Fără prezentare de o oră. Treizeci de minute și agentul pe ecran."
+      "note": "Fără prezentare de o oră. Treizeci de minute și agentul pe ecran.",
+      "pricingHint": "Nu sunteți gata de discuție?",
+      "pricingLink": "Vedeți întâi prețurile."
+    }
+  },
+  "contact": {
+    "form": {
+      "name": "Cum vă numiți",
+      "contact": "E-mail sau telefon",
+      "contactHint": "Unde vă răspundem. Nu vă înscriem la nimic.",
+      "site": "Site-ul companiei",
+      "message": "Ce vindeți și ce v-ar trebui",
+      "optional": "opțional",
+      "submit": "Trimite cererea",
+      "sending": "Se trimite…",
+      "failed": "Nu am reușit să trimitem. Încercați din nou sau scrieți-ne direct pe e-mail.",
+      "sentTitle": "Am primit cererea",
+      "sentText": "Vă răspundem în aceeași zi lucrătoare, cu pașii pentru nișa dumneavoastră — nu cu o broșură.",
+      "sendAnother": "Trimite încă una",
+      "privacy": "Datele din formular le folosim doar ca să vă răspundem.",
+      "privacyLink": "Politica de confidențialitate",
+      "errors": {
+        "name": "Scrieți-ne cum vă numiți.",
+        "contact": "Avem nevoie de un e-mail sau de un telefon ca să vă răspundem.",
+        "contactFormat": "Verificați adresa sau numărul — nu par complete.",
+        "tooLong": "Textul este prea lung.",
+        "site": "Verificați adresa site-ului.",
+        "message": "Textul este prea lung."
+      }
     }
   }
 }

@@ -385,9 +385,35 @@
     "finalCta": {
       "title": "See the agent on your own products, not on a generic demo",
       "lead": "In the demo we take a few products from your catalogue and show you exactly what the agent would answer a real customer.",
-      "primary": "Book a demo",
-      "secondary": "See the pricing",
-      "note": "No hour-long presentation. Thirty minutes and the agent on screen."
+      "note": "No hour-long presentation. Thirty minutes and the agent on screen.",
+      "pricingHint": "Not ready to talk?",
+      "pricingLink": "Look at the pricing first."
+    }
+  },
+  "contact": {
+    "form": {
+      "name": "Your name",
+      "contact": "Email or phone",
+      "contactHint": "Where we reply. We will not sign you up to anything.",
+      "site": "Company website",
+      "message": "What you sell and what you would need",
+      "optional": "optional",
+      "submit": "Send the request",
+      "sending": "Sending…",
+      "failed": "We could not send it. Try again, or write to us by email.",
+      "sentTitle": "We have your request",
+      "sentText": "We reply the same working day, with the steps for your niche — not with a brochure.",
+      "sendAnother": "Send another one",
+      "privacy": "We use what you enter here only to reply to you.",
+      "privacyLink": "Privacy policy",
+      "errors": {
+        "name": "Please tell us your name.",
+        "contact": "We need an email or a phone number to reply.",
+        "contactFormat": "Check the address or number — they do not look complete.",
+        "tooLong": "This text is too long.",
+        "site": "Check the website address.",
+        "message": "This text is too long."
+      }
     }
   }
 }
