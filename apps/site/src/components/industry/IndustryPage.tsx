@@ -82,10 +82,17 @@ export function IndustryPage({ industry }: { industry: Industry }) {
 
           {/* Разговор из этой ниши, а не общий. Он и есть узнавание:
               человек видит свои собственные вопросы раньше, чем читает
-              про платформу. */}
+              про платформу.
+
+              Под виджетом подписано, что это чат-бот — один из агентов,
+              а не вся страница. Заголовок здесь про набор, и картинка
+              без подписи молча сузила бы его до одного продукта. */}
           {full && (
             <div className="enter lg:pl-4" style={{ animationDelay: '260ms' }}>
               <WidgetChat namespace={`industryPage.${industry.slug}`} />
+              <p className="mt-5 max-w-[22rem] text-xs leading-relaxed text-chalk-faint lg:mx-auto">
+                {t('conversationNote')}
+              </p>
             </div>
           )}
         </div>

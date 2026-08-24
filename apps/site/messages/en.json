@@ -588,15 +588,15 @@
     "agentsLead": "Each is a separate product. You can start with one and add another once the first has shown its result.",
     "openAgent": "See the agent",
     "mobilier": {
-      "metaTitle": "AI chatbot for made-to-order furniture",
-      "metaDescription": "An AI agent for makers of made-to-order furniture and kitchens: it answers \"how much\" from your own price list, collects dimensions and materials, and hands sales a request that is ready to price.",
-      "title": "AI chatbot for made-to-order furniture",
-      "lead": "It answers \"how much does it cost\" in the evening and at weekends, asks for dimensions and materials before a survey visit takes up your day, and hands sales a request that is ready to price.",
+      "metaTitle": "AI agents for made-to-order furniture — chatbot, configurator, follow-up",
+      "metaDescription": "AI agents for makers of made-to-order furniture and kitchens: they answer pricing questions from your own list, collect dimensions and materials, and hand sales a request that is ready to price.",
+      "title": "AI agents for made-to-order furniture",
+      "lead": "They answer pricing questions from your own list, collect dimensions and materials before a survey visit, bring back customers who went quiet, and report at every production stage. Each is a separate product — take only the ones you need.",
       "widgetTitle": "Chatbot",
       "widgetStatus": "Replies instantly",
       "widgetPlaceholder": "Write a message…",
       "widgetInitial": "AI",
-      "conversationNote": "An example conversation for a made-to-order furniture workshop.",
+      "conversationNote": "The AI chatbot at work in a made-to-order furniture workshop. It is the agent available now.",
       "dialog": [
         {
           "role": "client",
@@ -700,8 +700,8 @@
           "a": "Not if you tell it from the start that there are two flows. A customer who arrives with a drawing gets different questions from one who arrives with an idea — that is settled during configuration."
         }
       ],
-      "closingTitle": "See the agent answering about your own furniture",
-      "closingLead": "In the demo we take a few items from your catalogue and show you exactly what it would answer a real customer."
+      "closingTitle": "See the agents at work on your own catalogue",
+      "closingLead": "In the demo we take a few items from your catalogue and show you exactly what they would answer a real customer."
     }
   }
 }

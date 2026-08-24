@@ -588,15 +588,15 @@
     "agentsLead": "Fiecare este un produs separat. Puteți începe cu unul și adăuga altul când primul își arată rezultatul.",
     "openAgent": "Vezi agentul",
     "mobilier": {
-      "metaTitle": "Chatbot AI pentru mobilă la comandă",
-      "metaDescription": "Agent AI pentru producătorii de mobilă și bucătării la comandă: răspunde la «cât costă» din lista dumneavoastră de prețuri, adună dimensiunile și materialul, predă vânzătorului o cerere gata de calculat.",
-      "title": "Chatbot AI pentru mobilă la comandă",
-      "lead": "Răspunde la «cât costă» seara și în weekend, întreabă dimensiunile și materialul înainte să vă ocupe o măsurare, și predă vânzătorului o cerere gata de calculat.",
+      "metaTitle": "Agenți AI pentru mobilă la comandă — chatbot, configurator, follow-up",
+      "metaDescription": "Agenți AI pentru producătorii de mobilă și bucătării la comandă: răspund la întrebările de preț din lista dumneavoastră, adună dimensiunile și materialul și predau vânzătorului o cerere gata de calculat.",
+      "title": "Agenți AI pentru mobilă la comandă",
+      "lead": "Răspund la întrebările de preț din lista dumneavoastră, adună dimensiunile și materialul înainte de măsurare, readuc clienții care au tăcut și anunță la fiecare etapă a producției. Fiecare este un produs separat — luați doar pe cei de care aveți nevoie.",
       "widgetTitle": "Chatbot",
       "widgetStatus": "Răspunde imediat",
       "widgetPlaceholder": "Scrieți un mesaj…",
       "widgetInitial": "AI",
-      "conversationNote": "Exemplu de conversație pentru un atelier de mobilă la comandă.",
+      "conversationNote": "Chatbotul AI la lucru într-un atelier de mobilă la comandă. Este agentul disponibil acum.",
       "dialog": [
         {
           "role": "client",
@@ -700,7 +700,7 @@
           "a": "Nu, dacă îi spuneți din start că există două fluxuri. Clientul care vine cu proiect primește alte întrebări decât cel care vine cu o idee — asta se stabilește la configurare."
         }
       ],
-      "closingTitle": "Vedeți agentul răspunzând despre mobila dumneavoastră",
+      "closingTitle": "Vedeți agenții la lucru pe catalogul dumneavoastră",
       "closingLead": "La demonstrație luăm câteva poziții din catalogul dumneavoastră și vă arătăm exact ce ar răspunde unui client real."
     }
   }
