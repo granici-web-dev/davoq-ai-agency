@@ -571,8 +571,10 @@
       ],
       "closingTitle": "Vedeți chatbotul răspunzând despre produsele dumneavoastră",
       "closingLead": "La demonstrație luăm câteva produse din catalogul dumneavoastră și vă arătăm exact ce ar răspunde unui client real.",
-      "phoneHeader": "Chatbot pe site",
-      "phonePlaceholder": "Scrieți un mesaj…"
+      "widgetTitle": "Chatbot",
+      "widgetStatus": "Răspunde imediat",
+      "widgetPlaceholder": "Scrieți un mesaj…",
+      "widgetInitial": "AI"
     }
   }
 }

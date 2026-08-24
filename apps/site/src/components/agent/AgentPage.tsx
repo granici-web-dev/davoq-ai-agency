@@ -6,7 +6,7 @@ import { DemoButton } from '@/components/ui/DemoButton';
 import { FaqList } from '@/components/ui/FaqList';
 import { Reveal } from '@/components/ui/Reveal';
 import { SectionHead } from './SectionHead';
-import { PhoneChat } from './PhoneChat';
+import { WidgetChat } from './WidgetChat';
 import { INDUSTRIES, type Agent } from '@/lib/catalog';
 import agentChatbot from '@/../public/images/agent-chatbot.webp';
 
@@ -112,8 +112,8 @@ export function AgentPage({ agent }: { agent: Agent }) {
               раньше, чем читает про это словами. */}
           {available && (
             <div className="lg:pl-4">
-              <PhoneChat namespace={`agentPage.${agent.slug}`} />
-              <p className="mt-6 max-w-[19rem] text-center text-xs leading-relaxed text-chalk-faint lg:mx-auto">
+              <WidgetChat namespace={`agentPage.${agent.slug}`} />
+              <p className="mt-6 max-w-[22rem] text-xs leading-relaxed text-chalk-faint lg:mx-auto">
                 {t('conversationNote')}
               </p>
             </div>

@@ -571,8 +571,10 @@
       ],
       "closingTitle": "See the chatbot answering about your own products",
       "closingLead": "In the demo we take a few products from your catalogue and show you exactly what it would answer a real customer.",
-      "phoneHeader": "Chatbot on your site",
-      "phonePlaceholder": "Write a message…"
+      "widgetTitle": "Chatbot",
+      "widgetStatus": "Replies instantly",
+      "widgetPlaceholder": "Write a message…",
+      "widgetInitial": "AI"
     }
   }
 }
