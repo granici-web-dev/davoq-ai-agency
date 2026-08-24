@@ -266,32 +266,32 @@
     },
     "onboarding": {
       "eyebrow": "How it starts",
-      "title": "From the first conversation to an agent on your site",
+      "title": "From request to agent on your site, in four steps",
       "lead": "This is not an implementation project. You need no developer, no IT department and no new website — the agent sits on top of what you already have.",
       "timeLabel": "Your time",
       "steps": {
-        "talk": {
-          "title": "The conversation",
-          "text": "What you sell, how the price is worked out at your company, and what people ask you most often. Nothing to prepare in advance.",
-          "time": "30–40 minutes"
+        "request": {
+          "title": "Send a request",
+          "text": "A short form: what you sell and on which site. We reply with the steps for your niche, not with a brochure.",
+          "time": "Two minutes"
         },
-        "materials": {
-          "title": "The materials",
-          "text": "Website, product sheets, price list, terms. In whatever form they exist — Excel, PDF, Word, photos. Putting them in order is our job.",
-          "time": "As long as an email takes"
+        "checklist": {
+          "title": "Get the checklist",
+          "text": "A concrete list: price list, product sheets, lead times, delivery and warranty terms. You upload them exactly as they are — Excel, PDF, Word, photos.",
+          "time": "An hour, at your own pace"
         },
-        "config": {
-          "title": "The configuration",
-          "text": "The script for your niche, your pricing rules, your brand on the quote. You see the agent before your customers do and correct anything that does not sound like you.",
+        "portal": {
+          "title": "Get access to the portal",
+          "text": "There you see the agent already configured on your materials. You test it as an ordinary customer would and correct anything that does not sound like you. Requests and quotes land there too.",
           "time": "Half an hour of checking"
         },
-        "embed": {
-          "title": "One line of code",
-          "text": "A script on your site. The widget runs isolated from the page styles, so it breaks nothing you already have. If there is nobody to do it, we do it.",
+        "script": {
+          "title": "Copy the script from the portal",
+          "text": "One line of code to put on your site. The widget runs isolated from the page styles, so it breaks nothing you already have. If there is nobody to do it, we do it.",
           "time": "A few minutes"
         }
       },
-      "total": "Usually under two hours of your time in total. The rest is on us — including the unpleasant part, where the price list has to be read line by line.",
+      "total": "Around two hours of your time in total. The hard part — turning your price list into the rules the agent prices by — stays with us.",
       "priceLink": "What the initial setup costs"
     }
   }
