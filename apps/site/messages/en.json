@@ -49,27 +49,117 @@
   "industries": {
     "mobilier": {
       "name": "Custom furniture and kitchens",
-      "short": "Priced from a sketch: fabrics, finishes, lead times."
+      "short": "Priced from a sketch: fabrics, finishes, lead times.",
+      "panel": "Customers do not think in production terms. The agent asks in the order you would ask yourself — space, material, deadline — and hands sales a request that is ready to price.",
+      "dialog": [
+        {
+          "role": "agent",
+          "text": "What are the dimensions of the wall you are furnishing?"
+        },
+        {
+          "role": "client",
+          "text": "3.2 metres, with a window in the middle."
+        },
+        {
+          "role": "agent",
+          "text": "Fabric or leather? I can show you the price difference on the same configuration."
+        }
+      ]
     },
     "constructii": {
       "name": "Renovation and interior design",
-      "short": "Quoted by area: stages, crews, schedules."
+      "short": "Quoted by area: stages, crews, schedules.",
+      "panel": "A quote starts from the area and from the state the space is in right now. The agent finds out both before a site visit takes up your day.",
+      "dialog": [
+        {
+          "role": "agent",
+          "text": "What is the area, and what state is the space in now?"
+        },
+        {
+          "role": "client",
+          "text": "68 m², a new flat, bare shell."
+        },
+        {
+          "role": "agent",
+          "text": "Full renovation or finishes only? The quote differs by a factor of two."
+        }
+      ]
     },
     "imobiliare": {
       "name": "Developers and estate agencies",
-      "short": "Requirements, budget, a viewing in the calendar."
+      "short": "Requirements, budget, a viewing in the calendar.",
+      "panel": "Budget and timing are settled in the first two questions. The agent asks them, and the estate agent gets a qualified lead with a viewing already proposed.",
+      "dialog": [
+        {
+          "role": "agent",
+          "text": "What budget do you have in mind, and by when?"
+        },
+        {
+          "role": "client",
+          "text": "Up to €90,000, by spring."
+        },
+        {
+          "role": "agent",
+          "text": "I have three options within budget. Does Saturday morning suit you for a viewing?"
+        }
+      ]
     },
     "auto": {
       "name": "Car dealerships",
-      "short": "Configuration, test drive, financing."
+      "short": "Configuration, test drive, financing.",
+      "panel": "Configuration, financing and the test drive are three conversations usually held separately. The agent keeps all three inside one.",
+      "dialog": [
+        {
+          "role": "agent",
+          "text": "What do you drive now, and what is missing?"
+        },
+        {
+          "role": "client",
+          "text": "An estate, but I need more space."
+        },
+        {
+          "role": "agent",
+          "text": "Two configurations fit. Shall we book a test drive on Saturday?"
+        }
+      ]
     },
     "energie": {
       "name": "Solar and HVAC",
-      "short": "Consumption, roof, payback calculation."
+      "short": "Consumption, roof, payback calculation.",
+      "panel": "The payback calculation depends on consumption and on the roof. The agent collects both and sends the quote with the payback period already worked out.",
+      "dialog": [
+        {
+          "role": "agent",
+          "text": "How much do you pay for electricity each month?"
+        },
+        {
+          "role": "client",
+          "text": "Around 2,400 lei."
+        },
+        {
+          "role": "agent",
+          "text": "What kind of roof do you have? The number of panels depends on it."
+        }
+      ]
     },
     "clinici": {
       "name": "Dental and aesthetic medicine",
-      "short": "Procedure, appointment, the awkward questions."
+      "short": "Procedure, appointment, the awkward questions.",
+      "panel": "Questions about pain, price and recovery time are hard to ask a person and easy to ask an agent. The patient reaches reception already decided.",
+      "dialog": [
+        {
+          "role": "agent",
+          "text": "What is bothering you, and for how long?"
+        },
+        {
+          "role": "client",
+          "text": "I need an implant, but I am afraid of the pain."
+        },
+        {
+          "role": "agent",
+          "text": "I will explain exactly how it goes and what it costs. Do you prefer mornings?"
+        }
+      ]
     },
     "other": {
       "name": "A different industry?",
@@ -128,10 +218,12 @@
     },
     "industries": {
       "eyebrow": "Industries",
-      "title": "Configured for your niche, not \"for any business\".",
-      "lead": "The same agent, a different script: different questions, different materials, a different route to the price. Pick your industry and see what the conversation looks like.",
+      "title": "Configured for your niche",
+      "lead": "Not \"for any business\": different questions, different materials, a different route to the price. Pick your industry and see what the conversation looks like.",
       "otherText": "We work in niches that are not on this list too. If the price has to be calculated, the script can be configured.",
-      "otherCta": "Write to us"
+      "otherCta": "Write to us",
+      "view": "See the industry",
+      "agentsLabel": "Agents that fit"
     }
   }
 }

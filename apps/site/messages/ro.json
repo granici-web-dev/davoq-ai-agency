@@ -49,27 +49,117 @@
   "industries": {
     "mobilier": {
       "name": "Mobilă și bucătării la comandă",
-      "short": "Preț pe schiță, țesături, termene de producție."
+      "short": "Preț pe schiță, țesături, termene de producție.",
+      "panel": "Clientul nu gândește în termeni de producție. Agentul întreabă în ordinea în care întrebați și dumneavoastră — spațiu, material, termen — și predă vânzătorului o cerere gata de calculat.",
+      "dialog": [
+        {
+          "role": "agent",
+          "text": "Ce dimensiuni are peretele pe care îl mobilați?"
+        },
+        {
+          "role": "client",
+          "text": "3,2 metri, cu o fereastră la mijloc."
+        },
+        {
+          "role": "agent",
+          "text": "Țesătură sau piele? Vă arăt diferența de preț pe aceeași configurație."
+        }
+      ]
     },
     "constructii": {
       "name": "Renovări și design interior",
-      "short": "Deviz pe metraj, etape, echipe."
+      "short": "Deviz pe metraj, etape, echipe.",
+      "panel": "Devizul începe de la metraj și de la starea în care e spațiul acum. Agentul află amândouă înainte să vă ocupe o deplasare la fața locului.",
+      "dialog": [
+        {
+          "role": "agent",
+          "text": "Ce suprafață are spațiul și în ce stare este acum?"
+        },
+        {
+          "role": "client",
+          "text": "68 m², apartament nou, la gri."
+        },
+        {
+          "role": "agent",
+          "text": "Renovare completă sau doar finisaje? Devizul diferă de două ori."
+        }
+      ]
     },
     "imobiliare": {
       "name": "Dezvoltatori și agenții imobiliare",
-      "short": "Cerere, buget, programare la vizionare."
+      "short": "Cerere, buget, programare la vizionare.",
+      "panel": "Bugetul și termenul se află în primele două întrebări. Agentul le pune el, iar agentul imobiliar primește lead-ul deja calificat, cu vizionarea propusă.",
+      "dialog": [
+        {
+          "role": "agent",
+          "text": "Ce buget aveți în vedere și pentru ce termen?"
+        },
+        {
+          "role": "client",
+          "text": "Până la 90 000 €, până la primăvară."
+        },
+        {
+          "role": "agent",
+          "text": "Am trei variante în buget. Sâmbătă dimineața vă convine la vizionare?"
+        }
+      ]
     },
     "auto": {
       "name": "Dealeri auto",
-      "short": "Configurație, test drive, finanțare."
+      "short": "Configurație, test drive, finanțare.",
+      "panel": "Configurația, finanțarea și test drive-ul sunt trei conversații care de obicei se poartă separat. Agentul le ține pe toate trei într-una singură.",
+      "dialog": [
+        {
+          "role": "agent",
+          "text": "Ce conduceți acum și ce vă lipsește?"
+        },
+        {
+          "role": "client",
+          "text": "Un break, dar am nevoie de mai mult spațiu."
+        },
+        {
+          "role": "agent",
+          "text": "Două configurații se potrivesc. Programăm test drive sâmbătă?"
+        }
+      ]
     },
     "energie": {
       "name": "Panouri solare și HVAC",
-      "short": "Consum, acoperiș, calcul de rentabilitate."
+      "short": "Consum, acoperiș, calcul de rentabilitate.",
+      "panel": "Calculul de rentabilitate ține de consum și de acoperiș. Agentul strânge ambele date și trimite oferta cu perioada de amortizare deja calculată.",
+      "dialog": [
+        {
+          "role": "agent",
+          "text": "Cât plătiți lunar pe energie electrică?"
+        },
+        {
+          "role": "client",
+          "text": "În jur de 2 400 de lei."
+        },
+        {
+          "role": "agent",
+          "text": "Ce tip de acoperiș aveți? De asta depinde numărul de panouri."
+        }
+      ]
     },
     "clinici": {
       "name": "Stomatologie și medicină estetică",
-      "short": "Procedură, programare, întrebări delicate."
+      "short": "Procedură, programare, întrebări delicate.",
+      "panel": "Întrebările despre durere, preț și timp de recuperare se pun greu unui om și ușor unui agent. Pacientul ajunge la recepție deja hotărât.",
+      "dialog": [
+        {
+          "role": "agent",
+          "text": "Ce vă deranjează și de cât timp?"
+        },
+        {
+          "role": "client",
+          "text": "Am nevoie de un implant, dar mi-e teamă de durere."
+        },
+        {
+          "role": "agent",
+          "text": "Vă explic exact cum decurge și cât costă. Preferați dimineața?"
+        }
+      ]
     },
     "other": {
       "name": "Altă industrie?",
@@ -128,10 +218,12 @@
     },
     "industries": {
       "eyebrow": "Industrii",
-      "title": "Configurat pentru nișa dumneavoastră, nu «pentru orice afacere».",
-      "lead": "Același agent, alt scenariu: alte întrebări, alte materiale, alt mod de a ajunge la preț. Alegeți industria și vedeți cum arată conversația.",
+      "title": "Configurat pentru nișa dumneavoastră",
+      "lead": "Nu «pentru orice afacere»: alte întrebări, alte materiale, alt mod de a ajunge la preț. Alegeți industria și vedeți cum arată conversația.",
       "otherText": "Lucrăm și în nișe care nu sunt în listă. Dacă prețul se calculează, scenariul se poate configura.",
-      "otherCta": "Scrieți-ne"
+      "otherCta": "Scrieți-ne",
+      "view": "Vezi industria",
+      "agentsLabel": "Agenți potriviți"
     }
   }
 }
