@@ -442,5 +442,137 @@
       "text": "Fill in the form and we reply the same working day, with the steps for your niche.",
       "close": "Close"
     }
+  },
+  "agentPage": {
+    "soonTitle": "This agent is still being built",
+    "soonText": "We are not selling it yet. If it interests you, write to us: in a demo we show what it already does and tell you when it will be ready.",
+    "backToAgents": "All agents",
+    "featuresEyebrow": "What it does",
+    "conversationEyebrow": "A conversation",
+    "sourcesEyebrow": "What it answers from",
+    "platformsEyebrow": "Where it goes",
+    "industriesEyebrow": "Industries",
+    "faqEyebrow": "Questions",
+    "industriesTitle": "The same agent, a different script for every niche",
+    "industriesLead": "Pick your industry and see how the questions, the materials and the route to the price change.",
+    "chatbot": {
+      "metaTitle": "AI chatbot for your website — answers from your own prices",
+      "metaDescription": "An AI chatbot that answers 24/7 from your company materials, qualifies the lead and never invents prices. Configured for your niche, on a monthly subscription.",
+      "title": "An AI chatbot that answers from your prices, not from general copy",
+      "lead": "It answers 24/7 on your site, in whichever language it is written to. When the answer is not in your materials it does not invent one — it captures the request, with everything discussed up to that point.",
+      "featuresTitle": "What it does, concretely",
+      "features": {
+        "always": {
+          "title": "It answers at eleven at night too",
+          "text": "Most questions arrive in the evening and at weekends. The agent is there then, not the next morning at nine."
+        },
+        "sources": {
+          "title": "From your own materials",
+          "text": "Product sheets, price list, lead times, delivery and warranty terms. Not from general articles about the trade."
+        },
+        "qualify": {
+          "title": "It qualifies the request",
+          "text": "It asks what your salesperson would ask: dimensions, material, budget, timing. Sales gets a request, not a \"someone wrote in\"."
+        },
+        "languages": {
+          "title": "Romanian, Russian, English",
+          "text": "In whichever language it is written to, without asking and without a language switcher."
+        },
+        "install": {
+          "title": "One line of code to install",
+          "text": "A script on your site. It runs isolated from the page styles, so it cannot break anything you have."
+        },
+        "portal": {
+          "title": "Everything lands in the portal",
+          "text": "Every conversation, with its full context. Nothing stays only in the chat window."
+        }
+      },
+      "conversationTitle": "What it looks like, word for word",
+      "conversationNote": "An example for made-to-order furniture. The prices in the answer come from the client's list, not from us.",
+      "dialog": [
+        {
+          "role": "client",
+          "text": "Hello. How much would a kitchen along a 3.2 metre wall cost?"
+        },
+        {
+          "role": "agent",
+          "text": "That depends first of all on the fronts and the worktop. Do you have a preference — painted MDF, veneer or foil?"
+        },
+        {
+          "role": "client",
+          "text": "Painted MDF. And a stone worktop."
+        },
+        {
+          "role": "agent",
+          "text": "For 3.2 m with painted MDF and a quartz worktop, the range in our list is 38,000 – 46,000 lei, depending on the hardware and the appliances."
+        },
+        {
+          "role": "client",
+          "text": "And how long does it take?"
+        },
+        {
+          "role": "agent",
+          "text": "Production takes around 30 working days from the moment the design is confirmed. If you leave me an email I will send the exact quote today — do you have a photo or a drawing of the space?"
+        }
+      ],
+      "sourcesTitle": "What it answers from — and what it never does",
+      "sourcesYes": {
+        "title": "It answers from",
+        "items": [
+          "Your price list, with its calculation rules",
+          "Your product sheets: materials, dimensions, options",
+          "Production and delivery lead times",
+          "Warranty and payment terms",
+          "The questions you already get most often"
+        ]
+      },
+      "sourcesNo": {
+        "title": "It never",
+        "items": [
+          "Invents prices that are not in the list",
+          "Promises lead times that are not in the materials",
+          "Answers things that have nothing to do with your business",
+          "Insists when the person asks to speak to a human",
+          "Sends a quote before you have set the rules"
+        ]
+      },
+      "platformsTitle": "It works on the site you already have",
+      "platformsLead": "It is a script. If you can add a script to the page — directly, through a plugin or through Google Tag Manager — the agent works. If there is nobody to do it, we do it.",
+      "platforms": [
+        "WordPress",
+        "WooCommerce",
+        "Shopify",
+        "Wix",
+        "Tilda",
+        "Webflow",
+        "Squarespace",
+        "Custom-built site"
+      ],
+      "faqTitle": "What people ask about the chatbot",
+      "faq": [
+        {
+          "q": "How long until it is on my site?",
+          "a": "From your side — one conversation and the materials you already have. The timeline depends on the shape your price list is in: a spreadsheet is one thing, a scanned catalogue is another. We give you a concrete date after the first conversation."
+        },
+        {
+          "q": "What if it answers something wrong?",
+          "a": "You see every conversation in the portal. When something sounds wrong, the source it answered from gets corrected — and the correction takes effect immediately, not in the next release. Mistakes in the first week are normal, which is exactly why you read the conversations."
+        },
+        {
+          "q": "Can it take orders and payments?",
+          "a": "It can collect the complete request and hand it to your salesperson. Order confirmation and payment stay with you — we do not want an agent taking money on your behalf."
+        },
+        {
+          "q": "What happens to my customers' data?",
+          "a": "It stays yours and is isolated from every other client on the platform — not by a promise, but by the way the database is built."
+        },
+        {
+          "q": "Does it work on a phone?",
+          "a": "Yes, and it is designed for the small screen first: that is where most questions come from. The window does not cover the page and closes with one gesture."
+        }
+      ],
+      "closingTitle": "See the chatbot answering about your own products",
+      "closingLead": "In the demo we take a few products from your catalogue and show you exactly what it would answer a real customer."
+    }
   }
 }

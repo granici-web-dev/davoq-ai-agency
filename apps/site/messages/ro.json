@@ -442,5 +442,137 @@
       "text": "Completați formularul și vă răspundem în aceeași zi lucrătoare, cu pașii pentru nișa dumneavoastră.",
       "close": "Închide"
     }
+  },
+  "agentPage": {
+    "soonTitle": "Agentul acesta este în lucru",
+    "soonText": "Nu îl vindem încă. Dacă vă interesează, scrieți-ne: la demonstrație vă arătăm ce face deja și vă spunem când e gata.",
+    "backToAgents": "Toți agenții",
+    "featuresEyebrow": "Ce face",
+    "conversationEyebrow": "O conversație",
+    "sourcesEyebrow": "Din ce răspunde",
+    "platformsEyebrow": "Unde se pune",
+    "industriesEyebrow": "Industrii",
+    "faqEyebrow": "Întrebări",
+    "industriesTitle": "Același agent, alt scenariu pentru fiecare nișă",
+    "industriesLead": "Alegeți industria și vedeți cum se schimbă întrebările, materialele și modul de a ajunge la preț.",
+    "chatbot": {
+      "metaTitle": "Chatbot AI pentru site — răspunde din prețurile dumneavoastră",
+      "metaDescription": "Chatbot AI care răspunde 24/7 din materialele companiei dumneavoastră, califică lead-ul și nu inventează prețuri. Configurat pentru nișa dumneavoastră, pe abonament lunar.",
+      "title": "Chatbot AI care răspunde din prețurile dumneavoastră, nu din texte generale",
+      "lead": "Răspunde 24/7 pe site-ul dumneavoastră, în limba în care i se scrie. Când nu are răspunsul în materialele dumneavoastră, nu îl inventează — lasă cererea, cu tot ce s-a discutat până acolo.",
+      "featuresTitle": "Ce face, concret",
+      "features": {
+        "always": {
+          "title": "Răspunde și la ora unsprezece seara",
+          "text": "Cele mai multe întrebări vin seara și în weekend. Agentul este acolo atunci, nu a doua zi la nouă."
+        },
+        "sources": {
+          "title": "Din materialele dumneavoastră",
+          "text": "Fișe de produs, listă de prețuri, termene, condiții de livrare și garanție. Nu din articole generale despre domeniu."
+        },
+        "qualify": {
+          "title": "Califică cererea",
+          "text": "Pune întrebările pe care le-ar pune vânzătorul: dimensiuni, material, buget, termen. Vânzătorul primește o cerere, nu un «a scris cineva»."
+        },
+        "languages": {
+          "title": "Româna, rusa, engleza",
+          "text": "În limba în care i se scrie, fără să întrebe și fără buton de schimbat limba."
+        },
+        "install": {
+          "title": "Se pune cu o linie de cod",
+          "text": "Un script pe site. Rulează izolat de stilurile paginii, deci nu poate strica nimic din ce aveți."
+        },
+        "portal": {
+          "title": "Totul ajunge în portal",
+          "text": "Fiecare conversație, cu tot contextul ei. Nimic nu rămâne doar în fereastra de chat."
+        }
+      },
+      "conversationTitle": "Cum arată, cuvânt cu cuvânt",
+      "conversationNote": "Exemplu pentru mobilă la comandă. Prețurile din răspuns vin din lista clientului, nu de la noi.",
+      "dialog": [
+        {
+          "role": "client",
+          "text": "Bună ziua. Cât ar costa o bucătărie pe un perete de 3,2 metri?"
+        },
+        {
+          "role": "agent",
+          "text": "Depinde în primul rând de fronturi și de blat. Aveți o preferință — MDF vopsit, furnir sau folie?"
+        },
+        {
+          "role": "client",
+          "text": "MDF vopsit. Și blat de piatră."
+        },
+        {
+          "role": "agent",
+          "text": "Pentru 3,2 m cu MDF vopsit și blat de cuarț, intervalul din lista noastră este 38 000 – 46 000 lei, în funcție de feronerie și de electrocasnice."
+        },
+        {
+          "role": "client",
+          "text": "Și în cât timp se face?"
+        },
+        {
+          "role": "agent",
+          "text": "Producția durează în jur de 30 de zile lucrătoare de la confirmarea proiectului. Dacă îmi lăsați un e-mail, vă trimit astăzi oferta exactă — aveți o poză sau schița spațiului?"
+        }
+      ],
+      "sourcesTitle": "Din ce răspunde — și ce nu face niciodată",
+      "sourcesYes": {
+        "title": "Răspunde din",
+        "items": [
+          "Lista dumneavoastră de prețuri, cu regulile de calcul",
+          "Fișele de produs: materiale, dimensiuni, opțiuni",
+          "Termenele de producție și de livrare",
+          "Condițiile de garanție și de plată",
+          "Întrebările pe care le primiți deja cel mai des"
+        ]
+      },
+      "sourcesNo": {
+        "title": "Nu face",
+        "items": [
+          "Nu inventează prețuri care nu sunt în listă",
+          "Nu promite termene care nu sunt în materiale",
+          "Nu răspunde la ce nu ține de afacerea dumneavoastră",
+          "Nu insistă când omul cere să vorbească cu un om",
+          "Nu trimite oferta fără ca dumneavoastră să fi stabilit regulile"
+        ]
+      },
+      "platformsTitle": "Funcționează pe site-ul pe care îl aveți deja",
+      "platformsLead": "Este un script. Dacă puteți adăuga un script în pagină — direct, prin plugin sau prin Google Tag Manager — agentul funcționează. Dacă nu aveți cui, îl punem noi.",
+      "platforms": [
+        "WordPress",
+        "WooCommerce",
+        "Shopify",
+        "Wix",
+        "Tilda",
+        "Webflow",
+        "Squarespace",
+        "Site scris la comandă"
+      ],
+      "faqTitle": "Ce se întreabă despre chatbot",
+      "faq": [
+        {
+          "q": "Cât durează până e pe site?",
+          "a": "Din partea dumneavoastră — o discuție și materialele pe care le aveți deja. Termenul depinde de forma în care e lista de prețuri: un tabel în Excel este una, un catalog scanat este alta. Vă spunem un termen concret după prima discuție."
+        },
+        {
+          "q": "Ce se întâmplă dacă răspunde greșit?",
+          "a": "Vedeți fiecare conversație în portal. Când ceva sună greșit, se corectează sursa din care a răspuns — și corecția intră imediat, nu la următoarea versiune. Greșelile din prima săptămână sunt normale și de aceea vă uitați la conversații."
+        },
+        {
+          "q": "Poate să preia comenzi și plăți?",
+          "a": "Poate să adune cererea completă și să o predea vânzătorului. Confirmarea comenzii și plata rămân la dumneavoastră — nu vrem ca un agent să încaseze bani în locul dumneavoastră."
+        },
+        {
+          "q": "Ce se întâmplă cu datele clienților mei?",
+          "a": "Rămân ale dumneavoastră și sunt izolate de datele oricărui alt client al platformei — nu printr-o promisiune, ci prin felul în care e construită baza de date."
+        },
+        {
+          "q": "Merge pe telefon?",
+          "a": "Da, și este gândit pentru ecran mic în primul rând: de acolo vin cele mai multe întrebări. Fereastra nu acoperă pagina și se închide cu un gest."
+        }
+      ],
+      "closingTitle": "Vedeți chatbotul răspunzând despre produsele dumneavoastră",
+      "closingLead": "La demonstrație luăm câteva produse din catalogul dumneavoastră și vă arătăm exact ce ar răspunde unui client real."
+    }
   }
 }
