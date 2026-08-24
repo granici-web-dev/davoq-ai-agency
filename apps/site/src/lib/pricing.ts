@@ -37,7 +37,7 @@ export const PLANS: Plan[] = [
     id: 'start',
     price: 199,
     setup: 490,
-    features: [{ key: 'chatbot' }, { key: 'limit' }, { key: 'language' }],
+    features: [{ key: 'chatbot' }, { key: 'contacts' }, { key: 'limit' }, { key: 'language' }],
   },
   {
     id: 'growth',
@@ -47,7 +47,6 @@ export const PLANS: Plan[] = [
     features: [
       { key: 'inherits' },
       { key: 'qualify' },
-      { key: 'contacts' },
       { key: 'portal' },
       { key: 'configurator', soon: true },
       { key: 'crm', soon: true },
@@ -120,7 +119,7 @@ export const MATRIX: MatrixRow[] = [
   { key: 'chatbot', start: true, growth: true, platform: true },
   { key: 'scenario', start: 'value', growth: 'value', platform: 'value' },
   { key: 'qualify', start: false, growth: true, platform: true },
-  { key: 'contacts', start: false, growth: true, platform: true },
+  { key: 'contacts', start: true, growth: true, platform: true },
   { key: 'portal', start: false, growth: true, platform: true },
   { key: 'configurator', start: false, growth: true, platform: true, soon: true },
   { key: 'crm', start: false, growth: true, platform: true, soon: true },

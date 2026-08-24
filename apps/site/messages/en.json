@@ -683,6 +683,7 @@
       "cta": "Book a demo",
       "features": {
         "chatbot": "AI chatbot for your site: 24/7 answers from your knowledge base",
+        "contacts": "Contact capture, delivered by email or into your CRM",
         "limit": "Up to 500 conversations a month",
         "language": "One language, standard industry script"
       }
@@ -695,7 +696,6 @@
       "features": {
         "inherits": "Everything in Start, up to 2,000 conversations a month",
         "qualify": "Lead qualification following your niche's script",
-        "contacts": "Contact capture, delivered by email or into your CRM",
         "portal": "Portal: leads, issued quotes, statistics and agent settings",
         "configurator": "AI request configurator: a structured specification for your sales team",
         "crm": "CRM assistant: records filled automatically from the correspondence",
