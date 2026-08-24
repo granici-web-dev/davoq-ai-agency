@@ -31,9 +31,9 @@ export default async function HomePage({
 
   return (
     <>
-      <Reveal>
-        <Hero />
-      </Reveal>
+      {/* Герой без `Reveal`: он на экране с первого кадра, и проявлять
+          его по прокрутке нечем. Свой вход, по порядку, у него внутри. */}
+      <Hero />
       <Reveal>
         <Problem />
       </Reveal>

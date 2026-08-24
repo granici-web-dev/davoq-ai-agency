@@ -71,6 +71,7 @@
     html { scroll-behavior: auto; }
     *, *::before, *::after {
       animation-duration: 0.01ms !important;
+      animation-delay: 0.01ms !important;
       animation-iteration-count: 1 !important;
       transition-duration: 0.01ms !important;
     }
@@ -251,6 +252,57 @@
 
   @media (prefers-reduced-motion: reduce) {
     .reveal[data-state='hidden'] {
+      opacity: 1;
+      transform: none;
+    }
+  }
+}
+
+@layer components {
+  /**
+   * Вход первого экрана.
+   *
+   * Не то же, что `.reveal`: то проявляет секцию, когда до неё дошли
+   * прокруткой, а здесь всё уже на экране в момент загрузки, и порядок
+   * задаёт не положение, а задержка.
+   *
+   * Сделано анимацией, а не переходом по состоянию React: анимация
+   * начинается сразу при разборе стилей, до того как отработает
+   * гидратация. Через состояние первый кадр приходил бы позже — и тем
+   * позже, чем медленнее устройство, то есть заметнее всего там, где
+   * это хуже всего.
+   *
+   * `both` держит начальное состояние в течение задержки: без него блок
+   * успевал бы мигнуть на своём месте, прежде чем спрятаться.
+   */
+  .enter {
+    animation: enter-rise 0.8s cubic-bezier(0.22, 0.61, 0.24, 1) both;
+  }
+
+  /* У кадра свой вход: он не поднимается, а проступает и отпускает
+     масштаб. Кадр, приезжающий снизу, читается как слайд презентации;
+     кадр, который проявляется, — как включённый свет. */
+  .enter-frame {
+    animation: enter-frame 1.4s cubic-bezier(0.22, 0.61, 0.24, 1) both;
+  }
+
+  @keyframes enter-rise {
+    from {
+      opacity: 0;
+      transform: translateY(16px);
+    }
+    to {
+      opacity: 1;
+      transform: none;
+    }
+  }
+
+  @keyframes enter-frame {
+    from {
+      opacity: 0;
+      transform: scale(1.04);
+    }
+    to {
       opacity: 1;
       transform: none;
     }
