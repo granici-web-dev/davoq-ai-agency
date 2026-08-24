@@ -448,7 +448,6 @@
     "soonText": "We are not selling it yet. If it interests you, write to us: in a demo we show what it already does and tell you when it will be ready.",
     "backToAgents": "All agents",
     "featuresEyebrow": "What it does",
-    "conversationEyebrow": "A conversation",
     "sourcesEyebrow": "What it answers from",
     "platformsEyebrow": "Where it goes",
     "industriesEyebrow": "Industries",
@@ -487,7 +486,6 @@
           "text": "Every conversation, with its full context. Nothing stays only in the chat window."
         }
       },
-      "conversationTitle": "What it looks like, word for word",
       "conversationNote": "An example for made-to-order furniture. The prices in the answer come from the client's list, not from us.",
       "dialog": [
         {
@@ -572,7 +570,9 @@
         }
       ],
       "closingTitle": "See the chatbot answering about your own products",
-      "closingLead": "In the demo we take a few products from your catalogue and show you exactly what it would answer a real customer."
+      "closingLead": "In the demo we take a few products from your catalogue and show you exactly what it would answer a real customer.",
+      "phoneHeader": "Chatbot on your site",
+      "phonePlaceholder": "Write a message…"
     }
   }
 }

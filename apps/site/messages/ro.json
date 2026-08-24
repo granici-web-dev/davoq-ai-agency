@@ -448,7 +448,6 @@
     "soonText": "Nu îl vindem încă. Dacă vă interesează, scrieți-ne: la demonstrație vă arătăm ce face deja și vă spunem când e gata.",
     "backToAgents": "Toți agenții",
     "featuresEyebrow": "Ce face",
-    "conversationEyebrow": "O conversație",
     "sourcesEyebrow": "Din ce răspunde",
     "platformsEyebrow": "Unde se pune",
     "industriesEyebrow": "Industrii",
@@ -487,7 +486,6 @@
           "text": "Fiecare conversație, cu tot contextul ei. Nimic nu rămâne doar în fereastra de chat."
         }
       },
-      "conversationTitle": "Cum arată, cuvânt cu cuvânt",
       "conversationNote": "Exemplu pentru mobilă la comandă. Prețurile din răspuns vin din lista clientului, nu de la noi.",
       "dialog": [
         {
@@ -572,7 +570,9 @@
         }
       ],
       "closingTitle": "Vedeți chatbotul răspunzând despre produsele dumneavoastră",
-      "closingLead": "La demonstrație luăm câteva produse din catalogul dumneavoastră și vă arătăm exact ce ar răspunde unui client real."
+      "closingLead": "La demonstrație luăm câteva produse din catalogul dumneavoastră și vă arătăm exact ce ar răspunde unui client real.",
+      "phoneHeader": "Chatbot pe site",
+      "phonePlaceholder": "Scrieți un mesaj…"
     }
   }
 }

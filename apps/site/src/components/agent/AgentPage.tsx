@@ -6,6 +6,7 @@ import { DemoButton } from '@/components/ui/DemoButton';
 import { FaqList } from '@/components/ui/FaqList';
 import { Reveal } from '@/components/ui/Reveal';
 import { SectionHead } from './SectionHead';
+import { PhoneChat } from './PhoneChat';
 import { INDUSTRIES, type Agent } from '@/lib/catalog';
 import agentChatbot from '@/../public/images/agent-chatbot.webp';
 
@@ -13,11 +14,6 @@ import agentChatbot from '@/../public/images/agent-chatbot.webp';
 const VISUALS: Partial<Record<string, typeof agentChatbot>> = {
   chatbot: agentChatbot,
 };
-
-interface DialogLine {
-  role: 'agent' | 'client';
-  text: string;
-}
 
 /**
  * Страница агента.
@@ -44,7 +40,6 @@ export function AgentPage({ agent }: { agent: Agent }) {
   const available = agent.status === 'available';
   const visual = VISUALS[agent.slug];
 
-  const dialog = available ? (t.raw('dialog') as DialogLine[]) : [];
   const platforms = available ? (t.raw('platforms') as string[]) : [];
   const yes = available ? (t.raw('sourcesYes.items') as string[]) : [];
   const no = available ? (t.raw('sourcesNo.items') as string[]) : [];
@@ -64,7 +59,8 @@ export function AgentPage({ agent }: { agent: Agent }) {
           </div>
         )}
 
-        <div className="relative mx-auto max-w-7xl">
+        <div className="relative mx-auto grid max-w-7xl gap-14 lg:grid-cols-[1fr_auto] lg:items-center lg:gap-20">
+          <div>
           <Link
             href="/agents"
             className="font-mono text-[11px] tracking-wider text-chalk-dim uppercase transition-colors hover:text-chalk"
@@ -108,6 +104,20 @@ export function AgentPage({ agent }: { agent: Agent }) {
               <p className="mt-3 leading-relaxed text-chalk-dim">{tPage('soonText')}</p>
             </div>
           )}
+          </div>
+
+          {/* Разговор стоит в первом экране, а не отдельной секцией ниже.
+              Это самое убедительное, что есть на странице: человек видит,
+              что агент называет цену из прайса и спрашивает про размеры,
+              раньше, чем читает про это словами. */}
+          {available && (
+            <div className="lg:pl-4">
+              <PhoneChat namespace={`agentPage.${agent.slug}`} />
+              <p className="mt-6 max-w-[19rem] text-center text-xs leading-relaxed text-chalk-faint lg:mx-auto">
+                {t('conversationNote')}
+              </p>
+            </div>
+          )}
         </div>
       </section>
 
@@ -128,38 +138,6 @@ export function AgentPage({ agent }: { agent: Agent }) {
                     </li>
                   ))}
                 </ul>
-              </div>
-            </section>
-          </Reveal>
-
-          <Reveal>
-            <section className="relative isolate px-6 py-section sm:px-8">
-              <div className="aurora" aria-hidden />
-              <div className="relative mx-auto max-w-7xl">
-                <SectionHead eyebrow={tPage('conversationEyebrow')} title={t('conversationTitle')} />
-
-                {/* Разговор целиком, а не обрывок: на главной хватало трёх
-                    реплик, чтобы обозначить мысль, здесь человек решает,
-                    покупать ли, и хочет видеть, чем всё кончается. */}
-                <div className="card mt-14 p-7 sm:p-10">
-                  <ul className="mx-auto flex max-w-2xl flex-col gap-4">
-                    {dialog.map((line, i) => (
-                      <li key={i} className={line.role === 'agent' ? 'mr-8' : 'ml-8 flex justify-end'}>
-                        <p
-                          className={
-                            line.role === 'agent'
-                              ? 'rounded-2xl rounded-bl-sm border border-white/10 bg-white/6 px-5 py-3.5 leading-relaxed text-chalk'
-                              : 'rounded-2xl rounded-br-sm bg-chalk px-5 py-3.5 leading-relaxed text-ink-950'
-                          }
-                        >
-                          {line.text}
-                        </p>
-                      </li>
-                    ))}
-                  </ul>
-                </div>
-
-                <p className="mt-5 text-sm text-chalk-faint">{t('conversationNote')}</p>
               </div>
             </section>
           </Reveal>
