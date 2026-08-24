@@ -339,6 +339,47 @@
           }
         }
       }
+    },
+    "portal": {
+      "eyebrow": "The portal",
+      "title": "One place where you see everything the agent did",
+      "lead": "The agent works on your site. What comes out of that work — requests, quotes, numbers — waits for you in the portal, not scattered across an inbox.",
+      "panelTitle": "Your account, not ours",
+      "panelText": "Every client has their own portal with their own data. You do not ask us for a report and wait until we send it — you log in and look.",
+      "capabilities": {
+        "leads": "Leads — every request, with everything the customer said",
+        "offers": "Quotes — every PDF issued, with its number and date",
+        "stats": "Statistics — where people stop and what they ask",
+        "agents": "Agents — switch on, switch off, correct the answers",
+        "billing": "Subscription — plan, invoices, payments"
+      },
+      "cta": "See the portal in a demo",
+      "mock": {
+        "brand": "Portal",
+        "range": "Last 7 days",
+        "nav": {
+          "leads": "Leads",
+          "offers": "Quotes",
+          "agents": "Agents",
+          "stats": "Statistics",
+          "billing": "Subscription"
+        },
+        "tiles": {
+          "requests": "Requests",
+          "offers": "Quotes",
+          "inProgress": "In progress"
+        },
+        "states": {
+          "sent": "Quote sent",
+          "open": "In progress"
+        },
+        "rows": {
+          "a": "Fitted kitchen, 3.2 m",
+          "b": "Three-seat sofa, fabric",
+          "c": "Corner wardrobe",
+          "d": "Extending table, oak"
+        }
+      }
     }
   }
 }

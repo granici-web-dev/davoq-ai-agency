@@ -339,6 +339,47 @@
           }
         }
       }
+    },
+    "portal": {
+      "eyebrow": "Portalul",
+      "title": "Un loc unde vedeți tot ce a făcut agentul",
+      "lead": "Agentul lucrează pe site. Ce a ieșit din munca lui — cereri, oferte, cifre — vă așteaptă în portal, nu împrăștiat printre e-mailuri.",
+      "panelTitle": "Contul dumneavoastră, nu al nostru",
+      "panelText": "Fiecare client are portalul lui, cu datele lui. Nu ne cereți un raport și nu așteptați până vi-l trimitem — intrați și vă uitați.",
+      "capabilities": {
+        "leads": "Lead-uri — fiecare cerere, cu tot ce a spus clientul",
+        "offers": "Oferte — fiecare PDF emis, cu număr și dată",
+        "stats": "Statistici — unde se opresc oamenii și ce întreabă",
+        "agents": "Agenți — porniți, opriți, corectați răspunsurile",
+        "billing": "Abonament — plan, facturi, plăți"
+      },
+      "cta": "Vedeți portalul la o demonstrație",
+      "mock": {
+        "brand": "Portal",
+        "range": "Ultimele 7 zile",
+        "nav": {
+          "leads": "Lead-uri",
+          "offers": "Oferte",
+          "agents": "Agenți",
+          "stats": "Statistici",
+          "billing": "Abonament"
+        },
+        "tiles": {
+          "requests": "Cereri",
+          "offers": "Oferte",
+          "inProgress": "În lucru"
+        },
+        "states": {
+          "sent": "Ofertă trimisă",
+          "open": "În lucru"
+        },
+        "rows": {
+          "a": "Bucătărie la comandă, 3,2 m",
+          "b": "Canapea 3 locuri, țesătură",
+          "c": "Dressing, colț",
+          "d": "Masă extensibilă, stejar"
+        }
+      }
     }
   }
 }

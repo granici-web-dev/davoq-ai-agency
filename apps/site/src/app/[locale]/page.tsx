@@ -5,6 +5,7 @@ import { Agents } from '@/components/home/Agents';
 import { Industries } from '@/components/home/Industries';
 import { Pilot } from '@/components/home/Pilot';
 import { Onboarding } from '@/components/home/Onboarding';
+import { Portal } from '@/components/home/Portal';
 import { Pricing } from '@/components/home/Pricing';
 
 /**
@@ -30,6 +31,7 @@ export default async function HomePage({
       <Industries />
       <Pilot />
       <Onboarding />
+      <Portal />
       <Pricing />
     </>
   );
