@@ -1,9 +1,11 @@
 import {
-  Document, Font, Image, Page, StyleSheet, Text, View, renderToBuffer,
+  Circle, Document, Ellipse, Font, G, Image, Line, Page, Path, Polygon, Polyline,
+  Rect, StyleSheet, Svg, Text, View, renderToBuffer,
 } from '@react-pdf/renderer';
-import type { ReactElement } from 'react';
+import type { ComponentType, ReactElement } from 'react';
 import { warnUncoveredData } from './fonts.js';
 import type { BlockId, OfferTemplate, OfferText } from './schema.js';
+import { fitVector, isVector, paintShape, vectorLogo } from './svg.js';
 
 /**
  * Рендер бланка. ОДИН на всех клиентов.
@@ -108,6 +110,7 @@ function styles(t: OfferTemplate) {
       backgroundColor: colors.accent,
     },
     heroImage: { position: 'absolute', width: '100%', height: '100%', objectFit: 'cover' },
+    heroScrim: { position: 'absolute', width: '100%', height: '100%' },
     heroPad: {
       flex: 1, justifyContent: 'space-between',
       paddingTop: 18, paddingBottom: 14,
@@ -115,7 +118,6 @@ function styles(t: OfferTemplate) {
     },
     heroTop: { flexDirection: 'row', justifyContent: 'space-between', alignItems: 'flex-start' },
     heroTitle: { color: colors.onAccent, fontSize: fontSize.title, lineHeight: 1.15 },
-    heroLogo: { width: 74, maxHeight: 46, objectFit: 'contain' },
     heroBottom: { flexDirection: 'row', justifyContent: 'space-between', alignItems: 'flex-end' },
     heroRight: { alignItems: 'flex-end' },
     heroSmall: { color: colors.onAccent, fontSize: fontSize.small, lineHeight: 1.5 },
@@ -128,7 +130,6 @@ function styles(t: OfferTemplate) {
     galleryRow: { flexDirection: 'row', gap: 8, flexWrap: 'wrap' },
     galleryImage: { width: 96, height: 72, objectFit: 'cover' },
     header: { flexDirection: 'row', justifyContent: 'space-between', alignItems: 'flex-start' },
-    logo: { width: 120, maxHeight: 44, objectFit: 'contain' },
     company: { textAlign: 'right', color: colors.muted, fontSize: fontSize.small, lineHeight: 1.5 },
     companyName: { color: colors.text, fontSize: fontSize.base },
     title: { fontSize: fontSize.title, marginTop: 24, color: colors.accent },
@@ -164,6 +165,43 @@ function styles(t: OfferTemplate) {
 
 type S = ReturnType<typeof styles>;
 
+/** Габариты марки в блоках. Вектор вписывается в бокс, растр — по ширине. */
+const MARK = { hero: { width: 74, height: 46 }, header: { width: 120, height: 44 } };
+
+const VECTOR_TAGS: Record<string, ComponentType<Record<string, unknown>> | undefined> = {
+  path: Path as never, rect: Rect as never, circle: Circle as never,
+  ellipse: Ellipse as never, polygon: Polygon as never,
+  polyline: Polyline as never, line: Line as never,
+};
+
+/**
+ * Марка клиента: SVG рисуется фигурами, PNG и JPG — картинкой.
+ *
+ * `color` подставляется на месте `currentColor` — поэтому один файл клиента
+ * годится и на тёмной обложке, и на светлом листе, и клиенту не нужно
+ * приносить логотип дважды.
+ */
+function Mark(
+  { file, box, color }: { file: string; box: { width: number; height: number }; color: string },
+): ReactElement {
+  if (!isVector(file)) {
+    return <Image src={file} style={{ width: box.width, maxHeight: box.height, objectFit: 'contain' }} />;
+  }
+  const logo = vectorLogo(file, 'бланк оферты');
+  const size = fitVector(logo, box.width, box.height);
+  return (
+    <Svg viewBox={logo.viewBox} width={size.width} height={size.height}>
+      <G>
+        {logo.shapes.map((shape, i) => {
+          const Tag = VECTOR_TAGS[shape.tag];
+          if (!Tag) return null;
+          return <Tag key={i} {...paintShape(shape, color)} />;
+        })}
+      </G>
+    </Svg>
+  );
+}
+
 function block(id: BlockId, t: OfferTemplate, txt: OfferText, d: OfferData, s: S): ReactElement | null {
   const cur = (bani: number): string => money(bani, t.currency.code, d.locale, t.currency.decimals);
 
@@ -172,18 +210,26 @@ function block(id: BlockId, t: OfferTemplate, txt: OfferText, d: OfferData, s: S
       const h = txt.hero;
       if (!h) return null;
       const cfg = t.hero ?? {};
+      // Затемнение под текстом обложки: см. schema.ts. Умолчание применяется
+      // только при фотографии — на однотонной заливке затемнять нечего.
+      const scrim = cfg.scrim ?? 0.35;
       // Без фотографии обложка короче: высокая пустая заливка читается
       // как незагрузившаяся картинка, а не как приём.
       return (
         <View style={[s.hero, { height: cfg.height ?? (cfg.image ? 210 : 120) }]} key={id}>
           {cfg.image ? <Image src={cfg.image} style={s.heroImage} /> : null}
+          {cfg.image && scrim > 0
+            ? <View style={[s.heroScrim, { backgroundColor: `rgba(0, 0, 0, ${scrim})` }]} />
+            : null}
           <View style={s.heroPad}>
             <View style={s.heroTop}>
               <View>
                 <Text style={s.heroTitle}>{h.title}</Text>
                 {d.customer.name ? <Text style={s.heroTitle}>{d.customer.name}</Text> : null}
               </View>
-              {cfg.logo ? <Image src={cfg.logo} style={s.heroLogo} /> : null}
+              {cfg.logo
+                ? <Mark file={cfg.logo} box={MARK.hero} color={t.theme.colors.onAccent} />
+                : null}
             </View>
             <View style={s.heroBottom}>
               <Text style={s.heroSmall}>{day(d.date, d.locale)}</Text>
@@ -204,7 +250,9 @@ function block(id: BlockId, t: OfferTemplate, txt: OfferText, d: OfferData, s: S
       if (!h) return null;
       return (
         <View style={s.header} key={id}>
-          {t.logo ? <Image src={t.logo} style={s.logo} /> : <View />}
+          {t.logo
+            ? <Mark file={t.logo} box={MARK.header} color={t.theme.colors.text} />
+            : <View />}
           <View style={s.company}>
             <Text style={s.companyName}>{h.company}</Text>
             {(h.lines ?? []).map((line, i) => <Text key={i}>{line}</Text>)}

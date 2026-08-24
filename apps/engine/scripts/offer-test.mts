@@ -8,11 +8,14 @@
  * первый собранный бланк вышел с «Ofert de pre» вместо «Ofertă de preț»,
  * и ни рендер, ни типы об этом не сообщили.
  */
-import { resolve } from 'node:path';
+import { writeFileSync } from 'node:fs';
+import { tmpdir } from 'node:os';
+import { join, resolve } from 'node:path';
 import { mergeLayers, type Json } from '../src/products/configurator/config/layers.js';
 import { assertShape } from '../src/products/configurator/config/shape.js';
 import { buildOfferTemplate, clientOfferLayer } from '../src/products/configurator/offer/load.js';
 import { glyphsOf, defaultFonts } from '../src/products/configurator/offer/fonts.js';
+import { fitVector, paintShape, parseVectorLogo } from '../src/products/configurator/offer/svg.js';
 import { renderOffer } from '../src/products/configurator/offer/render.js';
 import { sampleOffer } from '../src/products/configurator/offer/sample.js';
 
@@ -139,14 +142,16 @@ throws(
   'включённый блок без обязательного текста — ошибка, с именем недостающего ключа',
 );
 
+// Раньше здесь стояла обратная проверка: SVG отвергался, потому что движок
+// умел только растр. Теперь вектор — основной формат марки (см. svg.ts).
 throws(
   () => buildOfferTemplate({
     verticalId: 'furniture',
-    clientLayer: mergeLayers(pilot(), { logo: 'assets/logo.svg' } as Json)!,
+    clientLayer: mergeLayers(pilot(), { logo: 'assets/logo.tiff' } as Json)!,
     locales: ['ro'],
   }),
-  'PNG или JPG',
-  'SVG-логотип отвергается: в PDF он стал бы пустым местом',
+  'PNG, JPG или SVG',
+  'марка в формате, который PDF не примет, — ошибка на сборке',
 );
 
 console.log('\nШрифты');
@@ -176,6 +181,91 @@ const bare = buildOfferTemplate({
 !bare.blocks.includes('hero') && !bare.blocks.includes('gallery')
   ? ok('умолчание движка — сухой бланк, без обложки и галереи')
   : bad(`умолчание тянет лишние блоки: ${bare.blocks.join(', ')}`);
+
+console.log('\nМарка клиента');
+
+const svg = (body: string): string => {
+  const file = join(tmpdir(), `mark-${(seq += 1)}.svg`);
+  writeFileSync(file, body);
+  return file;
+};
+let seq = 0;
+
+const mark = parseVectorLogo(resolve(clients, 'sofabelle/assets/logo.svg'), 'тест');
+eq([mark.width, mark.height, mark.shapes.length], [595, 179, 1],
+   'вектор клиента разбирается: сетка и число фигур');
+
+// Пропорции: марку вписывают в бокс, а не растягивают по нему.
+const fitted = fitVector(mark, 74, 46);
+Math.abs(fitted.width / fitted.height - mark.width / mark.height) < 1e-9
+  ? ok('вписывание в бокс сохраняет пропорции')
+  : bad(`марку растянуло: ${fitted.width}×${fitted.height}`);
+
+eq(paintShape(mark.shapes[0]!, '#ffffff').fill, '#ffffff',
+   'currentColor подставляется цветом блока');
+eq(paintShape({ tag: 'path', props: { d: 'M0 0' } }, '#333').fill, '#333',
+   'фигура без заливки берёт цвет блока, а не чёрный по спецификации');
+eq(paintShape({ tag: 'path', props: { d: 'M0 0', fill: '#e11' } }, '#333').fill, '#e11',
+   'явный цвет фигуры не переопределяется');
+
+throws(
+  () => parseVectorLogo(svg('<svg viewBox="0 0 10 10"><text x="0" y="5">Sofa</text></svg>'), 'тест'),
+  '<text>',
+  'текст внутри марки — ошибка: шрифт исходника в PDF не поедет',
+);
+throws(
+  () => parseVectorLogo(svg('<svg viewBox="0 0 10 10"><g transform="translate(2 2)"><path d="M0 0h4v4z" fill="#000"/></g></svg>'), 'тест'),
+  'transform',
+  'трансформация — ошибка: движок сдвиг не применит',
+);
+throws(
+  () => parseVectorLogo(svg('<svg viewBox="0 0 10 10"><path d="M0 0h4v4z" fill="url(#grad)"/></svg>'), 'тест'),
+  'градиенты',
+  'градиентная заливка — ошибка, а не чёрное пятно',
+);
+throws(
+  () => parseVectorLogo(svg('<svg viewBox="0 0 10 10"><path d="M0 0h4v4z" class="mark"/></svg>'), 'тест'),
+  'классами',
+  'оформление CSS-классом — ошибка: стилей в PDF нет',
+);
+throws(
+  () => parseVectorLogo(svg('<svg fill="none" viewBox="0 0 10 10"><path d="M0 0h4v4z"/></svg>'), 'тест'),
+  'пустым местом',
+  'марка без единой заливки — ошибка: иначе в бланке пустое место',
+);
+throws(
+  () => parseVectorLogo(svg('<svg><path d="M0 0h4v4z" fill="#000"/></svg>'), 'тест'),
+  'viewBox',
+  'марка без viewBox — ошибка: пропорции неизвестны',
+);
+
+throws(
+  () => buildOfferTemplate({
+    verticalId: 'furniture',
+    clientLayer: mergeLayers(pilot(), { hero: { logo: 'assets/logo.gif' } } as Json)!,
+    locales: ['ro'],
+  }),
+  'PNG, JPG или SVG',
+  'марка неизвестного формата не доезжает до бланка',
+);
+throws(
+  () => buildOfferTemplate({
+    verticalId: 'furniture',
+    clientLayer: mergeLayers(pilot(), { hero: { logo: '/nope/mark.svg' } } as Json)!,
+    locales: ['ro'],
+  }),
+  'нет',
+  'марка, которой нет на диске, роняет сборку — react-pdf её молча проглотит',
+);
+throws(
+  () => buildOfferTemplate({
+    verticalId: 'furniture',
+    clientLayer: mergeLayers(pilot(), { hero: { scrim: 1.5 } } as Json)!,
+    locales: ['ro'],
+  }),
+  'от 0 до 1',
+  'затемнение вне 0…1 — ошибка',
+);
 
 console.log('\nРендер');
 
@@ -230,6 +320,44 @@ const onlyMeta = buildOfferTemplate({
 const short = await renderOffer(onlyMeta, sampleOffer('ro'));
 short.length < pdf.length ? ok('порядок блоков из конфига правда управляет бланком')
                           : bad('бланк с одним блоком не меньше полного');
+
+// Цвет марки должен приходить из темы, а не быть зашит в движок.
+const white = await renderOffer(template, sampleOffer('ro'));
+const red = await renderOffer(
+  buildOfferTemplate({
+    verticalId: 'furniture',
+    clientLayer: mergeLayers(pilot(), { theme: { colors: { onAccent: '#ff0000' } } } as Json)!,
+    locales: ['ro'],
+  }),
+  sampleOffer('ro'),
+);
+!white.equals(red) ? ok('марка перекрашивается цветом блока, а не зашита в движок')
+                   : bad('смена onAccent ничего не изменила в PDF');
+
+const dim = await renderOffer(
+  buildOfferTemplate({
+    verticalId: 'furniture',
+    clientLayer: mergeLayers(pilot(), { hero: { scrim: 0 } } as Json)!,
+    locales: ['ro'],
+  }),
+  sampleOffer('ro'),
+);
+!white.equals(dim) ? ok('затемнение обложки правда рисуется')
+                   : bad('scrim: 0 ничего не изменил — затемнения нет');
+
+// Растровая марка — та же ветка рендера, что и была до вектора.
+const raster = await renderOffer(
+  buildOfferTemplate({
+    verticalId: 'furniture',
+    clientLayer: mergeLayers(pilot(), {
+      hero: { logo: resolve(clients, 'sofabelle/assets/hero.jpg') },
+    } as Json)!,
+    locales: ['ro'],
+  }),
+  sampleOffer('ro'),
+);
+raster.length > 0 ? ok('растровая марка по-прежнему рендерится')
+                  : bad('бланк с растровой маркой пуст');
 
 console.log(failed === 0 ? '\nВсё сошлось.\n' : `\nНе сошлось: ${failed}\n`);
 process.exit(failed === 0 ? 0 : 1);

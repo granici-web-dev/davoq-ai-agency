@@ -5,6 +5,7 @@ import { mergeLayers, type Json } from '../config/layers.js';
 import { assertGlyphCoverage } from './fonts.js';
 import { defaultFonts } from './fonts.js';
 import { OFFER_DEFAULTS, validateOffer, type OfferTemplate } from './schema.js';
+import { isVector, vectorLogo } from './svg.js';
 
 /**
  * Сборка бланка из слоёв: умолчания движка → вертикаль → клиент.
@@ -143,5 +144,33 @@ export function buildOfferTemplate(src: OfferSource): OfferTemplate {
   validateOffer(merged, src.locales, where);
   const template = merged as unknown as OfferTemplate;
   assertGlyphCoverage(template, where);
+  assertAssets(template, where);
   return template;
+}
+
+/**
+ * Ассеты собранного бланка: файл на месте, вектор разбирается.
+ *
+ * Проверяется ПОСЛЕ слияния, хотя `resolvePaths` уже проверял каждый слой:
+ * слой клиента скоро будет приходить jsonb из базы, минуя резолвер путей,
+ * и тогда эта проверка останется единственной.
+ *
+ * Причина строгости — в поведении рендера: react-pdf на недоступной картинке
+ * не падает, а печатает ENOENT в stderr и отдаёт ГОТОВЫЙ PDF с дырой на месте
+ * марки. Такой бланк уходит покупателю, и первым его увидит покупатель.
+ */
+function assertAssets(template: OfferTemplate, where: string): void {
+  const files: Array<[string, string | undefined]> = [
+    ['offer.logo', template.logo],
+    ['offer.hero.logo', template.hero?.logo],
+    ['offer.hero.image', template.hero?.image],
+    ...(template.gallery ?? []).map((f, i): [string, string] => [`offer.gallery[${i}]`, f]),
+  ];
+  for (const [path, file] of files) {
+    if (typeof file !== 'string') continue;
+    if (!existsSync(file)) throw new Error(`${where}: ${path} — файла «${file}» нет`);
+    // Вектор разбирается на сборке, а не на рендере: SVG с непереносимой
+    // в PDF разметкой должен ронять онбординг, а не выдачу оферты.
+    if (isVector(file)) vectorLogo(file, `${where}: ${path}`);
+  }
 }

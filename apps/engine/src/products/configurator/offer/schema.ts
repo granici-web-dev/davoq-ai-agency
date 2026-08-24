@@ -67,7 +67,7 @@ export const OFFER_SHAPE: Shape = {
     fontSize: { title: true, heading: true, base: true, small: true },
   },
   logo: true,
-  hero: { image: true, height: true, logo: true },
+  hero: { image: true, height: true, logo: true, scrim: true },
   gallery: true,
   currency: { code: true, decimals: true },
   text: {
@@ -139,7 +139,21 @@ export interface OfferTemplate {
     fontSize: { title: number; heading: number; base: number; small: number };
   };
   logo?: string;
-  hero?: { image?: string; height?: number; logo?: string };
+  hero?: {
+    image?: string;
+    height?: number;
+    logo?: string;
+    /**
+     * Затемнение фотографии под текстом обложки, 0…1.
+     *
+     * Поверх фотографии стоит белый текст, а фотографию выбирает клиент.
+     * Без затемнения светлый снимок — а у мебельщиков они почти все светлые —
+     * съедает заголовок и номер оферты. Умолчание не ноль по той же причине,
+     * по которой шрифт бланка проверяется на диакритику: нечитаемый документ
+     * уходит покупателю молча.
+     */
+    scrim?: number;
+  };
   /** Фотографии материалов: пути к файлам в каталоге клиента. */
   gallery?: string[];
   currency: { code: string; decimals: number };
@@ -217,14 +231,30 @@ export function validateOffer(
     }
   }
 
-  // Логотип рисуется как растр: react-pdf кладёт SVG только отдельным деревом
-  // элементов, а не картинкой. Молча пропустить .svg значит отдать клиенту
-  // бланк с пустым местом вместо марки.
-  const logo = value.logo;
-  if (typeof logo === 'string' && !/\.(png|jpe?g)$/i.test(logo)) {
-    throw new Error(
-      `${where}: логотип бланка — PNG или JPG («${logo}» не подходит). ` +
-      'Вектор в PDF пойдёт после того, как движок научится инлайнить SVG.',
-    );
+  const hero = (value.hero ?? {}) as Record<string, unknown>;
+  // Марка — растр или вектор: SVG движок инлайнит фигурами (см. svg.ts).
+  assetKind(value.logo, RASTER_OR_VECTOR, 'offer.logo', where);
+  assetKind(hero.logo, RASTER_OR_VECTOR, 'offer.hero.logo', where);
+  // Фотография — только растр: за «векторным фото» стоит либо путаница
+  // в файлах, либо SVG с растром внутри, который движок не развернёт.
+  assetKind(hero.image, RASTER, 'offer.hero.image', where);
+  const gallery = value.gallery;
+  if (Array.isArray(gallery)) {
+    gallery.forEach((file, i) => assetKind(file, RASTER, `offer.gallery[${i}]`, where));
   }
+
+  const scrim = hero.scrim;
+  if (scrim !== undefined && (typeof scrim !== 'number' || scrim < 0 || scrim > 1)) {
+    throw new Error(`${where}: offer.hero.scrim — число от 0 до 1 («${String(scrim)}» не подходит)`);
+  }
+}
+
+const RASTER = { test: /\.(png|jpe?g)$/i, what: 'PNG или JPG' };
+const RASTER_OR_VECTOR = { test: /\.(png|jpe?g|svg)$/i, what: 'PNG, JPG или SVG' };
+
+function assetKind(
+  value: unknown, kind: { test: RegExp; what: string }, path: string, where: string,
+): void {
+  if (typeof value !== 'string' || kind.test.test(value)) return;
+  throw new Error(`${where}: ${path} — ${kind.what} («${value}» не подходит)`);
 }
