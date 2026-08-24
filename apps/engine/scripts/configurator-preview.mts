@@ -74,14 +74,20 @@ app.get('/', async (_req, reply) => reply.type('text/html; charset=utf-8').send(
  .page{max-width:760px;margin:0 auto;padding:64px 24px}
  .card{background:#fff;border-radius:16px;padding:28px;box-shadow:0 2px 12px rgb(0 0 0/6%)}
  h1{margin:0 0 6px;font-size:22px} p{margin:0 0 20px;color:#555;font-size:15px}
+ .row{display:flex;gap:12px;flex-wrap:wrap}
  button{font:inherit;font-size:15px;padding:12px 20px;border:0;border-radius:10px;
         background:#111;color:#fff;cursor:pointer}
+ button.ghost{background:#fff;color:#111;border:1px solid #d4d4d8}
 </style>
 </head><body>
 <div class="page"><div class="card">
   <h1>Canapea Free Comfort</h1>
-  <p>Страница товара клиента. Кнопка ниже — та, что он ставит в свою вёрстку.</p>
-  <button data-assistwidget-offer>Cere ofertă</button>
+  <p>Страница товара клиента. Слева — его собственная кнопка, она не наша.
+     Справа — та, что он ставит в вёрстку рядом с ней.</p>
+  <div class="row">
+    <button class="ghost" onclick="alert('Это существующий поп-ап клиента — мы его не трогаем.')">Cere ofertă</button>
+    <button data-assistwidget-configurator>Configurator</button>
+  </div>
 </div></div>
 <div id="root" data-locale="${locale}" data-name="${clientConfig.name ?? id}"
      data-preset="${clientConfig.channels?.web?.widget?.preset ?? 'classic'}"></div>

@@ -205,23 +205,9 @@ input {
 .ofr-rail .pending { opacity: .35; }
 @media (max-width: 720px) { .ofr-rail { display: none } }
 
-/* Развилка: посчитать самому или позвать продавца. Два равных пути, а не
-   кнопка и ссылка мелким шрифтом: клиент продаёт и через людей тоже. */
-.ofr-gate { flex: 1; display: flex; flex-direction: column; justify-content: center;
-            gap: 14px; padding: 28px 24px; }
-.ofr-gate p { margin: 0 0 4px; font-size: 14px; opacity: .8; }
-.ofr-choices { display: grid; gap: 12px; grid-template-columns: 1fr 1fr; }
-@media (max-width: 560px) { .ofr-choices { grid-template-columns: 1fr } }
-.ofr-choice {
-  display: flex; flex-direction: column; gap: 6px; align-items: flex-start;
-  padding: 18px; cursor: pointer; text-align: left; font: inherit; color: inherit;
-  background: transparent; border: 1px solid rgb(128 128 128 / 30%);
-  border-radius: var(--cw-radius);
-}
-.ofr-choice:hover { border-color: var(--cw-primary); }
-.ofr-choice b { font-size: 15px; }
-.ofr-choice span { font-size: 13px; opacity: .75; line-height: 1.45; }
-@media (prefers-reduced-motion: no-preference) { .ofr-choice { transition: border-color .15s } }
+/* Запасной ход: конфигуратор не отдался — остаётся форма заявки. */
+.ofr-fallback { flex: 1; display: flex; flex-direction: column; justify-content: center;
+                gap: 14px; padding: 28px 24px; }
 
 /* В широком окне карточек помещается больше двух — сетка считает сама. */
 .ofr .cfg-cards { grid-template-columns: repeat(auto-fill, minmax(150px, 1fr)); }

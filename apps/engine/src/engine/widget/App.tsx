@@ -4,16 +4,17 @@ import { pickLocale, STRINGS } from '../shared/i18n.js';
 import { DEFAULT_THEME, resolveTheme, toCssVars } from '../shared/theme.js';
 import { fetchConfig, streamChat, submitLead, visitorId, type WidgetConfig } from './api.js';
 import { CONFIGURATOR_STRINGS } from '../shared/i18n.js';
-import { OfferModal } from './configurator/OfferModal.js';
+import { ConfiguratorModal } from './configurator/ConfiguratorModal.js';
 
 /**
- * Событие, которым страница клиента открывает окно оферты.
+ * Событие, которым страница клиента открывает конфигуратор.
  *
- * Кнопка «Cere ofertă» стоит в вёрстке клиента, а не в нашем виджете: она
- * должна быть там, где посетитель принимает решение — рядом с товаром, —
- * а не в углу экрана. Поэтому вход событием, а не нашим элементом.
+ * Кнопка «Configurator» стоит в вёрстке клиента, а не в нашем виджете: она
+ * должна быть там, где посетитель принимает решение — рядом с товаром и
+ * рядом с его собственной «Cere ofertă», — а не в углу экрана. Поэтому вход
+ * событием, а не нашим элементом.
  */
-export const OFFER_EVENT = 'assistwidget:offer';
+export const CONFIGURATOR_EVENT = 'assistwidget:configurator';
 
 type Msg = { role: 'user' | 'bot' | 'note'; text: string };
 type Phase = 'idle' | 'streaming' | 'error' | 'busy' | 'offline';
@@ -57,12 +58,12 @@ export function App({ base, publicKey }: { base: string; publicKey: string }): p
   const [draft, setDraft] = useState('');
   const [phase, setPhase] = useState<Phase>('idle');
   const [prefersDark, setPrefersDark] = useState(false);
-  const [offerOpen, setOfferOpen] = useState(false);
+  const [configuratorOpen, setConfiguratorOpen] = useState(false);
 
   useEffect(() => {
-    const open = (): void => setOfferOpen(true);
-    document.addEventListener(OFFER_EVENT, open);
-    return () => document.removeEventListener(OFFER_EVENT, open);
+    const open = (): void => setConfiguratorOpen(true);
+    document.addEventListener(CONFIGURATOR_EVENT, open);
+    return () => document.removeEventListener(CONFIGURATOR_EVENT, open);
   }, []);
 
   // Идентификатор разговора переживает переход по страницам сайта.
@@ -262,8 +263,8 @@ export function App({ base, publicKey }: { base: string; publicKey: string }): p
 
   return (
     <div class="root" data-pos={config.position} style={toCssVars(theme)}>
-      {offerOpen && (
-        <OfferModal
+      {configuratorOpen && (
+        <ConfiguratorModal
           base={base}
           publicKey={publicKey}
           visitorId={visitorId()}
@@ -272,11 +273,11 @@ export function App({ base, publicKey }: { base: string; publicKey: string }): p
           locale={locale}
           t={CONFIGURATOR_STRINGS[locale]}
           s={t}
-          onClose={() => setOfferOpen(false)}
+          onClose={() => setConfiguratorOpen(false)}
           quoteForm={
             <LeadForm
               base={base} publicKey={publicKey} conversationId={conversationId.current}
-              t={t} intro={CONFIGURATOR_STRINGS[locale].gateHumanHint}
+              t={t} intro={CONFIGURATOR_STRINGS[locale].quoteIntro}
             />
           }
         />

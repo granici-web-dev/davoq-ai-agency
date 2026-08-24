@@ -125,11 +125,8 @@ export function pickLocale(
  * значит зашить порядок слов английского в четыре языка сразу.
  */
 export interface ConfiguratorStrings {
-  start: string;
-  gateSelf: string;
-  gateSelfHint: string;
-  gateHuman: string;
-  gateHumanHint: string;
+  /** Подводка формы заявки, когда конфигуратор не отдался. */
+  quoteIntro: string;
   step: string;
   back: string;
   next: string;
@@ -153,9 +150,8 @@ export interface ConfiguratorStrings {
 
 export const CONFIGURATOR_STRINGS: Record<Locale, ConfiguratorStrings> = {
   en: {
-    start: 'Configure and see the price', step: 'Step {n} of {total}',
-    gateSelf: 'See the price yourself', gateSelfHint: 'Pick the model, fabric and options — the price appears as you go.',
-    gateHuman: 'Ask a consultant', gateHumanHint: 'Leave your contact and we will prepare a quote for your configuration.',
+    step: 'Step {n} of {total}',
+    quoteIntro: 'Leave your contact and we will prepare a quote for your configuration.',
     back: 'Back', next: 'Next', skip: 'Skip', calculating: 'Calculating…',
     price: 'Estimated price', vatIncluded: 'VAT included',
     summary: 'Your configuration', change: 'Change',
@@ -169,9 +165,8 @@ export const CONFIGURATOR_STRINGS: Record<Locale, ConfiguratorStrings> = {
     askError: 'Could not answer right now.',
   },
   de: {
-    start: 'Konfigurieren und Preis sehen', step: 'Schritt {n} von {total}',
-    gateSelf: 'Preis selbst ansehen', gateSelfHint: 'Modell, Stoff und Optionen wählen — der Preis erscheint sofort.',
-    gateHuman: 'Berater fragen', gateHumanHint: 'Kontaktdaten hinterlassen — wir erstellen ein Angebot für Ihre Konfiguration.',
+    step: 'Schritt {n} von {total}',
+    quoteIntro: 'Kontaktdaten hinterlassen — wir erstellen ein Angebot für Ihre Konfiguration.',
     back: 'Zurück', next: 'Weiter', skip: 'Überspringen', calculating: 'Wird berechnet…',
     price: 'Richtpreis', vatIncluded: 'inkl. MwSt.',
     summary: 'Ihre Konfiguration', change: 'Ändern',
@@ -185,9 +180,8 @@ export const CONFIGURATOR_STRINGS: Record<Locale, ConfiguratorStrings> = {
     askError: 'Antwort gerade nicht möglich.',
   },
   ro: {
-    start: 'Configurați și aflați prețul', step: 'Pasul {n} din {total}',
-    gateSelf: 'Vedeți singur prețul', gateSelfHint: 'Alegeți modelul, țesătura și opțiunile — prețul apare pe loc.',
-    gateHuman: 'Întrebați un consultant', gateHumanHint: 'Lăsați-ne un contact și pregătim oferta pentru configurația dumneavoastră.',
+    step: 'Pasul {n} din {total}',
+    quoteIntro: 'Lăsați-ne un contact și pregătim oferta pentru configurația dumneavoastră.',
     back: 'Înapoi', next: 'Continuați', skip: 'Omiteți', calculating: 'Se calculează…',
     price: 'Preț estimativ', vatIncluded: 'TVA inclus',
     summary: 'Configurația dumneavoastră', change: 'Modificați',
@@ -201,9 +195,8 @@ export const CONFIGURATOR_STRINGS: Record<Locale, ConfiguratorStrings> = {
     askError: 'Nu putem răspunde chiar acum.',
   },
   ru: {
-    start: 'Собрать и узнать цену', step: 'Шаг {n} из {total}',
-    gateSelf: 'Посмотреть цену самому', gateSelfHint: 'Выберите модель, ткань и опции — цена появится сразу.',
-    gateHuman: 'Спросить консультанта', gateHumanHint: 'Оставьте контакт — подготовим оферту под вашу конфигурацию.',
+    step: 'Шаг {n} из {total}',
+    quoteIntro: 'Оставьте контакт — подготовим оферту под вашу конфигурацию.',
     back: 'Назад', next: 'Далее', skip: 'Пропустить', calculating: 'Считаем…',
     price: 'Ориентировочная цена', vatIncluded: 'НДС включён',
     summary: 'Ваша конфигурация', change: 'Изменить',

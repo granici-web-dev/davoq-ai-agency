@@ -5,20 +5,23 @@ import { Configurator } from './Configurator.js';
 import { fetchConfigurator, type Answers, type ConfiguratorConfig } from './api.js';
 
 /**
- * Окно оферты: развилка и конфигуратор.
+ * Окно конфигуратора.
  *
- * Открывается кнопкой НА САЙТЕ клиента («Cere ofertă»), а не пузырём в углу.
- * Посетитель, который дошёл до этой кнопки, уже выбирает товар, а не задаёт
- * вопрос: сажать его в то же окно, что и разговор о доставке, значит делать
- * вид, что это одна и та же задача.
+ * Открывается СВОЕЙ кнопкой на странице товара — рядом с «Cere ofertă»,
+ * которая у клиента уже есть и остаётся его собственной. Две кнопки, два
+ * понятных исхода: запросить оферту у продавца или собрать самому.
  *
- * Развилка — два равных пути. Клиент продаёт и через людей тоже, и «позвать
- * продавца» не должно выглядеть отступлением: часть покупателей никогда
- * не станет ничего собирать сама, и терять их ради стройности сценария
- * нельзя.
+ * Промежуточного экрана «что вы хотите» здесь нет намеренно. Он был:
+ * посетитель нажимал кнопку и попадал не в конфигуратор, а в вопрос
+ * о том, хочет ли он в конфигуратор. Выбор, уже сделанный кнопкой,
+ * переспрашивать не надо.
+ *
+ * Форма заявки остаётся ровно на один случай — когда конфигуратор
+ * не отдался. Пустое окно тогда хуже отказа: посетитель пришёл за ценой,
+ * и способ её получить у него должен остаться.
  */
 
-type Screen = 'gate' | 'configure' | 'quote';
+type Screen = 'configure' | 'quote';
 
 interface Props {
   base: string;
@@ -34,18 +37,19 @@ interface Props {
   quoteForm: preact.JSX.Element;
 }
 
-export function OfferModal(props: Props): preact.JSX.Element {
+export function ConfiguratorModal(props: Props): preact.JSX.Element {
   const { base, publicKey, botName, locale, t, s, onClose } = props;
-  const [screen, setScreen] = useState<Screen>('gate');
+  const [screen, setScreen] = useState<Screen>('configure');
   const [config, setConfig] = useState<ConfiguratorConfig | null>(null);
   const [failed, setFailed] = useState(false);
   const [answers, setAnswers] = useState<Answers>({});
   const box = useRef<HTMLDivElement | null>(null);
 
   useEffect(() => {
-    if (screen !== 'configure' || config || failed) return;
-    fetchConfigurator(base, publicKey, locale).then(setConfig).catch(() => setFailed(true));
-  }, [screen, base, publicKey, locale, config, failed]);
+    fetchConfigurator(base, publicKey, locale)
+      .then(setConfig)
+      .catch(() => { setFailed(true); setScreen('quote'); });
+  }, [base, publicKey, locale]);
 
   // Esc закрывает, Tab не уходит на страницу под окном — то же правило,
   // что у панели чата.
@@ -79,30 +83,10 @@ export function OfferModal(props: Props): preact.JSX.Element {
           <button class="iconbtn" aria-label={s.close} onClick={onClose}>×</button>
         </div>
 
-        {screen === 'gate' && (
-          <div class="ofr-gate">
-            <p>{t.start}</p>
-            <div class="ofr-choices">
-              <button type="button" class="ofr-choice" onClick={() => setScreen('configure')}>
-                <b>{t.gateSelf}</b>
-                <span>{t.gateSelfHint}</span>
-              </button>
-              <button type="button" class="ofr-choice" onClick={() => setScreen('quote')}>
-                <b>{t.gateHuman}</b>
-                <span>{t.gateHumanHint}</span>
-              </button>
-            </div>
-          </div>
-        )}
+        {screen === 'quote' && <div class="ofr-fallback">{props.quoteForm}</div>}
 
-        {screen === 'quote' && <div class="ofr-gate">{props.quoteForm}</div>}
-
-        {screen === 'configure' && (
-          failed
-            // Конфигуратор не отдался — предлагаем то, ради чего окно открывали:
-            // способ получить оферту. Пустое окно тут хуже отказа.
-            ? <div class="ofr-gate">{props.quoteForm}</div>
-            : config && (
+        {screen === 'configure' && !failed && (
+          config && (
               <div class="ofr-split">
                 <div class="ofr-main">
                   <Configurator

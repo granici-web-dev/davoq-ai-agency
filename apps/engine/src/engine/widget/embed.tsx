@@ -1,6 +1,6 @@
 /** @jsxImportSource preact */
 import { render } from 'preact';
-import { App, OFFER_EVENT } from './App.js';
+import { App, CONFIGURATOR_EVENT } from './App.js';
 import { CSS } from './styles.js';
 
 /**
@@ -30,23 +30,28 @@ if (!publicKey) {
   render(<App base={base} publicKey={publicKey} />, mount);
 
   /**
-   * Вход в оферту с сайта клиента.
+   * Вход в конфигуратор с сайта клиента.
    *
-   * Кнопка живёт в его вёрстке — рядом с товаром, где посетитель и решает, —
-   * поэтому мы даём два способа её связать и ни одного своего элемента:
-   *   <button data-assistwidget-offer>Cere ofertă</button>
-   *   assistwidget.offer()
+   * Кнопка живёт в его вёрстке — на странице товара, рядом с его собственной
+   * «Cere ofertă», — поэтому мы даём два способа её связать и ни одного
+   * своего элемента:
+   *   <button data-assistwidget-configurator>Configurator</button>
+   *   assistwidget.configurator()
    *
    * Делегированный слушатель, а не обход элементов при загрузке: карточки
    * товара на их сайте дорисовываются скриптом магазина, и кнопки, которых
    * в момент загрузки не было, иначе не работали бы вовсе.
    */
-  const openOffer = (): void => { document.dispatchEvent(new CustomEvent(OFFER_EVENT)); };
+  const openConfigurator = (): void => {
+    document.dispatchEvent(new CustomEvent(CONFIGURATOR_EVENT));
+  };
   document.addEventListener('click', (e) => {
-    const target = (e.target as Element | null)?.closest?.('[data-assistwidget-offer]');
+    const target = (e.target as Element | null)?.closest?.('[data-assistwidget-configurator]');
     if (!target) return;
     e.preventDefault();
-    openOffer();
+    openConfigurator();
   });
-  (window as unknown as { assistwidget?: { offer: () => void } }).assistwidget = { offer: openOffer };
+  (window as unknown as { assistwidget?: { configurator: () => void } }).assistwidget = {
+    configurator: openConfigurator,
+  };
 }
