@@ -592,37 +592,6 @@
       "metaDescription": "Agenți AI pentru producătorii de mobilă și bucătării la comandă: răspund la întrebările de preț din lista dumneavoastră, adună dimensiunile și materialul și predau vânzătorului o cerere gata de calculat.",
       "title": "Agenți AI pentru mobilă la comandă",
       "lead": "Răspund la întrebările de preț din lista dumneavoastră, adună dimensiunile și materialul înainte de măsurare, readuc clienții care au tăcut și anunță la fiecare etapă a producției. Fiecare este un produs separat — luați doar pe cei de care aveți nevoie.",
-      "widgetTitle": "Chatbot",
-      "widgetStatus": "Răspunde imediat",
-      "widgetPlaceholder": "Scrieți un mesaj…",
-      "widgetInitial": "AI",
-      "conversationNote": "Chatbotul AI la lucru într-un atelier de mobilă la comandă. Este agentul disponibil acum.",
-      "dialog": [
-        {
-          "role": "client",
-          "text": "Bună! Vreau un dressing pe colț, cam 2,4 pe 1,8 metri. Cât ar fi?"
-        },
-        {
-          "role": "agent",
-          "text": "Depinde de fronturi și de umplutură. Preferați uși batante sau glisante?"
-        },
-        {
-          "role": "client",
-          "text": "Glisante, cu oglindă pe una."
-        },
-        {
-          "role": "agent",
-          "text": "Pentru 2,4 × 1,8 cu uși glisante și o oglindă, intervalul din lista noastră este 24 000 – 31 000 lei, în funcție de sistemul de glisare."
-        },
-        {
-          "role": "client",
-          "text": "Și montajul e inclus?"
-        },
-        {
-          "role": "agent",
-          "text": "Da, montajul și transportul în oraș sunt incluse. Vă trimit oferta exactă după măsurare — când vă convine să vină colegul?"
-        }
-      ],
       "questionsTitle": "Întrebările pe care le primiți de zece ori pe zi",
       "questions": [
         {
@@ -701,7 +670,39 @@
         }
       ],
       "closingTitle": "Vedeți agenții la lucru pe catalogul dumneavoastră",
-      "closingLead": "La demonstrație luăm câteva poziții din catalogul dumneavoastră și vă arătăm exact ce ar răspunde unui client real."
+      "closingLead": "La demonstrație luăm câteva poziții din catalogul dumneavoastră și vă arătăm exact ce ar răspunde unui client real.",
+      "day": {
+        "title": "O zi în atelier",
+        "label": "Exemplu",
+        "note": "Așa arată o zi în care lucrează toți agenții. Astăzi este disponibil chatbotul; ceilalți sunt în lucru.",
+        "entries": [
+          {
+            "time": "08:40",
+            "agent": "Configurator",
+            "text": "Un client a configurat un dressing pe colț și a primit intervalul de preț."
+          },
+          {
+            "time": "12:05",
+            "agent": "Chatbot",
+            "text": "A răspuns în ce grupă de preț intră țesătura dintr-o poză de pe Instagram."
+          },
+          {
+            "time": "18:30",
+            "agent": "Statusul comenzii",
+            "text": "A anunțat clientul că bucătăria a intrat în montaj."
+          },
+          {
+            "time": "22:14",
+            "agent": "Chatbot",
+            "text": "A adunat dimensiunile pentru o bucătărie de 3,2 m și a lăsat cererea vânzătorului."
+          },
+          {
+            "time": "Vineri",
+            "agent": "Follow-up",
+            "text": "A revenit la clientul care a cerut ofertă acum două săptămâni și a tăcut."
+          }
+        ]
+      }
     }
   }
 }

@@ -4,7 +4,7 @@ import { Cta } from '@/components/ui/Cta';
 import { DemoButton } from '@/components/ui/DemoButton';
 import { FaqList } from '@/components/ui/FaqList';
 import { Reveal } from '@/components/ui/Reveal';
-import { WidgetChat } from '@/components/agent/WidgetChat';
+import { AgentDay } from './AgentDay';
 import { SectionHead } from '@/components/agent/SectionHead';
 import { AGENTS, type Industry } from '@/lib/catalog';
 
@@ -80,19 +80,13 @@ export function IndustryPage({ industry }: { industry: Industry }) {
             </div>
           </div>
 
-          {/* Разговор из этой ниши, а не общий. Он и есть узнавание:
-              человек видит свои собственные вопросы раньше, чем читает
-              про платформу.
-
-              Под виджетом подписано, что это чат-бот — один из агентов,
-              а не вся страница. Заголовок здесь про набор, и картинка
-              без подписи молча сузила бы его до одного продукта. */}
+          {/* Лента событий, а не окно одного агента: страница предлагает
+              четверых, и картинка обязана показывать набор. Заодно она
+              показывает часы — 08:40, 22:14, «vineri», — и этим говорит
+              про круглосуточность раньше, чем про неё написано словами. */}
           {full && (
             <div className="enter lg:pl-4" style={{ animationDelay: '260ms' }}>
-              <WidgetChat namespace={`industryPage.${industry.slug}`} />
-              <p className="mt-5 max-w-[22rem] text-xs leading-relaxed text-chalk-faint lg:mx-auto">
-                {t('conversationNote')}
-              </p>
+              <AgentDay namespace={`industryPage.${industry.slug}`} />
             </div>
           )}
         </div>

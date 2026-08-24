@@ -592,37 +592,6 @@
       "metaDescription": "AI agents for makers of made-to-order furniture and kitchens: they answer pricing questions from your own list, collect dimensions and materials, and hand sales a request that is ready to price.",
       "title": "AI agents for made-to-order furniture",
       "lead": "They answer pricing questions from your own list, collect dimensions and materials before a survey visit, bring back customers who went quiet, and report at every production stage. Each is a separate product — take only the ones you need.",
-      "widgetTitle": "Chatbot",
-      "widgetStatus": "Replies instantly",
-      "widgetPlaceholder": "Write a message…",
-      "widgetInitial": "AI",
-      "conversationNote": "The AI chatbot at work in a made-to-order furniture workshop. It is the agent available now.",
-      "dialog": [
-        {
-          "role": "client",
-          "text": "Hi! I want a corner wardrobe, roughly 2.4 by 1.8 metres. How much would that be?"
-        },
-        {
-          "role": "agent",
-          "text": "That depends on the fronts and the interior fittings. Would you prefer hinged or sliding doors?"
-        },
-        {
-          "role": "client",
-          "text": "Sliding, with a mirror on one of them."
-        },
-        {
-          "role": "agent",
-          "text": "For 2.4 × 1.8 with sliding doors and one mirror, the range in our list is 24,000 – 31,000 lei, depending on the sliding system."
-        },
-        {
-          "role": "client",
-          "text": "Is installation included?"
-        },
-        {
-          "role": "agent",
-          "text": "Yes, installation and delivery within the city are included. I will send the exact quote after the survey — when would suit you for a visit?"
-        }
-      ],
       "questionsTitle": "The questions you get ten times a day",
       "questions": [
         {
@@ -701,7 +670,39 @@
         }
       ],
       "closingTitle": "See the agents at work on your own catalogue",
-      "closingLead": "In the demo we take a few items from your catalogue and show you exactly what they would answer a real customer."
+      "closingLead": "In the demo we take a few items from your catalogue and show you exactly what they would answer a real customer.",
+      "day": {
+        "title": "A day in the workshop",
+        "label": "Example",
+        "note": "This is what a day looks like when all the agents are working. The chatbot is available today; the others are still being built.",
+        "entries": [
+          {
+            "time": "08:40",
+            "agent": "Configurator",
+            "text": "A customer configured a corner wardrobe and got the price range."
+          },
+          {
+            "time": "12:05",
+            "agent": "Chatbot",
+            "text": "Answered which price group a fabric from an Instagram photo falls into."
+          },
+          {
+            "time": "18:30",
+            "agent": "Order status",
+            "text": "Told the customer their kitchen had gone into installation."
+          },
+          {
+            "time": "22:14",
+            "agent": "Chatbot",
+            "text": "Collected the dimensions for a 3.2 m kitchen and left the request for sales."
+          },
+          {
+            "time": "Friday",
+            "agent": "Follow-up",
+            "text": "Came back to the customer who asked for a quote two weeks ago and went quiet."
+          }
+        ]
+      }
     }
   }
 }
