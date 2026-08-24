@@ -292,6 +292,7 @@ export function registerAdmin(app: FastifyInstance): void {
         id, name: PLANS[id].name,
         priceEur: PLANS[id].priceEur,
         priceEurYearly: PLANS[id].priceEurYearly,
+        setupFeeEur: PLANS[id].setupFeeEur,
         purchasable: PLANS[id].purchasable,
         monthlyMessages: PLANS[id].monthlyMessages,
         highlights: PLANS[id].highlights,

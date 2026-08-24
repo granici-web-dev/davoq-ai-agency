@@ -1901,7 +1901,7 @@ const ACCESS_EMAIL = 'hello@assistwidget.eu';
 
 interface PlanCard {
   id: string; name: string; priceEur: number; priceEurYearly: number;
-  purchasable: boolean; monthlyMessages: number;
+  setupFeeEur: number; purchasable: boolean; monthlyMessages: number;
   highlights: string[]; current: boolean;
 }
 
@@ -2128,9 +2128,14 @@ function Subscription(): React.ReactElement {
             </div>
           ))}
         </div>
-        <p className="note">
-          {t('Pentru Pro există o taxă unică de configurare — catalog, formulă de preț și formularul dumneavoastră de ofertă. O facturăm separat, după ce stabilim ce este de făcut.')}
-        </p>
+        {/* Сумма берётся из тарифа, а не из текста: цена, написанная словами
+            в разметке, расходится с прайсом в первый же пересмотр. */}
+        {data.allPlans.filter((p) => p.setupFeeEur > 0).map((p) => (
+          <p className="note" key={p.id}>
+            {tf('{plan}: configurarea inițială costă {fee} € — o singură dată. Include catalogul, formula de preț, formularul dumneavoastră de ofertă și publicarea pe site. O facturăm separat, după ce stabilim împreună ce este de făcut.',
+                { plan: p.name, fee: p.setupFeeEur })}
+          </p>
+        ))}
       </section>
     </>
   );

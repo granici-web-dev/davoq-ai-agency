@@ -58,6 +58,38 @@ export interface Plan {
    */
   priceEurYearly: number;
   /**
+   * Разовая плата за заведение. Ноль — заведение входит в подписку.
+   *
+   * ── Откуда число ──
+   *
+   * Полтора дня работы на клиента в УЖЕ ЗАВЕДЁННОЙ нише: созвон и вытащить
+   * каталог с ценами (2–3 ч), флоу и формула в конфиг (2 ч), ассеты (1–2 ч),
+   * бланк со сверкой и одной итерацией (2–3 ч), материалы в базу знаний
+   * (1–2 ч), встройка на сайт (1 ч).
+   *
+   * Декларативный бланк убрал из этого списка компонент на клиента, ревью
+   * и деплой — но не убрал главного: вытащить из мебельщика прайс, которого
+   * у него нет в структурированном виде. Это переговоры, а не набор текста,
+   * и быстрее они не становятся.
+   *
+   * ── Почему одно число, а не «от и до» ──
+   *
+   * Вилка в прайсе — это приглашение торговаться до её нижней границы ещё
+   * до того, как клиент сказал, что ему нужно. Одно число обсуждается
+   * по существу: что входит и что нет.
+   *
+   * ── Почему не дешевле ──
+   *
+   * Плата за заведение не окупает наши часы — она покупает обязательство.
+   * Клиент, не заплативший за онбординг, не соберёт материалы и пропадёт
+   * на третьей неделе, а полтора дня к тому времени уже потрачены.
+   *
+   * Второй клиент в той же нише обходится нам заметно дешевле — ниша уже
+   * написана. Скидка живёт ТАМ и даётся осознанно, а не получается сама
+   * из вилки в прайсе.
+   */
+  setupFeeEur: number;
+  /**
    * Можно ли купить прямо сейчас.
    *
    * Лестница видна целиком — клиент должен понимать, куда он растёт, — но
@@ -136,6 +168,10 @@ export const PLANS: Record<PlanId, Plan> = {
     maxChunks: 2_000,
     priceEur: 79,
     priceEurYearly: 790,
+    // Заведение чат-бота — это материалы и виджет на страницу. Клиент делает
+    // это сам за вечер, и брать за это отдельно значит продавать ему помощь,
+    // которая ему не нужна.
+    setupFeeEur: 0,
     purchasable: true,
     features: { ...BASE_FEATURES },
     highlights: [
@@ -156,11 +192,13 @@ export const PLANS: Record<PlanId, Plan> = {
     maxChunks: 10_000,
     priceEur: 199,
     priceEurYearly: 1_990,
+    setupFeeEur: 490,
     purchasable: true,
     features: { ...BASE_FEATURES, configurator: true, drive: true },
     highlights: [
       'Tot ce include Start',
       'Configurator cu preț și ofertă PDF pe formularul dumneavoastră',
+      'Configurare inițială 490 € — o singură dată',
       '5 000 de mesaje pe lună',
       '50 de documente în baza de cunoștințe',
       'Sincronizare cu Google Drive — puneți fișierul în dosar și gata',
@@ -187,6 +225,9 @@ export const PLANS: Record<PlanId, Plan> = {
     maxChunks: 50_000,
     priceEur: 349,
     priceEurYearly: 3_490,
+    // Заведение follow-up и этапов производства обсуждается вместе с самим
+    // тарифом: их ещё нет, и оценивать нечего.
+    setupFeeEur: 0,
     purchasable: false,
     features: {
       ...BASE_FEATURES, configurator: true, drive: true, connectors: true,
@@ -214,6 +255,7 @@ export const PLANS: Record<PlanId, Plan> = {
     // с индивидуальной ценой её в коде и не должно быть.
     priceEur: 0,
     priceEurYearly: 0,
+    setupFeeEur: 0,
     purchasable: false,
     features: {
       chatbot: true, configurator: true, drive: true, connectors: true,
