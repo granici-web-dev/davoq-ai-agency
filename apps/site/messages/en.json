@@ -779,6 +779,122 @@
       ],
       "closingTitle": "See what it would fill in from your own correspondence",
       "closingLead": "At the demo we take a few real customer conversations — anonymised, if you prefer — and show you what would have reached the record without anyone typing."
+    },
+    "follow-up": {
+      "metaTitle": "Follow-up agent — automatic returns to leads that went quiet",
+      "metaDescription": "An AI agent that comes back to customers who never replied: on a schedule you set, about what was actually discussed, on their own channel. It stops the moment they answer. Included in the Growth package.",
+      "title": "It comes back to the customers who went quiet — and stops when they answer",
+      "lead": "Most quotes are not lost on price. They are lost in the silence afterwards. The agent comes back on a schedule you set, writes about what was actually discussed, and stops the moment the person replies.",
+      "plan": {
+        "title": "Follow-up plan",
+        "number": "L-274",
+        "steps": [
+          {
+            "day": "Day 0",
+            "text": "Quote sent by the salesperson",
+            "state": "origin"
+          },
+          {
+            "day": "Day 2",
+            "text": "\"Did the quote arrive? If anything in it is unclear, tell me and we'll sort it out.\"",
+            "state": "done"
+          },
+          {
+            "day": "Day 6",
+            "text": "\"The price in the quote holds until the 30th. Shall I hold you a production slot?\"",
+            "state": "done"
+          },
+          {
+            "day": "Day 12",
+            "text": "Third follow-up, scheduled",
+            "state": "stopped"
+          }
+        ],
+        "stopLabel": "Stopped automatically",
+        "stop": "The customer replied on day seven. The remaining follow-ups are cancelled.",
+        "note": "This is how one lead's plan looks. The number of follow-ups, the intervals and the reasons to stop are the ones you set."
+      },
+      "featuresTitle": "What it does, concretely",
+      "features": {
+        "stop": {
+          "title": "It stops when the person answers",
+          "text": "It does not run the sequence to the end out of inertia. One reply and the rest is cancelled, including what was scheduled a fortnight out."
+        },
+        "task": {
+          "title": "It returns on a schedule, not when you happen to remember",
+          "text": "Day two, day six, day twelve — as you decide. It does not depend on who is on holiday or how full the day was."
+        },
+        "sources": {
+          "title": "It writes about what was discussed",
+          "text": "It refers to the product asked about, the price in the quote, the deadline talked through. Not a \"still interested?\" sent to everybody."
+        },
+        "read": {
+          "title": "On the channel the customer came in on",
+          "text": "If they wrote in the chat, they hear back in the chat. If they left an email, they get an email. We do not move them to wherever suits us."
+        },
+        "rules": {
+          "title": "You set the limits",
+          "text": "How many follow-ups, at what intervals, on which days and at what hours, when it stops for good. What you have not allowed does not happen."
+        },
+        "portal": {
+          "title": "Every follow-up stays in the portal",
+          "text": "You can see what was sent, when, and what came of it. Including the leads the agent stopped writing to, and why."
+        }
+      },
+      "sourcesEyebrow": "What it writes from",
+      "sourcesTitle": "What it writes the follow-ups from — and what it does not do",
+      "sourcesYes": {
+        "title": "It writes from",
+        "items": [
+          "The conversation held with the customer: what they asked for, what was discussed, where it stopped.",
+          "The quote that was sent: the items, the price, how long it holds.",
+          "The schedule and limits you wrote: how many follow-ups, at what intervals, on which days.",
+          "The reasons to stop that you set: they replied, they bought, they asked not to be contacted."
+        ]
+      },
+      "sourcesNo": {
+        "title": "It never",
+        "items": [
+          "It does not write indefinitely. The number of follow-ups is the one you set, and after it the agent stops.",
+          "It does not write to people who asked not to be contacted. Not in any scenario and not in any campaign.",
+          "It does not invent discounts or extend deadlines to get an answer out of somebody.",
+          "It does not write to bought lists or to contacts who never spoke to you."
+        ]
+      },
+      "platformsTitle": "It comes back where the customer spoke",
+      "platformsLead": "The customer picks the channel, not us. Which ones get connected for you is decided at the first conversation, once we see where your requests actually arrive.",
+      "platforms": [
+        "Email",
+        "The chat on your site",
+        "SMS",
+        "Messaging, where it is connected",
+        "A task for the salesperson, if you would rather a person called"
+      ],
+      "faqTitle": "What people ask about follow-up",
+      "faq": [
+        {
+          "q": "Does it not turn into spam?",
+          "a": "That depends on the limits, and you set the limits: how many follow-ups, at what intervals, on which days and at what hours. The agent stops at the first reply and never writes to people who asked not to be contacted. One follow-up about a real conversation, to a person who asked you first, is not spam. Three messages a week to a bought list is — and that we do not do."
+        },
+        {
+          "q": "Who writes the follow-up texts?",
+          "a": "We do, during setup, in the way you speak to your customers, and you see them before the first one goes out. They are changed from the portal, without asking us."
+        },
+        {
+          "q": "What happens if the customer replies angrily?",
+          "a": "It stops, as it does on any reply, and the conversation reaches the salesperson with everything that was sent before it. The agent does not argue on your behalf."
+        },
+        {
+          "q": "Can I stop the follow-ups for one particular customer?",
+          "a": "Yes, from the portal, at any time. There is also a stop across the whole base, if you want to suspend follow-ups for a period — over the holidays, during stocktaking, when production is full."
+        },
+        {
+          "q": "When will it be ready?",
+          "a": "We do not give a date we cannot keep. It is included in the Growth package: connect it now and the follow-up agent switches on in your account at launch, at the price you joined at."
+        }
+      ],
+      "closingTitle": "See how many of your quotes went quiet",
+      "closingLead": "At the demo we look at the quotes you sent over the last few months and show you what the agent would have written, when — and at which point it would have stopped."
     }
   },
   "industryPage": {

@@ -779,6 +779,122 @@
       ],
       "closingTitle": "Vedeți ce ar completa din corespondența dumneavoastră",
       "closingLead": "La demonstrație luăm câteva discuții reale cu clienți — anonimizate, dacă preferați — și vă arătăm ce ar fi ajuns în fișă fără ca cineva să tasteze."
+    },
+    "follow-up": {
+      "metaTitle": "Agent follow-up — reveniri automate la lead-urile care tac",
+      "metaDescription": "Agent AI care revine la clienții care nu au răspuns: după un orar stabilit de dumneavoastră, despre ce s-a discutat, pe canalul lor. Se oprește când omul răspunde. Inclus în pachetul Growth.",
+      "title": "Revine la clienții care au tăcut — și se oprește când răspund",
+      "lead": "Cele mai multe oferte nu se pierd la preț, ci în tăcerea de după. Agentul revine după un orar pe care îl stabiliți dumneavoastră, scrie despre ce s-a discutat și se oprește în clipa în care omul răspunde.",
+      "plan": {
+        "title": "Plan de revenire",
+        "number": "L-274",
+        "steps": [
+          {
+            "day": "Ziua 0",
+            "text": "Ofertă trimisă de vânzător",
+            "state": "origin"
+          },
+          {
+            "day": "Ziua 2",
+            "text": "«A ajuns oferta? Dacă ceva nu e clar acolo, spuneți-mi și lămurim.»",
+            "state": "done"
+          },
+          {
+            "day": "Ziua 6",
+            "text": "«Prețul din ofertă e valabil până pe 30. Vă țin un loc în producție?»",
+            "state": "done"
+          },
+          {
+            "day": "Ziua 12",
+            "text": "A treia revenire, programată",
+            "state": "stopped"
+          }
+        ],
+        "stopLabel": "Oprit automat",
+        "stop": "Clientul a răspuns în ziua a șaptea. Revenirile rămase se anulează.",
+        "note": "Așa va arăta planul unui lead. Numărul de reveniri, intervalul și motivele de oprire sunt cele stabilite de dumneavoastră."
+      },
+      "featuresTitle": "Ce face, concret",
+      "features": {
+        "stop": {
+          "title": "Se oprește când omul răspunde",
+          "text": "Nu duce scenariul până la capăt din inerție. Un răspuns — și restul revenirilor se anulează, inclusiv cele programate peste două săptămâni."
+        },
+        "task": {
+          "title": "Revine după un orar, nu după cum vă amintiți",
+          "text": "A doua zi, a șasea, a douăsprezecea — cum stabiliți. Nu depinde de cine e în concediu și de cât de plină a fost ziua."
+        },
+        "sources": {
+          "title": "Scrie despre ce s-a discutat",
+          "text": "Se referă la produsul cerut, la prețul din ofertă, la termenul discutat. Nu un «vă mai interesează?» trimis la toată lumea."
+        },
+        "read": {
+          "title": "Pe canalul pe care a venit clientul",
+          "text": "Dacă a scris pe chat, primește pe chat. Dacă a lăsat e-mailul, primește e-mail. Nu îl mutăm noi unde ne e comod nouă."
+        },
+        "rules": {
+          "title": "Limitele le puneți dumneavoastră",
+          "text": "Câte reveniri, la ce interval, în ce zile și la ce ore, când se oprește definitiv. Ce nu ați permis nu se întâmplă."
+        },
+        "portal": {
+          "title": "Fiecare revenire rămâne în portal",
+          "text": "Se vede ce s-a trimis, când și ce a urmat. Inclusiv lead-urile la care agentul a încetat să scrie, și din ce motiv."
+        }
+      },
+      "sourcesEyebrow": "Din ce scrie",
+      "sourcesTitle": "Din ce scrie revenirile — și ce nu face",
+      "sourcesYes": {
+        "title": "Scrie din",
+        "items": [
+          "Discuția purtată cu clientul: ce a cerut, ce s-a discutat, unde s-a oprit.",
+          "Oferta trimisă: pozițiile, prețul, termenul de valabilitate.",
+          "Orarul și limitele scrise de dumneavoastră: câte reveniri, la ce interval, în ce zile.",
+          "Motivele de oprire pe care le stabiliți: a răspuns, a cumpărat, a cerut să nu mai fie contactat."
+        ]
+      },
+      "sourcesNo": {
+        "title": "Nu face",
+        "items": [
+          "Nu scrie la nesfârșit. Numărul de reveniri este cel pe care l-ați pus, și după el se oprește.",
+          "Nu scrie celor care au cerut să nu mai fie contactați. În niciun scenariu și în nicio campanie.",
+          "Nu inventează reduceri și nu prelungește termene ca să obțină un răspuns.",
+          "Nu scrie la liste cumpărate sau la contacte care nu au vorbit niciodată cu dumneavoastră."
+        ]
+      },
+      "platformsTitle": "Revine acolo unde a vorbit clientul",
+      "platformsLead": "Canalul îl alege clientul, nu noi. Ce anume se conectează la dumneavoastră stabilim la prima discuție, după ce vedem pe unde vă vin cererile.",
+      "platforms": [
+        "E-mail",
+        "Chatul de pe site",
+        "SMS",
+        "Mesagerie, unde este conectată",
+        "Sarcină pentru vânzător, dacă preferați să sune un om"
+      ],
+      "faqTitle": "Ce se întreabă despre follow-up",
+      "faq": [
+        {
+          "q": "Nu devine spam?",
+          "a": "Depinde de limite, iar limitele le puneți dumneavoastră: câte reveniri, la ce interval, în ce zile și ore. Agentul se oprește la primul răspuns și nu scrie niciodată celor care au cerut să nu mai fie contactați. O revenire despre o discuție reală, la un om care a întrebat el primul, nu este spam. Trei mesaje pe săptămână la o listă cumpărată este — și asta nu facem."
+        },
+        {
+          "q": "Cine scrie textele revenirilor?",
+          "a": "Le scriem la configurare, în felul în care vorbiți dumneavoastră cu clienții, și le vedeți înainte să plece prima. Se schimbă din portal, fără să ne cereți nouă."
+        },
+        {
+          "q": "Ce se întâmplă dacă clientul răspunde supărat?",
+          "a": "Se oprește, ca la orice răspuns, iar discuția ajunge la vânzător cu tot ce s-a trimis înainte. Agentul nu poartă o discuție în contradictoriu în locul dumneavoastră."
+        },
+        {
+          "q": "Pot să opresc revenirile pentru un client anume?",
+          "a": "Da, din portal, în orice moment. Există și oprire pe toată baza, dacă vreți să suspendați revenirile într-o perioadă — în concediu, la inventar, când producția e plină."
+        },
+        {
+          "q": "Când este gata?",
+          "a": "Nu dăm o dată pe care nu o putem ține. Este inclus în pachetul Growth: dacă îl conectați acum, agentul de follow-up se activează pe contul dumneavoastră la lansare, la prețul de la conectare."
+        }
+      ],
+      "closingTitle": "Vedeți câte oferte tac în urma dumneavoastră",
+      "closingLead": "La demonstrație ne uităm la ofertele trimise în ultimele luni și vă arătăm ce ar fi scris agentul, când — și în ce moment s-ar fi oprit."
     }
   },
   "industryPage": {
