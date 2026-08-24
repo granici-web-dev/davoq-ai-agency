@@ -263,6 +263,36 @@
         }
       },
       "honesty": "De ce vă spunem că suntem în rodaj, în loc să tăcem: pentru că veți afla oricum. Un furnizor care își umflă lista de clienți își umflă și rezultatele."
+    },
+    "onboarding": {
+      "eyebrow": "Cum începe",
+      "title": "De la prima discuție la agent pe site",
+      "lead": "Nu este un proiect de implementare. Nu aveți nevoie de programator, de departament IT sau de un site nou — agentul se așază peste ce aveți acum.",
+      "timeLabel": "Timpul dumneavoastră",
+      "steps": {
+        "talk": {
+          "title": "Discuția",
+          "text": "Ce vindeți, cum se calculează prețul la dumneavoastră și ce vă întreabă oamenii cel mai des. Nu trebuie să pregătiți nimic dinainte.",
+          "time": "30–40 de minute"
+        },
+        "materials": {
+          "title": "Materialele",
+          "text": "Site, fișe de produs, lista de prețuri, condiții. În forma în care există — Excel, PDF, Word, poze. Să le punem în ordine este treaba noastră.",
+          "time": "Cât durează un e-mail"
+        },
+        "config": {
+          "title": "Configurarea",
+          "text": "Scenariul nișei, regulile de preț, brandul pe ofertă. Vedeți agentul înainte să îl vadă clienții și corectați ce nu sună a dumneavoastră.",
+          "time": "O jumătate de oră de verificat"
+        },
+        "embed": {
+          "title": "O linie de cod",
+          "text": "Un script pe site. Widgetul rulează izolat de stilurile paginii, deci nu strică nimic din ce aveți. Dacă nu aveți cui, îl punem noi.",
+          "time": "Câteva minute"
+        }
+      },
+      "total": "În total, de obicei sub două ore din timpul dumneavoastră. Restul este la noi — inclusiv partea neplăcută, în care lista de prețuri trebuie citită rând cu rând.",
+      "priceLink": "Costul configurării inițiale"
     }
   }
 }

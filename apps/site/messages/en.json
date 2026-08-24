@@ -263,6 +263,36 @@
         }
       },
       "honesty": "Why we tell you we are running in rather than keeping quiet: because you would find out anyway. A supplier who inflates their client list will inflate their results too."
+    },
+    "onboarding": {
+      "eyebrow": "How it starts",
+      "title": "From the first conversation to an agent on your site",
+      "lead": "This is not an implementation project. You need no developer, no IT department and no new website — the agent sits on top of what you already have.",
+      "timeLabel": "Your time",
+      "steps": {
+        "talk": {
+          "title": "The conversation",
+          "text": "What you sell, how the price is worked out at your company, and what people ask you most often. Nothing to prepare in advance.",
+          "time": "30–40 minutes"
+        },
+        "materials": {
+          "title": "The materials",
+          "text": "Website, product sheets, price list, terms. In whatever form they exist — Excel, PDF, Word, photos. Putting them in order is our job.",
+          "time": "As long as an email takes"
+        },
+        "config": {
+          "title": "The configuration",
+          "text": "The script for your niche, your pricing rules, your brand on the quote. You see the agent before your customers do and correct anything that does not sound like you.",
+          "time": "Half an hour of checking"
+        },
+        "embed": {
+          "title": "One line of code",
+          "text": "A script on your site. The widget runs isolated from the page styles, so it breaks nothing you already have. If there is nobody to do it, we do it.",
+          "time": "A few minutes"
+        }
+      },
+      "total": "Usually under two hours of your time in total. The rest is on us — including the unpleasant part, where the price list has to be read line by line.",
+      "priceLink": "What the initial setup costs"
     }
   }
 }
