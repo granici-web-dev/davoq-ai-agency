@@ -5,10 +5,126 @@
 # формулировки. Скопировать этот файл целиком ради двух правок — значит
 # не иметь слоя ниши вовсе.
 #
-# В фазе 2 здесь только бланк оферты. Флоу и промпт агента добавляются
-# в фазе 3 теми же двумя ключами: `flow:` и `agent:`.
+# Промпт агента добавляется в фазе 3 ключом `agent:`.
 schema: 1
 id: furniture
+
+# Шаги, которые видит посетитель. Здесь ФОРМА: какие шаги, в каком порядке,
+# как они называются и что подсказывать агенту. Модели, ткани и цвета
+# у каждого мебельщика свои — их варианты добавляет слой клиента по `id`,
+# а ненужный шаг он выключает через `enabled: false`.
+#
+# Цен здесь нет ни одной, и это правило, а не недоделка: цена мебельщика —
+# его коммерческая тайна, и в общем шаблоне ей не место.
+flow:
+  steps:
+    - id: model
+      type: cards
+      title:
+        ro: Modelul
+        ru: Модель
+        en: Model
+      aiHint:
+        ro: Dacă vizitatorul descrie spațiul, nu modelul, propuneți două-trei variante potrivite și explicați diferența.
+        ru: Если посетитель описывает комнату, а не модель, предложите две-три подходящие и объясните разницу.
+        en: If the visitor describes the room rather than a model, suggest two or three and explain the difference.
+      # Модели у каждого свои — варианты приходят из слоя клиента.
+      options: []
+
+    - id: size
+      type: cards
+      title:
+        ro: Dimensiunea
+        ru: Размер
+        en: Size
+      aiHint:
+        ro: Întrebați lățimea peretelui liber înainte de a recomanda o dimensiune.
+        ru: Спросите ширину свободной стены, прежде чем советовать размер.
+        en: Ask for the free wall width before recommending a size.
+      options: []
+
+    - id: seat
+      type: cards
+      title:
+        ro: Umplutura șezutului
+        ru: Наполнитель сиденья
+        en: Seat filling
+      aiHint:
+        ro: Spuma HR își ține forma, memory foam se așază după corp, puful natural cere înfoiere periodică.
+        ru: HR-пена держит форму, memory foam подстраивается под тело, натуральный пух требует регулярного взбивания.
+        en: HR foam holds its shape, memory foam adapts to the body, natural down needs regular fluffing.
+      # Наполнители одинаковы у всей ниши — варианты общие, цены клиентские.
+      options:
+        - id: hr-foam
+          label: { ro: Spumă poliuretanică HR, ru: Пенополиуретан HR, en: HR polyurethane foam }
+        - id: hr-memory
+          label: { ro: Spumă HR + memory foam, ru: HR-пена + memory foam, en: HR foam + memory foam }
+        - id: down
+          label: { ro: Puf natural, ru: Натуральный пух, en: Natural down }
+
+    - id: fabric
+      type: cards
+      title:
+        ro: Țesătura
+        ru: Ткань
+        en: Fabric
+      aiHint:
+        ro: Întrebați despre copii și animale înainte de a recomanda o colecție.
+        ru: Спросите про детей и животных, прежде чем советовать коллекцию.
+        en: Ask about children and pets before recommending a collection.
+      options: []
+
+    - id: colour
+      type: color-grid
+      title:
+        ro: Culoarea
+        ru: Цвет
+        en: Colour
+      aiHint:
+        ro: Avertizați că nuanțele de pe ecran diferă de material și propuneți mostre.
+        ru: Предупредите, что оттенки на экране отличаются от материала, и предложите образцы.
+        en: Warn that on-screen shades differ from the material and offer samples.
+      options: []
+
+    - id: extras
+      type: cards
+      multiple: true
+      optional: true
+      title:
+        ro: Opțiuni suplimentare
+        ru: Дополнительно
+        en: Extras
+      options:
+        - id: puf
+          label: { ro: Puf, ru: Пуф, en: Ottoman }
+        - id: topper
+          label: { ro: Topper, ru: Топпер, en: Topper }
+        - id: storage
+          label: { ro: Ladă de depozitare, ru: Ящик для белья, en: Storage box }
+        - id: extensible
+          label: { ro: Mecanism extensibil, ru: Раскладной механизм, en: Sofa bed mechanism }
+
+    - id: notes
+      type: text
+      optional: true
+      title:
+        ro: Observații
+        ru: Пожелания
+        en: Notes
+
+# Форма формулы — здесь, числа — у клиента.
+#
+# Мебель не размерная: изделие считается штукой, а не квадратом, поэтому
+# `dimension.kind: none`. Драйверы количества движок всё равно знает — окна,
+# жалюзи и столешницы без них не посчитать, а это самые вероятные вторые ниши.
+#
+# Ставки НДС здесь нет: она страновая, а не отраслевая. Румынский мебельщик
+# и польский пользуются одной вертикалью и разными ставками.
+pricing:
+  units:
+    dimension: { kind: none }
+  # Мебельщики называют круглую цену в леях, а не в банях.
+  rounding: { to: 100, mode: nearest }
 
 offer:
   # Порядок блоков ниши. Типы блоков задаёт движок; свой тип завести нельзя —

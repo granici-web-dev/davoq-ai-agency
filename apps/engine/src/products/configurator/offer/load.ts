@@ -1,7 +1,8 @@
 import { existsSync, readFileSync } from 'node:fs';
-import { join, resolve } from 'node:path';
-import { parse } from 'yaml';
 import { mergeLayers, type Json } from '../config/layers.js';
+import {
+  FILE_PREFIX, clientLayer, inside, verticalLayer, type Layer,
+} from '../config/source.js';
 import { assertGlyphCoverage } from './fonts.js';
 import { defaultFonts } from './fonts.js';
 import { OFFER_DEFAULTS, validateOffer, type OfferTemplate } from './schema.js';
@@ -19,22 +20,6 @@ import { isVector, vectorLogo } from './svg.js';
  * (предпросмотр и apply), дальше — jsonb из базы. Загрузчик принимает готовый
  * объект и о происхождении не спрашивает.
  */
-
-const VERTICALS_ROOT = resolve(
-  process.env.VERTICALS_DIR ?? new URL('../../../verticals', import.meta.url).pathname,
-);
-
-/** Ссылка на файл — только с явным префиксом: иначе обычный текст с точкой стал бы путём. */
-const FILE_PREFIX = 'file:';
-
-function inside(dir: string, rel: string, where: string): string {
-  const full = resolve(join(dir, rel));
-  if (!full.startsWith(resolve(dir) + '/')) {
-    throw new Error(`${where}: путь «${rel}» выходит за каталог слоя`);
-  }
-  if (!existsSync(full)) throw new Error(`${where}: файл «${rel}» не найден`);
-  return full;
-}
 
 /** Разворачивает `file:` в содержимое, а пути к ассетам — в абсолютные. */
 function resolvePaths(layer: Json | undefined, dir: string, where: string): Json | undefined {
@@ -96,27 +81,16 @@ function resolvePaths(layer: Json | undefined, dir: string, where: string): Json
   return out;
 }
 
+const offerOf = (layer: Layer | undefined): Json | undefined =>
+  layer && resolvePaths(layer.raw.offer, layer.dir, layer.where);
+
 /** Слой ниши. Ниша не задана — законное состояние: бланк соберётся из умолчаний и слоя клиента. */
-export function verticalOfferLayer(verticalId: string | null | undefined): Json | undefined {
-  if (!verticalId) return undefined;
-  const dir = join(VERTICALS_ROOT, verticalId);
-  const file = join(dir, 'configurator.yaml');
-  if (!existsSync(file)) return undefined;
-  const raw = parse(readFileSync(file, 'utf8')) as Record<string, Json> | null;
-  const where = `${verticalId}/configurator.yaml`;
-  if (raw && raw.schema !== 1) throw new Error(`${where}: поддерживается только schema: 1`);
-  return resolvePaths(raw?.offer, dir, where);
-}
+export const verticalOfferLayer = (verticalId: string | null | undefined): Json | undefined =>
+  offerOf(verticalLayer(verticalId));
 
 /** Слой клиента с диска. Из базы придёт тот же объект — тогда этот шаг просто пропускается. */
-export function clientOfferLayer(clientDir: string): Json | undefined {
-  const file = join(clientDir, 'configurator.yaml');
-  if (!existsSync(file)) return undefined;
-  const raw = parse(readFileSync(file, 'utf8')) as Record<string, Json> | null;
-  const where = `${clientDir}/configurator.yaml`;
-  if (raw && raw.schema !== 1) throw new Error(`${where}: поддерживается только schema: 1`);
-  return resolvePaths(raw?.offer, clientDir, where);
-}
+export const clientOfferLayer = (clientDir: string): Json | undefined =>
+  offerOf(clientLayer(clientDir));
 
 export interface OfferSource {
   verticalId?: string | null;

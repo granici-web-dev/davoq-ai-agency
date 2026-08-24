@@ -54,3 +54,92 @@ offer:
           - 'Livrare în raza de 300–350 km — 1200 lei'
           - 'Livrare în raza de 350–450 km — 1500 lei'
       footer: SofaBelle SRL · sofabelle.ro
+
+# Числа конфигуратора. Форма шагов и формулы — в нише `furniture`.
+#
+# TODO(клиент): подтверждено документами только `free-comfort` — 17840 лей
+# из OFERTA NR. 986. Остальные базы и все множители — заглушки, ставятся
+# на разговоре с клиентом. Заглушка с пометкой лучше пустого шага: видно,
+# что именно спрашивать.
+#
+# Замечено по их же оферте: скидка 5% там посчитана от товара без доставки
+# (18500 × 0.95 + 750 = 18325). У нас доставка — отдельная позиция оферты,
+# а не надбавка внутри конфигурации, поэтому расхождения с формулой нет.
+flow:
+  steps:
+    # Размеры у них «CONFORM SCHITEI» — по эскизу, а не выбором из списка.
+    # Шаг ниши выключается, а не переопределяется пустым.
+    - id: size
+      enabled: false
+
+    - id: model
+      options:
+        - id: free-comfort
+          label: { ro: Canapea Free Comfort }
+          priceEffect: { kind: base, bani: 1784000 }
+        - id: life
+          label: { ro: Canapea Life }
+          priceEffect: { kind: base, bani: 787600 }
+        - id: lofty
+          label: { ro: Canapea Lofty }
+          priceEffect: { kind: base, bani: 2764600 }
+        - id: allure-life
+          label: { ro: Pat Allure Life }
+          priceEffect: { kind: base, bani: 732600 }
+        - id: belle-moon
+          label: { ro: Pat Belle Moon }
+          priceEffect: { kind: base, bani: 900000 }
+
+    - id: seat
+      options:
+        - id: hr-foam
+          priceEffect: { kind: addon, bani: 0 }
+        - id: hr-memory
+          priceEffect: { kind: addon, bani: 45000 }
+        - id: down
+          priceEffect: { kind: multiplier, factor: 1.15 }
+
+    # Коллекции Fibreguard — те самые, что стоят в их офертах.
+    # TODO(клиент): ценовые категории коллекций.
+    - id: fabric
+      options:
+        - id: ambiant
+          label: { ro: 'Fibreguard Ambiant' }
+          priceEffect: { kind: multiplier, factor: 1.0 }
+        - id: veluxe
+          label: { ro: 'Fibreguard Veluxe' }
+          priceEffect: { kind: multiplier, factor: 1.12 }
+        - id: deluxe
+          label: { ro: 'Fibreguard Deluxe' }
+          priceEffect: { kind: multiplier, factor: 1.25 }
+
+    # TODO(клиент): картинки цветов. Пока список кодов из их оферт —
+    # выбор без образца, но с настоящими артикулами.
+    - id: colour
+      options:
+        - id: ambiant-06-whisper
+          label: { ro: 'Ambiant 06 Whisper' }
+        - id: veluxe-31-taupe
+          label: { ro: 'Veluxe 31 Taupe' }
+        - id: deluxe-16-cypress
+          label: { ro: 'Deluxe 16 Cypress' }
+        - id: sh-2327-8
+          label: { ro: 'SH 2327 #8' }
+
+    - id: extras
+      options:
+        - id: puf
+          priceEffect: { kind: addon, bani: 66000 }
+        - id: topper
+          priceEffect: { kind: addon, bani: 55000 }
+        - id: storage
+          priceEffect: { kind: addon, bani: 90000 }
+        - id: extensible
+          priceEffect: { kind: addon, bani: 140000 }
+
+pricing:
+  # 21% с августа 2025. Ставка страновая, поэтому здесь, а не в нише.
+  # TODO(сверка): их документы противоречат друг другу — в одном НДС строкой,
+  # в другом приписка «PRETUL INCLUDE TVA». Стоит `add`; ответ клиента
+  # меняет одно слово на `included`.
+  vat: { rate: 2100, mode: add }
