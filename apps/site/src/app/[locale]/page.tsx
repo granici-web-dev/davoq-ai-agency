@@ -30,18 +30,7 @@ export default async function HomePage({
         priority
         sizes="100vw"
         placeholder="blur"
-        /* Кадр отражён по горизонтали. В оригинале освещённое окно —
-           единственное светлое пятно снимка — приходится ровно на левую
-           треть, где стоит заголовок, и его приходится глушить затемнением.
-           Отражение уводит свет в правую половину: текст ложится на тёмный
-           камень, а взгляд после заголовка уходит к окну, а не спорит с ним.
-           Текста в кадре нет, отражать нечего испортить. */
-        /* На узком экране кадр 21:9 обрезается по вертикали так, что
-           освещённое окно уходит за край и остаётся чёрный камень.
-           Поэтому на телефоне кадрируем по окну, а не по центру.
-           Координата берётся в исходнике (окно стоит на 25% ширины),
-           а не на экране: отражение применяется уже после кадрирования. */
-        className="-z-10 -scale-x-100 object-cover object-[25%_45%] sm:object-bottom"
+        className="-z-10 object-cover object-center"
       />
       <div className="hero-scrim -z-10" aria-hidden />
 
@@ -50,7 +39,7 @@ export default async function HomePage({
         <h1 className="mt-6 max-w-4xl text-display font-medium">{t('tagline')}</h1>
         <p className="mt-6 max-w-xl text-lg leading-relaxed text-chalk-dim">
           Conținutul paginii principale vine în etapa 3. Aici se vede doar cum
-          se comportă fotografia sub titlu.
+          se comportă cadrul sub titlu.
         </p>
       </div>
     </section>
