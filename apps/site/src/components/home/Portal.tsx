@@ -48,7 +48,7 @@ export function Portal() {
         </div>
 
         <div className="mt-10 grid gap-6 lg:grid-cols-[1.4fr_1fr] lg:items-start lg:gap-16">
-          <h2 className="text-h1 font-medium">{t('title')}</h2>
+          <h2 className="text-h2 font-medium">{t('title')}</h2>
           <p className="leading-relaxed text-chalk-dim lg:pt-3">{t('lead')}</p>
         </div>
 
