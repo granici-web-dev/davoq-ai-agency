@@ -348,7 +348,7 @@
         },
         "language": {
           "q": "What language does the agent speak?",
-          "a": "Whichever one it is written to in. Romanian and Russian are configured from the start, English as well. We match the tone to how you speak to your customers, not to a manual."
+          "a": "Whichever one it is written to, among those configured for you. Romanian, Russian and English are the ones we work with most often. How many are active depends on the package: Start includes one, Growth two, and Platform is agreed individually. We match the tone to how you speak to your customers, not to a manual."
         },
         "priceChange": {
           "q": "What happens when I change my prices?",
@@ -418,7 +418,7 @@
       "metaTitle": "AI chatbot for your website — answers from your own prices",
       "metaDescription": "An AI chatbot that answers 24/7 from your company materials, qualifies the lead and never invents prices. Configured for your niche, on a monthly subscription.",
       "title": "An AI chatbot that answers from your prices, not from general copy",
-      "lead": "It answers 24/7 on your site, in whichever language it is written to. When the answer is not in your materials it does not invent one — it captures the request, with everything discussed up to that point.",
+      "lead": "It answers 24/7 on your site. When the answer is not in your materials it does not invent one — it captures the request, with everything discussed up to that point.",
       "featuresTitle": "What it does, concretely",
       "features": {
         "always": {
@@ -435,7 +435,7 @@
         },
         "languages": {
           "title": "Romanian, Russian, English",
-          "text": "In whichever language it is written to, without asking and without a language switcher."
+          "text": "It switches on its own, without asking and without a language switcher. How many are active depends on the package: Start includes one, Growth two."
         },
         "install": {
           "title": "One line of code to install",

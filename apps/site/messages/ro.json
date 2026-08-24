@@ -348,7 +348,7 @@
         },
         "language": {
           "q": "În ce limbă vorbește agentul?",
-          "a": "În limba în care i se scrie. Româna și rusa sunt configurate din start, engleza la fel. Tonul îl potrivim după cum vorbiți dumneavoastră cu clienții, nu după un manual."
+          "a": "În limba în care i se scrie, dintre cele configurate pentru dumneavoastră. Româna, rusa și engleza sunt cele cu care lucrăm cel mai des. Câte limbi sunt active ține de pachet: Start include una, Growth două, la Platformă se convine individual. Tonul îl potrivim după cum vorbiți dumneavoastră cu clienții, nu după un manual."
         },
         "priceChange": {
           "q": "Ce se întâmplă când îmi schimb prețurile?",
@@ -418,7 +418,7 @@
       "metaTitle": "Chatbot AI pentru site — răspunde din prețurile dumneavoastră",
       "metaDescription": "Chatbot AI care răspunde 24/7 din materialele companiei dumneavoastră, califică lead-ul și nu inventează prețuri. Configurat pentru nișa dumneavoastră, pe abonament lunar.",
       "title": "Chatbot AI care răspunde din prețurile dumneavoastră, nu din texte generale",
-      "lead": "Răspunde 24/7 pe site-ul dumneavoastră, în limba în care i se scrie. Când nu are răspunsul în materialele dumneavoastră, nu îl inventează — lasă cererea, cu tot ce s-a discutat până acolo.",
+      "lead": "Răspunde 24/7 pe site-ul dumneavoastră. Când nu are răspunsul în materialele dumneavoastră, nu îl inventează — lasă cererea, cu tot ce s-a discutat până acolo.",
       "featuresTitle": "Ce face, concret",
       "features": {
         "always": {
@@ -435,7 +435,7 @@
         },
         "languages": {
           "title": "Româna, rusa, engleza",
-          "text": "În limba în care i se scrie, fără să întrebe și fără buton de schimbat limba."
+          "text": "Comută singur, fără să întrebe și fără buton de schimbat limba. Câte limbi sunt active ține de pachet: Start include una, Growth două."
         },
         "install": {
           "title": "Se pune cu o linie de cod",
