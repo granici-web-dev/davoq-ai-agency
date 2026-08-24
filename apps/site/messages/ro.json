@@ -576,5 +576,132 @@
       "widgetPlaceholder": "Scrieți un mesaj…",
       "widgetInitial": "AI"
     }
+  },
+  "industryPage": {
+    "back": "Toate industriile",
+    "eyebrowIndustry": "Industrie",
+    "questionsEyebrow": "Ce vă întreabă",
+    "agentsEyebrow": "Agenți",
+    "leadEyebrow": "Ce primiți",
+    "faqEyebrow": "Întrebări",
+    "agentsTitle": "Agenții care lucrează în această nișă",
+    "agentsLead": "Fiecare este un produs separat. Puteți începe cu unul și adăuga altul când primul își arată rezultatul.",
+    "openAgent": "Vezi agentul",
+    "mobilier": {
+      "metaTitle": "Chatbot AI pentru mobilă la comandă",
+      "metaDescription": "Agent AI pentru producătorii de mobilă și bucătării la comandă: răspunde la «cât costă» din lista dumneavoastră de prețuri, adună dimensiunile și materialul, predă vânzătorului o cerere gata de calculat.",
+      "title": "Chatbot AI pentru mobilă la comandă",
+      "lead": "Răspunde la «cât costă» seara și în weekend, întreabă dimensiunile și materialul înainte să vă ocupe o măsurare, și predă vânzătorului o cerere gata de calculat.",
+      "widgetTitle": "Chatbot",
+      "widgetStatus": "Răspunde imediat",
+      "widgetPlaceholder": "Scrieți un mesaj…",
+      "widgetInitial": "AI",
+      "conversationNote": "Exemplu de conversație pentru un atelier de mobilă la comandă.",
+      "dialog": [
+        {
+          "role": "client",
+          "text": "Bună! Vreau un dressing pe colț, cam 2,4 pe 1,8 metri. Cât ar fi?"
+        },
+        {
+          "role": "agent",
+          "text": "Depinde de fronturi și de umplutură. Preferați uși batante sau glisante?"
+        },
+        {
+          "role": "client",
+          "text": "Glisante, cu oglindă pe una."
+        },
+        {
+          "role": "agent",
+          "text": "Pentru 2,4 × 1,8 cu uși glisante și o oglindă, intervalul din lista noastră este 24 000 – 31 000 lei, în funcție de sistemul de glisare."
+        },
+        {
+          "role": "client",
+          "text": "Și montajul e inclus?"
+        },
+        {
+          "role": "agent",
+          "text": "Da, montajul și transportul în oraș sunt incluse. Vă trimit oferta exactă după măsurare — când vă convine să vină colegul?"
+        }
+      ],
+      "questionsTitle": "Întrebările pe care le primiți de zece ori pe zi",
+      "questions": [
+        {
+          "q": "«Cât costă o bucătărie de 3 metri?»",
+          "a": "Întrebarea la care nu există un răspuns scurt — și pe care o primiți înainte de orice altceva. Agentul întreabă ce trebuie ca să dea un interval, în loc să răspundă «depinde»."
+        },
+        {
+          "q": "«Aveți țesătura asta?»",
+          "a": "Cu o poză de pe Instagram, fără nume și fără cod. Agentul cunoaște catalogul dumneavoastră de țesături și spune dacă există și în ce grupă de preț intră."
+        },
+        {
+          "q": "«În cât timp o faceți?»",
+          "a": "Termenul depinde de încărcarea atelierului și de materiale. Agentul răspunde cu termenul pe care l-ați stabilit dumneavoastră, nu cu unul inventat."
+        },
+        {
+          "q": "«Veniți la măsurat?»",
+          "a": "Înainte de măsurare aveți nevoie de dimensiuni aproximative și de buget. Agentul le adună, ca deplasarea să nu fie în gol."
+        }
+      ],
+      "agents": {
+        "chatbot": "Răspunde la întrebările de preț și materiale din lista dumneavoastră, la orice oră.",
+        "configurator": "Clientul alege dimensiuni, fronturi și țesătură; prețul se calculează după regulile atelierului.",
+        "follow-up": "Revine la clientul care a cerut ofertă și a tăcut — la momentul în care mai are sens.",
+        "order-status": "Anunță la fiecare etapă a producției, fără ca cineva să scrie mesajul."
+      },
+      "leadTitle": "Vânzătorul primește asta, nu «a scris cineva»",
+      "leadLead": "Toată conversația se strânge într-o fișă. Vânzătorul o deschide și poate calcula, fără să sune ca să afle ce voia omul.",
+      "leadCard": {
+        "title": "Cerere",
+        "number": "№ 1042",
+        "rows": [
+          {
+            "k": "Produs",
+            "v": "Dressing pe colț"
+          },
+          {
+            "k": "Dimensiuni",
+            "v": "2,4 × 1,8 m"
+          },
+          {
+            "k": "Uși",
+            "v": "Glisante, o oglindă"
+          },
+          {
+            "k": "Interval discutat",
+            "v": "24 000 – 31 000 lei"
+          },
+          {
+            "k": "Montaj",
+            "v": "Inclus, în oraș"
+          },
+          {
+            "k": "Pas următor",
+            "v": "Măsurare la domiciliu"
+          }
+        ],
+        "footer": "Conversația completă este atașată la fișă."
+      },
+      "faqTitle": "Ce întreabă atelierele înainte să înceapă",
+      "faq": [
+        {
+          "q": "Prețurile mele nu sunt fixe, se calculează de fiecare dată. Cum poate agentul să răspundă?",
+          "a": "Exact de aceea începe cu întrebări. Agentul nu ține o listă de prețuri finale, ci regulile după care le calculați: preț pe metru liniar, coeficient pe grupa de țesătură, adaosuri pentru feronerie. Din ele iese un interval, iar oferta exactă rămâne la dumneavoastră."
+        },
+        {
+          "q": "Am catalogul de țesături într-un PDF de la furnizor. E de ajuns?",
+          "a": "Da. PDF, Excel, poze ale mostrelor — le luăm în forma în care sunt. Să le punem în ordine este partea noastră din muncă, și pentru asta se plătește configurarea inițială."
+        },
+        {
+          "q": "Ce se întâmplă dacă clientul cere o reducere?",
+          "a": "Agentul nu dă reduceri. Spune că întrebarea ține de vânzător și lasă cererea marcată — ca să știți că omul a întrebat de preț înainte să sunați."
+        },
+        {
+          "q": "Lucrăm și cu proiecte de la designeri. Agentul încurcă lucrurile?",
+          "a": "Nu, dacă îi spuneți din start că există două fluxuri. Clientul care vine cu proiect primește alte întrebări decât cel care vine cu o idee — asta se stabilește la configurare."
+        }
+      ],
+      "closingTitle": "Vedeți agentul răspunzând despre mobila dumneavoastră",
+      "closingLead": "La demonstrație luăm câteva poziții din catalogul dumneavoastră și vă arătăm exact ce ar răspunde unui client real."
+    }
   }
 }

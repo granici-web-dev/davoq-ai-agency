@@ -576,5 +576,132 @@
       "widgetPlaceholder": "Write a message…",
       "widgetInitial": "AI"
     }
+  },
+  "industryPage": {
+    "back": "All industries",
+    "eyebrowIndustry": "Industry",
+    "questionsEyebrow": "What you get asked",
+    "agentsEyebrow": "Agents",
+    "leadEyebrow": "What you get",
+    "faqEyebrow": "Questions",
+    "agentsTitle": "The agents that work in this niche",
+    "agentsLead": "Each is a separate product. You can start with one and add another once the first has shown its result.",
+    "openAgent": "See the agent",
+    "mobilier": {
+      "metaTitle": "AI chatbot for made-to-order furniture",
+      "metaDescription": "An AI agent for makers of made-to-order furniture and kitchens: it answers \"how much\" from your own price list, collects dimensions and materials, and hands sales a request that is ready to price.",
+      "title": "AI chatbot for made-to-order furniture",
+      "lead": "It answers \"how much does it cost\" in the evening and at weekends, asks for dimensions and materials before a survey visit takes up your day, and hands sales a request that is ready to price.",
+      "widgetTitle": "Chatbot",
+      "widgetStatus": "Replies instantly",
+      "widgetPlaceholder": "Write a message…",
+      "widgetInitial": "AI",
+      "conversationNote": "An example conversation for a made-to-order furniture workshop.",
+      "dialog": [
+        {
+          "role": "client",
+          "text": "Hi! I want a corner wardrobe, roughly 2.4 by 1.8 metres. How much would that be?"
+        },
+        {
+          "role": "agent",
+          "text": "That depends on the fronts and the interior fittings. Would you prefer hinged or sliding doors?"
+        },
+        {
+          "role": "client",
+          "text": "Sliding, with a mirror on one of them."
+        },
+        {
+          "role": "agent",
+          "text": "For 2.4 × 1.8 with sliding doors and one mirror, the range in our list is 24,000 – 31,000 lei, depending on the sliding system."
+        },
+        {
+          "role": "client",
+          "text": "Is installation included?"
+        },
+        {
+          "role": "agent",
+          "text": "Yes, installation and delivery within the city are included. I will send the exact quote after the survey — when would suit you for a visit?"
+        }
+      ],
+      "questionsTitle": "The questions you get ten times a day",
+      "questions": [
+        {
+          "q": "\"How much does a three-metre kitchen cost?\"",
+          "a": "The question with no short answer — and the one you get before anything else. The agent asks what it needs in order to give a range, instead of answering \"it depends\"."
+        },
+        {
+          "q": "\"Do you have this fabric?\"",
+          "a": "With a photo from Instagram, no name and no code. The agent knows your fabric catalogue and says whether it exists and which price group it falls into."
+        },
+        {
+          "q": "\"How long does it take?\"",
+          "a": "Lead time depends on the workshop load and on materials. The agent answers with the lead time you set, not one it made up."
+        },
+        {
+          "q": "\"Will you come and measure?\"",
+          "a": "Before a survey you need rough dimensions and a budget. The agent collects them, so the trip is not wasted."
+        }
+      ],
+      "agents": {
+        "chatbot": "Answers questions about price and materials from your own list, at any hour.",
+        "configurator": "The customer picks dimensions, fronts and fabric; the price follows the workshop's rules.",
+        "follow-up": "Comes back to the customer who asked for a quote and went quiet — at the moment it still makes sense.",
+        "order-status": "Reports at every production stage, without anyone writing the message."
+      },
+      "leadTitle": "Your salesperson gets this, not \"someone wrote in\"",
+      "leadLead": "The whole conversation collects into one record. Your salesperson opens it and can price the job, without ringing back to find out what the person wanted.",
+      "leadCard": {
+        "title": "Request",
+        "number": "No. 1042",
+        "rows": [
+          {
+            "k": "Product",
+            "v": "Corner wardrobe"
+          },
+          {
+            "k": "Dimensions",
+            "v": "2.4 × 1.8 m"
+          },
+          {
+            "k": "Doors",
+            "v": "Sliding, one mirror"
+          },
+          {
+            "k": "Range discussed",
+            "v": "24,000 – 31,000 lei"
+          },
+          {
+            "k": "Installation",
+            "v": "Included, within the city"
+          },
+          {
+            "k": "Next step",
+            "v": "Survey at the customer's home"
+          }
+        ],
+        "footer": "The full conversation is attached to the record."
+      },
+      "faqTitle": "What workshops ask before they start",
+      "faq": [
+        {
+          "q": "My prices are not fixed, they are worked out every time. How can the agent answer?",
+          "a": "That is exactly why it starts with questions. The agent does not hold a list of final prices, but the rules you price by: price per linear metre, coefficient per fabric group, additions for hardware. A range comes out of those, and the exact quote stays with you."
+        },
+        {
+          "q": "My fabric catalogue is a PDF from the supplier. Is that enough?",
+          "a": "Yes. PDF, Excel, photos of the samples — we take them in whatever form they are in. Putting them in order is our part of the work, and that is what the initial setup pays for."
+        },
+        {
+          "q": "What if the customer asks for a discount?",
+          "a": "The agent does not give discounts. It says the question is for a salesperson and flags the request — so you know the person asked about price before you call."
+        },
+        {
+          "q": "We also work from designers' drawings. Does the agent get confused?",
+          "a": "Not if you tell it from the start that there are two flows. A customer who arrives with a drawing gets different questions from one who arrives with an idea — that is settled during configuration."
+        }
+      ],
+      "closingTitle": "See the agent answering about your own furniture",
+      "closingLead": "In the demo we take a few items from your catalogue and show you exactly what it would answer a real customer."
+    }
   }
 }
