@@ -225,45 +225,6 @@
       "view": "Vezi industria",
       "agentsLabel": "Agenți potriviți"
     },
-    "pilot": {
-      "eyebrow": "Program pilot",
-      "title": "Platforma se rodează pe un client real, nu pe un demo.",
-      "lead": "Un producător de mobilă la comandă, brand premium, trei showroom-uri. Nu îl numim până nu primim acordul — dar putem spune exact ce rulează acolo.",
-      "liveLabel": "Rulează",
-      "facts": {
-        "industry": {
-          "label": "Industrie",
-          "value": "Mobilă la comandă"
-        },
-        "showrooms": {
-          "label": "Showroom-uri",
-          "value": "Trei"
-        },
-        "status": {
-          "label": "Statut",
-          "value": "În rodaj"
-        }
-      },
-      "running": {
-        "chatbot": {
-          "title": "Chatbot pe site-ul lor",
-          "text": "Răspunde din fișele lor de produs, din țesăturile și termenele reale — nu din texte generale despre mobilă."
-        },
-        "configurator": {
-          "title": "Configurator de cerere",
-          "text": "Clientul alege dimensiuni, țesătură și opțiuni. Prețul se calculează după regulile lor, nu după o estimare."
-        },
-        "offer": {
-          "title": "Ofertă PDF cu brandul lor",
-          "text": "Generată automat: număr de ofertă, TVA, termen de valabilitate, condiții. Fără ca cineva să scrie documentul."
-        },
-        "isolation": {
-          "title": "Datele lor rămân ale lor",
-          "text": "Izolate tehnic de orice alt client al platformei. Nu printr-o promisiune, ci prin felul în care e construită baza de date."
-        }
-      },
-      "honesty": "De ce vă spunem că suntem în rodaj, în loc să tăcem: pentru că veți afla oricum. Un furnizor care își umflă lista de clienți își umflă și rezultatele."
-    },
     "onboarding": {
       "eyebrow": "Cum începe",
       "title": "De la prima discuție la agent pe site",
@@ -380,6 +341,53 @@
           "d": "Masă extensibilă, stejar"
         }
       }
+    },
+    "faq": {
+      "eyebrow": "Întrebări",
+      "title": "Ce ne întreabă oamenii înainte să înceapă",
+      "lead": "Dacă nu găsiți întrebarea dumneavoastră aici,",
+      "leadLink": "scrieți-ne.",
+      "items": {
+        "timeline": {
+          "q": "Cât durează până agentul e pe site?",
+          "a": "Din partea dumneavoastră — o discuție și materialele pe care le aveți deja. Termenul depinde de forma în care e lista de prețuri: un tabel în Excel este una, un catalog scanat este alta. Vă spunem un termen concret după prima discuție, nu înainte."
+        },
+        "unknown": {
+          "q": "Ce face agentul când nu știe răspunsul?",
+          "a": "Nu îl inventează. Răspunde din materialele dumneavoastră, iar când răspunsul nu e acolo spune că verifică și lasă cererea, cu tot ce s-a discutat până în acel moment. Vânzătorul primește conversația, nu un „client interesat”."
+        },
+        "data": {
+          "q": "Unde ajung datele clienților mei?",
+          "a": "Rămân ale dumneavoastră și sunt izolate de datele oricărui alt client al platformei — nu printr-o promisiune, ci prin felul în care e construită baza de date. Un cont nu are cum să ajungă la datele altui cont."
+        },
+        "site": {
+          "q": "Trebuie să-mi schimb site-ul?",
+          "a": "Nu. Se adaugă un script și atât. Widgetul rulează izolat de stilurile paginii, deci nu poate strica ce aveți acum — nici fonturile, nici așezarea. Dacă nu aveți cui, îl punem noi."
+        },
+        "language": {
+          "q": "În ce limbă vorbește agentul?",
+          "a": "În limba în care i se scrie. Româna și rusa sunt configurate din start, engleza la fel. Tonul îl potrivim după cum vorbiți dumneavoastră cu clienții, nu după un manual."
+        },
+        "priceChange": {
+          "q": "Ce se întâmplă când îmi schimb prețurile?",
+          "a": "Ne trimiteți lista nouă. Agentul calculează după reguli, nu după prețuri scrise de mână în răspunsuri, așa că o modificare de preț nu cere reconfigurare de la zero."
+        },
+        "cancel": {
+          "q": "Pot să opresc abonamentul?",
+          "a": "Da, abonamentul este lunar. Ce se întâmplă după oprire cu datele și cu ofertele deja emise este scris în contract și îl citiți înainte să semnați, nu după."
+        },
+        "reviews": {
+          "q": "De ce nu aveți recenzii și logo-uri de clienți pe site?",
+          "a": "Pentru că nu avem încă destule ca să însemne ceva. Platforma se rodează pe un client real din producția de mobilă la comandă, pe care nu îl numim până nu primim acordul. Preferăm să nu punem logo-uri decât să punem logo-uri care nu spun adevărul."
+        }
+      }
+    },
+    "finalCta": {
+      "title": "Vedeți agentul pe produsele dumneavoastră, nu pe un demo generic",
+      "lead": "La demonstrație luăm câteva produse din catalogul dumneavoastră și vă arătăm exact ce ar răspunde agentul unui client real.",
+      "primary": "Cere o demonstrație",
+      "secondary": "Vezi prețurile",
+      "note": "Fără prezentare de o oră. Treizeci de minute și agentul pe ecran."
     }
   }
 }

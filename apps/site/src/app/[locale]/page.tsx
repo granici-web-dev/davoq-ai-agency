@@ -3,10 +3,11 @@ import { Hero } from '@/components/home/Hero';
 import { Problem } from '@/components/home/Problem';
 import { Agents } from '@/components/home/Agents';
 import { Industries } from '@/components/home/Industries';
-import { Pilot } from '@/components/home/Pilot';
 import { Onboarding } from '@/components/home/Onboarding';
 import { Portal } from '@/components/home/Portal';
 import { Pricing } from '@/components/home/Pricing';
+import { Faq } from '@/components/home/Faq';
+import { FinalCta } from '@/components/home/FinalCta';
 
 /**
  * Главная — сборка секций, и только.
@@ -29,10 +30,11 @@ export default async function HomePage({
       <Problem />
       <Agents />
       <Industries />
-      <Pilot />
       <Onboarding />
       <Portal />
       <Pricing />
+      <Faq />
+      <FinalCta />
     </>
   );
 }

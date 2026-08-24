@@ -225,45 +225,6 @@
       "view": "See the industry",
       "agentsLabel": "Agents that fit"
     },
-    "pilot": {
-      "eyebrow": "Pilot programme",
-      "title": "The platform is being run in on a real client, not on a demo.",
-      "lead": "A made-to-order furniture manufacturer, premium brand, three showrooms. We do not name them until they agree — but we can say exactly what is running there.",
-      "liveLabel": "Live",
-      "facts": {
-        "industry": {
-          "label": "Industry",
-          "value": "Made-to-order furniture"
-        },
-        "showrooms": {
-          "label": "Showrooms",
-          "value": "Three"
-        },
-        "status": {
-          "label": "Status",
-          "value": "Running in"
-        }
-      },
-      "running": {
-        "chatbot": {
-          "title": "A chatbot on their site",
-          "text": "It answers from their own product sheets, their real fabrics and lead times — not from general copy about furniture."
-        },
-        "configurator": {
-          "title": "A request configurator",
-          "text": "The customer picks dimensions, fabric and options. The price is worked out by their own rules, not by an estimate."
-        },
-        "offer": {
-          "title": "A PDF quote in their brand",
-          "text": "Generated automatically: quote number, VAT, validity period, terms. Without anyone writing the document."
-        },
-        "isolation": {
-          "title": "Their data stays theirs",
-          "text": "Isolated from every other client on the platform. Not by a promise, but by the way the database is built."
-        }
-      },
-      "honesty": "Why we tell you we are running in rather than keeping quiet: because you would find out anyway. A supplier who inflates their client list will inflate their results too."
-    },
     "onboarding": {
       "eyebrow": "How it starts",
       "title": "From the first conversation to an agent on your site",
@@ -380,6 +341,53 @@
           "d": "Extending table, oak"
         }
       }
+    },
+    "faq": {
+      "eyebrow": "Questions",
+      "title": "What people ask before they start",
+      "lead": "If your question is not here,",
+      "leadLink": "write to us.",
+      "items": {
+        "timeline": {
+          "q": "How long until the agent is on my site?",
+          "a": "From your side — one conversation and the materials you already have. The timeline depends on the shape your price list is in: a spreadsheet is one thing, a scanned catalogue is another. We give you a concrete date after the first conversation, not before."
+        },
+        "unknown": {
+          "q": "What does the agent do when it does not know the answer?",
+          "a": "It does not invent one. It answers from your materials, and when the answer is not there it says it will check and captures the request, with everything discussed up to that point. Your salesperson gets the conversation, not an \"interested lead\"."
+        },
+        "data": {
+          "q": "Where does my customers' data go?",
+          "a": "It stays yours and is isolated from every other client on the platform — not by a promise, but by the way the database is built. One account cannot reach another account's data."
+        },
+        "site": {
+          "q": "Do I have to change my website?",
+          "a": "No. One script is added, and that is all. The widget runs isolated from the page styles, so it cannot break what you have — not the fonts, not the layout. If there is nobody to add it, we do it."
+        },
+        "language": {
+          "q": "What language does the agent speak?",
+          "a": "Whichever one it is written to in. Romanian and Russian are configured from the start, English as well. We match the tone to how you speak to your customers, not to a manual."
+        },
+        "priceChange": {
+          "q": "What happens when I change my prices?",
+          "a": "You send us the new list. The agent prices by rules rather than by figures written by hand into answers, so a price change does not require reconfiguring from scratch."
+        },
+        "cancel": {
+          "q": "Can I stop the subscription?",
+          "a": "Yes, it is monthly. What happens to your data and to quotes already issued after you stop is written in the contract, and you read it before signing, not after."
+        },
+        "reviews": {
+          "q": "Why are there no reviews or client logos on this site?",
+          "a": "Because we do not have enough of them yet to mean anything. The platform is being run in on a real client in made-to-order furniture, whom we do not name until they agree. We would rather show no logos than logos that do not tell the truth."
+        }
+      }
+    },
+    "finalCta": {
+      "title": "See the agent on your own products, not on a generic demo",
+      "lead": "In the demo we take a few products from your catalogue and show you exactly what the agent would answer a real customer.",
+      "primary": "Book a demo",
+      "secondary": "See the pricing",
+      "note": "No hour-long presentation. Thirty minutes and the agent on screen."
     }
   }
 }

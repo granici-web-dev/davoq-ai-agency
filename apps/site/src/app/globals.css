@@ -124,13 +124,21 @@
     filter: blur(90px);
     opacity: 0.85;
   }
-  /* Верхняя кромка гасится в фон: без неё свечение обрывается линией
-     и выдаёт, что это градиент, а не свет. */
+  /* Обе кромки гасятся в фон: без этого свечение обрывается прямой линией
+     по краю секции и выдаёт, что это градиент, а не свет. Нижняя заметнее
+     верхней — источник стоит внизу, и именно там обрез приходится на самое
+     яркое место. */
   .aurora::after {
     content: "";
     position: absolute;
     inset: 0;
-    background: linear-gradient(180deg, var(--color-ink-950) 12%, transparent 55%);
+    background: linear-gradient(
+      180deg,
+      var(--color-ink-950) 10%,
+      transparent 48%,
+      transparent 84%,
+      var(--color-ink-950) 100%
+    );
   }
 
   /**
