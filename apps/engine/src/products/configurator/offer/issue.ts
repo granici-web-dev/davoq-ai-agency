@@ -90,7 +90,21 @@ export async function issueOffer(
           // журналом: доказывать придётся именно про этот контакт.
           JSON.stringify({
             selections: req.selections,
+            // Читаемая конфигурация лежит рядом с сырым выбором.
+            // Директор в панели смотрит на заявку, а не на конфиг: `model:
+            // free-comfort` ему ничего не говорит, а расшифровывать
+            // идентификаторы панель не сможет — прайса у неё нет, да и
+            // конфиг к тому времени поменяется.
+            summary: summaryOf(cfg.flow, resolved, req.locale),
             listPriceBani: price.listPriceBani,
+            // Сумма строкой — по той же причине, что и `summary`: панель не
+            // знает ни валюты клиента, ни числа знаков после запятой, и
+            // форматировать ей нечем.
+            totalFormatted: new Intl.NumberFormat(req.locale, {
+              style: 'currency', currency: template.currency.code,
+              minimumFractionDigits: template.currency.decimals,
+              maximumFractionDigits: template.currency.decimals,
+            }).format(price.totalBani / 10 ** template.currency.decimals),
             discountBani: price.discountBani,
             totalBani: price.totalBani,
             locale: req.locale,
@@ -129,6 +143,30 @@ export async function issueOffer(
     if (storageKey) await storageRemove(storageKey).catch(() => undefined);
     throw err;
   }
+}
+
+/**
+ * Конфигурация словами, на языке оферты.
+ *
+ * Порядок — порядок шагов, а не порядок, в котором посетитель отвечал:
+ * продавец читает её как бриф, и бриф должен читаться одинаково каждый раз.
+ * Подписи берутся из ФЛОУ: числовые шаги в `picks` не попадают, и без флоу
+ * вместо «Lățimea (cm): 310 cm» вышло бы «width: 310».
+ */
+export function summaryOf(flow: FlowConfig, resolved: ResolvedSelections, locale: string): string[] {
+  const label = (map: Record<string, string>): string => map[locale] ?? Object.values(map)[0] ?? '';
+  return flow.steps.flatMap((step) => {
+    const chosen = resolved.picks.filter((p) => p.step.id === step.id);
+    if (chosen.length > 0) {
+      return [`${label(step.title)}: ${chosen.map((p) => label(p.option.label)).join(', ')}`];
+    }
+    const n = resolved.numbers[step.id];
+    if (n !== undefined) {
+      return [`${label(step.title)}: ${n}${step.input?.unit ? ' ' + step.input.unit : ''}`];
+    }
+    const text = resolved.texts[step.id];
+    return text ? [`${label(step.title)}: ${text}`] : [];
+  });
 }
 
 /** `{n}` — счётчик, `{year}` — год. Счётчик сквозной и не сбрасывается. */

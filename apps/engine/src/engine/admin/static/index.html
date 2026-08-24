@@ -266,6 +266,17 @@ tbody tr:hover{background:var(--muted)}
 td.num{font-variant-numeric:tabular-nums;font-weight:500}
 td.quiet{color:var(--muted-fg);white-space:nowrap}
 
+/* Заявка из конфигуратора. Метка и конфигурация живут внутри уже
+   существующих колонок: шестая колонка уезжает за край на телефоне,
+   а смотрят этот список чаще всего с телефона. */
+.tag{display:inline-block;margin-left:8px;padding:1px 7px;border-radius:999px;
+     font-size:11px;line-height:1.6;color:var(--muted-fg);
+     border:1px solid var(--border);white-space:nowrap}
+.lead-config{margin-top:6px;font-size:12px;color:var(--muted-fg)}
+.lead-offer{font-variant-numeric:tabular-nums}
+.lead-offer b{color:var(--fg)}
+.lead-lines{margin:4px 0 0;padding-left:16px;line-height:1.5}
+
 /* Закрытый пробел — это пара «вопрос-ответ», а не строка таблицы: ответ
    абзацем, и в трёх колонках он либо переносится по два слова, либо уезжает
    за правый край. Список даёт тексту нормальную ширину строки. */

@@ -1300,7 +1300,11 @@ interface AnalyticsData {
   closed?: Array<{ question: string; times: number; resolved_at: string; answer: string | null }>;
   leads: Array<{ id: string; name: string | null; email: string | null; phone: string | null;
                  note: string | null; created_at: string; conversation_id: string | null;
-                 notified_at: string | null; notify_error: string | null }>;
+                 notified_at: string | null; notify_error: string | null;
+                 /** chatbot | configurator — откуда пришла заявка. */
+                 product: string;
+                 payload: { summary?: string[]; totalFormatted?: string } | null;
+                 offer_id: string | null; offer_number: string | null; has_pdf: boolean }>;
   notifyEmail?: string;
   quota: { plan: string; cap: number | null; usedThisMonth: number };
 }
@@ -1482,8 +1486,20 @@ function Analytics(): React.ReactElement {
                     {d(l.created_at)}
                     <NotifyState lead={l} />
                   </td>
-                  <td>{l.name}</td><td>{l.email}</td>
-                  <td className="quiet">{l.phone}</td><td>{l.note}</td>
+                  <td>
+                    {l.name}
+                    {/* Метка продукта — под именем, а не колонкой: колонок
+                        и так пять, шестая уезжает за край на телефоне. */}
+                    {l.product === 'configurator' && (
+                      <span className="tag">{t('Configurator')}</span>
+                    )}
+                  </td>
+                  <td>{l.email}</td>
+                  <td className="quiet">{l.phone}</td>
+                  <td>
+                    {l.note}
+                    <Configuration lead={l} />
+                  </td>
                 </tr>
               ))}
             </tbody>
@@ -1491,6 +1507,43 @@ function Analytics(): React.ReactElement {
         </div>
       </section>
     </>
+  );
+}
+
+/**
+ * Конфигурация из конфигуратора и ссылка на документ.
+ *
+ * Расшифрованные строки берутся из заявки, а не собираются здесь: панель
+ * не знает ни прайса, ни подписей шагов, а через год конфиг тенанта будет
+ * другим — и старая заявка расшифровалась бы уже неверно.
+ */
+function Configuration({ lead }: {
+  lead: AnalyticsData['leads'][number];
+}): React.ReactElement | null {
+  const summary = lead.payload?.summary ?? [];
+  if (lead.product !== 'configurator') return null;
+  return (
+    <div className="lead-config">
+      {lead.offer_number && (
+        <div className="lead-offer">
+          <b>№ {lead.offer_number}</b>
+          {lead.payload?.totalFormatted && <span> · {lead.payload.totalFormatted}</span>}
+          {lead.has_pdf && lead.offer_id && (
+            <>
+              {' · '}
+              <a href={`/admin/api/offers/${lead.offer_id}/pdf`} target="_blank" rel="noreferrer">
+                PDF
+              </a>
+            </>
+          )}
+        </div>
+      )}
+      {summary.length > 0 && (
+        <ul className="lead-lines">
+          {summary.map((line, i) => <li key={i}>{line}</li>)}
+        </ul>
+      )}
+    </div>
   );
 }
 

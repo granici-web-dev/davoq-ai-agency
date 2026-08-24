@@ -904,6 +904,41 @@ export function registerAdmin(app: FastifyInstance): void {
     });
   });
 
+  /**
+   * PDF оферты.
+   *
+   * Отдаётся под сессией панели и только своего тенанта: RLS отсекает чужую
+   * строку, а без строки нет ключа. Ключ наружу не показывается вовсе —
+   * панель знает идентификатор оферты, а не путь к файлу.
+   *
+   * Отдельным маршрутом, а не через `guarded`: тот отдаёт JSON и заголовков
+   * не ставит, а браузеру нужен content-type и имя файла.
+   */
+  app.get<{ Params: { id: string } }>('/admin/api/offers/:id/pdf', async (request, reply) => {
+    const session = await loadSession(request);
+    if (!session) return reply.code(401).send({ error: 'unauthorized' });
+
+    const offer = await withTenant(session.tenantId, async (client) => {
+      const { rows } = await client.query<{ number: string; storage_key: string }>(
+        'SELECT number, storage_key FROM offers WHERE id = $1', [request.params.id]);
+      const found = rows[0];
+      if (found?.storage_key) {
+        await audit(client, session, 'offer.download', request.params.id, { number: found.number });
+      }
+      return found;
+    });
+    if (!offer?.storage_key) return reply.code(404).send();
+
+    const pdf = await storageGet(offer.storage_key).catch(() => null);
+    if (!pdf) return reply.code(404).send();
+    return reply
+      .type('application/pdf')
+      // Приватный кеш: документ отдаётся под сессией, общему кешу его нельзя.
+      .header('cache-control', 'private, max-age=300')
+      .header('content-disposition', `inline; filename="oferta-${offer.number}.pdf"`)
+      .send(pdf);
+  });
+
   // ── 4б. Утверждённые ответы ─────────────────────────────────────────────────
   app.get('/admin/api/approved', guarded(async ({ client }) => listApproved(client)));
 
@@ -957,10 +992,17 @@ export function registerAdmin(app: FastifyInstance): void {
           WHERE source = 'model' AND status = 'resolved'
             AND resolved_at >= now() - interval '30 days'
           GROUP BY 1 ORDER BY max(resolved_at) DESC LIMIT 20`),
+      // Оферта подтягивается к заявке: у продавца один список заявок,
+      // а не два. Файл отдаётся отдельным маршрутом — в списке только признак
+      // того, что он есть, иначе сотня PDF уехала бы в один ответ.
       client.query(
-        `SELECT id, name, email, phone, note, created_at, conversation_id,
-                notified_at, notify_error
-           FROM leads ORDER BY created_at DESC LIMIT 100`),
+        `SELECT l.id, l.name, l.email, l.phone, l.note, l.created_at, l.conversation_id,
+                l.notified_at, l.notify_error, l.product, l.payload,
+                o.id AS offer_id, o.number AS offer_number,
+                o.total_bani, o.storage_key <> '' AS has_pdf
+           FROM leads l
+           LEFT JOIN offers o ON o.lead_id = l.id
+          ORDER BY l.created_at DESC LIMIT 100`),
       client.query<{ monthly_message_cap: number | null; plan: string;
                      lead_notify_email: string | null }>(
         `SELECT monthly_message_cap, plan, lead_notify_email

@@ -7,7 +7,7 @@ import { get as storageGet } from '../../../engine/ingest/storage.js';
 import { buildAgentSystem } from '../agent/prompt.js';
 import { publicFlow } from '../flow/public.js';
 import { resolveSelections, type Selections } from '../flow/select.js';
-import { issueOffer } from '../offer/issue.js';
+import { issueOffer, summaryOf } from '../offer/issue.js';
 import { notifyOffer } from '../offer/notify.js';
 import { priceOf } from '../pricing/engine.js';
 import { tenantConfigurator, type TenantConfigurator } from '../tenant.js';
@@ -191,8 +191,7 @@ export function registerConfigurator(app: FastifyInstance): void {
     const resolved = resolveSelections(cfg.configurator.flow, body.selections ?? {}, 'оферта');
     await notifyOffer(issued, cfg.offer, {
       tenantName: name, from: notifyFrom, sellerEmail: notifyEmail, locale, contact,
-      summary: resolved.picks.map((p) =>
-        `${p.step.title[locale] ?? p.step.id}: ${p.option.label[locale] ?? p.option.id}`),
+      summary: summaryOf(cfg.configurator.flow, resolved, locale),
       totalFormatted: money(issued.price.totalBani, cfg.offer.currency, locale),
     });
 
