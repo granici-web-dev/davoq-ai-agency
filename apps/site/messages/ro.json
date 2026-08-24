@@ -224,6 +224,45 @@
       "otherCta": "Scrieți-ne",
       "view": "Vezi industria",
       "agentsLabel": "Agenți potriviți"
+    },
+    "pilot": {
+      "eyebrow": "Program pilot",
+      "title": "Platforma se rodează pe un client real, nu pe un demo.",
+      "lead": "Un producător de mobilă la comandă, brand premium, trei showroom-uri. Nu îl numim până nu primim acordul — dar putem spune exact ce rulează acolo.",
+      "liveLabel": "Rulează",
+      "facts": {
+        "industry": {
+          "label": "Industrie",
+          "value": "Mobilă la comandă"
+        },
+        "showrooms": {
+          "label": "Showroom-uri",
+          "value": "Trei"
+        },
+        "status": {
+          "label": "Statut",
+          "value": "În rodaj"
+        }
+      },
+      "running": {
+        "chatbot": {
+          "title": "Chatbot pe site-ul lor",
+          "text": "Răspunde din fișele lor de produs, din țesăturile și termenele reale — nu din texte generale despre mobilă."
+        },
+        "configurator": {
+          "title": "Configurator de cerere",
+          "text": "Clientul alege dimensiuni, țesătură și opțiuni. Prețul se calculează după regulile lor, nu după o estimare."
+        },
+        "offer": {
+          "title": "Ofertă PDF cu brandul lor",
+          "text": "Generată automat: număr de ofertă, TVA, termen de valabilitate, condiții. Fără ca cineva să scrie documentul."
+        },
+        "isolation": {
+          "title": "Datele lor rămân ale lor",
+          "text": "Izolate tehnic de orice alt client al platformei. Nu printr-o promisiune, ci prin felul în care e construită baza de date."
+        }
+      },
+      "honesty": "De ce vă spunem că suntem în rodaj, în loc să tăcem: pentru că veți afla oricum. Un furnizor care își umflă lista de clienți își umflă și rezultatele."
     }
   }
 }

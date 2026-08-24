@@ -224,6 +224,45 @@
       "otherCta": "Write to us",
       "view": "See the industry",
       "agentsLabel": "Agents that fit"
+    },
+    "pilot": {
+      "eyebrow": "Pilot programme",
+      "title": "The platform is being run in on a real client, not on a demo.",
+      "lead": "A made-to-order furniture manufacturer, premium brand, three showrooms. We do not name them until they agree — but we can say exactly what is running there.",
+      "liveLabel": "Live",
+      "facts": {
+        "industry": {
+          "label": "Industry",
+          "value": "Made-to-order furniture"
+        },
+        "showrooms": {
+          "label": "Showrooms",
+          "value": "Three"
+        },
+        "status": {
+          "label": "Status",
+          "value": "Running in"
+        }
+      },
+      "running": {
+        "chatbot": {
+          "title": "A chatbot on their site",
+          "text": "It answers from their own product sheets, their real fabrics and lead times — not from general copy about furniture."
+        },
+        "configurator": {
+          "title": "A request configurator",
+          "text": "The customer picks dimensions, fabric and options. The price is worked out by their own rules, not by an estimate."
+        },
+        "offer": {
+          "title": "A PDF quote in their brand",
+          "text": "Generated automatically: quote number, VAT, validity period, terms. Without anyone writing the document."
+        },
+        "isolation": {
+          "title": "Their data stays theirs",
+          "text": "Isolated from every other client on the platform. Not by a promise, but by the way the database is built."
+        }
+      },
+      "honesty": "Why we tell you we are running in rather than keeping quiet: because you would find out anyway. A supplier who inflates their client list will inflate their results too."
     }
   }
 }
