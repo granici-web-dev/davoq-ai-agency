@@ -2,7 +2,7 @@
 import { useEffect, useMemo, useRef, useState } from 'preact/hooks';
 import type { ConfiguratorStrings, Strings } from '../../shared/i18n.js';
 import {
-  askAgent, fetchPrice, money, submitOffer,
+  askAgent, fetchPrice, money, submitOffer, track,
   type Answers, type ConfiguratorConfig, type PriceView, type PublicStep,
 } from './api.js';
 
@@ -102,6 +102,21 @@ export function Configurator(props: Props): preact.JSX.Element {
   const step = steps[index];
   const answered = step ? filled(answers[step.id]) : false;
 
+  // Просмотр шага и первый показ цены. Оба — по факту появления на экране,
+  // а не по нажатию: посетитель, дошедший до шага и ушедший, шаг всё-таки
+  // видел, и в воронке он обязан быть.
+  useEffect(() => {
+    if (step) track(base, publicKey, 'step_view', step.id);
+  }, [base, publicKey, step?.id]);
+
+  const priceSeen = useRef(false);
+  useEffect(() => {
+    if (price && !priceSeen.current) {
+      priceSeen.current = true;
+      track(base, publicKey, 'price_shown');
+    }
+  }, [base, publicKey, price]);
+
   const set = (id: string, value: Answers[string] | undefined): void => {
     setAnswers((prev) => {
       const next = { ...prev };
@@ -120,12 +135,14 @@ export function Configurator(props: Props): preact.JSX.Element {
     if (!step) return;
     if (step.multiple) {
       const current = Array.isArray(answers[step.id]) ? (answers[step.id] as string[]) : [];
+      if (!current.includes(option)) track(base, publicKey, 'step_select', step.id);
       set(step.id, current.includes(option)
         ? current.filter((o) => o !== option)
         : [...current, option]);
       return;
     }
     set(step.id, option);
+    track(base, publicKey, 'step_select', step.id);
     // Одиночный выбор ведёт дальше сам: тап по карточке и есть ответ,
     // и требовать после него ещё тап по «Далее» — лишний шаг на каждом шаге.
     forward();

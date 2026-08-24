@@ -287,6 +287,71 @@ function App(): React.ReactElement {
   );
 }
 
+interface FunnelData {
+  days: number; opened: number; priceShown: number; offers: number;
+  steps: Array<{ stepId: string; title: string; views: number; selects: number; next: number }>;
+}
+
+/**
+ * Воронка конфигуратора.
+ *
+ * Показывает не «сколько прошло», а ГДЕ ПЕРЕСТАЛИ. Поэтому рядом с каждым
+ * шагом стоит потеря — сколько до него дошло и не пошло дальше: именно эта
+ * цифра говорит, какой вопрос переписать.
+ *
+ * Отдельного события «ушёл» нет. Его пришлось бы слать маячком при закрытии
+ * вкладки, а маячок теряется на спящем телефоне и закрытой крышке. Метрика,
+ * занижающая себя на неизвестную величину, хуже отсутствующей: по ней
+ * принимают решения, считая её верной.
+ */
+function FunnelView(): React.ReactElement | null {
+  const [data, setData] = useState<FunnelData | null | undefined>(undefined);
+  useEffect(() => { get<FunnelData | null>('/funnel').then(setData).catch(() => setData(null)); }, []);
+
+  if (data === undefined) return null;
+  // Конфигуратора нет — раздела тоже. Пустая воронка у чат-бота выглядела бы
+  // поломкой, а не отсутствием продукта.
+  if (data === null) return null;
+
+  const max = Math.max(data.opened, ...data.steps.map((s) => s.views), 1);
+
+  return (
+    <section className="sheet stack">
+      <h2>{t('Configurator')}</h2>
+      <p className="note">{tf('Ultimele {days} de zile', { days: data.days })}</p>
+
+      <div className="funnel">
+        <FunnelRow label={t('Deschideri')} value={data.opened} max={max} />
+        {data.steps.map((s) => (
+          <FunnelRow
+            key={s.stepId} label={s.title} value={s.views} max={max}
+            lost={s.views > 0 ? s.views - s.next : 0}
+          />
+        ))}
+        <FunnelRow label={t('Preț văzut')} value={data.priceShown} max={max} />
+        <FunnelRow label={t('Oferte emise')} value={data.offers} max={max} strong />
+      </div>
+
+      {data.opened === 0 && (
+        <p className="note">{t('Încă nimeni nu a deschis configuratorul.')}</p>
+      )}
+    </section>
+  );
+}
+
+function FunnelRow({ label, value, max, lost, strong }: {
+  label: string; value: number; max: number; lost?: number; strong?: boolean;
+}): React.ReactElement {
+  return (
+    <div className={`funnel-row${strong ? ' strong' : ''}`}>
+      <span className="funnel-label">{label}</span>
+      <span className="funnel-bar"><i style={{ width: `${(value / max) * 100}%` }} /></span>
+      <span className="funnel-num">{value}</span>
+      <span className="funnel-lost">{lost && lost > 0 ? `−${lost}` : ''}</span>
+    </div>
+  );
+}
+
 interface Promotion {
   id: string; source: 'config' | 'scrape'; state: 'pending' | 'active' | 'rejected' | 'expired';
   label: Record<string, string>; scope: 'sitewide' | 'models'; modelIds: string[];
@@ -1592,6 +1657,8 @@ function Analytics(): React.ReactElement {
           </div>
         </section>
       )}
+
+      <FunnelView />
 
       <section className="sheet stack">
         <h2>{t('Cereri de ofertă')}</h2>

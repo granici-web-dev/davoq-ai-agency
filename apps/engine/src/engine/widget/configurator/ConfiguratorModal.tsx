@@ -2,7 +2,7 @@
 import { useEffect, useRef, useState } from 'preact/hooks';
 import type { ConfiguratorStrings, Strings } from '../../shared/i18n.js';
 import { Configurator } from './Configurator.js';
-import { fetchConfigurator, type Answers, type ConfiguratorConfig } from './api.js';
+import { fetchConfigurator, flushEvents, track, type Answers, type ConfiguratorConfig } from './api.js';
 
 /**
  * Окно конфигуратора.
@@ -46,9 +46,13 @@ export function ConfiguratorModal(props: Props): preact.JSX.Element {
   const box = useRef<HTMLDivElement | null>(null);
 
   useEffect(() => {
+    track(base, publicKey, 'open');
     fetchConfigurator(base, publicKey, locale)
       .then(setConfig)
       .catch(() => { setFailed(true); setScreen('quote'); });
+    // Досылка при закрытии: события, накопленные за последние секунды,
+    // иначе уходят вместе с окном.
+    return () => { void flushEvents(base, publicKey); };
   }, [base, publicKey, locale]);
 
   // Esc закрывает, Tab не уходит на страницу под окном — то же правило,

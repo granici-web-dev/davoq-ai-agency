@@ -1,5 +1,5 @@
 /**
- * Заведение ВТОРОГО клиента.
+ * Заведение ВТОРОГО клиента, включая конфигуратор.
  *
  *   npm run test:onboarding
  *
@@ -7,6 +7,11 @@
  * проверялось: поиск тенанта, прерванное применение, переименование,
  * одноимённый второй клиент. Каждая из этих ошибок тихая — команда
  * рапортует «ПРИМЕНЕНО» и уходит.
+ *
+ * Отдельно проверяется главное обещание продукта: второй клиент
+ * конфигуратора поднимается КОПИРОВАНИЕМ ШАБЛОНА И ПРАВКОЙ YAML — без единой
+ * строки кода. Обещание, проверяемое чтением диффа, живёт до первого релиза;
+ * здесь оно проверяется тем, что тест собирает у нового клиента оферту.
  *
  * Тест заводит настоящего временного клиента и убирает его за собой.
  */
@@ -154,6 +159,61 @@ try {
   } catch (err) {
     if (/client_id/.test((err as Error).message)) ok('два одноимённых тенанта: отказ с инструкцией, а не выбор наугад');
     else bad(`отказ не по той причине: ${(err as Error).message.slice(0, 140)}`);
+  }
+
+  // ── Конфигуратор у нового клиента ────────────────────────────────────────
+  //
+  // Ни одной правки в движке: только YAML в каталоге клиента. Если для
+  // запуска второго клиента понадобится код, этот кусок упадёт — и упадёт
+  // раньше, чем мы пообещаем это следующему покупателю.
+  writeFileSync(join(dir, 'configurator.yaml'), [
+    'schema: 1',
+    'flow:',
+    '  steps:',
+    '    - id: model',
+    '      options:',
+    '        - id: sofa',
+    '          label: { ro: Canapea de probă }',
+    '          priceEffect: { kind: base, bani: 500000 }',
+    '    - id: fabric',
+    '      options:',
+    '        - id: plain',
+    '          label: { ro: Țesătură simplă }',
+    '    - id: colour',
+    '      options:',
+    '        - id: grey',
+    '          label: { ro: Gri }',
+    'pricing:',
+    '  vat: { rate: 2100, mode: add }',
+    '',
+  ].join('\n'));
+  write(config('Probe Configurator'));
+  const withConfigurator = await apply();
+  withConfigurator.applied.some((c) => c.field === 'configurator')
+    ? ok('конфигуратор клиента перенесён в базу одним apply')
+    : bad('apply не перенёс секцию конфигуратора');
+
+  const { tenantConfigurator } = await import('../src/products/configurator/tenant.js');
+  const { issueOffer } = await import('../src/products/configurator/offer/issue.js');
+  const cfg = await tenantConfigurator(withConfigurator.tenantId, ['ro']);
+  if (!cfg) {
+    bad('конфигуратор нового клиента не собрался из базы');
+  } else {
+    // Шаги пришли из ниши, содержимое — из YAML клиента. Ни того ни другого
+    // тест не писал в движок.
+    cfg.configurator.flow.steps.length > 3
+      ? ok(`флоу унаследован от ниши: ${cfg.configurator.flow.steps.length} шаг(ов)`)
+      : bad('новый клиент не унаследовал флоу ниши');
+
+    const issued = await issueOffer(cfg.configurator, cfg.offer, {
+      tenantId: withConfigurator.tenantId, locale: 'ro',
+      selections: { model: 'sofa', width: 200, seat: 'hr-foam', fabric: 'plain', colour: 'grey' },
+      contact: { name: 'Probe', email: 'probe@probe.invalid' },
+      consentMarketing: false,
+    });
+    issued.pdf.subarray(0, 5).toString() === '%PDF-'
+      ? ok(`оферта нового клиента собрана без правок кода: № ${issued.number}`)
+      : bad('оферта нового клиента не собралась');
   }
 
 } finally {

@@ -99,6 +99,39 @@ export async function askAgent(
   }
 }
 
+/**
+ * События воронки.
+ *
+ * Копятся и уходят пачкой: тап по карточке не должен ждать сети, а запрос
+ * на каждый тап — это шесть запросов на одну сборку дивана.
+ *
+ * Ошибка отправки проглатывается намеренно. Аналитика не та вещь, ради
+ * которой посетителю показывают ошибку или задерживают шаг.
+ */
+const pending: Array<{ event: string; stepId?: string }> = [];
+let flushTimer: ReturnType<typeof setTimeout> | null = null;
+
+export function track(
+  base: string, publicKey: string, event: string, stepId?: string,
+): void {
+  pending.push(stepId ? { event, stepId } : { event });
+  if (flushTimer) return;
+  flushTimer = setTimeout(() => { flushTimer = null; void flushEvents(base, publicKey); }, 2000);
+}
+
+export async function flushEvents(base: string, publicKey: string): Promise<void> {
+  if (pending.length === 0) return;
+  const hits = pending.splice(0, pending.length);
+  try {
+    await fetch(`${base}/v1/configurator/event`, {
+      method: 'POST',
+      headers: { 'content-type': 'application/json' },
+      body: JSON.stringify({ publicKey, hits }),
+      keepalive: true,
+    });
+  } catch { /* аналитика не повод показывать ошибку посетителю */ }
+}
+
 export function money(bani: number, currency: string, locale: string, decimals: number): string {
   return new Intl.NumberFormat(locale, {
     style: 'currency', currency,

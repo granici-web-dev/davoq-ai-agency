@@ -11,6 +11,7 @@ import { issueOffer, summaryOf } from '../offer/issue.js';
 import { notifyOffer } from '../offer/notify.js';
 import { priceOf } from '../pricing/engine.js';
 import { priceWithPromotion } from '../promo/apply.js';
+import { recordStats } from '../stats.js';
 import { tenantConfigurator, type TenantConfigurator } from '../tenant.js';
 
 /**
@@ -89,6 +90,25 @@ export function registerConfigurator(app: FastifyInstance): void {
       } catch (err) {
         return reply.code(422).send({ error: (err as Error).message });
       }
+    },
+  );
+
+  /**
+   * События воронки. Пачкой и без ответа по существу: виджет шлёт их фоном,
+   * и ждать от нас чего-либо ему незачем.
+   *
+   * 204 в любом случае, включая отброшенные события. Отвечать браузеру
+   * подробностями о том, какие имена шагов существуют, значит рассказывать
+   * про конфиг тенанта тому, кто его не спрашивал.
+   */
+  app.post<{ Body: { publicKey?: string; hits?: unknown } }>(
+    '/v1/configurator/event', async (request, reply) => {
+      const found = await load(request.body?.publicKey);
+      if (found) {
+        await recordStats(found.tenant.id, found.cfg.configurator.flow, request.body?.hits)
+          .catch((err: Error) => console.error(`события конфигуратора: ${err.message}`));
+      }
+      return reply.code(204).send();
     },
   );
 

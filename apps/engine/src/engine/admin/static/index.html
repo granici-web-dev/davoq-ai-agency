@@ -277,6 +277,19 @@ td.quiet{color:var(--muted-fg);white-space:nowrap}
 .lead-offer b{color:var(--fg)}
 .lead-lines{margin:4px 0 0;padding-left:16px;line-height:1.5}
 
+/* Воронка. Столбики, а не таблица: вопрос к ней один — где обрыв, —
+   и обрыв виден формой, а не сравнением чисел в колонке. */
+.funnel{display:flex;flex-direction:column;gap:6px}
+.funnel-row{display:grid;grid-template-columns:minmax(120px,1fr) 3fr auto 44px;
+            align-items:center;gap:10px;font-size:13px}
+.funnel-label{color:var(--muted-fg);overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.funnel-bar{height:8px;border-radius:4px;background:var(--muted);overflow:hidden}
+.funnel-bar i{display:block;height:100%;background:var(--fg);opacity:.55}
+.funnel-row.strong .funnel-bar i{opacity:1}
+.funnel-num{font-variant-numeric:tabular-nums;font-weight:500}
+/* Потеря — единственное красное число на экране: остальное просто цифры. */
+.funnel-lost{font-variant-numeric:tabular-nums;font-size:12px;color:#b91c1c;text-align:right}
+
 /* Акции. Карточкой, а не строкой таблицы: подтверждают их редко и вдумчиво,
    и условия должны читаться целиком, а не помещаться в колонку. */
 .promo{border:1px solid var(--border);border-radius:12px;padding:14px 16px;

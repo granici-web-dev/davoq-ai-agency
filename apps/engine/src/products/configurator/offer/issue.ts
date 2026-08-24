@@ -4,6 +4,7 @@ import type { FlowConfig } from '../flow/schema.js';
 import { resolveSelections, type ResolvedSelections, type Selections } from '../flow/select.js';
 import { priceOf, type Discount, type PriceResult } from '../pricing/engine.js';
 import type { Configurator } from '../load.js';
+import { recordStats } from '../stats.js';
 import { renderOffer, type OfferData, type OfferItem } from './render.js';
 import type { OfferTemplate } from './schema.js';
 
@@ -63,7 +64,7 @@ export async function issueOffer(
 
   let storageKey = '';
   try {
-    return await withTenant(req.tenantId, async (client) => {
+    const issued = await withTenant(req.tenantId, async (client) => {
       const { rows: numbered } = await client.query<{ n: number; fmt: string }>(
         `UPDATE tenants
             SET offer_number_next = offer_number_next + 1
@@ -151,6 +152,21 @@ export async function issueOffer(
 
       return { id, leadId, number, price, storageKey, validUntil, pdf };
     });
+
+    /**
+     * Выпуск считается ЗДЕСЬ, а не в маршруте.
+     *
+     * Это единственное место, где оферта возникает; счётчик в маршруте
+     * второй вызывающий просто забыл бы поставить, и воронка тихо
+     * недосчитывалась бы ровно на его долю.
+     *
+     * Вне транзакции и без права её уронить: упавшая аналитика не повод
+     * отменять выданный номер.
+     */
+    await recordStats(req.tenantId, cfg.flow, [{ event: 'offer_created' }])
+      .catch((err: Error) => console.error(`события конфигуратора: ${err.message}`));
+
+    return issued;
   } catch (err) {
     // Файл записан, транзакция не прошла: строки на него не осталось, значит
     // и файла быть не должно. Иначе он лежит вечно и о нём никто не знает.

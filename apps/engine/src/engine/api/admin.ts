@@ -947,6 +947,30 @@ export function registerAdmin(app: FastifyInstance): void {
   });
 
   /**
+   * Воронка конфигуратора.
+   *
+   * Пустой ответ, если конфигуратора нет: экран его и не покажет, но
+   * запрос из консоли не должен получать пятисотку вместо ответа.
+   */
+  app.get<{ Querystring: { days?: string } }>('/admin/api/funnel',
+    guarded(async ({ session, query }) => {
+      const { tenantConfigurator } = await import('../../products/configurator/tenant.js');
+      const { funnel } = await import('../../products/configurator/stats.js');
+      const me = await withTenant(session.tenantId, async (client) => {
+        const { rows } = await client.query<{ locale_default: string; supported_locales: string[] }>(
+          'SELECT locale_default, supported_locales FROM tenants WHERE id = $1', [session.tenantId]);
+        return rows[0];
+      });
+      const locales = me?.supported_locales?.length
+        ? me.supported_locales : [me?.locale_default ?? 'en'];
+      const cfg = await tenantConfigurator(session.tenantId, locales);
+      if (!cfg) return null;
+      const days = Math.min(365, Math.max(1, Number((query as { days?: string }).days ?? 30) || 30));
+      return funnel(session.tenantId, cfg.configurator.flow, locales[0]!, days);
+    }),
+  );
+
+  /**
    * Акции.
    *
    * Подтверждение — коммерческое решение клиента, а не техническая проверка

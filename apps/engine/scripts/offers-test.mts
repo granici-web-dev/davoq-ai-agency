@@ -18,6 +18,7 @@ import { purge } from '../src/engine/billing/retention.js';
 import { configuratorLayer } from '../src/products/configurator/onboarding.js';
 import { tenantConfigurator } from '../src/products/configurator/tenant.js';
 import { issueOffer } from '../src/products/configurator/offer/issue.js';
+import { funnel, recordStats } from '../src/products/configurator/stats.js';
 
 let failed = 0;
 const ok = (m: string): void => console.log(`  ✓ ${m}`);
@@ -178,6 +179,34 @@ try {
   eq(stored.product, 'configurator', 'заявка помечена продуктом, а не свалена к чат-боту');
   eq((stored.payload.consent as { marketing: boolean }).marketing, true,
     'маркетинговое согласие записано отдельным флагом');
+
+  console.log('\nВоронка');
+
+  const flow = cfg.configurator.flow;
+  eq(await recordStats(tenantId, flow, [
+    { event: 'open' }, { event: 'open' },
+    { event: 'step_view', stepId: 'model' }, { event: 'step_select', stepId: 'model' },
+    { event: 'step_view', stepId: 'width' },
+    { event: 'price_shown' },
+  ]), 6, 'события принимаются пачкой');
+
+  eq(await recordStats(tenantId, flow, [
+    { event: 'drop' },
+    { event: 'step_view', stepId: 'нет-такого-шага' },
+    { event: 'step_view' },
+    { event: 'open', stepId: 'model' },
+  ]), 1, 'чужое событие и чужой шаг отбрасываются, «open» с лишним шагом остаётся');
+
+  const f = await funnel(tenantId, flow, 'ro');
+  eq(f.opened, 3, 'открытия суммируются за день');
+  eq(f.steps[0]?.stepId, 'model', 'порядок шагов воронки — из флоу, а не из данных');
+  eq(f.steps.length, flow.steps.length,
+    'шаг, которого никто не видел, стоит в воронке нулём на своём месте');
+  eq([f.steps[0]?.views, f.steps[0]?.next], [1, 1],
+    'потеря считается как «дошло до шага минус дошло до следующего»');
+  eq(f.steps.at(-1)?.next, f.priceShown,
+    'у последнего шага «дальше» — это показ цены');
+  eq(f.offers >= 1, true, 'выпуск оферты попал в воронку с сервера, а не из браузера');
 
   console.log('\nСроки хранения');
 
