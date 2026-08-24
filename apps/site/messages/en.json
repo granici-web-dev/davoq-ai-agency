@@ -410,6 +410,8 @@
   "agentPage": {
     "soonTitle": "This agent is still being built",
     "soonText": "We are not selling it yet. If it interests you, write to us: in a demo we show what it already does and tell you when it will be ready.",
+    "soonInPlanTitle": "This agent has not shipped yet",
+    "soonInPlanText": "It is included in the Growth package: you can connect it now, at today's price, and the configurator switches on in your account at launch. What you read below is what it will do, written as such. We do not sell as finished something that is still being written.",
     "backToAgents": "All agents",
     "featuresEyebrow": "What it does",
     "sourcesEyebrow": "What it answers from",
@@ -539,6 +541,127 @@
       "widgetStatus": "Replies instantly",
       "widgetPlaceholder": "Write a message…",
       "widgetInitial": "AI"
+    },
+    "configurator": {
+      "metaTitle": "AI request configurator — a specification ready to price",
+      "metaDescription": "An AI agent that asks the questions the price depends on and hands your sales team a structured specification: dimensions, materials, installation, deadline. Included in the Growth package.",
+      "title": "A configurator that collects the specification, not just the contact details",
+      "lead": "It asks, one at a time, the questions the price depends on: dimensions, materials, installation, deadline. Your salesperson gets a filled-in sheet and goes straight to pricing, without three days of messages back and forth.",
+      "spec": {
+        "title": "Request specification",
+        "number": "A-2148",
+        "rows": [
+          {
+            "k": "Installation",
+            "v": "Roof panels, house"
+          },
+          {
+            "k": "Roof",
+            "v": "Ceramic tile, two slopes"
+          },
+          {
+            "k": "Clear area",
+            "v": "48 m²"
+          },
+          {
+            "k": "Monthly use",
+            "v": "540 kWh"
+          },
+          {
+            "k": "Supply",
+            "v": "Three-phase"
+          },
+          {
+            "k": "Wanted by",
+            "v": "End of October"
+          }
+        ],
+        "pendingLabel": "To clarify",
+        "pending": "Distance from the panel board to the roof",
+        "footer": "6 of 7 points, filled in from the customer's answers",
+        "note": "This is the sheet your salesperson will receive. The example is a solar installation — the questions and fields are written for your own niche."
+      },
+      "featuresTitle": "What it does, concretely",
+      "features": {
+        "questions": {
+          "title": "It asks in the order that matters",
+          "text": "No twenty-field form thrown at the visitor. The next question depends on the last answer, the way a salesperson who knows what comes next would ask."
+        },
+        "spec": {
+          "title": "It hands over a sheet, not a conversation",
+          "text": "Your salesperson gets filled-in fields: type, dimensions, material, installation, deadline. No three screens of messages to read before knowing what the person wants."
+        },
+        "gaps": {
+          "title": "It says what is missing",
+          "text": "What could not be established stays flagged, not guessed. You see what is still to be asked straight away, not halfway through the calculation."
+        },
+        "rules": {
+          "title": "It follows your rules",
+          "text": "Which combinations exist, what cannot be done at all, what needs measuring on site. The rules are yours, not the agent's assumptions."
+        },
+        "handoff": {
+          "title": "It arrives where you already work",
+          "text": "By email, in the portal, or straight into your CRM as a filled-in record. Your salesperson has no new program to learn."
+        },
+        "portal": {
+          "title": "Everything stays in the portal",
+          "text": "Every sheet, with its date and everything the customer answered. Nothing lives only in one person's inbox."
+        }
+      },
+      "sourcesEyebrow": "What it is built from",
+      "sourcesTitle": "What the sheet is built from — and what the agent does not do",
+      "sourcesYes": {
+        "title": "It collects from",
+        "items": [
+          "Your list of options: materials, dimensions, finishes, installation variants.",
+          "Your compatibility rules: what goes with what, and what cannot be done at all.",
+          "The questions your salespeople ask today, written down once and asked every time.",
+          "What requires measuring or a site visit, so that nothing impossible gets promised."
+        ]
+      },
+      "sourcesNo": {
+        "title": "It never",
+        "items": [
+          "It does not give a final price. It collects the data the price is calculated from; the calculation stays with you.",
+          "It does not invent an option that is not on your list.",
+          "It does not fill in fields the customer has not confirmed — it leaves them flagged.",
+          "It does not send the quote in the salesperson's place, and does not promise a deadline on production's behalf."
+        ]
+      },
+      "platformsTitle": "It starts wherever the request comes in",
+      "platformsLead": "The same sheet, wherever the conversation began. The result arrives the same way: filled in, in the portal and by email.",
+      "platforms": [
+        "Widget on your site",
+        "Button on the product page",
+        "A link sent to the customer",
+        "QR code in the showroom",
+        "Filled in by the salesperson, in the portal"
+      ],
+      "faqTitle": "What people ask about the configurator",
+      "faq": [
+        {
+          "q": "How is it different from an ordinary form?",
+          "a": "A form asks every question at once, and the same ones for everybody. The configurator asks the next question based on the last answer: if the person said installation is not needed, it does not go on to ask about floors and lifts. The fields stay the same, the road to them is shorter — which is why people reach the end."
+        },
+        {
+          "q": "Does it give the customer a price?",
+          "a": "No. It collects the data the price depends on and hands the sheet to your salesperson. You do the pricing, with the margin and the exceptions you never write down anywhere. If you want an indicative price said in the conversation itself, that is the chatbot's job, from your own price list."
+        },
+        {
+          "q": "What happens when the customer does not know the answer?",
+          "a": "It moves on and flags the point. The sheet arrives saying \"to clarify: ceiling height\", not with an invented value. An empty field you can see is cheaper than a full field that is wrong."
+        },
+        {
+          "q": "Who writes the questions?",
+          "a": "We do, during setup, from the way you already work: what your salespeople ask, in what order, which combinations are impossible. They are changed from the portal, without asking us."
+        },
+        {
+          "q": "When will it be ready?",
+          "a": "We do not give a date we cannot keep. It is included in the Growth package: connect it now and the configurator switches on in your account at launch, at the price you joined at."
+        }
+      ],
+      "closingTitle": "See what sheet it would collect from your own requests",
+      "closingLead": "At the demo we take one product from your catalogue, write the questions for it, and show you the sheet your salesperson would receive."
     }
   },
   "industryPage": {

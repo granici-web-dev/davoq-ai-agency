@@ -27,11 +27,21 @@ export type AgentStatus = 'available' | 'soon';
 export interface Agent {
   slug: AgentSlug;
   status: AgentStatus;
+  /**
+   * Полные тексты страницы написаны.
+   *
+   * Это НЕ то же самое, что `status`. Агент может ещё не выйти, но
+   * страница у него уже настоящая: он входит в оплаченный пакет, и
+   * человек имеет право прочитать, что именно он покупает. Без этого
+   * различия «в разработке» означало бы «страницы нет», и половина
+   * пакета Growth продавалась бы одной строкой описания.
+   */
+  full?: boolean;
 }
 
 export const AGENTS: Agent[] = [
-  { slug: 'chatbot', status: 'available' },
-  { slug: 'configurator', status: 'soon' },
+  { slug: 'chatbot', status: 'available', full: true },
+  { slug: 'configurator', status: 'soon', full: true },
   { slug: 'crm-assistant', status: 'soon' },
   { slug: 'follow-up', status: 'soon' },
   { slug: 'order-status', status: 'soon' },

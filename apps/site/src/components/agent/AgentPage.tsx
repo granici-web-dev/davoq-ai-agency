@@ -7,6 +7,7 @@ import { FaqList } from '@/components/ui/FaqList';
 import { Reveal } from '@/components/ui/Reveal';
 import { SectionHead } from './SectionHead';
 import { WidgetChat } from './WidgetChat';
+import { SpecSheet } from './SpecSheet';
 import { FeatureIcon } from './FeatureIcon';
 import { INDUSTRIES, industriesForAgent, type Agent } from '@/lib/catalog';
 import { PLAN_FOR_AGENT } from '@/lib/pricing';
@@ -15,6 +16,18 @@ import agentChatbot from '@/../public/images/agent-chatbot.webp';
 /** Кадр есть пока только у доступного агента. Остальные ждут своей очереди. */
 const VISUALS: Partial<Record<string, typeof agentChatbot>> = {
   chatbot: agentChatbot,
+};
+
+/**
+ * Что стоит в первом экране у каждого агента.
+ *
+ * У чат-бота убеждает разговор, у конфигуратора — то, что от разговора
+ * осталось: заполненная фишка. Один макет на всех показывал бы работу
+ * одного агента шесть раз.
+ */
+const HERO_VISUAL: Partial<Record<string, (p: { namespace: string }) => React.ReactElement>> = {
+  chatbot: WidgetChat,
+  configurator: SpecSheet,
 };
 
 /**
@@ -40,13 +53,19 @@ export function AgentPage({ agent }: { agent: Agent }) {
   const tHomeIndustries = useTranslations('home.industries');
   const tPlans = useTranslations('plans');
 
+  /* `available` решает, что написано на бейдже. `full` — есть ли у агента
+     страница. Это разные вопросы: конфигуратор ещё не вышел, но входит
+     в оплачиваемый сегодня пакет, и человек имеет право прочитать,
+     что именно он покупает. */
   const available = agent.status === 'available';
+  const full = agent.full === true;
   const visual = VISUALS[agent.slug];
+  const Hero = HERO_VISUAL[agent.slug];
 
-  const platforms = available ? (t.raw('platforms') as string[]) : [];
-  const yes = available ? (t.raw('sourcesYes.items') as string[]) : [];
-  const no = available ? (t.raw('sourcesNo.items') as string[]) : [];
-  const faqCount = available ? (t.raw('faq') as unknown[]).length : 0;
+  const platforms = full ? (t.raw('platforms') as string[]) : [];
+  const yes = full ? (t.raw('sourcesYes.items') as string[]) : [];
+  const no = full ? (t.raw('sourcesNo.items') as string[]) : [];
+  const faqCount = full ? (t.raw('faq') as unknown[]).length : 0;
 
   return (
     <>
@@ -103,13 +122,13 @@ export function AgentPage({ agent }: { agent: Agent }) {
           </div>
 
           <h1 className="enter mt-6 max-w-3xl text-h1 font-medium" style={{ animationDelay: '560ms' }}>
-            {available ? t('title') : tAgents(`${agent.slug}.name`)}
+            {full ? t('title') : tAgents(`${agent.slug}.name`)}
           </h1>
           <p
             className="enter mt-6 max-w-xl text-lg leading-relaxed text-chalk-dim"
             style={{ animationDelay: '700ms' }}
           >
-            {available ? t('lead') : tAgents(`${agent.slug}.short`)}
+            {full ? t('lead') : tAgents(`${agent.slug}.short`)}
           </p>
 
           <div className="enter mt-10 flex flex-wrap items-center gap-3" style={{ animationDelay: '840ms' }}>
@@ -119,10 +138,16 @@ export function AgentPage({ agent }: { agent: Agent }) {
             </Cta>
           </div>
 
+          {/* «Не вышел, страницы нет» и «не вышел, но уже в пакете» —
+              разные новости. Вторая обязана сказать, что читатель видит
+              описание будущего, иначе страница продаёт как готовое то,
+              что ещё пишется. */}
           {!available && (
             <div className="enter mt-14 max-w-xl border-l-2 border-white/12 pl-5" style={{ animationDelay: '960ms' }}>
-              <h2 className="font-medium">{tPage('soonTitle')}</h2>
-              <p className="mt-3 leading-relaxed text-chalk-dim">{tPage('soonText')}</p>
+              <h2 className="font-medium">{tPage(full ? 'soonInPlanTitle' : 'soonTitle')}</h2>
+              <p className="mt-3 leading-relaxed text-chalk-dim">
+                {tPage(full ? 'soonInPlanText' : 'soonText')}
+              </p>
             </div>
           )}
           </div>
@@ -131,15 +156,15 @@ export function AgentPage({ agent }: { agent: Agent }) {
               Это самое убедительное, что есть на странице: человек видит,
               что агент называет цену из прайса и спрашивает про размеры,
               раньше, чем читает про это словами. */}
-          {available && (
+          {full && Hero && (
             <div className="enter lg:pl-4" style={{ animationDelay: '260ms' }}>
-              <WidgetChat namespace={`agentPage.${agent.slug}`} />
+              <Hero namespace={`agentPage.${agent.slug}`} />
             </div>
           )}
         </div>
       </section>
 
-      {available && (
+      {full && (
         <>
           <Reveal>
             <section className="px-6 py-section sm:px-8">
@@ -167,7 +192,10 @@ export function AgentPage({ agent }: { agent: Agent }) {
           <Reveal>
             <section className="px-6 py-section sm:px-8">
               <div className="mx-auto max-w-7xl">
-                <SectionHead eyebrow={tPage('sourcesEyebrow')} title={t('sourcesTitle')} />
+                <SectionHead
+                  eyebrow={t.has('sourcesEyebrow') ? t('sourcesEyebrow') : tPage('sourcesEyebrow')}
+                  title={t('sourcesTitle')}
+                />
 
                 {/* Два столбца: что делает и чего не делает. Второй важнее
                     первого — он и есть разница между этим агентом и

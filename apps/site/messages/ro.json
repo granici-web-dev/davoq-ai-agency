@@ -410,6 +410,8 @@
   "agentPage": {
     "soonTitle": "Agentul acesta este în lucru",
     "soonText": "Nu îl vindem încă. Dacă vă interesează, scrieți-ne: la demonstrație vă arătăm ce face deja și vă spunem când e gata.",
+    "soonInPlanTitle": "Agentul acesta încă nu a ieșit",
+    "soonInPlanText": "Este inclus în pachetul Growth: îl puteți conecta acum, la prețul de azi, iar configuratorul se activează pe contul dumneavoastră la lansare. Ce citiți mai jos este ce va face — scris ca atare. Nu vindem ca gata ceva ce încă se scrie.",
     "backToAgents": "Toți agenții",
     "featuresEyebrow": "Ce face",
     "sourcesEyebrow": "Din ce răspunde",
@@ -539,6 +541,127 @@
       "widgetStatus": "Răspunde imediat",
       "widgetPlaceholder": "Scrieți un mesaj…",
       "widgetInitial": "AI"
+    },
+    "configurator": {
+      "metaTitle": "Configurator AI de cereri — specificație gata de calculat",
+      "metaDescription": "Agent AI care pune întrebările de care depinde prețul și predă vânzărilor o specificație structurată: dimensiuni, materiale, montaj, termen. Inclus în pachetul Growth.",
+      "title": "Configurator care adună specificația, nu doar datele de contact",
+      "lead": "Pune, pe rând, întrebările de care depinde prețul: dimensiuni, materiale, montaj, termen. Vânzătorul primește o fișă completată și trece direct la calcul, fără trei zile de mesaje înainte și înapoi.",
+      "spec": {
+        "title": "Specificație cerere",
+        "number": "A-2148",
+        "rows": [
+          {
+            "k": "Tip instalare",
+            "v": "Panouri pe acoperiș, casă"
+          },
+          {
+            "k": "Acoperiș",
+            "v": "Țiglă ceramică, două ape"
+          },
+          {
+            "k": "Suprafață liberă",
+            "v": "48 m²"
+          },
+          {
+            "k": "Consum lunar",
+            "v": "540 kWh"
+          },
+          {
+            "k": "Racord",
+            "v": "Trifazat"
+          },
+          {
+            "k": "Termen dorit",
+            "v": "Până în octombrie"
+          }
+        ],
+        "pendingLabel": "De clarificat",
+        "pending": "Distanța de la tablou până la acoperiș",
+        "footer": "6 din 7 puncte, completate din răspunsurile clientului",
+        "note": "Așa va arăta fișa pe care o primește vânzătorul. Exemplu pentru instalări de panouri solare — întrebările și câmpurile se scriu pentru nișa dumneavoastră."
+      },
+      "featuresTitle": "Ce face, concret",
+      "features": {
+        "questions": {
+          "title": "Întreabă în ordinea care contează",
+          "text": "Nu aruncă un formular cu douăzeci de câmpuri. Întrebarea următoare depinde de răspunsul anterior, ca la un vânzător care știe ce urmează."
+        },
+        "spec": {
+          "title": "Predă o fișă, nu o conversație",
+          "text": "Vânzătorul primește câmpuri completate: tip, dimensiuni, material, montaj, termen. Nu are de citit trei ecrane de mesaje ca să afle ce vrea omul."
+        },
+        "gaps": {
+          "title": "Spune ce lipsește",
+          "text": "Ce nu s-a putut afla rămâne marcat, nu ghicit. Se vede din prima ce mai e de întrebat, nu la mijlocul calculului."
+        },
+        "rules": {
+          "title": "Merge după regulile dumneavoastră",
+          "text": "Ce combinații există, ce nu se poate face, ce cere măsurare la fața locului. Regulile sunt ale dumneavoastră, nu presupuneri ale agentului."
+        },
+        "handoff": {
+          "title": "Ajunge unde lucrați deja",
+          "text": "Pe e-mail, în portal sau direct în CRM, ca fișă completată. Vânzătorul nu are de învățat un program nou."
+        },
+        "portal": {
+          "title": "Totul rămâne în portal",
+          "text": "Fiecare fișă, cu data și cu tot ce a răspuns clientul. Nimic nu rămâne doar în cutia poștală a unui om."
+        }
+      },
+      "sourcesEyebrow": "Din ce se construiește",
+      "sourcesTitle": "Din ce iese fișa — și ce nu face agentul",
+      "sourcesYes": {
+        "title": "Adună din",
+        "items": [
+          "Lista dumneavoastră de opțiuni: materiale, dimensiuni, finisaje, variante de montaj.",
+          "Regulile de compatibilitate: ce merge cu ce și ce nu se poate face deloc.",
+          "Întrebările pe care le pune vânzătorul dumneavoastră astăzi, scrise o dată și puse de fiecare dată.",
+          "Ce cere măsurare sau vizită la fața locului, ca să nu promită ce nu se poate promite."
+        ]
+      },
+      "sourcesNo": {
+        "title": "Nu face",
+        "items": [
+          "Nu dă prețul final. Adună datele din care se calculează; calculul rămâne la dumneavoastră.",
+          "Nu inventează o opțiune care nu există în lista dumneavoastră.",
+          "Nu completează câmpurile pe care clientul nu le-a confirmat — le lasă marcate.",
+          "Nu trimite oferta în locul vânzătorului și nu promite un termen în numele producției."
+        ]
+      },
+      "platformsTitle": "Pornește de acolo unde vine cererea",
+      "platformsLead": "Aceeași fișă, indiferent de unde a început discuția. Rezultatul ajunge la fel: completat, în portal și pe e-mail.",
+      "platforms": [
+        "Widget pe site",
+        "Buton pe pagina produsului",
+        "Link trimis clientului",
+        "Cod QR în showroom",
+        "Completat de vânzător, în portal"
+      ],
+      "faqTitle": "Ce se întreabă despre configurator",
+      "faq": [
+        {
+          "q": "Prin ce diferă de un formular obișnuit?",
+          "a": "Formularul pune toate întrebările deodată și aceleași pentru toți. Configuratorul pune întrebarea următoare în funcție de răspunsul anterior: dacă omul a spus că montajul nu îl interesează, nu îl mai întreabă despre etaj și lift. Câmpurile rămân aceleași, drumul până la ele este mai scurt — și de aceea se ajunge la capăt."
+        },
+        {
+          "q": "Dă un preț clientului?",
+          "a": "Nu. Adună datele de care depinde prețul și predă fișa vânzătorului. Prețul îl calculați dumneavoastră, cu marja și cu excepțiile pe care nu le scrieți nicăieri. Dacă vreți ca în discuție să se spună și un preț orientativ, asta face chatbotul, din lista dumneavoastră."
+        },
+        {
+          "q": "Ce se întâmplă când clientul nu știe răspunsul?",
+          "a": "Merge mai departe și marchează punctul. Fișa ajunge cu «de clarificat: înălțimea tavanului», nu cu o valoare inventată. Un câmp gol care se vede este mai ieftin decât un câmp plin care e greșit."
+        },
+        {
+          "q": "Cine scrie întrebările?",
+          "a": "Le scriem noi, la configurare, din felul în care lucrați acum: ce întreabă vânzătorii dumneavoastră, în ce ordine, ce combinații nu se pot face. Se schimbă din portal, fără să ne cereți nouă."
+        },
+        {
+          "q": "Când este gata?",
+          "a": "Nu dăm o dată pe care nu o putem ține. Este inclus în pachetul Growth: dacă îl conectați acum, configuratorul se activează pe contul dumneavoastră la lansare, la prețul de la conectare."
+        }
+      ],
+      "closingTitle": "Vedeți ce fișă ar strânge din cererile dumneavoastră",
+      "closingLead": "La demonstrație luăm un produs din catalogul dumneavoastră, scriem întrebările pentru el și vă arătăm fișa pe care ar primi-o vânzătorul."
     }
   },
   "industryPage": {
