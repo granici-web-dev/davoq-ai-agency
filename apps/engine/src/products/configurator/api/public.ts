@@ -1,6 +1,7 @@
 import { basename } from 'node:path';
 import type { FastifyInstance } from 'fastify';
 import { resolveTenant } from '../../../engine/api/auth.js';
+import { configuratorAllowed, offerQuotaLeft } from '../access.js';
 import { acquireSlot } from '../../../engine/api/concurrency.js';
 import { withTenant } from '../../../engine/db/pool.js';
 import { get as storageGet } from '../../../engine/ingest/storage.js';
@@ -196,6 +197,30 @@ export function registerConfigurator(app: FastifyInstance): void {
       return reply.code(400).send({ error: 'consent required' });
     }
 
+    /**
+     * Потолок оферт в месяц.
+     *
+     * Проверяется до выпуска, а не после: номер, выданный сверх квоты,
+     * пришлось бы либо оставить (тогда квота ничего не значит), либо отозвать
+     * (тогда в нумерации коммерческих документов появляется дыра).
+     *
+     * Упёрлись — форма контакта, как и при отсутствии доступа. Посетитель
+     * не должен расплачиваться за то, что у продавца кончился пакет.
+     */
+    const cap = await withTenant(tenant.id, async (client) => {
+      const { rows } = await client.query<{ cap: number | null; used: string }>(
+        `SELECT t.monthly_offer_cap AS cap,
+                (SELECT count(*) FROM offers o
+                  WHERE o.tenant_id = t.id
+                    AND o.created_at >= date_trunc('month', current_date)) AS used
+           FROM tenants t WHERE t.id = $1`, [tenant.id]);
+      return rows[0];
+    });
+    if (cap && !offerQuotaLeft(tenant.plan, cap.cap, Number(cap.used))) {
+      console.warn(`оферты тенанта ${tenant.id}: месячный потолок исчерпан`);
+      return reply.code(402).send({ error: 'offer quota exceeded' });
+    }
+
     const locale = pickLocale(body.locale, tenant.localeDefault, tenant.supportedLocales);
 
     // Акция выбирается ЗДЕСЬ, на сервере, из подтверждённых и не истёкших.
@@ -254,10 +279,26 @@ interface Found {
   notifyFrom?: string | undefined;
 }
 
+/**
+ * Тенант, конфигуратор и право им пользоваться.
+ *
+ * Замок стоит ЗДЕСЬ, на сервере, а не в виджете: экран, закрытый рисованием,
+ * открывается обычным запросом — это в проекте уже находили на экранах панели.
+ *
+ * Два условия складываются, и оба обязательны. Тариф отвечает на «куплено ли»,
+ * подписка — на «оплачено ли сейчас». Тенант в grace-периоде тариф не терял,
+ * но автоматизацию теряет: философия существующего entitlement — клиент
+ * лишается автоматизации, а не обращений.
+ *
+ * Причина отказа наружу НЕ уходит. Виджету достаточно знать, что
+ * конфигуратора нет: он покажет форму «оставьте контакт», нейтральную
+ * и без единого слова про оплату. Посетитель тут ни при чём.
+ */
 async function load(publicKey: string | undefined): Promise<Found | null> {
   if (!publicKey) return null;
   const tenant = await resolveTenant(publicKey);
   if (!tenant) return null;
+  if (!configuratorAllowed(tenant)) return null;
   const cfg = await tenantConfigurator(tenant.id, tenant.supportedLocales);
   if (!cfg) return null;
 

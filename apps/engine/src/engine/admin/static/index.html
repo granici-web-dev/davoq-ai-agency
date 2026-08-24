@@ -277,6 +277,14 @@ td.quiet{color:var(--muted-fg);white-space:nowrap}
 .lead-offer b{color:var(--fg)}
 .lead-lines{margin:4px 0 0;padding-left:16px;line-height:1.5}
 
+/* Тариф, которого ещё нет: виден, но приглушён. Одинаковый вид
+   с покупаемыми читался бы как «можно взять сейчас». */
+.plan-card.soon{opacity:.7;border-style:dashed}
+.btn-link{display:inline-block;padding:10px 16px;border:1px solid var(--border);
+          border-radius:10px;font-size:14px;text-decoration:none;color:inherit}
+.switch{display:flex;align-items:center;gap:8px;font-size:13px;color:var(--muted-fg);cursor:pointer}
+.switch input{width:16px;height:16px}
+
 /* Воронка. Столбики, а не таблица: вопрос к ней один — где обрыв, —
    и обрыв виден формой, а не сравнением чисел в колонке. */
 .funnel{display:flex;flex-direction:column;gap:6px}

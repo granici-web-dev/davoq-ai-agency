@@ -18,7 +18,9 @@
  */
 import '../src/engine/env.js';
 import { claude, modelFor } from '../src/engine/llm/claude.js';
-import { PLAN_IDS, PLANS, messageCapFor, planFor } from '../src/engine/plans.js';
+import {
+  PLAN_IDS, PLANS, hasFeature, messageCapFor, planFor, type Feature,
+} from '../src/engine/plans.js';
 
 let failed = 0;
 const ok = (m: string): void => console.log(`  ✓ ${m}`);
@@ -26,7 +28,16 @@ const bad = (m: string): void => { console.error(`  ✗ ${m}`); failed++; };
 
 // ── 1. Лестница ───────────────────────────────────────────────────────────
 {
-  const ladder = PLAN_IDS.map((id) => PLANS[id]).sort((a, b) => a.priceEur - b.priceEur);
+  /**
+   * Тариф с ценой по запросу в сравнение по цене не входит.
+   *
+   * Ноль в `priceEur` означает «договариваемся», а не «бесплатно», и порядок
+   * по нему поставил бы Enterprise ниже Start. Сравнивать по цене можно
+   * только то, у чего цена есть.
+   */
+  const ladder = PLAN_IDS.map((id) => PLANS[id])
+    .filter((p) => p.priceEur > 0)
+    .sort((a, b) => a.priceEur - b.priceEur);
   let broken = false;
   for (let i = 1; i < ladder.length; i++) {
     const prev = ladder[i - 1]!;
@@ -72,6 +83,12 @@ const bad = (m: string): void => { console.error(`  ✗ ${m}`); failed++; };
 
   for (const id of PLAN_IDS) {
     const plan = PLANS[id];
+    // Маржа считается там, где есть выручка. У тарифа по запросу её считает
+    // человек на переговорах, а не тест.
+    if (plan.priceEur === 0) {
+      ok(`${plan.name}: цена по запросу — маржа обсуждается, а не проверяется`);
+      continue;
+    }
     const p = PRICE[plan.modelTier];
     // Без кеша: нижняя граница маржи. Считать по кешу значило бы закладывать
     // в цену предположение, которого мы ещё не замеряли.
@@ -82,6 +99,105 @@ const bad = (m: string): void => { console.error(`  ✗ ${m}`); failed++; };
     if (margin < 40) bad(`${line} (ниже 40% — тариф не окупает даже модель с запасом)`);
     else ok(line);
   }
+}
+
+// ── 3б. Лестница фич не идёт вспять ──────────────────────────────────────
+//
+// Тариф дороже — значит НЕ МЕНЬШЕ включает. Ошибка здесь тихая: клиент
+// покупает Pro и обнаруживает, что потерял то, что было на Start.
+{
+  const FEATURES: Feature[] = [
+    'chatbot', 'configurator', 'drive', 'connectors',
+    'followup', 'productionUpdates', 'social',
+  ];
+  const paid = PLAN_IDS.map((id) => PLANS[id])
+    .filter((p) => p.priceEur > 0)
+    .sort((a, b) => a.priceEur - b.priceEur);
+
+  let broken = false;
+  for (let i = 1; i < paid.length; i++) {
+    for (const f of FEATURES) {
+      if (paid[i - 1]!.features[f] && !paid[i]!.features[f]) {
+        bad(`«${paid[i]!.name}» дороже «${paid[i - 1]!.name}», но теряет «${f}»`);
+        broken = true;
+      }
+    }
+  }
+  if (!broken) ok('фичи только добавляются вверх по лестнице');
+
+  hasFeature('starter', 'configurator')
+    ? bad('Start получил конфигуратор — за него платят на Pro')
+    : ok('Start без конфигуратора');
+  hasFeature('pro', 'configurator') ? ok('Pro с конфигуратором')
+                                    : bad('Pro без конфигуратора — тариф не за что продавать');
+  hasFeature('starter', 'drive')
+    ? bad('Start получил Drive — регресс замка, который уже работал')
+    : ok('Start без Drive: замок не откатился');
+  hasFeature('pro', 'followup')
+    ? bad('Pro обещает follow-up, которого нет в коде')
+    : ok('нереализованное не обещано покупаемым тарифом');
+
+  // Незнакомый тариф не должен молча открывать платное.
+  hasFeature('нет-такого', 'configurator')
+    ? bad('неизвестный тариф открыл конфигуратор')
+    : ok('неизвестный тариф не открывает платных фич');
+}
+
+// ── 3в. Замок конфигуратора ──────────────────────────────────────────────
+//
+// Тариф и подписка складываются. Проверять их порознь — значит однажды
+// открыть конфигуратор тому, кто перестал платить, или закрыть тому,
+// кто платит.
+{
+  const { configuratorAllowed, offerQuotaLeft } = await import(
+    '../src/products/configurator/access.js');
+  const DAY = 24 * 60 * 60 * 1000;
+  const now = Date.now();
+  const base = { trialEndsAt: null, currentPeriodEnd: null } as const;
+
+  const cases: Array<[string, boolean, Parameters<typeof configuratorAllowed>[0]]> = [
+    ['Pro с оплаченной подпиской', true,
+     { ...base, plan: 'pro', subscriptionStatus: 'active' }],
+    ['Pro на живом триале', true,
+     { ...base, plan: 'pro', subscriptionStatus: 'trial', trialEndsAt: new Date(now + 5 * DAY) }],
+    ['Pro с кончившимся триалом', false,
+     { ...base, plan: 'pro', subscriptionStatus: 'trial', trialEndsAt: new Date(now - DAY) }],
+    ['Pro с отменённой подпиской', false,
+     { ...base, plan: 'pro', subscriptionStatus: 'canceled' }],
+    ['Start с оплаченной подпиской', false,
+     { ...base, plan: 'starter', subscriptionStatus: 'active' }],
+    ['Business с оплаченной подпиской', true,
+     { ...base, plan: 'business', subscriptionStatus: 'active' }],
+    ['неизвестный тариф', false,
+     { ...base, plan: 'нет-такого', subscriptionStatus: 'active' }],
+  ];
+  for (const [name, want, state] of cases) {
+    const got = configuratorAllowed(state, now);
+    got === want
+      ? ok(`${name}: ${want ? 'доступ есть' : 'доступа нет'}`)
+      : bad(`${name}: получено ${got}, ожидалось ${want}`);
+  }
+
+  // Grace-период: тариф не потерян, автоматизация потеряна.
+  const grace = configuratorAllowed({
+    plan: 'pro', subscriptionStatus: 'past_due',
+    trialEndsAt: null, currentPeriodEnd: new Date(now - 30 * DAY),
+  }, now);
+  grace ? bad('через месяц после неоплаты конфигуратор всё ещё открыт')
+        : ok('grace кончился — автоматизация выключена, хотя тариф прежний');
+
+  offerQuotaLeft('starter', null, 0)
+    ? bad('Start получил право на оферту — конфигуратора у него нет')
+    : ok('пакет оферт у Start нулевой');
+  offerQuotaLeft('pro', null, PLANS.pro.monthlyOffers - 1)
+    ? ok('последняя оферта пакета выпускается')
+    : bad('последняя оферта пакета отклонена');
+  offerQuotaLeft('pro', null, PLANS.pro.monthlyOffers)
+    ? bad('оферта сверх пакета выпущена')
+    : ok('оферта сверх пакета отклонена');
+  offerQuotaLeft('starter', 50, 10)
+    ? ok('индивидуальный потолок перекрывает тарифный')
+    : bad('индивидуальный потолок не сработал');
 }
 
 // ── 4. Потолок есть всегда ────────────────────────────────────────────────

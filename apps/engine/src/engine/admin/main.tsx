@@ -1896,8 +1896,12 @@ function Install(): React.ReactElement {
 
 // ── Abonament ────────────────────────────────────────────────────────────────
 
+/** Куда писать за ранним доступом. Адрес один и в панели, и в письмах. */
+const ACCESS_EMAIL = 'hello@assistwidget.eu';
+
 interface PlanCard {
-  id: string; name: string; priceEur: number; monthlyMessages: number;
+  id: string; name: string; priceEur: number; priceEurYearly: number;
+  purchasable: boolean; monthlyMessages: number;
   highlights: string[]; current: boolean;
 }
 
@@ -1947,6 +1951,14 @@ function Subscription(): React.ReactElement {
   const [portalError, setPortalError] = useState('');
   const [busy, setBusy] = useState('');
   const [requested, setRequested] = useState<string | null>(null);
+  /**
+   * Годовая оплата — минус два месяца.
+   *
+   * Переключатель стоит месячным по умолчанию, а не годовым: годовой ценник
+   * выглядит выгоднее, и подсунуть его умолчанием значит показать человеку
+   * не ту цифру, которую он придёт сравнивать с конкурентом.
+   */
+  const [yearly, setYearly] = useState(false);
 
   if (error) return <Failed error={error} onRetry={reload} />;
   if (!data) return <Loading />;
@@ -1964,7 +1976,7 @@ function Subscription(): React.ReactElement {
     setBusy(planId);
     try {
       const r = await post<{ url?: string; changed?: boolean; requested?: boolean }>(
-        '/subscription/checkout', { plan: planId },
+        '/subscription/checkout', { plan: planId, period: yearly ? 'yearly' : 'monthly' },
       );
       if (r.url) { location.href = r.url; return; }
       if (r.requested) { setRequested(planId); setBusy(''); return; }
@@ -2078,20 +2090,37 @@ function Subscription(): React.ReactElement {
       </section>
 
       <section className="sheet stack">
-        <h2>{t('Pachete')}</h2>
+        <div className="row" style={{ justifyContent: 'space-between', alignItems: 'center' }}>
+          <h2>{t('Pachete')}</h2>
+          <label className="switch">
+            <input type="checkbox" checked={yearly} onChange={(e) => setYearly(e.currentTarget.checked)} />
+            <span>{t('Plata anuală — două luni cadou')}</span>
+          </label>
+        </div>
         <div className="plans">
           {data.allPlans.map((p) => (
-            <div key={p.id} className={`plan-card${p.current ? ' current' : ''}`}>
+            <div key={p.id} className={`plan-card${p.current ? ' current' : ''}${p.purchasable ? '' : ' soon'}`}>
               <div className="row" style={{ justifyContent: 'space-between' }}>
                 <strong>{p.name}</strong>
-                <span className="quiet">{p.priceEur} €</span>
+                <span className="quiet">
+                  {/* Ноль означает «по запросу», а не «бесплатно». */}
+                  {p.priceEur === 0 ? t('la cerere')
+                   : yearly ? tf('{price} € pe an', { price: p.priceEurYearly })
+                   : tf('{price} € pe lună', { price: p.priceEur })}
+                </span>
               </div>
               <ul className="ticks">
                 {p.highlights.map((h) => <li key={h}>{h}</li>)}
               </ul>
               {requested === p.id ? <span className="stamp ok">{t('Cererea a fost trimisă')}</span>
                : p.current ? <span className="stamp ok">{t('Pachetul dumneavoastră')}</span>
-               : (
+               : !p.purchasable ? (
+                 /* Кнопки «оплатить» у нереализованного нет и быть не должно:
+                    это была бы продажа долга, который отдаёт поддержка. */
+                 <a className="btn-link" href={`mailto:${ACCESS_EMAIL}?subject=${encodeURIComponent(`Acces anticipat ${p.name}`)}`}>
+                   {t('Cere acces anticipat')}
+                 </a>
+               ) : (
                 <button disabled={busy !== ''} onClick={() => void choose(p.id)}>
                   {busy === p.id ? t('Se trimite…') : t('Alege acest pachet')}
                 </button>
@@ -2100,7 +2129,7 @@ function Subscription(): React.ReactElement {
           ))}
         </div>
         <p className="note">
-          {t('Schimbarea pachetului se face de către noi — primiți un link de plată în aceeași zi.')}
+          {t('Pentru Pro există o taxă unică de configurare — catalog, formulă de preț și formularul dumneavoastră de ofertă. O facturăm separat, după ce stabilim ce este de făcut.')}
         </p>
       </section>
     </>

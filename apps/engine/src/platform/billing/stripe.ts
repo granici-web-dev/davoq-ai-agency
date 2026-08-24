@@ -32,13 +32,34 @@ const secretKey = (): string => {
   return key;
 };
 
-/** Идентификаторы цен в Stripe: заводятся в их панели, сюда попадают строкой. */
-export const priceIdFor = (plan: PlanId): string => {
-  const id = process.env[`STRIPE_PRICE_${plan.toUpperCase()}`];
-  if (!id) {
+export type BillingPeriod = 'monthly' | 'yearly';
+
+/**
+ * Идентификаторы цен в Stripe: заводятся в их панели, сюда попадают строкой.
+ *
+ * Годовая цена — ОТДЕЛЬНАЯ цена в Stripe, а не скидка к месячной: он считает
+ * периоды по цене, и «то же самое, но раз в год» у него так не выражается.
+ *
+ * Непокупаемый тариф сюда не доходит вовсе — его отсекает вызывающий. Но
+ * если дойдёт, сообщение обязано объяснить это словами, а не «переменная
+ * не задана»: цены у него нет не по недосмотру.
+ */
+export const priceIdFor = (plan: PlanId, period: BillingPeriod = 'monthly'): string => {
+  if (!PLANS[plan].purchasable) {
     throw new Error(
-      `STRIPE_PRICE_${plan.toUpperCase()} не задан. Заведите цену «${PLANS[plan].name}» ` +
-      `(€${PLANS[plan].priceEur}/мес) в панели Stripe и впишите её id.`,
+      `тариф «${PLANS[plan].name}» не продаётся: его функции ещё не написаны, ` +
+      'и цены в Stripe у него нет намеренно.',
+    );
+  }
+  const name = `STRIPE_PRICE_${plan.toUpperCase()}${period === 'yearly' ? '_YEARLY' : ''}`;
+  const id = process.env[name];
+  if (!id) {
+    const price = period === 'yearly'
+      ? `€${PLANS[plan].priceEurYearly}/год`
+      : `€${PLANS[plan].priceEur}/мес`;
+    throw new Error(
+      `${name} не задан. Заведите цену «${PLANS[plan].name}» (${price}) ` +
+      'в панели Stripe и впишите её id.',
     );
   }
   return id;
@@ -75,6 +96,8 @@ async function call(path: string, form: Record<string, string>): Promise<Record<
 export async function createCheckout(args: {
   tenantId: string;
   plan: PlanId;
+  /** Месяц или год. Год — отдельная цена в Stripe, минус два месяца. */
+  period?: BillingPeriod;
   email?: string;
   successUrl: string;
   cancelUrl: string;
@@ -82,7 +105,7 @@ export async function createCheckout(args: {
 }): Promise<{ url: string }> {
   const form: Record<string, string> = {
     mode: 'subscription',
-    'line_items[0][price]': priceIdFor(args.plan),
+    'line_items[0][price]': priceIdFor(args.plan, args.period ?? 'monthly'),
     'line_items[0][quantity]': '1',
     success_url: args.successUrl,
     cancel_url: args.cancelUrl,
@@ -140,7 +163,9 @@ async function get(path: string): Promise<Record<string, unknown>> {
  * посчитает разницу за остаток периода: при повышении спишет доплату,
  * при понижении оставит остаток на счету.
  */
-export async function changePlan(subscriptionId: string, plan: PlanId): Promise<void> {
+export async function changePlan(
+  subscriptionId: string, plan: PlanId, period: BillingPeriod = 'monthly',
+): Promise<void> {
   const sub = await get(`/subscriptions/${subscriptionId}`);
   const items = (sub.items as { data?: Array<{ id?: string }> } | undefined)?.data ?? [];
   const itemId = items[0]?.id;
@@ -148,7 +173,7 @@ export async function changePlan(subscriptionId: string, plan: PlanId): Promise<
 
   await call(`/subscriptions/${subscriptionId}`, {
     'items[0][id]': itemId,
-    'items[0][price]': priceIdFor(plan),
+    'items[0][price]': priceIdFor(plan, period),
     // Разница за остаток периода считается сразу: иначе повышение тарифа
     // вступало бы в силу бесплатно до конца месяца.
     proration_behavior: 'create_prorations',

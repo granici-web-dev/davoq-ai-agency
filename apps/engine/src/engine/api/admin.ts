@@ -280,10 +280,19 @@ export function registerAdmin(app: FastifyInstance): void {
         id: plan.id, name: plan.name, priceEur: plan.priceEur,
         highlights: plan.highlights,
       },
-      // Все тарифы — чтобы клиент видел, что он получит, если попросит выше.
-      // Кнопки переключения нет намеренно: тариф меняем мы.
+      /**
+       * Вся лестница, включая непокупаемое.
+       *
+       * Клиент решает, брать ли Pro, глядя на то, куда он растёт. Скрыть
+       * Business и Enterprise значило бы показать лестницу из двух ступеней
+       * и выглядеть меньше, чем мы есть; поставить им кнопку «оплатить» —
+       * продать то, чего нет.
+       */
       allPlans: PLAN_IDS.map((id) => ({
-        id, name: PLANS[id].name, priceEur: PLANS[id].priceEur,
+        id, name: PLANS[id].name,
+        priceEur: PLANS[id].priceEur,
+        priceEurYearly: PLANS[id].priceEurYearly,
+        purchasable: PLANS[id].purchasable,
         monthlyMessages: PLANS[id].monthlyMessages,
         highlights: PLANS[id].highlights,
         current: id === plan.id,
@@ -358,7 +367,7 @@ export function registerAdmin(app: FastifyInstance): void {
    * на всякий случай: пока не решён вопрос с юрлицом, он единственный рабочий,
    * и клиент не должен упираться в мёртвую кнопку.
    */
-  app.post<{ Body: { plan?: string } }>('/admin/api/subscription/checkout',
+  app.post<{ Body: { plan?: string; period?: string } }>('/admin/api/subscription/checkout',
     guarded(async ({ session, client, body, request }) => {
       const { rows } = await client.query<{
         name: string; plan: string; subscription_id: string | null; subscription_status: string;
@@ -370,6 +379,13 @@ export function registerAdmin(app: FastifyInstance): void {
       // Пакет не назвали — значит платят за текущий.
       const wanted = String((body as { plan?: string })?.plan ?? t.plan);
       if (!isPlanId(wanted)) throw clientError('unknown_plan', 'Pachet necunoscut');
+      // Непокупаемое отсекается ЗДЕСЬ, а не в панели: кнопки у него нет,
+      // но запрос отправляется и без кнопки.
+      if (!PLANS[wanted].purchasable) {
+        throw clientError('plan_not_purchasable',
+          'Acest pachet nu este încă disponibil pentru cumpărare');
+      }
+      const period = (body as { period?: string })?.period === 'yearly' ? 'yearly' : 'monthly';
 
       if (!process.env.STRIPE_SECRET_KEY) {
         await requestPlanByEmail(session.email, t.name, t.plan, wanted);
@@ -384,7 +400,7 @@ export function registerAdmin(app: FastifyInstance): void {
         const live = t.subscription_id && ['active', 'past_due'].includes(t.subscription_status);
         if (live) {
           const { changePlan } = await import('../../platform/billing/stripe.js');
-          await changePlan(t.subscription_id!, wanted);
+          await changePlan(t.subscription_id!, wanted, period);
           // Тариф в базе не трогаем: его поставит вебхук. Записать здесь значило бы
           // иметь две правды — нашу и Stripe, — и расходиться они начнут в тот день,
           // когда смена не пройдёт.
@@ -396,7 +412,7 @@ export function registerAdmin(app: FastifyInstance): void {
         const back = `${proto}://${host}/admin#subscription`;
         const { createCheckout } = await import('../../platform/billing/stripe.js');
         return await createCheckout({
-          tenantId: session.tenantId, plan: wanted,
+          tenantId: session.tenantId, plan: wanted, period,
           email: session.email, successUrl: back, cancelUrl: back,
         });
       } catch (err) {
