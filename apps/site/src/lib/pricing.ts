@@ -64,6 +64,7 @@ export const PLANS: Plan[] = [
       { key: 'orderStatus', soon: true },
       { key: 'content', soon: true },
       { key: 'integrations' },
+      { key: 'custom' },
       { key: 'sla' },
     ],
   },
@@ -121,6 +122,7 @@ export const MATRIX: MatrixRow[] = [
   { key: 'orderStatus', start: false, growth: false, platform: true, soon: true },
   { key: 'content', start: false, growth: false, platform: true, soon: true },
   { key: 'integrations', start: false, growth: false, platform: true },
+  { key: 'custom', start: false, growth: false, platform: true },
   { key: 'sla', start: false, growth: false, platform: true },
   { key: 'setup', start: 'value', growth: 'value', platform: 'value' },
 ];

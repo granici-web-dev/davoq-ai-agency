@@ -713,6 +713,7 @@
         "orderStatus": "Statusuri comenzi pentru clienți: notificări automate pe etape",
         "content": "Motor de conținut pentru social media",
         "integrations": "Integrări custom și adaptarea scenariilor",
+        "custom": "Agenți personalizați, orice automatizare — inclusiv un site nou, construit de noi",
         "sla": "Însoțire dedicată, SLA"
       }
     },
@@ -772,6 +773,9 @@
         },
         "integrations": {
           "label": "Integrări custom"
+        },
+        "custom": {
+          "label": "Agenți personalizați, automatizări, site nou"
         },
         "sla": {
           "label": "Însoțire dedicată, SLA"

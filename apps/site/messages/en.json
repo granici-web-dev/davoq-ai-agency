@@ -713,6 +713,7 @@
         "orderStatus": "Order status for customers: automatic notifications at each stage",
         "content": "Content engine for social media",
         "integrations": "Custom integrations and adapted scripts",
+        "custom": "Custom agents, any automation — including a new website, built by us",
         "sla": "Dedicated support, SLA"
       }
     },
@@ -772,6 +773,9 @@
         },
         "integrations": {
           "label": "Custom integrations"
+        },
+        "custom": {
+          "label": "Custom agents, automations, a new website"
         },
         "sla": {
           "label": "Dedicated support, SLA"
