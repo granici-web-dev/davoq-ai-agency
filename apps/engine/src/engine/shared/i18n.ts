@@ -126,6 +126,10 @@ export function pickLocale(
  */
 export interface ConfiguratorStrings {
   start: string;
+  gateSelf: string;
+  gateSelfHint: string;
+  gateHuman: string;
+  gateHumanHint: string;
   step: string;
   back: string;
   next: string;
@@ -142,11 +146,16 @@ export interface ConfiguratorStrings {
   getOffer: string;
   offerSent: string;
   notePlaceholder: string;
+  ask: string;
+  askPlaceholder: string;
+  askError: string;
 }
 
 export const CONFIGURATOR_STRINGS: Record<Locale, ConfiguratorStrings> = {
   en: {
     start: 'Configure and see the price', step: 'Step {n} of {total}',
+    gateSelf: 'See the price yourself', gateSelfHint: 'Pick the model, fabric and options — the price appears as you go.',
+    gateHuman: 'Ask a consultant', gateHumanHint: 'Leave your contact and we will prepare a quote for your configuration.',
     back: 'Back', next: 'Next', skip: 'Skip', calculating: 'Calculating…',
     price: 'Estimated price', vatIncluded: 'VAT included',
     summary: 'Your configuration', change: 'Change',
@@ -156,9 +165,13 @@ export const CONFIGURATOR_STRINGS: Record<Locale, ConfiguratorStrings> = {
     needConsent: 'Consent is required to prepare a quote.',
     getOffer: 'Get the quote', offerSent: 'The quote is on its way to you.',
     notePlaceholder: 'Anything we should know?',
+    ask: 'Have a question about this step?', askPlaceholder: 'Ask about the options…',
+    askError: 'Could not answer right now.',
   },
   de: {
     start: 'Konfigurieren und Preis sehen', step: 'Schritt {n} von {total}',
+    gateSelf: 'Preis selbst ansehen', gateSelfHint: 'Modell, Stoff und Optionen wählen — der Preis erscheint sofort.',
+    gateHuman: 'Berater fragen', gateHumanHint: 'Kontaktdaten hinterlassen — wir erstellen ein Angebot für Ihre Konfiguration.',
     back: 'Zurück', next: 'Weiter', skip: 'Überspringen', calculating: 'Wird berechnet…',
     price: 'Richtpreis', vatIncluded: 'inkl. MwSt.',
     summary: 'Ihre Konfiguration', change: 'Ändern',
@@ -168,9 +181,13 @@ export const CONFIGURATOR_STRINGS: Record<Locale, ConfiguratorStrings> = {
     needConsent: 'Für ein Angebot ist die Einwilligung erforderlich.',
     getOffer: 'Angebot erhalten', offerSent: 'Das Angebot ist auf dem Weg zu Ihnen.',
     notePlaceholder: 'Gibt es etwas, das wir wissen sollten?',
+    ask: 'Fragen zu diesem Schritt?', askPlaceholder: 'Fragen Sie zu den Optionen…',
+    askError: 'Antwort gerade nicht möglich.',
   },
   ro: {
     start: 'Configurați și aflați prețul', step: 'Pasul {n} din {total}',
+    gateSelf: 'Vedeți singur prețul', gateSelfHint: 'Alegeți modelul, țesătura și opțiunile — prețul apare pe loc.',
+    gateHuman: 'Întrebați un consultant', gateHumanHint: 'Lăsați-ne un contact și pregătim oferta pentru configurația dumneavoastră.',
     back: 'Înapoi', next: 'Continuați', skip: 'Omiteți', calculating: 'Se calculează…',
     price: 'Preț estimativ', vatIncluded: 'TVA inclus',
     summary: 'Configurația dumneavoastră', change: 'Modificați',
@@ -180,9 +197,13 @@ export const CONFIGURATOR_STRINGS: Record<Locale, ConfiguratorStrings> = {
     needConsent: 'Fără acord nu putem întocmi oferta.',
     getOffer: 'Primiți oferta', offerSent: 'Oferta este pe drum către dumneavoastră.',
     notePlaceholder: 'Aveți ceva de adăugat?',
+    ask: 'Aveți o întrebare despre acest pas?', askPlaceholder: 'Întrebați despre opțiuni…',
+    askError: 'Nu putem răspunde chiar acum.',
   },
   ru: {
     start: 'Собрать и узнать цену', step: 'Шаг {n} из {total}',
+    gateSelf: 'Посмотреть цену самому', gateSelfHint: 'Выберите модель, ткань и опции — цена появится сразу.',
+    gateHuman: 'Спросить консультанта', gateHumanHint: 'Оставьте контакт — подготовим оферту под вашу конфигурацию.',
     back: 'Назад', next: 'Далее', skip: 'Пропустить', calculating: 'Считаем…',
     price: 'Ориентировочная цена', vatIncluded: 'НДС включён',
     summary: 'Ваша конфигурация', change: 'Изменить',
@@ -192,5 +213,7 @@ export const CONFIGURATOR_STRINGS: Record<Locale, ConfiguratorStrings> = {
     needConsent: 'Без согласия оферту подготовить нельзя.',
     getOffer: 'Получить оферту', offerSent: 'Оферта уже едет к вам.',
     notePlaceholder: 'Что-нибудь важное для нас?',
+    ask: 'Есть вопрос по этому шагу?', askPlaceholder: 'Спросите про варианты…',
+    askError: 'Сейчас ответить не получается.',
   },
 };

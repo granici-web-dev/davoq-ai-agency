@@ -3,6 +3,17 @@ import { useCallback, useEffect, useMemo, useRef, useState } from 'preact/hooks'
 import { pickLocale, STRINGS } from '../shared/i18n.js';
 import { DEFAULT_THEME, resolveTheme, toCssVars } from '../shared/theme.js';
 import { fetchConfig, streamChat, submitLead, visitorId, type WidgetConfig } from './api.js';
+import { CONFIGURATOR_STRINGS } from '../shared/i18n.js';
+import { OfferModal } from './configurator/OfferModal.js';
+
+/**
+ * Событие, которым страница клиента открывает окно оферты.
+ *
+ * Кнопка «Cere ofertă» стоит в вёрстке клиента, а не в нашем виджете: она
+ * должна быть там, где посетитель принимает решение — рядом с товаром, —
+ * а не в углу экрана. Поэтому вход событием, а не нашим элементом.
+ */
+export const OFFER_EVENT = 'assistwidget:offer';
 
 type Msg = { role: 'user' | 'bot' | 'note'; text: string };
 type Phase = 'idle' | 'streaming' | 'error' | 'busy' | 'offline';
@@ -46,6 +57,13 @@ export function App({ base, publicKey }: { base: string; publicKey: string }): p
   const [draft, setDraft] = useState('');
   const [phase, setPhase] = useState<Phase>('idle');
   const [prefersDark, setPrefersDark] = useState(false);
+  const [offerOpen, setOfferOpen] = useState(false);
+
+  useEffect(() => {
+    const open = (): void => setOfferOpen(true);
+    document.addEventListener(OFFER_EVENT, open);
+    return () => document.removeEventListener(OFFER_EVENT, open);
+  }, []);
 
   // Идентификатор разговора переживает переход по страницам сайта.
   //
@@ -244,6 +262,26 @@ export function App({ base, publicKey }: { base: string; publicKey: string }): p
 
   return (
     <div class="root" data-pos={config.position} style={toCssVars(theme)}>
+      {offerOpen && (
+        <OfferModal
+          base={base}
+          publicKey={publicKey}
+          visitorId={visitorId()}
+          conversationId={conversationId.current}
+          botName={config.botName || t.title}
+          locale={locale}
+          t={CONFIGURATOR_STRINGS[locale]}
+          s={t}
+          onClose={() => setOfferOpen(false)}
+          quoteForm={
+            <LeadForm
+              base={base} publicKey={publicKey} conversationId={conversationId.current}
+              t={t} intro={CONFIGURATOR_STRINGS[locale].gateHumanHint}
+            />
+          }
+        />
+      )}
+
       {!open && (
         <button ref={launcherRef} class="launcher" onClick={() => setOpen(true)}>
           {config.botName || t.launcher}
@@ -305,13 +343,15 @@ export function App({ base, publicKey }: { base: string; publicKey: string }): p
   );
 }
 
-function LeadForm({
-  base, publicKey, conversationId, t,
+export function LeadForm({
+  base, publicKey, conversationId, t, intro,
 }: {
   base: string;
   publicKey: string;
   conversationId: string | undefined;
   t: (typeof STRINGS)['en'];
+  /** Подводка. По умолчанию — «ассистент недоступен»; в окне оферты она другая. */
+  intro?: string;
 }): preact.JSX.Element {
   const [form, setForm] = useState({ name: '', email: '', phone: '' });
   const [state, setState] = useState<'idle' | 'sending' | 'error' | 'sent'>('idle');
@@ -344,7 +384,7 @@ function LeadForm({
 
   return (
     <form class="lead" onSubmit={submit}>
-      <span class="hint">{t.offline}</span>
+      <span class="hint">{intro ?? t.offline}</span>
       {field('name', t.leadName)}
       {field('email', t.leadEmail, 'email')}
       {field('phone', t.leadPhone, 'tel')}

@@ -154,6 +154,80 @@ input {
 .cfg-check input { flex: none; width: 16px; height: 16px; margin-top: 1px; }
 .cfg-summary .hint { font-size: 13px; opacity: .8; margin-top: 4px; }
 .cfg-summary .err { font-size: 12px; color: #b91c1c; }
+.cfg-ask-open { align-self: flex-start; margin-top: 4px; padding: 0; font-size: 12px; }
+.cfg-ask { display: flex; flex-direction: column; gap: 8px; margin-top: 8px;
+           padding-top: 12px; border-top: 1px solid rgb(128 128 128 / 20%); }
+.cfg-ask-row { display: flex; gap: 8px; }
+.cfg-ask-row input { flex: 1; }
+.cfg-ask-row .send { padding: 10px 14px; }
+.cfg-answer { margin: 0; padding: 10px 13px; border-radius: 14px; font-size: 13px;
+              line-height: 1.5; background: var(--cw-bot-bubble); color: var(--cw-on-bot-bubble); }
+.cfg-answer.pending { opacity: .6; }
 .cfg-done { flex: 1; display: flex; align-items: center; justify-content: center; padding: 24px;
             text-align: center; font-size: 14px; }
+
+/* Окно оферты.
+   Намеренно НЕ похоже на чат: чат — это угловой пузырь на 380 px, который
+   ведёт разговор; здесь посетитель собирает изделие и смотрит на цену, и
+   ему нужны крупные карточки, картинки и вся конфигурация перед глазами.
+   Один и тот же прямоугольник в углу под обе задачи означал бы, что вторая
+   задача просто не влезла. */
+.ofr-overlay {
+  position: fixed; inset: 0; z-index: 2147483001; padding: 16px;
+  display: flex; align-items: center; justify-content: center;
+  background: rgb(0 0 0 / 45%);
+}
+.ofr {
+  display: flex; flex-direction: column;
+  width: min(760px, 100%);
+  /* Высота от содержимого: на развилке две карточки, и растянутое до 660 px
+     окно выглядело бы недогрузившимся. Полную высоту берёт только
+     конфигуратор — там шаги должны стоять на месте от шага к шагу. */
+  height: auto; max-height: min(660px, 100%);
+  background: var(--cw-bg); color: var(--cw-text);
+  border-radius: var(--cw-radius); overflow: hidden;
+  box-shadow: 0 24px 64px rgb(0 0 0 / 32%);
+}
+.ofr[data-screen="configure"] { height: min(660px, 100%); }
+.ofr-head { display: flex; align-items: center; gap: 10px; padding: 16px 20px;
+            background: var(--cw-primary); color: var(--cw-on-primary); }
+.ofr-head .name { flex: 1; min-width: 0; font-weight: 600; font-size: 16px;
+                  overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+.ofr-split { flex: 1; min-height: 0; display: flex; }
+.ofr-main { flex: 1; min-width: 0; display: flex; flex-direction: column; }
+.ofr-rail { width: 232px; flex: none; overflow-y: auto; padding: 16px;
+            border-left: 1px solid rgb(128 128 128 / 20%); font-size: 13px; }
+.ofr-rail h4 { margin: 0 0 10px; font-size: 12px; font-weight: 600; opacity: .6;
+               text-transform: uppercase; letter-spacing: .04em; }
+.ofr-rail dl { margin: 0; display: flex; flex-direction: column; gap: 8px; }
+.ofr-rail dt { font-size: 11px; opacity: .6; }
+.ofr-rail dd { margin: 0; }
+.ofr-rail .pending { opacity: .35; }
+@media (max-width: 720px) { .ofr-rail { display: none } }
+
+/* Развилка: посчитать самому или позвать продавца. Два равных пути, а не
+   кнопка и ссылка мелким шрифтом: клиент продаёт и через людей тоже. */
+.ofr-gate { flex: 1; display: flex; flex-direction: column; justify-content: center;
+            gap: 14px; padding: 28px 24px; }
+.ofr-gate p { margin: 0 0 4px; font-size: 14px; opacity: .8; }
+.ofr-choices { display: grid; gap: 12px; grid-template-columns: 1fr 1fr; }
+@media (max-width: 560px) { .ofr-choices { grid-template-columns: 1fr } }
+.ofr-choice {
+  display: flex; flex-direction: column; gap: 6px; align-items: flex-start;
+  padding: 18px; cursor: pointer; text-align: left; font: inherit; color: inherit;
+  background: transparent; border: 1px solid rgb(128 128 128 / 30%);
+  border-radius: var(--cw-radius);
+}
+.ofr-choice:hover { border-color: var(--cw-primary); }
+.ofr-choice b { font-size: 15px; }
+.ofr-choice span { font-size: 13px; opacity: .75; line-height: 1.45; }
+@media (prefers-reduced-motion: no-preference) { .ofr-choice { transition: border-color .15s } }
+
+/* В широком окне карточек помещается больше двух — сетка считает сама. */
+.ofr .cfg-cards { grid-template-columns: repeat(auto-fill, minmax(150px, 1fr)); }
+.ofr .cfg-swatches { grid-template-columns: repeat(auto-fill, minmax(88px, 1fr)); }
+.ofr .cfg-body { padding: 18px 20px; }
+.ofr .cfg-top { padding: 14px 20px 0; }
+.ofr .cfg-nav { padding: 14px 20px; }
+.ofr .cfg-title { font-size: 17px; }
 `;

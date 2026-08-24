@@ -2,7 +2,7 @@
 import { useEffect, useMemo, useRef, useState } from 'preact/hooks';
 import type { ConfiguratorStrings, Strings } from '../../shared/i18n.js';
 import {
-  fetchPrice, money, submitOffer,
+  askAgent, fetchPrice, money, submitOffer,
   type Answers, type ConfiguratorConfig, type PriceView, type PublicStep,
 } from './api.js';
 
@@ -32,6 +32,8 @@ interface Props {
   t: ConfiguratorStrings;
   /** Подписи полей контакта общие с формой заявки чат-бота: поле «Телефон» одно на продукт. */
   s: Strings;
+  /** Выбор наружу: боковая сводка живёт в окне оферты, а не внутри шагов. */
+  onAnswers?: (answers: Answers) => void;
 }
 
 function restore(publicKey: string): Answers {
@@ -64,10 +66,12 @@ export function Configurator(props: Props): preact.JSX.Element {
   const [price, setPrice] = useState<PriceView | null>(null);
   const [pricing, setPricing] = useState(false);
 
+  const { onAnswers } = props;
   useEffect(() => {
+    onAnswers?.(answers);
     try { sessionStorage.setItem(`cw_cfg_${publicKey}`, JSON.stringify(answers)); }
     catch { /* приватный режим */ }
-  }, [publicKey, answers]);
+  }, [publicKey, answers, onAnswers]);
 
   // Цена запрашивается, только когда отвечены все обязательные шаги. Показывать
   // её раньше значит называть сумму, которая на следующем шаге вырастет вдвое:
@@ -158,6 +162,10 @@ export function Configurator(props: Props): preact.JSX.Element {
       <div class="cfg-body">
         <h3 class="cfg-title">{step.title}</h3>
         <StepBody step={step} value={answers[step.id]} onChoose={choose} onSet={(v) => set(step.id, v)} t={t} />
+        {/* key по шагу: без него ответ про наполнитель оставался на экране
+            размеров — вопрос забыт, ответ висит, и он теперь не о том. */}
+        <Ask key={step.id} base={base} publicKey={publicKey} locale={locale}
+             stepId={step.id} answers={answers} t={t} />
       </div>
 
       <div class="cfg-nav">
@@ -170,6 +178,64 @@ export function Configurator(props: Props): preact.JSX.Element {
         </button>
       </div>
     </div>
+  );
+}
+
+/**
+ * Вопрос агенту, не выходя из шага.
+ *
+ * Свёрнут по умолчанию. Поле ввода, открытое на каждом шаге, читается как
+ * «здесь надо что-то написать» и сбивает с выбора — а выбор здесь и есть
+ * работа. Кто хочет спросить, спросит.
+ */
+function Ask({
+  base, publicKey, locale, stepId, answers, t,
+}: {
+  base: string;
+  publicKey: string;
+  locale: string;
+  stepId: string;
+  answers: Answers;
+  t: ConfiguratorStrings;
+}): preact.JSX.Element {
+  const [open, setOpen] = useState(false);
+  const [draft, setDraft] = useState('');
+  const [reply, setReply] = useState<string | null>(null);
+  const [busy, setBusy] = useState(false);
+
+  const send = async (e: Event): Promise<void> => {
+    e.preventDefault();
+    const question = draft.trim();
+    if (!question || busy) return;
+    setBusy(true);
+    setDraft('');
+    const answer = await askAgent(base, { publicKey, locale, stepId, selections: answers, question });
+    setReply(answer ?? t.askError);
+    setBusy(false);
+  };
+
+  if (!open) {
+    return (
+      <button type="button" class="cfg-link cfg-ask-open" onClick={() => setOpen(true)}>
+        {t.ask}
+      </button>
+    );
+  }
+
+  return (
+    <form class="cfg-ask" onSubmit={send}>
+      {reply && <p class="cfg-answer">{reply}</p>}
+      {busy && <p class="cfg-answer pending">{t.calculating}</p>}
+      <div class="cfg-ask-row">
+        <input
+          value={draft}
+          placeholder={t.askPlaceholder}
+          aria-label={t.askPlaceholder}
+          onInput={(e) => setDraft((e.target as HTMLInputElement).value)}
+        />
+        <button class="send" type="submit" disabled={busy || !draft.trim()}>›</button>
+      </div>
+    </form>
   );
 }
 

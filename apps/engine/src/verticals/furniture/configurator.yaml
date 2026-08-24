@@ -31,17 +31,40 @@ flow:
       # Модели у каждого свои — варианты приходят из слоя клиента.
       options: []
 
-    - id: size
-      type: cards
+    # Размеры спрашиваются, но в формуле НЕ участвуют.
+    #
+    # У мебельщика изделие делается по эскизу: в оферте пилота на месте
+    # размеров стоит «CONFORM SCHITEI», а цену под конкретный метраж
+    # подтверждает менеджер. Считать её линейно от ширины значит называть
+    # покупателю число, которое менеджер потом опровергнет, — а первое
+    # названное число запоминается.
+    #
+    # Поэтому ответы отсюда едут в характеристики оферты и в лид: менеджеру
+    # они нужны до звонка, и спросить их должен конфигуратор, а не он.
+    - id: width
+      type: number-input
       title:
-        ro: Dimensiunea
-        ru: Размер
-        en: Size
+        ro: Lățimea (cm)
+        ru: Ширина (см)
+        en: Width (cm)
+      input: { min: 100, max: 500, step: 5, unit: cm }
       aiHint:
-        ro: Întrebați lățimea peretelui liber înainte de a recomanda o dimensiune.
-        ru: Спросите ширину свободной стены, прежде чем советовать размер.
-        en: Ask for the free wall width before recommending a size.
-      options: []
+        ro: Întrebați lățimea peretelui liber, nu a canapelei — pentru colțare lăsați loc de trecere.
+        ru: Спрашивайте ширину свободной стены, а не дивана — для углового нужен проход.
+        en: Ask for the free wall width, not the sofa's — a corner unit needs clearance.
+
+    - id: depth
+      type: number-input
+      optional: true
+      title:
+        ro: Adâncimea sau lungimea (cm)
+        ru: Глубина или длина (см)
+        en: Depth or length (cm)
+      input: { min: 60, max: 400, step: 5, unit: cm }
+      aiHint:
+        ro: Pentru paturi este lungimea saltelei, pentru canapele adâncimea șezutului.
+        ru: Для кроватей это длина матраса, для диванов — глубина сиденья.
+        en: For beds this is the mattress length, for sofas the seat depth.
 
     - id: seat
       type: cards
@@ -111,6 +134,14 @@ flow:
         ro: Observații
         ru: Пожелания
         en: Notes
+
+# Промпт агента конфигуратора. Отдельный от промпта чат-бота намеренно:
+# у бота задача довести до шоурума и никогда не называть цену, а здесь цена
+# уже посчитана сервером и стоит у посетителя перед глазами. Один промпт
+# на две задачи означал бы, что агент либо молчит о цене, которую видно,
+# либо начинает её обсуждать там, где ему нельзя.
+agent:
+  prompt: prompt/configurator.md
 
 # Форма формулы — здесь, числа — у клиента.
 #

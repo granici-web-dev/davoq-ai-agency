@@ -21,6 +21,8 @@ import { buildConfigurator } from '../src/products/configurator/load.js';
 import { publicFlow } from '../src/products/configurator/flow/public.js';
 import { priceOf } from '../src/products/configurator/pricing/engine.js';
 import { buildOfferTemplate, clientOfferLayer } from '../src/products/configurator/offer/load.js';
+import { buildAgentSystem } from '../src/products/configurator/agent/prompt.js';
+import { resolveSelections } from '../src/products/configurator/flow/select.js';
 
 const args = process.argv.slice(2);
 const id = args.find((a) => !a.startsWith('--'));
@@ -67,11 +69,22 @@ app.get('/', async (_req, reply) => reply.type('text/html; charset=utf-8').send(
 <html lang="${locale}"><head><meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1">
 <title>Configurator · ${id}</title>
-<style>body{margin:0;min-height:100vh;background:#f4f4f5;font-family:system-ui}</style>
+<style>
+ body{margin:0;min-height:100vh;background:#f4f4f5;font-family:system-ui;color:#111}
+ .page{max-width:760px;margin:0 auto;padding:64px 24px}
+ .card{background:#fff;border-radius:16px;padding:28px;box-shadow:0 2px 12px rgb(0 0 0/6%)}
+ h1{margin:0 0 6px;font-size:22px} p{margin:0 0 20px;color:#555;font-size:15px}
+ button{font:inherit;font-size:15px;padding:12px 20px;border:0;border-radius:10px;
+        background:#111;color:#fff;cursor:pointer}
+</style>
 </head><body>
+<div class="page"><div class="card">
+  <h1>Canapea Free Comfort</h1>
+  <p>Страница товара клиента. Кнопка ниже — та, что он ставит в свою вёрстку.</p>
+  <button data-assistwidget-offer>Cere ofertă</button>
+</div></div>
 <div id="root" data-locale="${locale}" data-name="${clientConfig.name ?? id}"
-     data-preset="${clientConfig.channels?.web?.widget?.preset ?? 'classic'}"
-     data-disclosure="Preț estimativ, calculat pe server."></div>
+     data-preset="${clientConfig.channels?.web?.widget?.preset ?? 'classic'}"></div>
 <script src="/demo.js"></script>
 </body></html>`));
 
@@ -101,6 +114,82 @@ app.post<{ Body: { selections: Record<string, string | string[] | number> } }>(
 
 app.post('/v1/configurator/offer', async (_req, reply) =>
   reply.code(501).send({ error: 'выпуск оферты — фаза 4' }));
+
+/**
+ * Вопрос агенту. Модель вызывается настоящая — иначе предпросмотр показал бы,
+ * что кнопка нажимается, и умолчал бы о том, отвечает ли агент по делу.
+ * Без ключей AWS отвечает 503: это предпросмотр, а не витрина.
+ */
+app.post<{ Body: {
+  question?: string; stepId?: string; locale?: string;
+  selections?: Record<string, string | string[] | number>;
+} }>('/v1/configurator/ask', async (request, reply) => {
+  const question = (request.body?.question ?? '').trim().slice(0, 500);
+  if (!question) return reply.code(400).send({ error: 'нет вопроса' });
+
+  let selections;
+  let price: string | undefined;
+  try {
+    selections = resolveSelections(cfg.flow, request.body?.selections ?? {}, 'вопрос');
+  } catch {
+    // Выбор ещё неполный — это нормальный ход: агент отвечает и без него.
+    selections = { picks: [], numbers: {}, texts: {} };
+  }
+  try {
+    const r = priceOf(cfg.flow, cfg.pricing, request.body?.selections ?? {});
+    price = new Intl.NumberFormat(locale, {
+      style: 'currency', currency: offer.currency.code,
+      minimumFractionDigits: offer.currency.decimals,
+      maximumFractionDigits: offer.currency.decimals,
+    }).format(r.totalBani / 10 ** offer.currency.decimals);
+  } catch { /* цены ещё нет */ }
+
+  const system = buildAgentSystem({
+    botName: clientConfig.name ?? id,
+    companyName: clientConfig.name ?? id,
+    locale: request.body?.locale ?? locale,
+    flow: cfg.flow,
+    stepId: request.body?.stepId,
+    selections,
+    price,
+    prompt: cfg.agent.prompt,
+  });
+
+  try {
+    const { claude, modelFor } = await import('../src/engine/llm/claude.js');
+    const res = await claude.messages.create({
+      model: modelFor('base'),
+      max_tokens: 400,
+      system,
+      messages: [{ role: 'user', content: question }],
+    });
+    const answer = res.content
+      .map((b) => (b.type === 'text' ? b.text : ''))
+      .join('')
+      .trim();
+    return { answer };
+  } catch (e) {
+    console.error('агент не ответил:', (e as Error).message);
+    return reply.code(503).send({ error: 'модель недоступна' });
+  }
+});
+
+// Промпт агента печатается по запросу: его читают глазами чаще, чем кажется.
+app.get('/agent-prompt', async (_req, reply) => reply.type('text/plain; charset=utf-8').send(
+  buildAgentSystem({
+    botName: clientConfig.name ?? id, companyName: clientConfig.name ?? id, locale,
+    flow: cfg.flow, stepId: cfg.flow.steps[0]?.id,
+    selections: { picks: [], numbers: {}, texts: {} },
+    prompt: cfg.agent.prompt,
+  }),
+));
+
+// Заявка продавцу: в предпросмотре только подтверждение, чтобы ветку
+// «позвать консультанта» можно было пройти целиком.
+app.post('/v1/lead', async (request) => {
+  console.log('заявка продавцу:', JSON.stringify(request.body));
+  return { ok: true };
+});
 
 app.get<{ Params: { i: string } }>('/asset/:i', async (request, reply) => {
   const file = assets[Number(request.params.i)];

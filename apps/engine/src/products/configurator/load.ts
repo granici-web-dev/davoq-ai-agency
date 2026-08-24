@@ -1,3 +1,5 @@
+import { readFileSync } from 'node:fs';
+import { assertAgentPrompt, type AgentConfig } from './agent/prompt.js';
 import { mergeLayers, type Json } from './config/layers.js';
 import { clientLayer, inside, verticalLayer, type Layer } from './config/source.js';
 import { validateFlow, type FlowConfig } from './flow/schema.js';
@@ -20,6 +22,8 @@ import {
 export interface Configurator {
   flow: FlowConfig;
   pricing: PricingConfig;
+  /** Промпт агента. Ниша задаёт, клиент может переопределить своим файлом. */
+  agent: AgentConfig;
 }
 
 export interface ConfiguratorSource {
@@ -60,6 +64,25 @@ const flowOf = (layer: Layer | undefined): Json | undefined =>
 
 const pricingOf = (layer: Layer | undefined): Json | undefined => layer?.raw.pricing;
 
+/**
+ * Промпт агента читается ФАЙЛОМ, а не строкой в YAML.
+ *
+ * Он длинный, многострочный и правится текстом; в YAML он превратился бы
+ * в блок с отступами, где отступ и есть смысл, а diff нечитаем. Тот же
+ * выбор, что у промптов чат-бота в `vertical.yaml`.
+ */
+function agentOf(layer: Layer | undefined): Json | undefined {
+  const raw = layer?.raw.agent;
+  if (!raw || typeof raw !== 'object' || Array.isArray(raw)) return raw;
+  const out = { ...(raw as Record<string, Json>) };
+  if (typeof out.prompt === 'string') {
+    out.prompt = readFileSync(
+      inside(layer!.dir, out.prompt, `${layer!.where}: agent.prompt`), 'utf8',
+    ).trimEnd();
+  }
+  return out;
+}
+
 export function buildConfigurator(src: ConfiguratorSource): Configurator {
   const where = src.where ?? 'конфигуратор';
   const vertical = verticalLayer(src.verticalId);
@@ -87,7 +110,13 @@ export function buildConfigurator(src: ConfiguratorSource): Configurator {
   validatePricing(pricing, flow, where);
   assertPriceable(flow, where);
 
-  return { flow, pricing };
+  const agent = (mergeLayers(
+    agentOf(vertical),
+    src.clientLayer !== undefined ? layerSection(src.clientLayer, 'agent') : agentOf(client),
+  ) ?? {}) as AgentConfig;
+  assertAgentPrompt(agent, where);
+
+  return { flow, pricing, agent };
 }
 
 function layerSection(layer: Json | undefined, key: string): Json | undefined {

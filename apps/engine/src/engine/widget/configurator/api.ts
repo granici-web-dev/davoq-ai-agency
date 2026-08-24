@@ -75,6 +75,27 @@ export async function submitOffer(base: string, body: OfferRequest): Promise<boo
   }
 }
 
+/**
+ * Вопрос агенту. Ответ приходит целиком, а не потоком: реплика короткая,
+ * а поток внутри шага перетягивал бы внимание с выбора на печатающийся текст.
+ */
+export async function askAgent(
+  base: string, body: { publicKey: string; locale: string; stepId?: string; selections: Answers; question: string },
+): Promise<string | null> {
+  try {
+    const res = await fetch(`${base}/v1/configurator/ask`, {
+      method: 'POST',
+      headers: { 'content-type': 'application/json' },
+      body: JSON.stringify(body),
+    });
+    if (!res.ok) return null;
+    const data = (await res.json()) as { answer?: string };
+    return data.answer ?? null;
+  } catch {
+    return null;
+  }
+}
+
 export function money(bani: number, currency: string, locale: string, decimals: number): string {
   return new Intl.NumberFormat(locale, {
     style: 'currency', currency,
