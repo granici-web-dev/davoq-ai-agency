@@ -293,6 +293,52 @@
       },
       "total": "Usually under two hours of your time in total. The rest is on us — including the unpleasant part, where the price list has to be read line by line.",
       "priceLink": "What the initial setup costs"
+    },
+    "pricing": {
+      "eyebrow": "Pricing",
+      "title": "A monthly subscription, not an implementation project",
+      "lead": "You pay for the agent that runs. The initial setup is paid once, at the start.",
+      "perMonth": "/ month",
+      "recommended": "Recommended",
+      "setupNote": "Initial setup — {fee}, once: the conversation, reading your price list line by line, the script for your niche and your brand on the quote. Without it the agent would answer from general copy rather than from your prices.",
+      "compare": "Compare the plans",
+      "plans": {
+        "starter": {
+          "name": "Starter",
+          "for": "For a single agent on a single site. This is where most people start.",
+          "cta": "Book a demo",
+          "features": {
+            "oneAgent": "One agent of your choice",
+            "oneSite": "One site",
+            "branding": "Configured on your own materials",
+            "email": "Email support"
+          }
+        },
+        "pro": {
+          "name": "Pro",
+          "for": "For when the agent has to price things, not just answer.",
+          "cta": "Book a demo",
+          "features": {
+            "moreAgents": "Several agents on one account",
+            "configurator": "Request configurator",
+            "offerPdf": "PDF quotes in your brand",
+            "crm": "Requests land in your CRM",
+            "priority": "Priority support"
+          }
+        },
+        "enterprise": {
+          "name": "Enterprise",
+          "priceOnRequest": "On request",
+          "for": "Large volumes, several brands, or your own security requirements.",
+          "cta": "Talk to us",
+          "features": {
+            "volume": "No fixed volume cap",
+            "ownRules": "Your own pricing rules, however complicated",
+            "contract": "Contract and company invoicing",
+            "sla": "Agreed response times"
+          }
+        }
+      }
     }
   }
 }

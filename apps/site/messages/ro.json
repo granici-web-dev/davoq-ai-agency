@@ -293,6 +293,52 @@
       },
       "total": "În total, de obicei sub două ore din timpul dumneavoastră. Restul este la noi — inclusiv partea neplăcută, în care lista de prețuri trebuie citită rând cu rând.",
       "priceLink": "Costul configurării inițiale"
+    },
+    "pricing": {
+      "eyebrow": "Prețuri",
+      "title": "Abonament lunar, nu proiect de implementare",
+      "lead": "Plătiți pentru agentul care rulează. Configurarea inițială se plătește o singură dată, la început.",
+      "perMonth": "/ lună",
+      "recommended": "Recomandat",
+      "setupNote": "Configurarea inițială — {fee}, o singură dată: discuția, citirea listei de prețuri rând cu rând, scenariul nișei și brandul pe ofertă. Fără ea agentul ar răspunde din texte generale, nu din prețurile dumneavoastră.",
+      "compare": "Comparați planurile",
+      "plans": {
+        "starter": {
+          "name": "Starter",
+          "for": "Pentru un singur agent, pe un singur site. De aici începe majoritatea.",
+          "cta": "Cere o demonstrație",
+          "features": {
+            "oneAgent": "Un agent la alegere",
+            "oneSite": "Un site",
+            "branding": "Configurat pe materialele dumneavoastră",
+            "email": "Suport pe e-mail"
+          }
+        },
+        "pro": {
+          "name": "Pro",
+          "for": "Când agentul trebuie să și calculeze, nu doar să răspundă.",
+          "cta": "Cere o demonstrație",
+          "features": {
+            "moreAgents": "Mai mulți agenți pe același cont",
+            "configurator": "Configurator de cerere",
+            "offerPdf": "Ofertă PDF cu brandul dumneavoastră",
+            "crm": "Cererile ajung în CRM-ul dumneavoastră",
+            "priority": "Suport prioritar"
+          }
+        },
+        "enterprise": {
+          "name": "Enterprise",
+          "priceOnRequest": "La cerere",
+          "for": "Volume mari, mai multe branduri sau cerințe proprii de securitate.",
+          "cta": "Discutați cu noi",
+          "features": {
+            "volume": "Volume fără plafon fix",
+            "ownRules": "Reguli de preț proprii, oricât de complicate",
+            "contract": "Contract și facturare pe firmă",
+            "sla": "Termene de răspuns agreate"
+          }
+        }
+      }
     }
   }
 }
