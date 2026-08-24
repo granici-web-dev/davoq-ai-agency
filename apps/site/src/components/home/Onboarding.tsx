@@ -73,16 +73,26 @@ export function Onboarding() {
       </div>
 
       {/* Дорожка. Её высота и есть время, которое читатель проводит
-          в секции: четыре экрана на четыре шага. */}
-      <div ref={track} className="mx-auto max-w-7xl lg:h-[400vh]">
-        <div className="lg:sticky lg:top-24 lg:flex lg:h-[calc(100dvh-6rem)] lg:flex-col lg:justify-center">
+          в секции. Она короче четырёх полных экранов: на шаг остаётся
+          около шестидесяти процентов экрана прокрутки — достаточно, чтобы
+          заметить смену, и не столько, чтобы устать.
+
+          Сцена внутри — высотой по содержимому, а не во весь экран.
+          Блок во весь экран с центрированием давал по сто девяносто
+          пикселей пустоты сверху и снизу, и первая из них зияла между
+          заголовком и дорожкой. Центрирование при прокрутке даёт `top`:
+          отступ считается от высоты экрана, но сам блок остаётся ровно
+          такой высоты, какая нужна содержимому. `max(6rem, …)` не даёт
+          сцене уехать под шапку на низких экранах. */}
+      <div ref={track} className="mx-auto max-w-7xl lg:h-[340vh]">
+        <div className="mt-4 lg:sticky lg:top-[max(6rem,calc((100dvh-34rem)/2))] lg:mt-14">
           <Rail active={active} />
 
           {/* Панели лежат друг на друге в одной ячейке сетки и переключаются
               прозрачностью. Показывать по одной значило бы менять высоту
               блока на каждом шаге — панель дёргалась бы под неподвижным
               взглядом. */}
-          <div className="mt-8 grid lg:mt-10">
+          <div className="mt-8 grid lg:mt-8">
             {STEPS.map((key, i) => (
               <Panel key={key} step={key} index={i} active={i === active} />
             ))}
@@ -91,7 +101,7 @@ export function Onboarding() {
       </div>
 
       <div className="mx-auto max-w-7xl pb-section">
-        <div className="mt-12 flex flex-col gap-4 border-t border-white/8 pt-8 lg:flex-row lg:items-baseline lg:justify-between">
+        <div className="flex flex-col gap-4 border-t border-white/8 pt-8 lg:flex-row lg:items-baseline lg:justify-between">
           <p className="max-w-xl leading-relaxed text-chalk-dim">{t('total')}</p>
           <Link
             href="/pricing"
@@ -151,7 +161,7 @@ function Panel({ step, index, active }: { step: Step; index: number; active: boo
     <div
       /* col/row-start-1 кладёт все панели в одну ячейку. inert снимает
          скрытые с пути клавиатуры: без него Tab уводил бы в невидимое. */
-      className={`card relative overflow-hidden p-7 transition-opacity duration-500 sm:p-9 lg:col-start-1 lg:row-start-1 ${
+      className={`card relative overflow-hidden p-7 transition-opacity duration-500 sm:p-9 lg:col-start-1 lg:row-start-1 lg:min-h-[26rem] ${
         active ? 'lg:opacity-100' : 'lg:pointer-events-none lg:opacity-0'
       } ${index > 0 ? 'mt-4 lg:mt-0' : ''}`}
       {...(!active ? { 'data-inactive': true } : {})}
@@ -161,8 +171,8 @@ function Panel({ step, index, active }: { step: Step; index: number; active: boo
         aria-hidden
       />
 
-      <div className="relative grid gap-8 lg:grid-cols-2 lg:items-center lg:gap-12">
-        <div>
+      <div className="relative grid gap-8 lg:h-full lg:grid-cols-2 lg:items-center lg:gap-12">
+        <div className="flex flex-col justify-center">
           <p className="font-mono text-[11px] tracking-wider text-chalk-faint uppercase lg:hidden">
             {String(index + 1).padStart(2, '0')}
           </p>
@@ -270,9 +280,18 @@ function StepVisual({ step }: { step: Step }) {
   );
 }
 
+/**
+ * Рамка иллюстрации.
+ *
+ * Тянется на всю высоту панели, содержимое внутри по центру. Иначе
+ * на высокой сцене иллюстрация прижималась бы к верху, а под ней
+ * оставалась бы пустая половина карточки.
+ */
 function Frame({ children }: { children: React.ReactNode }) {
   return (
-    <div className="rounded-xl border border-white/10 bg-ink-900/60 p-5 sm:p-6">{children}</div>
+    <div className="flex flex-col justify-center rounded-xl border border-white/10 bg-ink-900/60 p-5 sm:p-6">
+      {children}
+    </div>
   );
 }
 
