@@ -53,6 +53,8 @@ export const PLANS: Plan[] = [
     featured: true,
     features: [
       { key: 'inherits' },
+      { key: 'scenario' },
+      { key: 'languages' },
       { key: 'configurator', soon: true },
       { key: 'crm', soon: true },
       { key: 'followUp', soon: true },
@@ -123,6 +125,7 @@ export const MATRIX: MatrixRow[] = [
   { key: 'conversations', start: 'value', growth: 'value', platform: 'value' },
   { key: 'chatbot', start: true, growth: true, platform: true },
   { key: 'scenario', start: 'value', growth: 'value', platform: 'value' },
+  { key: 'languages', start: 'value', growth: 'value', platform: 'value' },
   { key: 'qualify', start: true, growth: true, platform: true },
   { key: 'contacts', start: true, growth: true, platform: true },
   { key: 'portal', start: true, growth: true, platform: true },

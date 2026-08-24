@@ -697,6 +697,8 @@
       "cta": "Book a demo",
       "features": {
         "inherits": "Everything in Start, up to 2,000 conversations a month",
+        "scenario": "A script adapted to your business, not just the industry standard",
+        "languages": "A second language for conversations",
         "configurator": "AI request configurator: a structured specification for your sales team",
         "crm": "CRM assistant: records filled automatically from the correspondence",
         "followUp": "Follow-up agent: automatic returns to undecided leads",
@@ -744,8 +746,14 @@
         "scenario": {
           "label": "Script",
           "start": "Standard for the industry",
-          "growth": "Standard for the industry",
-          "platform": "Adapted"
+          "growth": "Adapted",
+          "platform": "Written from scratch around your process"
+        },
+        "languages": {
+          "label": "Conversation languages",
+          "start": "1",
+          "growth": "2",
+          "platform": "Agreed individually"
         },
         "qualify": {
           "label": "Lead qualification by niche script"

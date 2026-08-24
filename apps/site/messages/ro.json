@@ -697,6 +697,8 @@
       "cta": "Cere o demonstrație",
       "features": {
         "inherits": "Tot din Start, până la 2 000 de conversații pe lună",
+        "scenario": "Scenariu adaptat afacerii dumneavoastră, nu doar standardul industriei",
+        "languages": "A doua limbă de comunicare",
         "configurator": "Configurator AI de cereri: specificație structurată pentru echipa de vânzări",
         "crm": "Asistent CRM: completare automată a fișelor din corespondență",
         "followUp": "Agent follow-up: reveniri automate la lead-urile indecise",
@@ -744,8 +746,14 @@
         "scenario": {
           "label": "Scenariu",
           "start": "Standard al industriei",
-          "growth": "Standard al industriei",
-          "platform": "Adaptat"
+          "growth": "Adaptat",
+          "platform": "Scris de la zero, sub procesul dumneavoastră"
+        },
+        "languages": {
+          "label": "Limbi de comunicare",
+          "start": "1",
+          "growth": "2",
+          "platform": "Convenit individual"
         },
         "qualify": {
           "label": "Calificarea lead-urilor după scenariul nișei"
