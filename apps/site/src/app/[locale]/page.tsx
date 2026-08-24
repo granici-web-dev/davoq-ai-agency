@@ -1,4 +1,5 @@
 import { setRequestLocale } from 'next-intl/server';
+import { Reveal } from '@/components/ui/Reveal';
 import { Hero } from '@/components/home/Hero';
 import { Problem } from '@/components/home/Problem';
 import { Agents } from '@/components/home/Agents';
@@ -12,9 +13,13 @@ import { FinalCta } from '@/components/home/FinalCta';
 /**
  * Главная — сборка секций, и только.
  *
- * Каждая секция живёт своим файлом: страница из восьми блоков, написанная
+ * Каждая секция живёт своим файлом: страница из девяти блоков, написанная
  * одним куском, правится потом целиком ради одной строки, и правка задевает
  * соседей.
+ *
+ * Секция подключения не обёрнута в `Reveal` намеренно: у неё внутри
+ * прилипшая панель, а `transform` на родителе создаёт новую систему
+ * координат и `position: sticky` перестаёт работать вовсе.
  */
 export default async function HomePage({
   params,
@@ -26,15 +31,31 @@ export default async function HomePage({
 
   return (
     <>
-      <Hero />
-      <Problem />
-      <Agents />
-      <Industries />
+      <Reveal>
+        <Hero />
+      </Reveal>
+      <Reveal>
+        <Problem />
+      </Reveal>
+      <Reveal>
+        <Agents />
+      </Reveal>
+      <Reveal>
+        <Industries />
+      </Reveal>
       <Onboarding />
-      <Portal />
-      <Pricing />
-      <Faq />
-      <FinalCta />
+      <Reveal>
+        <Portal />
+      </Reveal>
+      <Reveal>
+        <Pricing />
+      </Reveal>
+      <Reveal>
+        <Faq />
+      </Reveal>
+      <Reveal>
+        <FinalCta />
+      </Reveal>
     </>
   );
 }

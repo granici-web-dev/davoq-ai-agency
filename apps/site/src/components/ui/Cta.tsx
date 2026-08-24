@@ -1,5 +1,29 @@
 import { Link } from '@/i18n/routing';
 
+export type CtaVariant = 'primary' | 'ghost';
+export type CtaSize = 'md' | 'sm';
+
+/**
+ * Классы кнопки отдельной функцией: ровно те же нужны `DemoButton`,
+ * который открывает окно вместо перехода по ссылке. Ссылка и кнопка
+ * различаются семантикой, но не должны различаться видом.
+ */
+export function ctaClasses(variant: CtaVariant = 'primary', size: CtaSize = 'md') {
+  const base =
+    'inline-flex items-center justify-center rounded-pill text-sm font-medium transition-all duration-200';
+  const padding = size === 'sm' ? 'px-5 py-2.5' : 'px-6 py-3.5';
+
+  /* Главная кнопка — белая заливка, не акцентный цвет. Акценты на этом
+     сайте живут только в свете и градиентах; как только янтарь становится
+     заливкой кнопки, он перестаёт быть светом и делается краской. */
+  const styles =
+    variant === 'primary'
+      ? 'bg-chalk text-ink-950 hover:scale-[1.03] hover:bg-white'
+      : 'border border-white/12 text-chalk backdrop-blur-sm hover:border-white/25 hover:bg-white/5';
+
+  return `${base} ${padding} ${styles}`;
+}
+
 /**
  * Кнопка-ссылка.
  *
@@ -19,26 +43,14 @@ export function Cta({
   children,
 }: {
   href: string;
-  variant?: 'primary' | 'ghost';
-  /** `sm` — только для шапки, где кнопка стоит в одной строке с пунктами меню. */
-  size?: 'md' | 'sm';
+  variant?: CtaVariant;
+  /** `sm` — только для шапки, где кнопка стоит в одной строке с меню. */
+  size?: CtaSize;
   className?: string;
   children: React.ReactNode;
 }) {
-  const base =
-    'inline-flex items-center justify-center rounded-pill text-sm font-medium transition-all duration-200';
-  const padding = size === 'sm' ? 'px-5 py-2.5' : 'px-6 py-3.5';
-
-  /* Главная кнопка — белая заливка, не акцентный цвет. Акценты на этом
-     сайте живут только в свете и градиентах; как только янтарь становится
-     заливкой кнопки, он перестаёт быть светом и делается краской. */
-  const styles =
-    variant === 'primary'
-      ? 'bg-chalk text-ink-950 hover:scale-[1.03] hover:bg-white'
-      : 'border border-white/12 text-chalk backdrop-blur-sm hover:border-white/25 hover:bg-white/5';
-
   return (
-    <Link href={href} className={`${base} ${padding} ${styles} ${className}`}>
+    <Link href={href} className={`${ctaClasses(variant, size)} ${className}`}>
       {children}
     </Link>
   );

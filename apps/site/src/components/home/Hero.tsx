@@ -2,6 +2,7 @@ import Image from 'next/image';
 import { useTranslations } from 'next-intl';
 import heroHome from '@/../public/images/hero-home.webp';
 import { Cta } from '@/components/ui/Cta';
+import { DemoButton } from '@/components/ui/DemoButton';
 
 /**
  * Первый экран.
@@ -49,25 +50,12 @@ export function Hero() {
           </p>
 
           <div className="mt-10 flex flex-wrap items-center gap-3">
-            <Cta href="/contact">{t('ctaPrimary')}</Cta>
+            <DemoButton>{t('ctaPrimary')}</DemoButton>
             <Cta href="/agents" variant="ghost">
               {t('ctaSecondary')}
             </Cta>
           </div>
 
-          {/* Строка вместо отзывов и логотипов клиентов, которых нет.
-              Она говорит правду о готовности продукта — и именно поэтому
-              работает лучше выдуманного «нам доверяют 300 команд». */}
-          <p className="mt-8 flex items-start gap-2.5 font-mono text-[11px] leading-relaxed tracking-wider text-chalk-faint uppercase">
-            {/* items-start, а не center: на телефоне строка переносится
-                на две, и точка, выровненная по центру блока, повисает
-                между строками вместо начала фразы. */}
-            <span
-              className="mt-1.5 size-1.5 shrink-0 rounded-full bg-aurora-warm shadow-[0_0_10px_var(--color-aurora-warm)]"
-              aria-hidden
-            />
-            {t('note')}
-          </p>
         </div>
       </div>
     </section>

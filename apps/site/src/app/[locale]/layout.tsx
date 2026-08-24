@@ -1,6 +1,7 @@
 import type { Metadata } from 'next';
 import { notFound } from 'next/navigation';
 import { hasLocale, NextIntlClientProvider } from 'next-intl';
+import { DemoDialog } from '@/components/contact/DemoDialog';
 import { getTranslations, setRequestLocale } from 'next-intl/server';
 import { Instrument_Sans, JetBrains_Mono } from 'next/font/google';
 import { routing } from '@/i18n/routing';
@@ -72,11 +73,22 @@ export default async function LocaleLayout({
 
   return (
     <html lang={locale} className={`${sans.variable} ${mono.variable}`}>
+      <head>
+        {/* Проявление секций прячет их до срабатывания наблюдателя.
+            Без JavaScript наблюдатель не сработает никогда, и страница
+            осталась бы пустой — этот стиль отменяет скрытие целиком. */}
+        <noscript
+          dangerouslySetInnerHTML={{
+            __html: '<style>.reveal{opacity:1!important;transform:none!important}</style>',
+          }}
+        />
+      </head>
       <body className="min-h-dvh antialiased">
         <NextIntlClientProvider>
           <Header />
           <main id="main">{children}</main>
           <Footer />
+          <DemoDialog />
         </NextIntlClientProvider>
       </body>
     </html>

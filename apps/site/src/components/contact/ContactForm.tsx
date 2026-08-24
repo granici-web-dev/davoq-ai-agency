@@ -19,7 +19,7 @@ type State = 'idle' | 'sending' | 'sent' | 'failed';
  * человеку, который набрал две буквы из десяти, — значит ругать его за
  * то, что он ещё печатает.
  */
-export function ContactForm() {
+export function ContactForm({ bare = false }: { bare?: boolean } = {}) {
   const t = useTranslations('contact.form');
   const id = useId();
 
@@ -55,7 +55,7 @@ export function ContactForm() {
 
   if (state === 'sent') {
     return (
-      <div className="card flex min-h-80 flex-col items-start justify-center p-7 sm:p-8">
+      <div className={bare ? 'flex flex-col items-start py-4' : 'card flex min-h-80 flex-col items-start justify-center p-7 sm:p-8'}>
         <span
           className="size-2 rounded-full bg-aurora-warm shadow-[0_0_12px_var(--color-aurora-warm)]"
           aria-hidden
@@ -74,7 +74,7 @@ export function ContactForm() {
   }
 
   return (
-    <form onSubmit={submit} noValidate className="card p-7 sm:p-8">
+    <form onSubmit={submit} noValidate className={bare ? '' : 'card p-7 sm:p-8'}>
       <div className="flex flex-col gap-5">
         <Field
           id={`${id}-name`}

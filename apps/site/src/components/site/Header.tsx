@@ -4,7 +4,7 @@ import { useEffect, useState } from 'react';
 import { useLocale, useTranslations } from 'next-intl';
 import { Link, usePathname } from '@/i18n/routing';
 import { AGENTS, INDUSTRIES } from '@/lib/catalog';
-import { Cta } from '@/components/ui/Cta';
+import { DemoButton } from '@/components/ui/DemoButton';
 
 /**
  * Шапка.
@@ -164,9 +164,7 @@ export function Header() {
               и кто победит — решает порядок правил в собранном CSS,
               а не порядок слов в строке классов. */}
           <div className="hidden sm:block">
-            <Cta href="/contact" size="sm">
-              {t('cta')}
-            </Cta>
+            <DemoButton size="sm">{t('cta')}</DemoButton>
           </div>
           <button
             type="button"
@@ -212,9 +210,7 @@ export function Header() {
                 </Link>
               ))}
             </div>
-            <Cta href="/contact" className="mt-4 w-full">
-              {t('cta')}
-            </Cta>
+            <DemoButton className="mt-4 w-full">{t('cta')}</DemoButton>
           </div>
         </div>
       )}

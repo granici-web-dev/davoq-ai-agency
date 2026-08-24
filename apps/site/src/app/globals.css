@@ -211,3 +211,35 @@
     );
   }
 }
+
+@layer components {
+  /**
+   * Проявление секции при прокрутке.
+   *
+   * Сдвиг маленький — четырнадцать пикселей. Больше читается как «блок
+   * прилетел», а нужно «блок проявился»: страница про сдержанный продукт
+   * не должна вести себя как презентация.
+   *
+   * Переход описан только у показанного состояния. Иначе при обратной
+   * прокрутке блок уезжал бы обратно с той же анимацией, а он не должен
+   * уезжать вовсе.
+   */
+  .reveal[data-state='hidden'] {
+    opacity: 0;
+    transform: translateY(14px);
+  }
+  .reveal[data-state='shown'] {
+    opacity: 1;
+    transform: none;
+    transition:
+      opacity 0.7s cubic-bezier(0.22, 0.61, 0.24, 1),
+      transform 0.7s cubic-bezier(0.22, 0.61, 0.24, 1);
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .reveal[data-state='hidden'] {
+      opacity: 1;
+      transform: none;
+    }
+  }
+}

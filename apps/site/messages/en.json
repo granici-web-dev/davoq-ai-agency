@@ -186,8 +186,7 @@
       "title": "AI agents for businesses where the price is calculated",
       "lead": "Rent the agent you need — configured for your niche and your brand, on a monthly subscription. No implementation project, no technical team.",
       "ctaPrimary": "Book a demo",
-      "ctaSecondary": "See the agents",
-      "note": "AI chatbot — available now. The other five agents — coming soon."
+      "ctaSecondary": "See the agents"
     },
     "problem": {
       "eyebrow": "The problem",
@@ -253,7 +252,30 @@
         }
       },
       "total": "Usually under two hours of your time in total. The rest is on us — including the unpleasant part, where the price list has to be read line by line.",
-      "priceLink": "What the initial setup costs"
+      "priceLink": "What the initial setup costs",
+      "visuals": {
+        "talk": {
+          "a": "What you sell and what a typical order looks like",
+          "b": "How the price is worked out at your company",
+          "c": "What people ask you most often"
+        },
+        "materials": {
+          "xlsx": "price-list.xlsx",
+          "pdf": "catalogue.pdf",
+          "docx": "delivery-terms.docx",
+          "zip": "product-photos.zip"
+        },
+        "config": {
+          "tone": "The tone it speaks in",
+          "price": "Works out the price",
+          "offer": "Sends a PDF quote",
+          "language": "Asks for billing details"
+        },
+        "embed": {
+          "label": "The script on your site",
+          "note": "One line, at the end of the page. The widget runs isolated from the site styles."
+        }
+      }
     },
     "pricing": {
       "eyebrow": "Pricing",
@@ -386,8 +408,8 @@
       "title": "See the agent on your own products, not on a generic demo",
       "lead": "In the demo we take a few products from your catalogue and show you exactly what the agent would answer a real customer.",
       "note": "No hour-long presentation. Thirty minutes and the agent on screen.",
-      "pricingHint": "Not ready to talk?",
-      "pricingLink": "Look at the pricing first."
+      "primary": "Book a demo",
+      "secondary": "See the pricing"
     }
   },
   "contact": {
@@ -414,6 +436,11 @@
         "site": "Check the website address.",
         "message": "This text is too long."
       }
+    },
+    "dialog": {
+      "title": "Book a demo",
+      "text": "Fill in the form and we reply the same working day, with the steps for your niche.",
+      "close": "Close"
     }
   }
 }

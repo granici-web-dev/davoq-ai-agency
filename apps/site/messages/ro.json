@@ -186,8 +186,7 @@
       "title": "Agenți AI pentru afaceri unde prețul se calculează",
       "lead": "Închiriați agentul de care aveți nevoie — configurat pentru nișa și brandul dumneavoastră, pe abonament lunar. Fără proiect de implementare și fără echipă tehnică.",
       "ctaPrimary": "Cere o demonstrație",
-      "ctaSecondary": "Vezi agenții",
-      "note": "Chatbot AI — disponibil acum. Ceilalți cinci agenți — în curând."
+      "ctaSecondary": "Vezi agenții"
     },
     "problem": {
       "eyebrow": "Problema",
@@ -253,7 +252,30 @@
         }
       },
       "total": "În total, de obicei sub două ore din timpul dumneavoastră. Restul este la noi — inclusiv partea neplăcută, în care lista de prețuri trebuie citită rând cu rând.",
-      "priceLink": "Costul configurării inițiale"
+      "priceLink": "Costul configurării inițiale",
+      "visuals": {
+        "talk": {
+          "a": "Ce vindeți și cum arată o comandă obișnuită",
+          "b": "Cum se calculează prețul la dumneavoastră",
+          "c": "Ce vă întreabă oamenii cel mai des"
+        },
+        "materials": {
+          "xlsx": "lista-de-preturi.xlsx",
+          "pdf": "catalog.pdf",
+          "docx": "conditii-livrare.docx",
+          "zip": "poze-produse.zip"
+        },
+        "config": {
+          "tone": "Tonul cu care vorbește",
+          "price": "Calculează prețul",
+          "offer": "Trimite ofertă PDF",
+          "language": "Cere datele de facturare"
+        },
+        "embed": {
+          "label": "Scriptul de pe site",
+          "note": "O singură linie, la finalul paginii. Widgetul rulează izolat de stilurile site-ului."
+        }
+      }
     },
     "pricing": {
       "eyebrow": "Prețuri",
@@ -386,8 +408,8 @@
       "title": "Vedeți agentul pe produsele dumneavoastră, nu pe un demo generic",
       "lead": "La demonstrație luăm câteva produse din catalogul dumneavoastră și vă arătăm exact ce ar răspunde agentul unui client real.",
       "note": "Fără prezentare de o oră. Treizeci de minute și agentul pe ecran.",
-      "pricingHint": "Nu sunteți gata de discuție?",
-      "pricingLink": "Vedeți întâi prețurile."
+      "primary": "Cere o demonstrație",
+      "secondary": "Vezi prețurile"
     }
   },
   "contact": {
@@ -414,6 +436,11 @@
         "site": "Verificați adresa site-ului.",
         "message": "Textul este prea lung."
       }
+    },
+    "dialog": {
+      "title": "Cere o demonstrație",
+      "text": "Completați formularul și vă răspundem în aceeași zi lucrătoare, cu pașii pentru nișa dumneavoastră.",
+      "close": "Închide"
     }
   }
 }

@@ -1,6 +1,6 @@
 import { useTranslations } from 'next-intl';
 import { Link } from '@/i18n/routing';
-import { Cta } from '@/components/ui/Cta';
+import { DemoButton } from '@/components/ui/DemoButton';
 import { PLANS, SETUP_FEE } from '@/lib/pricing';
 
 /**
@@ -77,13 +77,12 @@ export function Pricing() {
               {/* mt-auto держит кнопки на одной линии: у планов разное
                   число строк, и без этого три кнопки встали бы лесенкой. */}
               <div className="mt-auto pt-8">
-                <Cta
-                  href="/contact"
+                <DemoButton
                   variant={plan.featured ? 'primary' : 'ghost'}
                   className="w-full"
                 >
                   {tPlans(`${plan.id}.cta`)}
-                </Cta>
+                </DemoButton>
               </div>
             </div>
           ))}

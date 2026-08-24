@@ -1,5 +1,5 @@
 import { useTranslations } from 'next-intl';
-import { Cta } from '@/components/ui/Cta';
+import { DemoButton } from '@/components/ui/DemoButton';
 
 /** Пункты слева. `soon` — того, чего ещё нет, и вид у него другой. */
 interface Capability {
@@ -83,9 +83,7 @@ export function Portal() {
               </ul>
 
               <div className="mt-8">
-                <Cta href="/contact" variant="ghost">
-                  {t('cta')}
-                </Cta>
+                <DemoButton variant="ghost">{t('cta')}</DemoButton>
               </div>
             </div>
 
