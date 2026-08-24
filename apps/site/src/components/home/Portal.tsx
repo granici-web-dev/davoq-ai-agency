@@ -74,7 +74,7 @@ export function Portal() {
                       {t(`capabilities.${key}`)}
                     </span>
                     {soon && (
-                      <span className="ml-auto rounded-pill border border-white/10 px-2 py-0.5 font-mono text-[9px] tracking-wider text-chalk-faint uppercase">
+                      <span className="ml-auto rounded-pill border border-white/10 px-2 py-0.5 font-mono text-[10px] tracking-wider text-chalk-faint uppercase">
                         {tStatus('soon')}
                       </span>
                     )}
@@ -151,7 +151,7 @@ function PortalMock() {
       <div className="min-w-0 flex-1 p-4">
         <div className="flex items-center justify-between gap-3">
           <p className="text-sm text-chalk">{t('nav.leads')}</p>
-          <span className="rounded-pill border border-white/10 px-2.5 py-1 font-mono text-[9px] tracking-wider text-chalk-faint uppercase">
+          <span className="rounded-pill border border-white/10 px-2.5 py-1 font-mono text-[10px] tracking-wider text-chalk-faint uppercase">
             {t('range')}
           </span>
         </div>
@@ -159,7 +159,7 @@ function PortalMock() {
         <div className="mt-4 grid grid-cols-3 gap-px overflow-hidden rounded-lg bg-white/8">
           {(['requests', 'offers', 'inProgress'] as const).map((key, i) => (
             <div key={key} className="bg-ink-900 px-3 py-3">
-              <p className="font-mono text-[9px] tracking-wider text-chalk-faint uppercase">
+              <p className="font-mono text-[10px] tracking-wider text-chalk-faint uppercase">
                 {t(`tiles.${key}`)}
               </p>
               <p className="mt-1.5 text-lg text-chalk tabular-nums">{[24, 9, 15][i]}</p>
@@ -176,7 +176,7 @@ function PortalMock() {
               <span className="font-mono text-chalk-faint tabular-nums">#{row.id}</span>
               <span className="min-w-0 flex-1 truncate text-chalk-dim">{row.item}</span>
               <span
-                className={`shrink-0 rounded-pill border px-2 py-0.5 font-mono text-[9px] tracking-wider uppercase ${
+                className={`shrink-0 rounded-pill border px-2 py-0.5 font-mono text-[10px] tracking-wider uppercase ${
                   row.state === 'sent'
                     ? 'border-aurora-warm/30 text-chalk'
                     : 'border-white/10 text-chalk-faint'

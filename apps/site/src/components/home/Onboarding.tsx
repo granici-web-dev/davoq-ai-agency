@@ -228,7 +228,7 @@ function StepVisual({ step }: { step: Step }) {
               key={ext}
               className="flex items-center gap-3 rounded-lg border border-white/8 bg-white/3 px-3 py-2.5"
             >
-              <span className="rounded border border-white/12 px-1.5 py-0.5 font-mono text-[9px] tracking-wider text-chalk-faint uppercase">
+              <span className="rounded border border-white/12 px-1.5 py-0.5 font-mono text-[10px] tracking-wider text-chalk-faint uppercase">
                 {ext}
               </span>
               <span className="min-w-0 truncate text-sm text-chalk-dim">

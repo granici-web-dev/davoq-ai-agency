@@ -190,7 +190,7 @@ function Field({
   const errorId = `${id}-error`;
   const base =
     'w-full rounded-xl border bg-white/3 px-4 py-3 text-sm text-chalk placeholder:text-chalk-faint transition-colors focus:bg-white/5 focus:outline-none';
-  const border = error ? 'border-aurora-warm/50' : 'border-white/10 hover:border-white/20';
+  const border = error ? 'border-aurora-warm' : 'border-field hover:border-chalk-faint';
 
   return (
     <div>
