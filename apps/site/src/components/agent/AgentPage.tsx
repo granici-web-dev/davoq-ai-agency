@@ -54,7 +54,7 @@ export function AgentPage({ agent }: { agent: Agent }) {
              симметрия, и растянутый на весь экран он утаскивает взгляд
              в центр — ровно туда, где идёт заголовок. */
           <div className="pointer-events-none absolute inset-y-0 right-0 -z-10 w-full opacity-70 lg:w-3/5" aria-hidden>
-            <Image src={visual} alt="" fill priority sizes="(min-width: 1024px) 60vw, 100vw" className="object-cover object-center" />
+            <Image src={visual} alt="" fill priority sizes="(min-width: 1024px) 60vw, 100vw" className="enter-frame object-cover object-center" />
             <div className="absolute inset-0 bg-linear-to-r from-ink-950 via-ink-950/70 to-transparent lg:via-ink-950/40" />
             <div className="absolute inset-0 bg-linear-to-t from-ink-950 via-transparent to-ink-950" />
           </div>
@@ -62,14 +62,19 @@ export function AgentPage({ agent }: { agent: Agent }) {
 
         <div className="relative mx-auto grid max-w-7xl gap-14 lg:grid-cols-[1fr_auto] lg:items-center lg:gap-20">
           <div>
+          {/* Вход по очереди, как на главной: сначала проступает кадр,
+              следом виджет, потом текст сверху вниз. Задержки сужаются
+              к концу — равный шаг читался бы как список, который
+              подгружается по одному, а не как одно появление. */}
           <Link
             href="/agents"
-            className="font-mono text-[11px] tracking-wider text-chalk-dim uppercase transition-colors hover:text-chalk"
+            className="enter font-mono text-[11px] tracking-wider text-chalk-dim uppercase transition-colors hover:text-chalk"
+            style={{ animationDelay: '420ms' }}
           >
             ← {tPage('backToAgents')}
           </Link>
 
-          <div className="mt-8 flex items-center gap-3">
+          <div className="enter mt-8 flex items-center gap-3" style={{ animationDelay: '480ms' }}>
             <span
               className={`flex items-center gap-2 rounded-pill border px-3 py-1 font-mono text-[10px] tracking-wider uppercase ${
                 available ? 'border-aurora-warm/30 text-chalk' : 'border-white/10 text-chalk-faint'
@@ -85,14 +90,17 @@ export function AgentPage({ agent }: { agent: Agent }) {
             </span>
           </div>
 
-          <h1 className="mt-6 max-w-3xl text-h1 font-medium">
+          <h1 className="enter mt-6 max-w-3xl text-h1 font-medium" style={{ animationDelay: '560ms' }}>
             {available ? t('title') : tAgents(`${agent.slug}.name`)}
           </h1>
-          <p className="mt-6 max-w-xl text-lg leading-relaxed text-chalk-dim">
+          <p
+            className="enter mt-6 max-w-xl text-lg leading-relaxed text-chalk-dim"
+            style={{ animationDelay: '700ms' }}
+          >
             {available ? t('lead') : tAgents(`${agent.slug}.short`)}
           </p>
 
-          <div className="mt-10 flex flex-wrap items-center gap-3">
+          <div className="enter mt-10 flex flex-wrap items-center gap-3" style={{ animationDelay: '840ms' }}>
             <DemoButton>{tNav('cta')}</DemoButton>
             <Cta href="/pricing" variant="ghost">
               {tNav('pricing')}
@@ -100,7 +108,7 @@ export function AgentPage({ agent }: { agent: Agent }) {
           </div>
 
           {!available && (
-            <div className="mt-14 max-w-xl border-l-2 border-white/12 pl-5">
+            <div className="enter mt-14 max-w-xl border-l-2 border-white/12 pl-5" style={{ animationDelay: '960ms' }}>
               <h2 className="font-medium">{tPage('soonTitle')}</h2>
               <p className="mt-3 leading-relaxed text-chalk-dim">{tPage('soonText')}</p>
             </div>
@@ -112,11 +120,8 @@ export function AgentPage({ agent }: { agent: Agent }) {
               что агент называет цену из прайса и спрашивает про размеры,
               раньше, чем читает про это словами. */}
           {available && (
-            <div className="lg:pl-4">
+            <div className="enter lg:pl-4" style={{ animationDelay: '260ms' }}>
               <WidgetChat namespace={`agentPage.${agent.slug}`} />
-              <p className="mt-6 max-w-[22rem] text-xs leading-relaxed text-chalk-faint lg:mx-auto">
-                {t('conversationNote')}
-              </p>
             </div>
           )}
         </div>
