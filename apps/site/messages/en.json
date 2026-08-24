@@ -694,6 +694,8 @@
       "cta": "Book a demo",
       "features": {
         "inherits": "Everything in Start, up to 2,000 conversations a month",
+        "qualify": "Lead qualification following your niche's script",
+        "contacts": "Contact capture, delivered by email or into your CRM",
         "portal": "Portal: leads, issued quotes, statistics and agent settings",
         "configurator": "AI request configurator: a structured specification for your sales team",
         "crm": "CRM assistant: records filled automatically from the correspondence",

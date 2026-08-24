@@ -46,6 +46,8 @@ export const PLANS: Plan[] = [
     featured: true,
     features: [
       { key: 'inherits' },
+      { key: 'qualify' },
+      { key: 'contacts' },
       { key: 'portal' },
       { key: 'configurator', soon: true },
       { key: 'crm', soon: true },
