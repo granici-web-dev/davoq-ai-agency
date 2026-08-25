@@ -89,10 +89,81 @@
     <path fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round"
           d="M17.5 17.5L21 21"/>
   </symbol>
+  <symbol id="logotype-sym" viewBox="0 0 74 26">
+    <g fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="butt" stroke-linejoin="miter">
+      <circle cx="8" cy="12" r="4.8"/><path d="M12.8 2V18"/>
+      <circle cx="21.6" cy="12" r="4.8"/><path d="M26.4 6V18"/>
+      <path d="M30.4 6L34.7 18L39 6"/>
+      <circle cx="47.8" cy="12" r="4.8"/>
+      <circle cx="61" cy="12" r="4.8"/><path d="M64.4 15.4L71 22"/>
+    </g>
+  </symbol>
+
+  <symbol id="q-mark" viewBox="0 0 24 24">
+    <g fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="butt">
+      <circle cx="10.5" cy="10.5" r="5.5"/>
+      <path d="M14.4 14.4L20.5 20.5"/>
+    </g>
+  </symbol>
 </svg>
 
 <section>
-  <h2>Масштабы на тёмном</h2>
+  <h2>По референсу: логотипия</h2>
+
+  <!--
+    Слово целиком построено из окружностей и прямых — так устроен любой
+    геометрический гротеск, и так же устроен референс.
+
+    Сетка: рост строчной 12 (это же диаметр «о» по внешнему краю), штрих 2.4,
+    базовая линия 18, верх выносных 2, низ хвоста 23. Окружность у d, a, o и q
+    одна и та же: центр на 12, радиус по осевой 4.8. Стойка касается чаши
+    справа — её осевая стоит ровно на 4.8 от центра, и внешний край стойки
+    совпадает с внешним краем чаши.
+
+    Концы прямые, не скруглённые: у геометрического гротеска терминалы
+    срезаны, и круглые концы сделали бы из шрифта иконочный набор.
+
+    Хвост q — единственное отступление от нормальной буквы: вместо
+    вертикального выносного идёт прямая под 45° из нижне-правой точки чаши.
+    Это и есть весь знак.
+  -->
+  <svg viewBox="0 0 74 26" width="420" aria-label="davoq"><use href="#logotype-sym"/></svg>
+
+  <div class="row" style="margin-top:32px">
+    <div class="item"><svg viewBox="0 0 74 26" width="74"><use href="#logotype-sym"/></svg><span class="cap">74</span></div>
+    <div class="item"><svg viewBox="0 0 74 26" width="110"><use href="#logotype-sym"/></svg><span class="cap">110</span></div>
+    <div class="item"><svg viewBox="0 0 74 26" width="160"><use href="#logotype-sym"/></svg><span class="cap">160</span></div>
+  </div>
+  <p class="note">
+    Внизу — то же слово в трёх кеглях. Проверяем, на каком просветы между
+    буквами и дырка внутри «о» начинают затягиваться.
+  </p>
+</section>
+
+<section>
+  <h2>Знак, выведенный из логотипии</h2>
+  <!--
+    Логотипия сама по себе не даёт фавикона: слово в 16 px нечитаемо при
+    любой отрисовке. Знаком становится та самая q — единственная буква,
+    которая в этом слове не как у всех.
+  -->
+  <div class="row">
+    <div class="item"><svg width="16" height="16"><use href="#q-mark"/></svg><span class="cap">16</span></div>
+    <div class="item"><svg width="24" height="24"><use href="#q-mark"/></svg><span class="cap">24</span></div>
+    <div class="item"><svg width="32" height="32"><use href="#q-mark"/></svg><span class="cap">32</span></div>
+    <div class="item"><svg width="48" height="48"><use href="#q-mark"/></svg><span class="cap">48</span></div>
+    <div class="item"><svg width="128" height="128"><use href="#q-mark"/></svg><span class="cap">128</span></div>
+  </div>
+  <p class="note">
+    Штрих здесь толще, чем в слове: знак стоит один, и пропорции буквы,
+    выдернутой из строки, на мелочи не держатся.
+  </p>
+</section>
+
+<section>
+  <h2>Прежний концепт: монограмма D + Q</h2>
+  <p class="note" style="margin:0 0 20px">Построен по письменной спецификации, до того как появился референс. Оставлен для сравнения.</p>
+  <div class="row">
   <div class="row">
     <div class="item"><svg width="16" height="16"><use href="#mark"/></svg><span class="cap">16</span></div>
     <div class="item"><svg width="24" height="24"><use href="#mark"/></svg><span class="cap">24</span></div>
