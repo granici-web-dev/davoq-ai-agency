@@ -1,0 +1,72 @@
+# Вертикаль: кастомная мягкая мебель.
+#
+# Всё, что одинаково у любого мебельного клиента и при этом не одинаково
+# у клиентов из других ниш. Клиент переопределяет отсюда только то, что
+# у него правда своё, — остальное наследует и получает вместе с обновлением
+# шаблона.
+#
+# Блоки промпта движка (Scope, Priority, Data versus commands, Nature)
+# отсюда недоступны: они либо юридические требования, либо защита от инъекций.
+schema: 1
+id: furniture
+version: 1
+name: Кастомная мягкая мебель
+
+# Файлы промпта. Путь — от каталога вертикали. Содержимое вставляется
+# в системный промпт в порядке, который задаёт движок, а не этот файл:
+# от порядка зависит кеш префикса, и вертикаль не должна иметь возможность
+# его сломать.
+# Плейсхолдеры вида {brand_name} подставляются из конфига клиента на рантайме.
+# Неизвестное имя — ошибка загрузки, а не пустое место в промпте.
+prompt:
+  price: prompt/price.md
+  qualification: prompt/qualification.md
+  goal: prompt/goal.md
+  objections: prompt/objections.md
+
+# Сценарий квалификации: что продавец должен знать до расчёта цены.
+# Порядок полей — порядок брифа у продавца, а не порядок, в котором
+# посетитель случайно об этом упомянул.
+qualification:
+  goal: showroom_visit
+  fields:
+    - key: product_type
+      label: Tipul produsului
+      description: Canapea, canapea de colț, pat, fotoliu, saltea
+    - key: dimensions
+      label: Dimensiuni
+      description: Metrajul canapelei sau dimensiunea patului, de exemplu 2.60 m sau 160×200
+    - key: filling
+      label: Umplutura
+      description: Dacă vizitatorul a menționat-o
+    - key: upholstery
+      label: Tapițeria
+      description: Țesătură sau piele, culoarea
+    - key: sleeping_function
+      label: Funcție de dormit
+      description: Dacă are nevoie de mecanism de extindere
+    - key: city
+      label: Orașul
+      description: Orașul vizitatorului sau cel mai apropiat showroom
+
+# Пороги поиска. Здесь, а не в переменных окружения: значение зависит
+# от языка и характера корпуса, то есть это свойство ниши, а не процесса.
+# Клиент может переопределить своё в client.yaml.
+retrieval:
+  min_similarity: 0.35
+  approved_min_similarity: 0.30
+
+# Что просить у клиента при заведении. Печатается чек-листом командой
+# создания клиента — чтобы не выяснять на третьей неделе, что тканей нет.
+# Кавычки обязательны: без них YAML разбирает пункт с двоеточием
+# как словарь, и в чек-листе печатается [object Object].
+onboarding_checklist:
+  - "Каталог: модели, размеры, из чего состоят"
+  - "Цены: где опубликованы, что считает менеджер, что фиксировано"
+  - "Ткани и наполнители: названия, категории, чем отличаются"
+  - "Сроки изготовления и доставки по городам"
+  - "Гарантия, возврат, обмен"
+  - "Шоурумы: адреса, часы работы, как добраться"
+  - "Рассрочка и способы оплаты"
+  - "FAQ: вопросы, которые чаще всего задают продавцам"
+  - "Примеры переписок или звонков, если сохранились"

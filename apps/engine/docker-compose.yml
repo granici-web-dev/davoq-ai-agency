@@ -1,0 +1,25 @@
+services:
+  db:
+    image: pgvector/pgvector:pg17
+    environment:
+      POSTGRES_DB: assistwidget
+      POSTGRES_USER: app
+      POSTGRES_PASSWORD: dev
+    ports: ["5433:5432"]
+    volumes: ["pgdata:/var/lib/postgresql/data"]
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U app -d assistwidget"]
+      interval: 2s
+      timeout: 3s
+      retries: 20
+  redis:
+    image: redis:7-alpine
+    ports: ["6380:6379"]
+  # Почтовый ящик для разработки: ловит письма и показывает их целиком
+  # на http://localhost:8025. Нужен, чтобы проверять уведомления о заявках,
+  # не заводя настоящих почтовых доступов и никому ничего не отправляя.
+  mail:
+    image: axllent/mailpit:latest
+    ports: ["1025:1025", "8025:8025"]
+volumes:
+  pgdata:

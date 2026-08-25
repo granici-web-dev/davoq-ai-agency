@@ -1,0 +1,154 @@
+# Конфигуратор: слой клиента поверх ниши `furniture`.
+#
+# Здесь только то, что у этого клиента правда своё. Порядок блоков, тексты
+# по локалям и юртекст приходят из `src/verticals/furniture/configurator.yaml`
+# и обновляются вместе с ним.
+schema: 1
+
+offer:
+  hero:
+    # Снимок с их же сайта: тёплый орех попадает в акцент бланка #706155.
+    # Кадр подрезан под пропорции полосы, чтобы обрезка не решалась на рендере.
+    image: assets/hero.jpg
+    # Марка идёт вектором и берёт цвет от блока: на обложке она белая,
+    # в реквизитах была бы тёмной — из одного и того же файла.
+    logo: assets/logo.svg
+
+  theme:
+    # Цвета сняты с их собственной оферты: плашки и заливки #706155,
+    # фон листа #dad2c8. Белый лист у них не используется нигде.
+    colors:
+      accent: '#706155'
+      page: '#dad2c8'
+      text: '#3d342c'
+      muted: '#6b5e53'
+      line: '#c4b8aa'
+      onAccent: '#ffffff'
+
+  text:
+    ro:
+      # Реквизитов (CUI, адрес) здесь нет намеренно: их нет и в собственной
+      # оферте клиента. «Anexa 1» — приложение к договору, а не фискальный
+      # документ; CUI живёт в договоре и на фактуре. Блок `header` у ниши
+      # `furniture` поэтому не включён, а марка и контакты стоят на обложке.
+      hero:
+        title: 'ANEXA 1'
+        numberLabel: 'OFERTA NR.'
+        lines:
+          - sofabelle.ro
+          - '+40 720 111 225'
+      notes:
+        heading: Atenție
+        # Условия перенесены из их оферты дословно. Две опечатки источника
+        # («MINUPULARE», «APARTMANET») исправлены — в документе, который
+        # печатается сам, опечатка перестаёт быть разовой.
+        items:
+          - 'Livrare în zona Brașov — 150 lei'
+          - 'Manipulare până la casă sol sau apartament parter — 150 lei'
+          - 'Pentru fiecare etaj ridicat fără lift — +50 lei per etaj'
+          - 'Pentru ridicare la etaj cu lift manipularea va fi 150 lei'
+          - 'Livrare în raza de 25–100 km — 400 lei'
+          - 'Livrare în raza de 100–200 km — 600 lei'
+          - 'Livrare în raza de 200–250 km — 800 lei'
+          - 'Livrare în raza de 250–300 km — 1000 lei'
+          - 'Livrare în raza de 300–350 km — 1200 lei'
+          - 'Livrare în raza de 350–450 km — 1500 lei'
+      footer: SofaBelle SRL · sofabelle.ro
+
+# Числа конфигуратора. Форма шагов и формулы — в нише `furniture`.
+#
+# TODO(клиент): подтверждено документами только `free-comfort` — 17840 лей
+# из OFERTA NR. 986. Остальные базы и все множители — заглушки, ставятся
+# на разговоре с клиентом. Заглушка с пометкой лучше пустого шага: видно,
+# что именно спрашивать.
+#
+# Замечено по их же оферте: скидка 5% там посчитана от товара без доставки
+# (18500 × 0.95 + 750 = 18325). У нас доставка — отдельная позиция оферты,
+# а не надбавка внутри конфигурации, поэтому расхождения с формулой нет.
+flow:
+  steps:
+    - id: model
+      options:
+        - id: free-comfort
+          label: { ro: Canapea Free Comfort }
+          priceEffect: { kind: base, bani: 1784000 }
+        - id: life
+          label: { ro: Canapea Life }
+          priceEffect: { kind: base, bani: 787600 }
+        - id: lofty
+          label: { ro: Canapea Lofty }
+          priceEffect: { kind: base, bani: 2764600 }
+        - id: allure-life
+          label: { ro: Pat Allure Life }
+          priceEffect: { kind: base, bani: 732600 }
+        - id: belle-moon
+          label: { ro: Pat Belle Moon }
+          priceEffect: { kind: base, bani: 900000 }
+
+    - id: seat
+      options:
+        - id: hr-foam
+          priceEffect: { kind: addon, bani: 0 }
+        - id: hr-memory
+          priceEffect: { kind: addon, bani: 45000 }
+        - id: down
+          priceEffect: { kind: multiplier, factor: 1.15 }
+
+    # Коллекции Fibreguard — те самые, что стоят в их офертах.
+    # TODO(клиент): ценовые категории коллекций.
+    - id: fabric
+      options:
+        - id: ambiant
+          label: { ro: 'Fibreguard Ambiant' }
+          priceEffect: { kind: multiplier, factor: 1.0 }
+        - id: veluxe
+          label: { ro: 'Fibreguard Veluxe' }
+          priceEffect: { kind: multiplier, factor: 1.12 }
+        - id: deluxe
+          label: { ro: 'Fibreguard Deluxe' }
+          priceEffect: { kind: multiplier, factor: 1.25 }
+
+    # TODO(клиент): картинки цветов. Пока список кодов из их оферт —
+    # выбор без образца, но с настоящими артикулами.
+    - id: colour
+      options:
+        - id: ambiant-06-whisper
+          label: { ro: 'Ambiant 06 Whisper' }
+        - id: veluxe-31-taupe
+          label: { ro: 'Veluxe 31 Taupe' }
+        - id: deluxe-16-cypress
+          label: { ro: 'Deluxe 16 Cypress' }
+        - id: sh-2327-8
+          label: { ro: 'SH 2327 #8' }
+
+    - id: extras
+      options:
+        - id: puf
+          priceEffect: { kind: addon, bani: 66000 }
+        - id: topper
+          priceEffect: { kind: addon, bani: 55000 }
+        - id: storage
+          priceEffect: { kind: addon, bani: 90000 }
+        - id: extensible
+          priceEffect: { kind: addon, bani: 140000 }
+
+# Акции читаются с их же сайта — там они и живут: на главной висит баннер
+# «Reducere 15% la toate comenzile». В оферту ни одна не попадёт, пока
+# человек не подтвердит её в панели.
+#
+# Потолок 25%: их обычные акции — 5–15%, а «Black Friday» доходил до 20.
+# Всё, что выше, вероятнее ошибка парсера, чем решение маркетолога, и
+# черновик из этого не заводится вовсе.
+promotions:
+  maxDiscountPercent: 25
+  scrape:
+    url: https://sofabelle.ro/
+    everyHours: 6
+    strategy: html
+
+pricing:
+  # 21% с августа 2025. Ставка страновая, поэтому здесь, а не в нише.
+  # TODO(сверка): их документы противоречат друг другу — в одном НДС строкой,
+  # в другом приписка «PRETUL INCLUDE TVA». Стоит `add`; ответ клиента
+  # меняет одно слово на `included`.
+  vat: { rate: 2100, mode: add }

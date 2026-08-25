@@ -1,0 +1,132 @@
+# Боевая установка целиком: прокси с сертификатом, API, воркер, база, очередь.
+#
+#   docker compose -f docker-compose.prod.yml --env-file .env.prod up -d --build
+#
+# Отдельный файл, а не профили в docker-compose.yml. Причина простая: перепутать
+# файл трудно, а перепутать профиль — легко, и цена ошибки разная. В файле для
+# разработки открыты порты базы и почтовая ловушка; здесь ни того, ни другого.
+#
+# Наружу смотрит только Caddy. У базы и Redis портов на хост нет вовсе —
+# добраться до них можно лишь из этой же сети docker.
+
+services:
+  # ── Прокси и сертификаты ──────────────────────────────────────────────────
+  # Caddy берёт сертификат Let's Encrypt сам и продлевает сам. Тома обязательны:
+  # без caddy_data сертификат теряется при каждом перезапуске, а у Let's Encrypt
+  # есть недельные лимиты на выдачу — и упереться в них можно за один вечер.
+  caddy:
+    image: caddy:2-alpine
+    restart: unless-stopped
+    ports: ["80:80", "443:443"]
+    volumes:
+      - ./deploy/Caddyfile:/etc/caddy/Caddyfile:ro
+      - caddy_data:/data
+      - caddy_config:/config
+    environment:
+      API_DOMAIN: ${API_DOMAIN:?нужен домен, например bot.assistwidget.ro}
+    depends_on:
+      api:
+        condition: service_healthy
+
+  # ── База ──────────────────────────────────────────────────────────────────
+  db:
+    image: pgvector/pgvector:pg17
+    restart: unless-stopped
+    environment:
+      POSTGRES_DB: ${POSTGRES_DB:-assistwidget}
+      POSTGRES_USER: ${POSTGRES_USER:?владелец базы}
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD:?пароль владельца базы}
+    volumes:
+      - pgdata:/var/lib/postgresql/data
+      # Каталог копий виден базе. Так pg_dump пишет файл сам, а не гонит
+      # гигабайты через stdout докера, и pg_restore проверяет копию там же,
+      # где он вообще существует: на голом сервере клиента Postgres не
+      # установлен, есть только этот контейнер.
+      - ./backups:/backups
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U $${POSTGRES_USER} -d $${POSTGRES_DB}"]
+      interval: 5s
+      timeout: 3s
+      retries: 20
+
+  # ── Очередь ───────────────────────────────────────────────────────────────
+  # appendonly: в очереди лежат разбор документов, сверка Drive и письма
+  # о заявках. Перезапуск без сохранения — это молча не отправленное письмо.
+  redis:
+    image: redis:7-alpine
+    restart: unless-stopped
+    command: ["redis-server", "--appendonly", "yes"]
+    volumes:
+      - redisdata:/data
+    healthcheck:
+      test: ["CMD", "redis-cli", "ping"]
+      interval: 5s
+      timeout: 3s
+      retries: 20
+
+  # ── Миграции ──────────────────────────────────────────────────────────────
+  # Отдельной службой, которая отрабатывает и завершается. API ждёт её успеха:
+  # сервер, поднявшийся раньше схемы, отвечает 500 на всё и выглядит как поломка
+  # приложения, хотя это гонка запуска.
+  migrate:
+    build: .
+    restart: "no"
+    command: ["node", "dist/engine/db/migrate.js"]
+    env_file: [.env.prod]
+    depends_on:
+      db:
+        condition: service_healthy
+
+  # ── API ───────────────────────────────────────────────────────────────────
+  api:
+    build: .
+    restart: unless-stopped
+    env_file: [.env.prod]
+    volumes:
+      - uploads:/app/var/uploads
+    depends_on:
+      migrate:
+        condition: service_completed_successfully
+      redis:
+        condition: service_healthy
+
+  # ── Воркер ────────────────────────────────────────────────────────────────
+  # Отдельным процессом, чтобы разбор PDF на сотню страниц не занимал цикл
+  # событий API. Тот же том с файлами: воркер читает то, что положил API.
+  worker:
+    build: .
+    restart: unless-stopped
+    command: ["node", "dist/engine/ingest/worker.js"]
+    env_file: [.env.prod]
+    volumes:
+      - uploads:/app/var/uploads
+    depends_on:
+      migrate:
+        condition: service_completed_successfully
+      redis:
+        condition: service_healthy
+
+  # ── Наблюдатель ───────────────────────────────────────────────────────────
+  # Раз в минуту спрашивает у API, всё ли в порядке, и пишет письмо, когда
+  # перестаёт быть в порядке. Отдельным процессом, а не внутри API: наблюдатель
+  # в том же процессе молчит ровно тогда, когда должен кричать.
+  #
+  # Он не заметит смерти самого сервера — он умрёт вместе с ним. Для этого
+  # HEARTBEAT_URL: пока всё хорошо, наблюдатель дёргает внешнюю службу, и та
+  # поднимает тревогу, когда сигналы ПЕРЕСТАЮТ приходить.
+  #
+  # depends_on без condition намеренно: наблюдатель обязан подняться и тогда,
+  # когда API не поднялся, — это ровно тот случай, о котором надо сообщить.
+  watchdog:
+    build: .
+    restart: unless-stopped
+    command: ["node", "dist/engine/ops/watchdog.js"]
+    env_file: [.env.prod]
+    depends_on: [api]
+
+volumes:
+  pgdata:
+  redisdata:
+  uploads:
+  caddy_data:
+  caddy_config:

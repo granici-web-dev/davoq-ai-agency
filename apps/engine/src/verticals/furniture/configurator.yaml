@@ -1,0 +1,270 @@
+# Конфигуратор: слой ниши «кастомная мягкая мебель».
+#
+# Всё, что одинаково у любого мебельного клиента. Клиент переопределяет отсюда
+# по ключу только то, что у него правда своё: марку, реквизиты, палитру,
+# формулировки. Скопировать этот файл целиком ради двух правок — значит
+# не иметь слоя ниши вовсе.
+#
+# Промпт агента добавляется в фазе 3 ключом `agent:`.
+schema: 1
+id: furniture
+
+# Шаги, которые видит посетитель. Здесь ФОРМА: какие шаги, в каком порядке,
+# как они называются и что подсказывать агенту. Модели, ткани и цвета
+# у каждого мебельщика свои — их варианты добавляет слой клиента по `id`,
+# а ненужный шаг он выключает через `enabled: false`.
+#
+# Цен здесь нет ни одной, и это правило, а не недоделка: цена мебельщика —
+# его коммерческая тайна, и в общем шаблоне ей не место.
+flow:
+  steps:
+    - id: model
+      type: cards
+      title:
+        ro: Modelul
+        ru: Модель
+        en: Model
+      aiHint:
+        ro: Dacă vizitatorul descrie spațiul, nu modelul, propuneți două-trei variante potrivite și explicați diferența.
+        ru: Если посетитель описывает комнату, а не модель, предложите две-три подходящие и объясните разницу.
+        en: If the visitor describes the room rather than a model, suggest two or three and explain the difference.
+      # Модели у каждого свои — варианты приходят из слоя клиента.
+      options: []
+
+    # Размеры спрашиваются, но в формуле НЕ участвуют.
+    #
+    # У мебельщика изделие делается по эскизу: в оферте пилота на месте
+    # размеров стоит «CONFORM SCHITEI», а цену под конкретный метраж
+    # подтверждает менеджер. Считать её линейно от ширины значит называть
+    # покупателю число, которое менеджер потом опровергнет, — а первое
+    # названное число запоминается.
+    #
+    # Поэтому ответы отсюда едут в характеристики оферты и в лид: менеджеру
+    # они нужны до звонка, и спросить их должен конфигуратор, а не он.
+    - id: width
+      type: number-input
+      title:
+        ro: Lățimea (cm)
+        ru: Ширина (см)
+        en: Width (cm)
+      input: { min: 100, max: 500, step: 5, unit: cm }
+      aiHint:
+        ro: Întrebați lățimea peretelui liber, nu a canapelei — pentru colțare lăsați loc de trecere.
+        ru: Спрашивайте ширину свободной стены, а не дивана — для углового нужен проход.
+        en: Ask for the free wall width, not the sofa's — a corner unit needs clearance.
+
+    - id: depth
+      type: number-input
+      optional: true
+      title:
+        ro: Adâncimea sau lungimea (cm)
+        ru: Глубина или длина (см)
+        en: Depth or length (cm)
+      input: { min: 60, max: 400, step: 5, unit: cm }
+      aiHint:
+        ro: Pentru paturi este lungimea saltelei, pentru canapele adâncimea șezutului.
+        ru: Для кроватей это длина матраса, для диванов — глубина сиденья.
+        en: For beds this is the mattress length, for sofas the seat depth.
+
+    - id: seat
+      type: cards
+      title:
+        ro: Umplutura șezutului
+        ru: Наполнитель сиденья
+        en: Seat filling
+      aiHint:
+        ro: Spuma HR își ține forma, memory foam se așază după corp, puful natural cere înfoiere periodică.
+        ru: HR-пена держит форму, memory foam подстраивается под тело, натуральный пух требует регулярного взбивания.
+        en: HR foam holds its shape, memory foam adapts to the body, natural down needs regular fluffing.
+      # Наполнители одинаковы у всей ниши — варианты общие, цены клиентские.
+      options:
+        - id: hr-foam
+          label: { ro: Spumă poliuretanică HR, ru: Пенополиуретан HR, en: HR polyurethane foam }
+        - id: hr-memory
+          label: { ro: Spumă HR + memory foam, ru: HR-пена + memory foam, en: HR foam + memory foam }
+        - id: down
+          label: { ro: Puf natural, ru: Натуральный пух, en: Natural down }
+
+    - id: fabric
+      type: cards
+      title:
+        ro: Țesătura
+        ru: Ткань
+        en: Fabric
+      aiHint:
+        ro: Întrebați despre copii și animale înainte de a recomanda o colecție.
+        ru: Спросите про детей и животных, прежде чем советовать коллекцию.
+        en: Ask about children and pets before recommending a collection.
+      options: []
+
+    - id: colour
+      type: color-grid
+      title:
+        ro: Culoarea
+        ru: Цвет
+        en: Colour
+      aiHint:
+        ro: Avertizați că nuanțele de pe ecran diferă de material și propuneți mostre.
+        ru: Предупредите, что оттенки на экране отличаются от материала, и предложите образцы.
+        en: Warn that on-screen shades differ from the material and offer samples.
+      options: []
+
+    - id: extras
+      type: cards
+      multiple: true
+      optional: true
+      title:
+        ro: Opțiuni suplimentare
+        ru: Дополнительно
+        en: Extras
+      options:
+        - id: puf
+          label: { ro: Puf, ru: Пуф, en: Ottoman }
+        - id: topper
+          label: { ro: Topper, ru: Топпер, en: Topper }
+        - id: storage
+          label: { ro: Ladă de depozitare, ru: Ящик для белья, en: Storage box }
+        - id: extensible
+          label: { ro: Mecanism extensibil, ru: Раскладной механизм, en: Sofa bed mechanism }
+
+    - id: notes
+      type: text
+      optional: true
+      title:
+        ro: Observații
+        ru: Пожелания
+        en: Notes
+
+# Промпт агента конфигуратора. Отдельный от промпта чат-бота намеренно:
+# у бота задача довести до шоурума и никогда не называть цену, а здесь цена
+# уже посчитана сервером и стоит у посетителя перед глазами. Один промпт
+# на две задачи означал бы, что агент либо молчит о цене, которую видно,
+# либо начинает её обсуждать там, где ему нельзя.
+agent:
+  prompt: prompt/configurator.md
+
+# Форма формулы — здесь, числа — у клиента.
+#
+# Мебель не размерная: изделие считается штукой, а не квадратом, поэтому
+# `dimension.kind: none`. Драйверы количества движок всё равно знает — окна,
+# жалюзи и столешницы без них не посчитать, а это самые вероятные вторые ниши.
+#
+# Ставки НДС здесь нет: она страновая, а не отраслевая. Румынский мебельщик
+# и польский пользуются одной вертикалью и разными ставками.
+pricing:
+  units:
+    dimension: { kind: none }
+  # Мебельщики называют круглую цену в леях, а не в банях.
+  rounding: { to: 100, mode: nearest }
+
+offer:
+  # Порядок блоков ниши. Типы блоков задаёт движок; свой тип завести нельзя —
+  # это был бы код на клиента, то есть ровно то, чего мы избегаем.
+  # Порядок как в настоящей оферте мебельщика: обложка с фото и номером,
+  # позиции, цена, характеристики изделия, условия доставки, материалы.
+  # Отдельного блока «кому» нет намеренно — имя заказчика стоит на обложке,
+  # ровно как в бланке пилота.
+  blocks: [hero, meta, items, pricing, specs, notes, gallery, legal, footer]
+
+  # «OFERTA VALABILA 14 ZILE» — из оферты пилота. Цены на ткани и поролон
+  # меняются поставщиками чаще, чем месяц, и месячный срок мебельщик
+  # подтверждать не готов.
+  validDays: 14
+
+  currency:
+    code: RON
+
+  text:
+    ro:
+      hero:
+        title: Ofertă
+        numberLabel: 'OFERTA NR.'
+      meta:
+        # Номер печатается на обложке — здесь он не нужен.
+        title: Ofertă de preț
+        date: Data
+        validUntil: Valabilă până la
+        consultant: Consilier
+      customer:
+        heading: Client
+        name: Nume
+        phone: Telefon
+        email: Email
+      items:
+        heading: Produse și servicii
+        product: Produs sau serviciu
+        quantity: Cant.
+        unitPrice: Preț unitar
+        discount: Reducere
+        total: Total
+      pricing:
+        heading: Preț
+        subtotal: Subtotal
+        discount: Reducere
+        vat: TVA
+        total: Total
+        # Цена конфигурации мебели зависит от замера и ткани на складе.
+        # Оферта без этой оговорки читается как твёрдое обязательство.
+        disclaimer: >-
+          Prețul este estimativ și se confirmă după măsurătoare și verificarea
+          disponibilității țesăturii. Oferta nu constituie contract.
+      specs:
+        heading: Descrierea produsului
+        label: Caracteristică
+        value: Valoare
+      notes:
+        heading: Atenție
+        # Условия доставки и подъёма у каждого клиента свои — здесь пусто
+        # намеренно: выдуманный прайс в оферте хуже отсутствующего.
+        items: []
+      gallery:
+        heading: Compoziție
+      legal: file:offer/legal.ro.md
+
+    ru:
+      hero: { title: Коммерческое предложение, numberLabel: '№' }
+      meta: { title: Коммерческое предложение, date: Дата, validUntil: Действительно до, consultant: Менеджер }
+      customer: { heading: Клиент, name: Имя, phone: Телефон, email: Email }
+      items:
+        heading: Товары и услуги
+        product: Наименование
+        quantity: Кол-во
+        unitPrice: Цена
+        discount: Скидка
+        total: Сумма
+      pricing:
+        heading: Цена
+        subtotal: Подытог
+        discount: Скидка
+        vat: НДС
+        total: Итого
+        disclaimer: >-
+          Цена предварительная и подтверждается после замера и проверки наличия
+          ткани. Предложение не является договором.
+      specs: { heading: Характеристики изделия, label: Параметр, value: Значение }
+      notes: { heading: Условия, items: [] }
+      gallery: { heading: Материалы }
+
+    en:
+      hero: { title: Quotation, numberLabel: 'OFFER NO.' }
+      meta: { title: Quotation, date: Date, validUntil: Valid until, consultant: Consultant }
+      customer: { heading: Customer, name: Name, phone: Phone, email: Email }
+      items:
+        heading: Products and services
+        product: Product or service
+        quantity: Qty
+        unitPrice: Unit price
+        discount: Discount
+        total: Total
+      pricing:
+        heading: Price
+        subtotal: Subtotal
+        discount: Discount
+        vat: VAT
+        total: Total
+        disclaimer: >-
+          The price is an estimate and is confirmed after measurement and fabric
+          availability check. This quotation is not a contract.
+      specs: { heading: Product description, label: Property, value: Value }
+      notes: { heading: Please note, items: [] }
+      gallery: { heading: Materials }

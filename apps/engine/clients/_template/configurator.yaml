@@ -1,0 +1,83 @@
+# Бланк оферты: стартовая точка для клиента БЕЗ ниши.
+#
+# Клиент, у которого ниша задана (`vertical:` в config.yaml), тексты и порядок
+# блоков НАСЛЕДУЕТ из вертикали — тогда здесь остаётся только своё: марка,
+# реквизиты, палитра, шрифты. Дублировать сюда тексты ниши не надо: правка
+# в вертикали дойдёт до всех, правка в копии — ни до кого.
+#
+# Этот файл заполнен целиком именно потому, что ниши может не быть вовсе.
+schema: 1
+
+offer:
+  # Логотип — PNG или JPG: вектор в PDF движок пока не инлайнит.
+  # logo: assets/logo.png
+
+  currency:
+    code: RON
+
+  theme:
+    colors:
+      accent: '#111111'
+
+  text:
+    ro:
+      header:
+        company: Denumirea companiei SRL
+        lines:
+          - CUI 00000000
+          - Adresa, oraș
+          - +40 000 000 000
+          - www.example.com
+      meta:
+        title: Ofertă de preț
+        number: Nr.
+        date: Data
+        validUntil: Valabilă până la
+      customer:
+        heading: Client
+        name: Nume
+        phone: Telefon
+        email: Email
+      items:
+        heading: Produse și servicii
+        product: Produs sau serviciu
+        quantity: Cant.
+        unitPrice: Preț unitar
+        discount: Reducere
+        total: Total
+      pricing:
+        heading: Preț
+        subtotal: Subtotal
+        discount: Reducere
+        vat: TVA
+        total: Total
+        disclaimer: Prețul este estimativ. Oferta nu constituie contract.
+      legal: Oferta este valabilă până la data indicată mai sus.
+      footer: Denumirea companiei SRL
+
+    en:
+      header:
+        company: Your Company Ltd
+        lines:
+          - Reg. no. 00000000
+          - Address, city
+          - +40 000 000 000
+          - www.example.com
+      meta: { title: Quotation, number: 'No.', date: Date, validUntil: Valid until }
+      customer: { heading: Customer, name: Name, phone: Phone, email: Email }
+      items:
+        heading: Products and services
+        product: Product or service
+        quantity: Qty
+        unitPrice: Unit price
+        discount: Discount
+        total: Total
+      pricing:
+        heading: Price
+        subtotal: Subtotal
+        discount: Discount
+        vat: VAT
+        total: Total
+        disclaimer: The price is an estimate. This quotation is not a contract.
+      legal: This quotation is valid until the date shown above.
+      footer: Your Company Ltd

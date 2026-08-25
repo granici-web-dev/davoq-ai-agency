@@ -1,0 +1,212 @@
+/** Интерфейсные строки виджета (§9). Языки: en/de/ro/ru. */
+export const LOCALES = ['en', 'de', 'ro', 'ru'] as const;
+export type Locale = (typeof LOCALES)[number];
+
+export interface Strings {
+  launcher: string;
+  title: string;
+  placeholder: string;
+  send: string;
+  close: string;
+  typing: string;
+  error: string;
+  retry: string;
+  offline: string;
+  /** AI Act Art. 50(1): постоянная надпись, а не всплывающая подсказка. */
+  disclosure: string;
+  leadIntro: string;
+  leadEmail: string;
+  leadPhone: string;
+  leadName: string;
+  leadSubmit: string;
+  leadThanks: string;
+  leadNeedContact: string;
+  /**
+   * Отказ по занятости: наш потолок или квота модели. Отличается от поломки
+   * тем, что повтор через минуту помогает, — и посетителю надо сказать
+   * именно это, а не «что-то пошло не так».
+   */
+  busy: string;
+
+  /**
+   * Когда оборот кончился без единого знака текста: модель только вызывала
+   * инструменты. Пустую реплику нельзя ни показать, ни сохранить — в истории
+   * она отвергается моделью, и разговор ломается насмерть.
+   */
+  noAnswer: string;
+}
+
+export const STRINGS: Record<Locale, Strings> = {
+  en: {
+    launcher: 'Chat with us', title: 'Assistant', placeholder: 'Ask a question…',
+    send: 'Send', close: 'Close chat', typing: 'Typing…',
+    error: 'Something went wrong.', retry: 'Try again',
+    offline: 'The assistant is unavailable right now. Leave your contact and we will get back to you.',
+    disclosure: 'You are chatting with an AI assistant.',
+    leadIntro: 'Leave your contact details', leadEmail: 'Email', leadPhone: 'Phone',
+    leadName: 'Name', leadSubmit: 'Send', leadThanks: 'Thank you, we will be in touch.',
+    leadNeedContact: 'Please provide an email or a phone number.',
+    noAnswer: 'I have noted your request — a colleague will get back to you shortly.',
+    busy: 'A lot of people are writing right now. Please try again in a moment.',
+  },
+  de: {
+    launcher: 'Schreiben Sie uns', title: 'Assistent', placeholder: 'Stellen Sie eine Frage…',
+    send: 'Senden', close: 'Chat schließen', typing: 'Schreibt…',
+    error: 'Etwas ist schiefgelaufen.', retry: 'Erneut versuchen',
+    offline: 'Der Assistent ist gerade nicht erreichbar. Hinterlassen Sie Ihre Kontaktdaten, wir melden uns.',
+    disclosure: 'Sie chatten mit einem KI-Assistenten.',
+    leadIntro: 'Hinterlassen Sie Ihre Kontaktdaten', leadEmail: 'E-Mail', leadPhone: 'Telefon',
+    leadName: 'Name', leadSubmit: 'Absenden', leadThanks: 'Danke, wir melden uns.',
+    leadNeedContact: 'Bitte geben Sie eine E-Mail-Adresse oder Telefonnummer an.',
+    noAnswer: 'Ich habe Ihre Anfrage notiert — ein Kollege meldet sich in Kürze bei Ihnen.',
+    busy: 'Gerade schreiben viele Menschen. Bitte versuchen Sie es gleich noch einmal.',
+  },
+  ro: {
+    launcher: 'Scrieți-ne', title: 'Asistent', placeholder: 'Puneți o întrebare…',
+    send: 'Trimite', close: 'Închide chatul', typing: 'Scrie…',
+    error: 'Ceva nu a funcționat.', retry: 'Încercați din nou',
+    offline: 'Asistentul nu este disponibil acum. Lăsați datele de contact și vă contactăm noi.',
+    disclosure: 'Discutați cu un asistent AI.',
+    leadIntro: 'Lăsați datele de contact', leadEmail: 'Email', leadPhone: 'Telefon',
+    leadName: 'Nume', leadSubmit: 'Trimite', leadThanks: 'Mulțumim, vă contactăm în curând.',
+    leadNeedContact: 'Indicați un email sau un număr de telefon.',
+    noAnswer: 'Am notat solicitarea dvs. — un coleg vă va contacta în curând.',
+    busy: 'Acum ne scriu mulți. Încercați din nou peste un minut.',
+  },
+  ru: {
+    launcher: 'Написать нам', title: 'Ассистент', placeholder: 'Задайте вопрос…',
+    send: 'Отправить', close: 'Закрыть чат', typing: 'Печатает…',
+    error: 'Что-то пошло не так.', retry: 'Повторить',
+    offline: 'Ассистент сейчас недоступен. Оставьте контакт, и мы свяжемся с вами.',
+    disclosure: 'Вы общаетесь с ИИ-ассистентом.',
+    leadIntro: 'Оставьте контакты', leadEmail: 'Email', leadPhone: 'Телефон',
+    leadName: 'Имя', leadSubmit: 'Отправить', leadThanks: 'Спасибо, мы свяжемся с вами.',
+    leadNeedContact: 'Укажите email или телефон.',
+    noAnswer: 'Я записал ваш запрос — коллега свяжется с вами в ближайшее время.',
+    busy: 'Сейчас пишут многие. Попробуйте ещё раз через минуту.',
+  },
+};
+
+/**
+ * Язык виджета.
+ *
+ * navigator.language отдаёт «de-AT», «ru-MD» и подобное — интересует только
+ * базовый язык. Но выбирать из всех четырёх встроенных нельзя: клиент отвечает
+ * на тех языках, на которых у него есть материалы. Румынский производитель
+ * с русским приветствием получает посетителя, который спрашивает по-русски
+ * и не находит ничего — поиск одноязычен.
+ *
+ * Поэтому язык браузера учитывается, только если клиент его поддерживает.
+ */
+export function pickLocale(
+  preferred: string | undefined,
+  fallback: string,
+  supported?: readonly string[],
+): Locale {
+  const base = (v: string | undefined): string | undefined => v?.toLowerCase().split('-')[0];
+
+  const allowed = (supported && supported.length > 0 ? supported : LOCALES)
+    .map((l) => base(l)!)
+    .filter((l): l is Locale => (LOCALES as readonly string[]).includes(l));
+  const pool: readonly Locale[] = allowed.length > 0 ? allowed : LOCALES;
+
+  for (const candidate of [base(preferred), base(fallback)]) {
+    if (candidate && pool.includes(candidate as Locale)) return candidate as Locale;
+  }
+  return pool[0]!;
+}
+
+/**
+ * Строки конфигуратора. Отдельным словарём, а не внутри `Strings`: чат-бот
+ * без конфигуратора не должен тащить их в свой словарь, а конфигуратор
+ * без чата — наоборот. Тенанту с одним продуктом второй набор ни к чему.
+ *
+ * `{n}` и `{total}` подставляются в `step`: собирать «Pasul » + n + « din »
+ * значит зашить порядок слов английского в четыре языка сразу.
+ */
+export interface ConfiguratorStrings {
+  /** Подводка формы заявки, когда конфигуратор не отдался. */
+  quoteIntro: string;
+  step: string;
+  back: string;
+  next: string;
+  skip: string;
+  calculating: string;
+  price: string;
+  vatIncluded: string;
+  summary: string;
+  change: string;
+  contactIntro: string;
+  consentRequired: string;
+  consentMarketing: string;
+  needConsent: string;
+  getOffer: string;
+  offerSent: string;
+  notePlaceholder: string;
+  ask: string;
+  askPlaceholder: string;
+  askError: string;
+}
+
+export const CONFIGURATOR_STRINGS: Record<Locale, ConfiguratorStrings> = {
+  en: {
+    step: 'Step {n} of {total}',
+    quoteIntro: 'Leave your contact and we will prepare a quote for your configuration.',
+    back: 'Back', next: 'Next', skip: 'Skip', calculating: 'Calculating…',
+    price: 'Estimated price', vatIncluded: 'VAT included',
+    summary: 'Your configuration', change: 'Change',
+    contactIntro: 'Where should we send the quote?',
+    consentRequired: 'I agree to my data being processed so that a quote can be prepared.',
+    consentMarketing: 'You may send me offers and news.',
+    needConsent: 'Consent is required to prepare a quote.',
+    getOffer: 'Get the quote', offerSent: 'The quote is on its way to you.',
+    notePlaceholder: 'Anything we should know?',
+    ask: 'Have a question about this step?', askPlaceholder: 'Ask about the options…',
+    askError: 'Could not answer right now.',
+  },
+  de: {
+    step: 'Schritt {n} von {total}',
+    quoteIntro: 'Kontaktdaten hinterlassen — wir erstellen ein Angebot für Ihre Konfiguration.',
+    back: 'Zurück', next: 'Weiter', skip: 'Überspringen', calculating: 'Wird berechnet…',
+    price: 'Richtpreis', vatIncluded: 'inkl. MwSt.',
+    summary: 'Ihre Konfiguration', change: 'Ändern',
+    contactIntro: 'Wohin sollen wir das Angebot schicken?',
+    consentRequired: 'Ich bin mit der Verarbeitung meiner Daten zur Angebotserstellung einverstanden.',
+    consentMarketing: 'Sie dürfen mir Angebote und Neuigkeiten senden.',
+    needConsent: 'Für ein Angebot ist die Einwilligung erforderlich.',
+    getOffer: 'Angebot erhalten', offerSent: 'Das Angebot ist auf dem Weg zu Ihnen.',
+    notePlaceholder: 'Gibt es etwas, das wir wissen sollten?',
+    ask: 'Fragen zu diesem Schritt?', askPlaceholder: 'Fragen Sie zu den Optionen…',
+    askError: 'Antwort gerade nicht möglich.',
+  },
+  ro: {
+    step: 'Pasul {n} din {total}',
+    quoteIntro: 'Lăsați-ne un contact și pregătim oferta pentru configurația dumneavoastră.',
+    back: 'Înapoi', next: 'Continuați', skip: 'Omiteți', calculating: 'Se calculează…',
+    price: 'Preț estimativ', vatIncluded: 'TVA inclus',
+    summary: 'Configurația dumneavoastră', change: 'Modificați',
+    contactIntro: 'Unde vă trimitem oferta?',
+    consentRequired: 'Sunt de acord cu prelucrarea datelor mele pentru întocmirea ofertei.',
+    consentMarketing: 'Îmi puteți trimite oferte și noutăți.',
+    needConsent: 'Fără acord nu putem întocmi oferta.',
+    getOffer: 'Primiți oferta', offerSent: 'Oferta este pe drum către dumneavoastră.',
+    notePlaceholder: 'Aveți ceva de adăugat?',
+    ask: 'Aveți o întrebare despre acest pas?', askPlaceholder: 'Întrebați despre opțiuni…',
+    askError: 'Nu putem răspunde chiar acum.',
+  },
+  ru: {
+    step: 'Шаг {n} из {total}',
+    quoteIntro: 'Оставьте контакт — подготовим оферту под вашу конфигурацию.',
+    back: 'Назад', next: 'Далее', skip: 'Пропустить', calculating: 'Считаем…',
+    price: 'Ориентировочная цена', vatIncluded: 'НДС включён',
+    summary: 'Ваша конфигурация', change: 'Изменить',
+    contactIntro: 'Куда отправить оферту?',
+    consentRequired: 'Согласен на обработку моих данных для подготовки оферты.',
+    consentMarketing: 'Можно присылать мне предложения и новости.',
+    needConsent: 'Без согласия оферту подготовить нельзя.',
+    getOffer: 'Получить оферту', offerSent: 'Оферта уже едет к вам.',
+    notePlaceholder: 'Что-нибудь важное для нас?',
+    ask: 'Есть вопрос по этому шагу?', askPlaceholder: 'Спросите про варианты…',
+    askError: 'Сейчас ответить не получается.',
+  },
+};
