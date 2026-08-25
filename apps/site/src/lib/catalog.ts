@@ -42,43 +42,48 @@ export interface Agent {
 }
 
 /**
- * Статус берётся из контракта, а не отсюда.
+ * Статус берётся из контракта — и больше ниоткуда.
  *
  * В контракте он выведен из манифеста рядом с кодом агента, то есть из того,
- * что правда есть в движке. Значение в списке ниже — запасное, для агентов,
- * которым манифест ещё не завели.
+ * что правда есть в движке.
  *
- * Почему не наоборот. Конфигуратор стоял здесь в `soon`, пока движок его
- * уже считал и выставлял в счёт: двадцать семь файлов кода, потолок оферт
- * в каждом тарифе — и «в curând» на витрине. Заметить это можно было,
- * только открыв оба проекта разом, чего никто не делает.
+ * Запасного значения здесь нет намеренно. Оно было, и было дырой: агент без
+ * манифеста молча получал статус, написанный руками, — ровно так конфигуратор
+ * простоял в `soon`, пока движок его считал и выставлял в счёт. Двадцать семь
+ * файлов кода, потолок оферт в каждом тарифе — и «în curând» на витрине.
  *
- * Запасной путь временный. Когда манифесты будут у всех шести, `fallback`
- * отсюда уйдёт: пока он есть, статус всё ещё можно разойтись с движком,
- * просто не заметив, что манифеста нет.
+ * Поэтому отсутствие манифеста — ошибка, а не повод подставить значение.
+ * Падает на сборке страниц, то есть до выкладки, и говорит, что именно
+ * забыли завести.
  */
-const statusFromContract = (slug: AgentSlug): AgentStatus | undefined => {
+const statusOf = (slug: AgentSlug): AgentStatus => {
   const product = productById(slug);
-  if (!product) return undefined;
+  if (!product) {
+    throw new Error(
+      `Агент «${slug}» есть в каталоге сайта, но манифеста у него нет. ` +
+        `Заведите apps/engine/src/products/${slug}/product.yaml и пересоберите ` +
+        `контракт: npm run contract`,
+    );
+  }
   return product.status === 'shipped' ? 'available' : 'soon';
 };
 
-const AGENT_BASE: Array<{ slug: AgentSlug; fallback: AgentStatus; full?: boolean }> = [
-  { slug: 'chatbot', fallback: 'available', full: true },
-  { slug: 'voice-assistant', fallback: 'soon', full: true },
-  { slug: 'configurator', fallback: 'soon', full: true },
-  { slug: 'follow-up', fallback: 'soon', full: true },
-  { slug: 'order-status', fallback: 'soon', full: true },
-  { slug: 'content-engine', fallback: 'soon', full: true },
+const AGENT_BASE: Array<{ slug: AgentSlug; full?: boolean }> = [
+  { slug: 'chatbot', full: true },
+  { slug: 'voice-assistant', full: true },
+  { slug: 'configurator', full: true },
+  { slug: 'follow-up', full: true },
+  { slug: 'order-status', full: true },
+  { slug: 'content-engine', full: true },
 ];
 
 /* Выводится один раз здесь, а не у каждого читателя: статус спрашивают
    шесть мест — шапка, главная, хаб агентов, страница агента, страница
    ниши, — и шесть одинаковых веток разошлись бы на первой же правке. */
-export const AGENTS: Agent[] = AGENT_BASE.map(({ slug, fallback, full }) => ({
+export const AGENTS: Agent[] = AGENT_BASE.map(({ slug, full }) => ({
   slug,
   full,
-  status: statusFromContract(slug) ?? fallback,
+  status: statusOf(slug),
 }));
 
 export const INDUSTRY_SLUGS = [

@@ -10,6 +10,40 @@ import type { Product, Vertical } from './index.js';
 
 export const PRODUCTS: readonly Product[] = [
     {
+      "id": "chatbot",
+      "version": 1,
+      "status": "shipped",
+      "feature": "chatbot",
+      "plan": "starter",
+      "verticals": [
+        "furniture"
+      ],
+      "tiers": {
+        "starter": {
+          "price": 79,
+          "setup": 490,
+          "limits": {
+            "conversations": 500
+          },
+          "features": [
+            "scenarioIndustry",
+            "oneLanguage"
+          ]
+        },
+        "pro": {
+          "price": 149,
+          "setup": 490,
+          "limits": {
+            "conversations": 2000
+          },
+          "features": [
+            "scenarioCustom",
+            "secondLanguage"
+          ]
+        }
+      }
+    },
+    {
       "id": "configurator",
       "version": 1,
       "status": "shipped",
@@ -43,6 +77,27 @@ export const PRODUCTS: readonly Product[] = [
           ]
         }
       }
+    },
+    {
+      "id": "content-engine",
+      "version": 1,
+      "status": "planned",
+      "feature": "social",
+      "verticals": []
+    },
+    {
+      "id": "follow-up",
+      "version": 1,
+      "status": "planned",
+      "feature": "followup",
+      "verticals": []
+    },
+    {
+      "id": "order-status",
+      "version": 1,
+      "status": "planned",
+      "feature": "productionUpdates",
+      "verticals": []
     },
     {
       "id": "voice-assistant",

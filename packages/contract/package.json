@@ -15,7 +15,7 @@
     "dist"
   ],
   "scripts": {
-    "generate": "node build.mjs",
+    "generate": "node build.mjs && tsc -p tsconfig.json",
     "check": "node build.mjs --check",
     "compile": "tsc -p tsconfig.json",
     "build": "npm run check && npm run compile"

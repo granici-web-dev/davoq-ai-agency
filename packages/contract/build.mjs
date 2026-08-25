@@ -202,13 +202,23 @@ function checkTierCopy(products) {
     }
 
     for (const { locale, data } of files) {
-      const at = data?.agentPricing?.[p.id] ?? {};
-      const text = (o, k) => (typeof o?.[k] === 'string' && o[k].trim() ? null : k);
+      const own = data?.agentPricing?.[p.id] ?? {};
+      const shared = data?.agentPricing?.shared ?? {};
+
+      /* Сначала текст самого агента, потом общий. «Свой сценарий вместо
+         отраслевого» звучит одинаково у чатбота и у конфигуратора, и шесть
+         копий этой строки разошлись бы ровно так же, как разошлось всё
+         остальное. Переопределение остаётся: у агента, которому общая
+         формулировка не подходит, своя перебивает. */
+      const has = (kind, k) => {
+        const v = own[kind]?.[k] ?? shared[kind]?.[k];
+        return typeof v === 'string' && v.trim();
+      };
       for (const k of limitKeys) {
-        if (text(at.limits, k)) missing.push(`${locale}: agentPricing.${p.id}.limits.${k}`);
+        if (!has('limits', k)) missing.push(`${locale}: agentPricing.{${p.id}|shared}.limits.${k}`);
       }
       for (const k of featureKeys) {
-        if (text(at.features, k)) missing.push(`${locale}: agentPricing.${p.id}.features.${k}`);
+        if (!has('features', k)) missing.push(`${locale}: agentPricing.{${p.id}|shared}.features.${k}`);
       }
     }
   }

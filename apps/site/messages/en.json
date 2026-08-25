@@ -2376,15 +2376,20 @@
       "cta": "Let's discuss the project"
     },
     "configurator": {
+      "features": {
+        "promo": "Promotions from your own site, applied to the quote once you approve them"
+      }
+    },
+    "shared": {
       "limits": {
+        "conversations": "conversations per month",
         "offers": "quotes per month"
       },
       "features": {
         "scenarioIndustry": "The standard scenario for your niche",
         "oneLanguage": "One language",
         "scenarioCustom": "A scenario adapted to your business, not just the niche standard",
-        "secondLanguage": "A second language",
-        "promo": "Promotions from your own site, applied to the quote once you approve them"
+        "secondLanguage": "A second language"
       }
     }
   }

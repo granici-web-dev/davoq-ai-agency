@@ -2376,15 +2376,20 @@
       "cta": "Discutăm proiectul"
     },
     "configurator": {
+      "features": {
+        "promo": "Promoțiile de pe site-ul dumneavoastră, aplicate în ofertă după ce le confirmați"
+      }
+    },
+    "shared": {
       "limits": {
+        "conversations": "conversații pe lună",
         "offers": "oferte pe lună"
       },
       "features": {
         "scenarioIndustry": "Scenariu standard al nișei dumneavoastră",
         "oneLanguage": "O limbă de comunicare",
         "scenarioCustom": "Scenariu adaptat afacerii dumneavoastră, nu doar standardul nișei",
-        "secondLanguage": "A doua limbă de comunicare",
-        "promo": "Promoțiile de pe site-ul dumneavoastră, aplicate în ofertă după ce le confirmați"
+        "secondLanguage": "A doua limbă de comunicare"
       }
     }
   }

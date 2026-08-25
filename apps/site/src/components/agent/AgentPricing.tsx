@@ -52,6 +52,13 @@ function PaidColumn({ slug, name, tier }: { slug: string; name: 'starter' | 'pro
   const t = useTranslations('agentPricing');
   const featured = name === 'pro';
 
+  /* Текст агента, иначе общий. «Свой сценарий вместо отраслевого» звучит
+     одинаково у чатбота и у конфигуратора; держать эту строку у каждого
+     значило бы завести шесть копий, которые разойдутся. Сборка проверяет,
+     что хотя бы один из двух ключей нашёлся — на обоих языках. */
+  const copy = (kind: 'limits' | 'features', key: string) =>
+    t.has(`${slug}.${kind}.${key}`) ? t(`${slug}.${kind}.${key}`) : t(`shared.${kind}.${key}`);
+
   return (
     /* Выделение заливкой, а не рамкой: рамка внутри уже разграфлённого
        блока читается как сбой вёрстки. */
@@ -85,14 +92,14 @@ function PaidColumn({ slug, name, tier }: { slug: string; name: 'starter' | 'pro
             <CheckIcon />
             <span>
               <span className="text-chalk">{value.toLocaleString('ro-RO')}</span>{' '}
-              {t(`${slug}.limits.${key}`)}
+              {copy('limits', key)}
             </span>
           </li>
         ))}
         {tier.features.map((key) => (
           <li key={key} className="flex gap-3 text-sm leading-relaxed text-chalk-dim">
             <CheckIcon />
-            <span>{t(`${slug}.features.${key}`)}</span>
+            <span>{copy('features', key)}</span>
           </li>
         ))}
       </ul>
