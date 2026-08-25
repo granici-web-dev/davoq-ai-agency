@@ -1,0 +1,228 @@
+<!doctype html>
+<html lang="ru">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Davoq — проверка знака</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Instrument+Sans:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+  :root { --ink:#0a0a0b; --chalk:#f2f0ed; --dim:#9b9894; --warm:#e8a56b; }
+  * { box-sizing:border-box; }
+  body {
+    margin:0; padding:56px 40px 96px;
+    background:var(--ink); color:var(--chalk);
+    font-family:'Instrument Sans',system-ui,sans-serif;
+    -webkit-font-smoothing:antialiased;
+  }
+  h1 { font-size:28px; font-weight:600; margin:0 0 4px; letter-spacing:-0.01em; }
+  .sub { color:var(--dim); font-size:14px; margin:0 0 48px; max-width:60ch; line-height:1.6; }
+  h2 {
+    font-size:11px; font-weight:500; letter-spacing:0.12em; text-transform:uppercase;
+    color:var(--dim); margin:0 0 20px; padding-bottom:10px; border-bottom:1px solid #ffffff14;
+  }
+  section { margin-bottom:56px; max-width:1100px; }
+  .row { display:flex; align-items:flex-end; gap:40px; flex-wrap:wrap; }
+  .item { display:flex; flex-direction:column; align-items:center; gap:10px; }
+  .cap { font-size:11px; color:var(--dim); font-variant-numeric:tabular-nums; }
+  .light { background:var(--chalk); color:var(--ink); padding:28px 32px; border-radius:14px; }
+  .swatches { display:flex; gap:0; border-radius:12px; overflow:hidden; max-width:760px; }
+  .sw { flex:1; padding:24px 0; display:flex; justify-content:center; }
+  .note { font-size:13px; color:var(--dim); line-height:1.7; max-width:70ch; margin-top:18px; }
+  .lockup { display:flex; align-items:center; }
+  .word { font-weight:600; letter-spacing:0.02em; line-height:1; }
+  code { font-family:ui-monospace,monospace; font-size:12px; color:var(--warm); }
+</style>
+</head>
+<body>
+
+<h1>Davoq — знак</h1>
+<p class="sub">
+  Монограмма: D образует контур скруглённого окна, внутри Q — окружность с хвостом под 45°,
+  выходящим за контур. Сетка 24×24, штрих 2, все координаты на целых или половинных значениях.
+  Геометрия построена с нуля, не обводка.
+</p>
+
+<!--
+  Знак. Единственное определение на этой странице — остальное ссылается сюда
+  через <use>. Пять копий пути, отличающихся размером, разошлись бы при первой
+  же правке кривой, и заметить это можно было бы только сличив их глазами.
+-->
+<svg width="0" height="0" style="position:absolute" aria-hidden="true">
+  <symbol id="mark" viewBox="0 0 24 24">
+    <g fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+      <!-- Пропорции посчитаны от 16px, а не от красоты на 128.
+      
+           Поперёк знака через центр идут девять полос: поле, штрих D, просвет,
+           штрих Q, дырка Q, и обратно. При 16px каждая линия и каждый просвет
+           должны получить не меньше полутора пикселей, иначе антиалиасинг
+           сливает их в пятно — что и вышло на первой версии, где просвет между
+           D и Q был всего 1.3 px.
+      
+           Отсюда: штрих 2.5 (1.67 px), просвет 2.5, дырка Q 7 (4.7 px).
+           Q сидит плотно в D — заодно это убивает сходство с лупой:
+           у лупы линза никогда не заполняет оправу. -->
+      <path d="M4.5 3H12A9 9 0 0 1 12 21H4.5A1.5 1.5 0 0 1 3 19.5V4.5A1.5 1.5 0 0 1 4.5 3Z"/>
+      <circle cx="12" cy="11.5" r="3.5"/>
+      <!-- Хвост начинается ВНУТРИ чаши и пересекает её: этим Q и отличается
+           от лупы, у которой ручка в линзу не заходит. -->
+      <path d="M13.5 13L20.5 20"/>
+    </g>
+  </symbol>
+
+  <!--
+    Врезка для малых размеров: 16 px и фавикон.
+
+    Не другой логотип, а тот же силуэт, пересказанный заливкой. Штриховой
+    знак на 16 px рассыпается не от тонкости линии, а от нехватки места:
+    поперёк идут четыре штриха, два просвета и дырка Q — семь полос на
+    шестнадцать пикселей. Утолщение только съедает просветы.
+
+    Заливка убирает четыре полосы из семи: остаётся тело D, дырка Q и хвост.
+    Дырка сделана вырезом (evenodd), а не белым кружком сверху, — иначе знак
+    перестал бы работать на любом фоне, кроме одного.
+  -->
+  <symbol id="mark-16" viewBox="0 0 24 24">
+    <path fill="currentColor" fill-rule="evenodd"
+          d="M6 2.5H12A9.5 9.5 0 0 1 12 21.5H6A3.5 3.5 0 0 1 2.5 18V6A3.5 3.5 0 0 1 6 2.5ZM12 7.5A4.5 4.5 0 1 0 12 16.5A4.5 4.5 0 1 0 12 7.5Z"/>
+    <path fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round"
+          d="M17.5 17.5L21 21"/>
+  </symbol>
+</svg>
+
+<section>
+  <h2>Масштабы на тёмном</h2>
+  <div class="row">
+    <div class="item"><svg width="16" height="16"><use href="#mark"/></svg><span class="cap">16</span></div>
+    <div class="item"><svg width="24" height="24"><use href="#mark"/></svg><span class="cap">24</span></div>
+    <div class="item"><svg width="32" height="32"><use href="#mark"/></svg><span class="cap">32</span></div>
+    <div class="item"><svg width="48" height="48"><use href="#mark"/></svg><span class="cap">48</span></div>
+    <div class="item"><svg width="128" height="128"><use href="#mark"/></svg><span class="cap">128</span></div>
+  </div>
+  <p class="note">
+    Смотреть надо на 16: там хвост либо читается отдельной деталью, либо слипается
+    с дугой D в пятно. Если слипается — хвост укорачивается или штрих утолщается.
+  </p>
+</section>
+
+<section>
+  <h2>Врезка для малых размеров</h2>
+  <div class="row">
+    <div class="item"><svg width="16" height="16"><use href="#mark"/></svg><span class="cap">16 штрих</span></div>
+    <div class="item"><svg width="16" height="16"><use href="#mark-16"/></svg><span class="cap">16 заливка</span></div>
+    <div class="item"><svg width="24" height="24"><use href="#mark-16"/></svg><span class="cap">24</span></div>
+    <div class="item"><svg width="32" height="32"><use href="#mark-16"/></svg><span class="cap">32</span></div>
+    <div class="item"><svg width="128" height="128"><use href="#mark-16"/></svg><span class="cap">128</span></div>
+  </div>
+  <p class="note">
+    Слева штриховой знак на 16, рядом врезка. Врезка идёт только в фавикон
+    и туда, где знак меньше 20&nbsp;px; везде выше работает основной.
+  </p>
+</section>
+
+<section>
+  <h2>Масштабы на светлом</h2>
+  <div class="light">
+    <div class="row">
+      <div class="item"><svg width="16" height="16"><use href="#mark"/></svg><span class="cap">16</span></div>
+      <div class="item"><svg width="24" height="24"><use href="#mark"/></svg><span class="cap">24</span></div>
+      <div class="item"><svg width="32" height="32"><use href="#mark"/></svg><span class="cap">32</span></div>
+      <div class="item"><svg width="48" height="48"><use href="#mark"/></svg><span class="cap">48</span></div>
+      <div class="item"><svg width="128" height="128"><use href="#mark"/></svg><span class="cap">128</span></div>
+    </div>
+  </div>
+</section>
+
+<section>
+  <h2>Лочап: знак и слово</h2>
+  <!-- Отступ = ширине штриха × 3. При знаке 24 штрих равен 2, отступ 6. -->
+  <div class="row" style="gap:56px">
+    <div class="lockup" style="gap:6px">
+      <svg width="24" height="24"><use href="#mark"/></svg>
+      <span class="word" style="font-size:19px">davoq</span>
+    </div>
+    <div class="lockup" style="gap:10px">
+      <svg width="40" height="40"><use href="#mark"/></svg>
+      <span class="word" style="font-size:32px">davoq</span>
+    </div>
+    <div class="lockup" style="gap:16px">
+      <svg width="64" height="64"><use href="#mark"/></svg>
+      <span class="word" style="font-size:51px">davoq</span>
+    </div>
+  </div>
+  <p class="note">
+    Слово строчными, Instrument&nbsp;Sans 600, трекинг +2%. Кегль слова — 80% высоты знака:
+    так высота строчной <code>a</code> совпадает с внутренней окружностью Q, и лочап
+    садится на одну оптическую линию.
+  </p>
+</section>
+
+<section>
+  <h2>Контраст на фонах сайта</h2>
+  <div class="swatches">
+    <div class="sw" style="background:#0a0a0b"><svg width="32" height="32"><use href="#mark"/></svg></div>
+    <div class="sw" style="background:#141416"><svg width="32" height="32"><use href="#mark"/></svg></div>
+    <div class="sw" style="background:#1e1e21"><svg width="32" height="32"><use href="#mark"/></svg></div>
+    <div class="sw" style="background:#f2f0ed;color:#0a0a0b"><svg width="32" height="32"><use href="#mark"/></svg></div>
+    <div class="sw" style="background:#e8a56b;color:#0a0a0b"><svg width="32" height="32"><use href="#mark"/></svg></div>
+  </div>
+  <p class="note">
+    Знак нарисован <code>currentColor</code> — цвет наследуется от места, куда он поставлен,
+    и отдельных версий под каждый фон не требует.
+  </p>
+</section>
+
+<section>
+  <h2>Что происходит на самом деле: настоящий растр</h2>
+  <div class="row" id="rasters"></div>
+  <p class="note">
+    Знак отрисован в настоящие 16 и 32&nbsp;пикселя, потом растр увеличен без
+    сглаживания. Это то, что увидит человек во вкладке браузера, — в отличие
+    от вектора выше, который на экране всегда выглядит лучше, чем в жизни.
+  </p>
+</section>
+
+<script>
+/* Векторный знак, отрисованный в N пикселей и увеличенный без сглаживания.
+   Единственный честный способ оценить мелкий размер: вектор на экране
+   всегда выглядит лучше, чем его же растр в 16 px. */
+(function () {
+  const shots = [
+    ['mark', 16, 'штриховой, 16'],
+    ['mark-16', 16, 'врезка, 16'],
+    ['mark', 32, 'штриховой, 32'],
+    ['mark-16', 32, 'врезка, 32'],
+  ];
+  const host = document.getElementById('rasters');
+  for (const [id, px, caption] of shots) {
+    const sym = document.getElementById(id);
+    const svg = '<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="' + px +
+      '" height="' + px + '">' + sym.innerHTML.replace(/currentColor/g, '#f2f0ed') + '</svg>';
+    const img = new Image();
+    img.onload = function () {
+      const scale = px === 16 ? 10 : 5;
+      const small = document.createElement('canvas');
+      small.width = small.height = px;
+      small.getContext('2d').drawImage(img, 0, 0, px, px);
+      const big = document.createElement('canvas');
+      big.width = big.height = px * scale;
+      const c = big.getContext('2d');
+      c.imageSmoothingEnabled = false;
+      c.drawImage(small, 0, 0, big.width, big.height);
+      const item = document.createElement('div');
+      item.className = 'item';
+      const cap = document.createElement('span');
+      cap.className = 'cap';
+      cap.textContent = caption;
+      item.appendChild(big);
+      item.appendChild(cap);
+      host.appendChild(item);
+    };
+    img.src = 'data:image/svg+xml;base64,' + btoa(unescape(encodeURIComponent(svg)));
+  }
+})();
+</script>
+
+</body>
+</html>
