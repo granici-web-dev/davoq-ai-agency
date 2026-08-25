@@ -1,7 +1,7 @@
 import { getTranslations, setRequestLocale } from 'next-intl/server';
 import type { Metadata } from 'next';
-import { PlanCards } from '@/components/pricing/PlanCards';
-import { Matrix } from '@/components/pricing/Matrix';
+import { AgentPriceGrid } from '@/components/pricing/AgentPriceGrid';
+import { BundleTerms } from '@/components/pricing/BundleTerms';
 import { FaqList } from '@/components/ui/FaqList';
 import { Reveal } from '@/components/ui/Reveal';
 import { DemoButton } from '@/components/ui/DemoButton';
@@ -38,8 +38,8 @@ export default async function Page({ params }: { params: Promise<{ locale: strin
   setRequestLocale(locale);
 
   const t = await getTranslations('pricingPage');
-  const tPlans = await getTranslations('plans');
-  const faqCount = (tPlans.raw('faq') as unknown[]).length;
+  const tPricing = await getTranslations('agentPricing');
+  const faqCount = (tPricing.raw('faq') as unknown[]).length;
 
   return (
     <>
@@ -59,29 +59,31 @@ export default async function Page({ params }: { params: Promise<{ locale: strin
             {t('lead')}
           </p>
 
-          <div className="enter mt-14" style={{ animationDelay: '460ms' }}>
-            <PlanCards />
-          </div>
-
-          {/* Оговорка про «в курând» стоит сразу под пакетами: она меняет
+          {/* Оговорка про «в curând» стоит в первом экране: она меняет
               решение о покупке и должна попасться на глаза до того, как
-              человек уйдёт сравнивать. */}
+              человек начнёт листать шесть агентов. */}
           <p
             className="enter mt-8 max-w-2xl text-sm leading-relaxed text-chalk-dim"
-            style={{ animationDelay: '560ms' }}
+            style={{ animationDelay: '460ms' }}
           >
-            {tPlans('soonNote')}
+            {t('soonNote')}
           </p>
         </div>
+      </section>
+
+      {/* Сетка отдельной секцией, а не в герое: её липкая шапка с навигацией
+          и переключателем не должна уезжать вместе с заголовком страницы. */}
+      <section className="px-6 pb-section sm:px-8">
+        <AgentPriceGrid />
       </section>
 
       <Reveal>
         <section className="px-6 py-section sm:px-8">
           <div className="mx-auto max-w-7xl">
-            <p className="eyebrow">{tPlans('matrix.title')}</p>
-            <p className="mt-5 max-w-xl leading-relaxed text-chalk-dim">{tPlans('matrix.lead')}</p>
+            <h2 className="text-h2 font-medium">{t('bundleTitle')}</h2>
+            <p className="mt-4 max-w-xl text-body text-chalk-dim">{t('bundleLead')}</p>
             <div className="mt-12">
-              <Matrix />
+              <BundleTerms />
             </div>
           </div>
         </section>
@@ -94,7 +96,7 @@ export default async function Page({ params }: { params: Promise<{ locale: strin
               <p className="eyebrow">{t('faqEyebrow')}</p>
               <h2 className="mt-6 text-h2 font-medium">{t('faqTitle')}</h2>
             </div>
-            <FaqList namespace="plans.faq" count={faqCount} />
+            <FaqList namespace="agentPricing.faq" count={faqCount} />
           </div>
         </section>
       </Reveal>
@@ -106,9 +108,9 @@ export default async function Page({ params }: { params: Promise<{ locale: strin
             <h2 className="text-h1 font-medium">{t('closingTitle')}</h2>
             <p className="mt-6 max-w-xl text-lg leading-relaxed text-chalk-dim">{t('closingLead')}</p>
             <div className="mt-10 flex flex-wrap items-center justify-center gap-3">
-              <DemoButton>{tPlans('start.cta')}</DemoButton>
+              <DemoButton>{t('closingCta')}</DemoButton>
               <Cta href="/agents/chatbot" variant="ghost">
-                {tPlans('matrix.feature')}
+                {t('closingSecondary')}
               </Cta>
             </div>
           </div>

@@ -6,7 +6,8 @@ import { DemoButton } from '@/components/ui/DemoButton';
 import { Reveal } from '@/components/ui/Reveal';
 import { SectionHead } from '@/components/agent/SectionHead';
 import { AGENTS } from '@/lib/catalog';
-import { PLAN_FOR_AGENT } from '@/lib/pricing';
+import { productById } from '@assistwidget/contract';
+import { AgentPriceList } from '@/components/pricing/AgentPriceList';
 import { routing } from '@/i18n/routing';
 
 export function generateStaticParams() {
@@ -57,7 +58,7 @@ export default async function Page({ params }: { params: Promise<{ locale: strin
   const t = await getTranslations('agentsHub');
   const tAgents = await getTranslations('agents');
   const tStatus = await getTranslations('status');
-  const tPlans = await getTranslations('plans');
+  const tPricing = await getTranslations('agentPricing');
   const tHomeAgents = await getTranslations('home.agents');
   const tNav = await getTranslations('nav');
 
@@ -131,9 +132,12 @@ export default async function Page({ params }: { params: Promise<{ locale: strin
                             )}
                             {available ? tStatus('available') : tStatus('soon')}
                           </span>
+                          {/* Цена вместо пакета: агент продаётся сам по себе,
+                              и «входит в Growth» перестало быть ответом
+                              на вопрос «сколько». */}
                           <span className="rounded-pill border border-white/12 px-3 py-1 font-mono text-[10px] tracking-wider text-chalk-faint uppercase">
-                            {tPlans('includedIn', {
-                              plan: tPlans(`${PLAN_FOR_AGENT[agent.slug]}.name`),
+                            {tPricing('priceFrom', {
+                              price: productById(agent.slug)!.tiers!.basic.price,
                             })}
                           </span>
                         </div>
@@ -175,80 +179,24 @@ export default async function Page({ params }: { params: Promise<{ locale: strin
           <div className="mx-auto max-w-7xl">
             <SectionHead eyebrow={t('plansEyebrow')} title={t('plansTitle')} lead={t('plansLead')} />
 
-            {/* Состав пакетов считается из той же таблицы, что и бейджи
-                выше: два списка, написанные руками, разойдутся с ней на
-                первой же перестановке агента между пакетами.
+            {/* Список цен, а не состав пакетов. Пакетов больше нет: агент
+                берётся отдельно, и вопрос «что входит в Growth» сменился
+                вопросом «сколько стоит именно этот». */}
+            <div className="mt-14">
+              <AgentPriceList />
+            </div>
 
-                Двумя карточками это не встаёт: в Start агент ровно один,
-                и рядом с пятью в Growth его карточка выглядела пустой —
-                хотя Start пустым не является, просто остальное в нём
-                не агенты. Две строки не врут ни про одну из ступеней. */}
-            <div className="mt-14 overflow-hidden rounded-card border border-white/8">
-              {(['start', 'growth'] as const).map((plan) => {
-                const inPlan = AGENTS.filter((a) => PLAN_FOR_AGENT[a.slug] === plan);
-                /* Когда вся ступень ещё впереди, метка «в курând» стоит
-                   одна у названия пакета, а не пять раз подряд у каждого
-                   агента. Пять одинаковых подписей в строке читаются как
-                   шум и прячут ровно то, что должны сказать. Как только
-                   первый агент ступени выйдет, метки вернутся к строкам —
-                   потому что тогда они начнут различать. */
-                const allSoon = inPlan.every((a) => a.status !== 'available');
-                return (
-                  <div
-                    key={plan}
-                    className="grid gap-4 border-b border-white/8 px-7 py-7 sm:px-8 lg:grid-cols-[10rem_1fr] lg:gap-12"
-                  >
-                    <div>
-                      <h3 className="text-h3 font-medium">{tPlans(`${plan}.name`)}</h3>
-                      <p className="mt-2 flex flex-wrap items-center gap-2 font-mono text-[10px] tracking-wider text-chalk-faint uppercase">
-                        {t(plan === 'start' ? 'startLabel' : 'growthLabel')}
-                        {allSoon && (
-                          <span className="rounded-pill border border-white/10 px-2 py-0.5">
-                            {tStatus('soon')}
-                          </span>
-                        )}
-                      </p>
-                    </div>
-
-                    <ul className="flex flex-wrap items-center gap-x-6 gap-y-3 lg:pt-1">
-                      {inPlan.map((agent) => (
-                        <li key={agent.slug} className="flex items-center gap-2.5 text-chalk-dim">
-                          <span
-                            className={`size-1.5 shrink-0 rounded-full ${
-                              agent.status === 'available'
-                                ? 'bg-aurora-warm shadow-[0_0_8px_var(--color-aurora-warm)]'
-                                : 'bg-white/25'
-                            }`}
-                            aria-hidden
-                          />
-                          {tAgents(`${agent.slug}.name`)}
-                          {!allSoon && agent.status !== 'available' && (
-                            <span className="font-mono text-[10px] tracking-wider text-chalk-faint uppercase">
-                              {tStatus('soon')}
-                            </span>
-                          )}
-                        </li>
-                      ))}
-                    </ul>
-                  </div>
-                );
-              })}
-
-              {/* Оговорка обязательна: список выше — только агенты, а
-                  ступени состоят не из них одних. Без неё Start читается
-                  как «один чат-бот за те же деньги». */}
-              <div className="flex flex-col gap-4 px-7 py-6 sm:flex-row sm:items-center sm:justify-between sm:px-8">
-                <p className="max-w-2xl text-sm leading-relaxed text-chalk-dim">{t('plansNote')}</p>
-                <Link
-                  href="/pricing"
-                  className="group shrink-0 font-mono text-[11px] tracking-wider text-chalk-faint uppercase transition-colors hover:text-chalk"
-                >
-                  {t('plansLink')}{' '}
-                  <span className="inline-block transition-transform group-hover:translate-x-1">
-                    →
-                  </span>
-                </Link>
-              </div>
+            <div className="mt-8 flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
+              <p className="max-w-2xl text-sm leading-relaxed text-chalk-dim">{t('plansNote')}</p>
+              <Link
+                href="/pricing"
+                className="group shrink-0 font-mono text-[11px] tracking-wider text-chalk-faint uppercase transition-colors hover:text-chalk"
+              >
+                {t('plansLink')}{' '}
+                <span className="inline-block transition-transform group-hover:translate-x-1">
+                  →
+                </span>
+              </Link>
             </div>
 
             {/* Седьмая плитка — не агент, а разговор. Тексты те же, что

@@ -1,6 +1,6 @@
 import { useTranslations } from 'next-intl';
 import { Link } from '@/i18n/routing';
-import { PlanCards } from '@/components/pricing/PlanCards';
+import { AgentPriceList } from '@/components/pricing/AgentPriceList';
 
 /**
  * Тарифы на главной.
@@ -13,7 +13,7 @@ import { PlanCards } from '@/components/pricing/PlanCards';
  */
 export function Pricing() {
   const t = useTranslations('home.pricing');
-  const tPlans = useTranslations('plans');
+  const tPricing = useTranslations('agentPricing');
 
   return (
     <section id="preturi" className="relative isolate px-6 py-section sm:px-8">
@@ -25,14 +25,14 @@ export function Pricing() {
         <p className="mt-6 max-w-xl leading-relaxed text-chalk-dim">{t('lead')}</p>
 
         <div className="mt-14">
-          <PlanCards />
+          <AgentPriceList />
         </div>
 
         {/* Оговорка про «в курând» и ссылка на полное сравнение. На
             главной человек ещё решает, нужен ли ему агент, поэтому
             матрицы здесь нет — только дверь к ней. */}
         <div className="mt-8 flex flex-col gap-6 lg:flex-row lg:items-start lg:justify-between">
-          <p className="max-w-2xl text-sm leading-relaxed text-chalk-dim">{tPlans('soonNote')}</p>
+          <p className="max-w-2xl text-sm leading-relaxed text-chalk-dim">{tPricing('homeNote')}</p>
 
           <Link
             href="/pricing"

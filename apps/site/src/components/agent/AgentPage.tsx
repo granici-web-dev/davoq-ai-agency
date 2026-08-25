@@ -3,7 +3,6 @@ import { useTranslations } from 'next-intl';
 import { Link } from '@/i18n/routing';
 import { Cta } from '@/components/ui/Cta';
 import { DemoButton } from '@/components/ui/DemoButton';
-import { productById } from '@assistwidget/contract';
 import { AgentPricing } from '@/components/pricing/AgentPricing';
 import { FaqList } from '@/components/ui/FaqList';
 import { Reveal } from '@/components/ui/Reveal';
@@ -16,7 +15,6 @@ import { OrderStatus } from './OrderStatus';
 import { ContentDraft } from './ContentDraft';
 import { FeatureIcon } from './FeatureIcon';
 import { INDUSTRIES, industriesForAgent, type Agent } from '@/lib/catalog';
-import { PLAN_FOR_AGENT } from '@/lib/pricing';
 import agentChatbot from '@/../public/images/agent-chatbot.webp';
 
 /** Кадр есть пока только у доступного агента. Остальные ждут своей очереди. */
@@ -68,8 +66,6 @@ export function AgentPage({ agent }: { agent: Agent }) {
      в оплачиваемый сегодня пакет, и человек имеет право прочитать,
      что именно он покупает. */
   const available = agent.status === 'available';
-  /* Есть ли у агента собственные вилки — то есть продаётся ли он поштучно. */
-  const ownTiers = productById(agent.slug)?.tiers !== undefined;
   const full = agent.full === true;
   const visual = VISUALS[agent.slug];
   const Hero = HERO_VISUAL[agent.slug];
@@ -122,23 +118,6 @@ export function AgentPage({ agent }: { agent: Agent }) {
               {available ? tStatus('available') : tStatus('soon')}
             </span>
 
-            {/* С какого пакета агент доступен. Стоит рядом со статусом,
-                а не внизу страницы: «в разработке» без пакета звучит как
-                «когда-нибудь», а с пакетом — как «уже оплачено, ждём».
-             
-                У агента со своей ценой метки нет. «Входит в Growth» над
-                собственными 119 € противоречит само себе и уводит на
-                страницу пакетов — то есть прочь от цены, которую человек
-                как раз и пришёл узнать. Как только у агента появляются
-                вилки, пакет перестаёт быть ответом на вопрос «сколько». */}
-            {!ownTiers && (
-              <Link
-                href="/pricing"
-                className="rounded-pill border border-white/12 px-3 py-1 font-mono text-[10px] tracking-wider text-chalk-dim uppercase transition-colors hover:border-white/25 hover:text-chalk"
-              >
-                {tPlans('includedIn', { plan: tPlans(`${PLAN_FOR_AGENT[agent.slug]}.name`) })}
-              </Link>
-            )}
           </div>
 
           <h1 className="enter mt-6 max-w-3xl text-h1 font-medium" style={{ animationDelay: '560ms' }}>

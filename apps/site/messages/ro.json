@@ -279,9 +279,9 @@
     },
     "pricing": {
       "eyebrow": "Prețuri",
-      "title": "Trei pachete, componență fixă",
-      "lead": "Plătiți lunar pentru agenții care rulează. Separat, o singură dată la început, se plătește configurarea: citirea materialelor dumneavoastră și transformarea listei de prețuri în regulile după care agentul calculează.",
-      "compare": "Comparați planurile"
+      "title": "Fiecare agent, prețul lui",
+      "lead": "Plătiți lunar doar pentru agenții care rulează. Configurarea se plătește o singură dată, la pornire: citirea materialelor dumneavoastră și integrarea pe site.",
+      "compare": "Vedeți toate prețurile"
     },
     "portal": {
       "eyebrow": "Portalul",
@@ -411,7 +411,7 @@
     "soonTitle": "Agentul acesta este în lucru",
     "soonText": "Nu îl vindem încă. Dacă vă interesează, scrieți-ne: la demonstrație vă arătăm ce face deja și vă spunem când e gata.",
     "soonInPlanTitle": "Agentul acesta încă nu a ieșit",
-    "soonInPlanText": "Este inclus în pachetul Growth: îl puteți conecta acum, la prețul de azi, iar agentul se activează pe contul dumneavoastră la lansare. Ce citiți mai jos este ce va face — scris ca atare. Nu vindem ca gata ceva ce încă se scrie.",
+    "soonInPlanText": "Prețul lui este deja stabilit și îl puteți rezerva acum: la lansare rămâne cel de azi. Ce citiți mai jos este ce va face — scris ca atare. Nu vindem ca gata ceva ce încă se scrie.",
     "backToAgents": "Toți agenții",
     "featuresEyebrow": "Ce face",
     "sourcesEyebrow": "Din ce răspunde",
@@ -544,7 +544,7 @@
     },
     "voice-assistant": {
       "metaTitle": "Asistent telefonic AI — răspunde la apeluri și face programări",
-      "metaDescription": "Agent AI care preia apelurile la orice oră, află ce vrea omul, programează în calendarul dumneavoastră și trimite urgențele mai departe. Spune de la început că este agent. Inclus în pachetul Growth.",
+      "metaDescription": "Agent AI care preia apelurile la orice oră, află ce vrea omul, programează în calendarul dumneavoastră și trimite urgențele mai departe. Spune de la început că este agent.",
       "title": "Telefonul care sună în gol este cel mai scump lucru din firmă",
       "lead": "Agentul preia apelul de la primul semnal, la orice oră, află ce vrea omul și îl programează direct în calendarul dumneavoastră. Ce este urgent ajunge la un om în timpul apelului. După fiecare convorbire primiți rezumatul scris.",
       "call": {
@@ -655,7 +655,7 @@
         },
         {
           "q": "Când este gata?",
-          "a": "Nu dăm o dată pe care nu o putem ține. Este inclus în pachetul Growth: dacă îl conectați acum, asistentul telefonic se activează pe contul dumneavoastră la lansare, la prețul de la conectare."
+          "a": "Nu dăm o dată pe care nu o putem ține. Prețul lui este însă stabilit, iar dacă îl rezervați acum, la lansare rămâne cel de azi."
         }
       ],
       "closingTitle": "Sunați-ne și ascultați cum sună",
@@ -663,7 +663,7 @@
     },
     "configurator": {
       "metaTitle": "Configurator AI de cereri — specificație gata de calculat",
-      "metaDescription": "Agent AI care pune întrebările de care depinde prețul și predă vânzărilor o specificație structurată: dimensiuni, materiale, montaj, termen. Inclus în pachetul Growth.",
+      "metaDescription": "Agent AI care pune întrebările de care depinde prețul și predă vânzărilor o specificație structurată: dimensiuni, materiale, montaj, termen.",
       "title": "Configurator care adună specificația, nu doar datele de contact",
       "lead": "Pune, pe rând, întrebările de care depinde prețul: dimensiuni, materiale, montaj, termen. Vânzătorul primește o fișă completată și trece direct la calcul, fără trei zile de mesaje înainte și înapoi.",
       "spec": {
@@ -776,7 +776,7 @@
         },
         {
           "q": "Când este gata?",
-          "a": "Nu dăm o dată pe care nu o putem ține. Este inclus în pachetul Growth: dacă îl conectați acum, configuratorul se activează pe contul dumneavoastră la lansare, la prețul de la conectare."
+          "a": "Nu dăm o dată pe care nu o putem ține. Prețul lui este însă stabilit, iar dacă îl rezervați acum, la lansare rămâne cel de azi."
         }
       ],
       "closingTitle": "Vedeți ce fișă ar strânge din cererile dumneavoastră",
@@ -784,7 +784,7 @@
     },
     "follow-up": {
       "metaTitle": "Agent follow-up — reveniri automate la lead-urile care tac",
-      "metaDescription": "Agent AI care revine la clienții care nu au răspuns: după un orar stabilit de dumneavoastră, despre ce s-a discutat, pe canalul lor. Se oprește când omul răspunde. Inclus în pachetul Growth.",
+      "metaDescription": "Agent AI care revine la clienții care nu au răspuns: după un orar stabilit de dumneavoastră, despre ce s-a discutat, pe canalul lor. Se oprește când omul răspunde.",
       "title": "Revine la clienții care au tăcut — și se oprește când răspund",
       "lead": "Cele mai multe oferte nu se pierd la preț, ci în tăcerea de după. Agentul revine după un orar pe care îl stabiliți dumneavoastră, scrie despre ce s-a discutat și se oprește în clipa în care omul răspunde.",
       "plan": {
@@ -892,7 +892,7 @@
         },
         {
           "q": "Când este gata?",
-          "a": "Nu dăm o dată pe care nu o putem ține. Este inclus în pachetul Growth: dacă îl conectați acum, agentul de follow-up se activează pe contul dumneavoastră la lansare, la prețul de la conectare."
+          "a": "Nu dăm o dată pe care nu o putem ține. Prețul lui este însă stabilit, iar dacă îl rezervați acum, la lansare rămâne cel de azi."
         }
       ],
       "closingTitle": "Vedeți câte oferte tac în urma dumneavoastră",
@@ -900,7 +900,7 @@
     },
     "order-status": {
       "metaTitle": "Statusuri comenzi pentru clienți — anunțuri automate pe etape",
-      "metaDescription": "Agent AI care anunță clientul la fiecare etapă a comenzii și îi dă o pagină cu starea ei. Anunță și întârzierile, la timp. Inclus în pachetul Growth.",
+      "metaDescription": "Agent AI care anunță clientul la fiecare etapă a comenzii și îi dă o pagină cu starea ei. Anunță și întârzierile, la timp.",
       "title": "Clientul află unde e comanda fără să sune",
       "lead": "La fiecare etapă marcată pleacă un mesaj scurt și un link către pagina comenzii. Întârzierile se anunță la fel, iar ce ați marcat ca intern rămâne intern.",
       "order": {
@@ -1010,7 +1010,7 @@
         },
         {
           "q": "Când este gata?",
-          "a": "Nu dăm o dată pe care nu o putem ține. Este inclus în pachetul Growth: dacă îl conectați acum, agentul de statusuri se activează pe contul dumneavoastră la lansare, la prețul de la conectare."
+          "a": "Nu dăm o dată pe care nu o putem ține. Prețul lui este însă stabilit, iar dacă îl rezervați acum, la lansare rămâne cel de azi."
         }
       ],
       "closingTitle": "Vedeți cum arată comanda dumneavoastră pentru client",
@@ -1018,7 +1018,7 @@
     },
     "content-engine": {
       "metaTitle": "Agent AI pentru conținut pe rețele — din lucrările dumneavoastră reale",
-      "metaDescription": "Agent AI care face postări pentru Instagram, TikTok și Pinterest din fotografiile lucrărilor dumneavoastră. Nimic nu se publică fără aprobarea dumneavoastră. Inclus în pachetul Growth.",
+      "metaDescription": "Agent AI care face postări pentru Instagram, TikTok și Pinterest din fotografiile lucrărilor dumneavoastră. Nimic nu se publică fără aprobarea dumneavoastră.",
       "title": "Conținut din lucrările pe care le faceți oricum",
       "lead": "Un montaj fotografiat pe telefon devine trei postări, fiecare în formatul platformei ei. Le citiți, le corectați dacă e cazul, și abia atunci pleacă. Fără apăsarea dumneavoastră nu se publică nimic.",
       "draft": {
@@ -1125,7 +1125,7 @@
         },
         {
           "q": "Când este gata?",
-          "a": "Nu dăm o dată pe care nu o putem ține. Este inclus în pachetul Growth: dacă îl conectați acum, motorul de conținut se activează pe contul dumneavoastră la lansare, la prețul de la conectare."
+          "a": "Nu dăm o dată pe care nu o putem ține. Prețul lui este însă stabilit, iar dacă îl rezervați acum, la lansare rămâne cel de azi."
         }
       ],
       "closingTitle": "Vedeți ce ar ieși dintr-o lucrare de-a dumneavoastră",
@@ -1858,175 +1858,21 @@
       }
     }
   },
-  "plans": {
-    "perMonth": "/ lună",
-    "setup": "Taxă unică de configurare {fee} €",
-    "setupCustom": "Taxă de configurare convenită individual",
-    "recommended": "Recomandat",
-    "priceOnRequest": "Preț individual",
-    "soon": "În curând",
-    "includedIn": "Inclus în {plan}",
-    "start": {
-      "name": "Start",
-      "subtitle": "Asistent AI",
-      "tagline": "Un agent care răspunde non-stop și vă aduce lead-urile gata calificate.",
-      "cta": "Cere o demonstrație",
-      "features": {
-        "chatbot": "Chatbot AI pentru site: răspunsuri 24/7 din baza de cunoștințe",
-        "contacts": "Colectare contacte, transmitere pe e-mail sau în CRM",
-        "qualify": "Calificarea lead-urilor după scenariul nișei",
-        "portal": "Portal: lead-uri, oferte emise, statistici și setările agenților",
-        "limit": "Până la 500 de conversații pe lună",
-        "language": "O limbă, scenariu standard al industriei"
-      }
-    },
-    "growth": {
-      "name": "Growth",
-      "subtitle": "Vânzări AI",
-      "tagline": "Toți agenții noștri, pe un singur cont.",
-      "cta": "Cere o demonstrație",
-      "features": {
-        "inherits": "Tot din Start, până la 2 000 de conversații pe lună",
-        "scenario": "Scenariu adaptat afacerii dumneavoastră, nu doar standardul industriei",
-        "languages": "A doua limbă de comunicare",
-        "voice": "Asistent telefonic: preia apelurile și face programări",
-        "configurator": "Configurator AI de cereri: specificație structurată pentru echipa de vânzări",
-        "followUp": "Agent follow-up: reveniri automate la lead-urile indecise",
-        "orderStatus": "Statusuri comenzi pentru clienți: notificări automate pe etape",
-        "content": "Motor de conținut pentru social media",
-        "priority": "Suport prioritar"
-      }
-    },
-    "platform": {
-      "name": "Platformă",
-      "subtitle": "Custom",
-      "tagline": "Când aveți nevoie de ceva ce nu există încă.",
-      "cta": "Discută cu noi",
-      "features": {
-        "inherits": "Tot din Growth, limite convenite individual",
-        "customAgent": "Orice agent, construit pe comanda dumneavoastră",
-        "automation": "Automatizări la comandă și integrări cu sistemele pe care le folosiți",
-        "website": "Site nou sau refacerea celui existent",
-        "seo": "SEO: structură, texte, viteză, poziții",
-        "marketing": "Marketing digital: campanii, conținut, analitică",
-        "sla": "Însoțire dedicată, SLA"
-      }
-    },
-    "soonNote": "Agenții marcați «în curând» sunt incluși în pachet: îl puteți conecta acum, la prețul de azi, iar agenții se activează pe măsură ce ies. Prețul rămâne cel de la conectare.",
-    "matrix": {
-      "title": "Ce intră în fiecare pachet",
-      "lead": "Pentru cei care compară în detaliu. Rândurile marcate «în curând» sunt incluse în pachet, dar agentul încă nu a ieșit.",
-      "feature": "Ce include",
-      "yes": "Inclus",
-      "no": "Nu este inclus",
-      "rows": {
-        "conversations": {
-          "label": "Conversații pe lună",
-          "start": "500",
-          "growth": "2 000",
-          "platform": "Convenit individual"
-        },
-        "chatbot": {
-          "label": "Chatbot AI 24/7 din baza de cunoștințe"
-        },
-        "scenario": {
-          "label": "Scenariu",
-          "start": "Standard al industriei",
-          "growth": "Adaptat",
-          "platform": "Scris de la zero, sub procesul dumneavoastră"
-        },
-        "languages": {
-          "label": "Limbi de comunicare",
-          "start": "1",
-          "growth": "2",
-          "platform": "Convenit individual"
-        },
-        "voice": {
-          "label": "Asistent telefonic: apeluri preluate și programări"
-        },
-        "qualify": {
-          "label": "Calificarea lead-urilor după scenariul nișei"
-        },
-        "contacts": {
-          "label": "Contacte pe e-mail sau în CRM"
-        },
-        "portal": {
-          "label": "Portal cu lead-uri, oferte și statistici"
-        },
-        "configurator": {
-          "label": "Configurator AI de cereri"
-        },
-        "followUp": {
-          "label": "Agent follow-up"
-        },
-        "orderStatus": {
-          "label": "Statusuri comenzi pentru clienți"
-        },
-        "content": {
-          "label": "Motor de conținut"
-        },
-        "priority": {
-          "label": "Suport prioritar"
-        },
-        "customAgent": {
-          "label": "Agent construit pe comandă"
-        },
-        "automation": {
-          "label": "Automatizări și integrări la comandă"
-        },
-        "website": {
-          "label": "Site nou sau refăcut"
-        },
-        "seo": {
-          "label": "SEO"
-        },
-        "marketing": {
-          "label": "Marketing digital"
-        },
-        "sla": {
-          "label": "Însoțire dedicată, SLA"
-        },
-        "setup": {
-          "label": "Taxă unică de configurare",
-          "start": "490 €",
-          "growth": "890 €",
-          "platform": "Individual"
-        }
-      }
-    },
-    "faq": [
-      {
-        "q": "Ce se consideră o conversație?",
-        "a": "Un dialog cu un vizitator, indiferent câte mesaje conține. Dacă omul revine peste câteva zile și scrie din nou, este o conversație nouă. Mesajele dumneavoastră de test nu se numără."
-      },
-      {
-        "q": "Ce intră în taxa de configurare?",
-        "a": "Discuția, citirea materialelor rând cu rând, transformarea listei de prețuri în regulile după care agentul calculează, scenariul nișei, brandul pe ofertă și verificarea împreună cu dumneavoastră înainte de lansare. Se plătește o singură dată, la început."
-      },
-      {
-        "q": "Pot schimba pachetul?",
-        "a": "Da, în ambele direcții, de la începutul lunii următoare. La trecerea în sus se plătește diferența de configurare, dacă pachetul nou cere mai multă muncă."
-      },
-      {
-        "q": "Ce se întâmplă dacă depășesc limita de conversații?",
-        "a": "Agentul nu se oprește și clienții nu rămân fără răspuns. Depășirea se acoperă cu un pachet suplimentar de conversații, iar dacă se repetă lună de lună vă propunem trecerea la pachetul următor — de obicei iese mai ieftin."
-      },
-      {
-        "q": "Există un termen minim de contract?",
-        "a": "Nu. Abonamentul este lunar și se poate opri de la luna următoare. Ce se întâmplă după oprire cu datele și cu ofertele deja emise este scris în contract, și îl citiți înainte să semnați."
-      }
-    ]
-  },
   "pricingPage": {
     "metaTitle": "Prețuri — agenți AI pe abonament lunar",
     "metaDescription": "Trei pachete: Start de la 199 €/lună, Growth 449 €/lună și Platformă cu preț individual. Configurarea inițială se plătește o singură dată. Fără termen minim de contract.",
     "eyebrow": "Prețuri",
-    "title": "Trei pachete, componență fixă",
-    "lead": "Plătiți lunar pentru agenții care rulează. Configurarea inițială — citirea materialelor și transformarea listei de prețuri în reguli de calcul — se plătește o singură dată, la început.",
+    "title": "Fiecare agent se ia separat",
+    "lead": "Nișe diferite au nevoie de agenți diferiți. Plătiți pentru cei de care aveți nevoie, nu pentru un pachet în care jumătate nu vă folosește.",
     "faqEyebrow": "Întrebări despre prețuri",
     "faqTitle": "Ce se întreabă înainte de a alege",
     "closingTitle": "Nu sunteți sigur ce pachet vă trebuie?",
-    "closingLead": "La demonstrație ne uităm la ce vindeți și la câte întrebări primiți, și vă spunem de care pachet aveți nevoie — inclusiv dacă acela este Start."
+    "closingLead": "La demonstrație ne uităm la ce vindeți și la câte întrebări primiți, și vă spunem de care pachet aveți nevoie — inclusiv dacă acela este Start.",
+    "soonNote": "Agenții marcați «în curând» încă se scriu. Prețul lor este deja stabilit și îl puteți rezerva acum — la lansare rămâne cel de azi.",
+    "bundleTitle": "Mai mulți agenți, configurare",
+    "bundleLead": "Al doilea agent costă mai puțin la pornire decât primul: catalogul, materialele și integrarea pe site se fac o singură dată.",
+    "closingCta": "Cere o demonstrație",
+    "closingSecondary": "Vezi chatbotul"
   },
   "agentsHub": {
     "metaTitle": "Agenți AI pentru afaceri — șase agenți, închiriați separat",
@@ -2066,14 +1912,14 @@
       }
     },
     "plansEyebrow": "Cum se închiriază",
-    "plansTitle": "Doi pași, nu șase abonamente",
-    "plansLead": "Agenții nu se cumpără la bucată: intră în pachete. Start pornește chatbotul, Growth adaugă restul pe măsură ce ies — la prețul de la conectare.",
+    "plansTitle": "Fiecare separat, lunar",
+    "plansLead": "Nu există pachete. Luați agentul de care aveți nevoie, la Basic sau la Pro, și îl opriți când nu vă mai trebuie.",
     "startLabel": "Pornește cu",
     "growthLabel": "Adaugă",
     "plansLink": "Vedeți prețurile",
     "closingTitle": "Nu știți de unde să începeți?",
     "closingLead": "La demonstrație ne uităm la drumul clientului dumneavoastră și vă spunem unde pierdeți cel mai mult. De obicei sunt unul sau două locuri, nu șase.",
-    "plansNote": "Pachetele conțin și ce nu este agent: portalul, calificarea, limbile, numărul de conversații incluse. Lista completă stă la prețuri."
+    "plansNote": "De la doi agenți prețul scade, iar configurarea se plătește o singură dată — al doilea agent pornește mai ieftin decât primul."
   },
   "industriesHub": {
     "metaTitle": "Agenți AI pe industrii — scenariu configurat pentru nișa dumneavoastră",
@@ -2258,15 +2104,15 @@
         "title": "Prețurile afișate",
         "intro": "Prețurile de pe pagina de prețuri sunt abonamentul lunar și taxa unică de configurare pentru pachetele standard. Ele au caracter informativ: nu constituie o ofertă fermă în sens juridic, iar contractul se încheie separat, în scris.",
         "list": [
-          "Pentru pachetul Platformă prețul se stabilește individual, pentru că munca este de fiecare dată alta.",
-          "Prețurile pot fi schimbate pentru viitor. Clientului deja conectat nu i se schimbă prețul pentru pachetul pe care îl are, în condițiile din contract.",
+          "Pentru lucrări la comandă — automatizări, integrări, site, SEO — prețul se stabilește individual, pentru că munca este de fiecare dată alta.",
+          "Prețurile pot fi schimbate pentru viitor. Clientului deja conectat nu i se schimbă prețul pentru agenții pe care îi are, în condițiile din contract.",
           "Regimul de TVA și moneda de facturare se precizează în contract și pe factură."
         ]
       },
       {
         "title": "Agenții marcați «în curând»",
         "intro": "O parte dintre agenți sunt în lucru și nu funcționează încă. Paginile lor descriu ce vor face, nu ce fac azi, și sunt scrise ca atare.",
-        "outro": "«Inclus în pachet» înseamnă că pachetul se poate conecta acum, la prețul de acum, iar agentul se activează pe contul dumneavoastră când este gata. Nu înseamnă o dată anume: nu promitem termene pe care nu le putem ține. Dacă un agent nu apare într-un timp rezonabil, aveți dreptul să renunțați la pachet în condițiile din contract."
+        "outro": "«Preț rezervat» înseamnă că agentul se poate rezerva acum, la prețul de acum, și se activează pe contul dumneavoastră când este gata. Nu înseamnă o dată anume."
       },
       {
         "title": "Imaginile din pagini",
@@ -2338,10 +2184,10 @@
     ],
     "nowEyebrow": "Unde suntem acum",
     "nowTitle": "Un agent lucrează, cinci se scriu",
-    "nowLead": "Chatbotul se vinde și funcționează azi. Ceilalți cinci intră în pachetul Growth pe măsură ce ies. Asta are două fețe și le scriem pe amândouă.",
+    "nowLead": "Chatbotul se vinde și funcționează azi. Ceilalți cinci se scriu și se vând separat, pe măsură ce ies. Asta are două fețe și le scriem pe amândouă.",
     "gainTitle": "Ce câștigați dacă intrați acum",
     "gain": [
-      "Prețul de azi rămâne al dumneavoastră pentru pachetul pe care îl luați.",
+      "Prețul de azi rămâne al dumneavoastră pentru agentul pe care îl luați.",
       "Scenariul îl scriem împreună cu dumneavoastră, nu îl adaptăm dintr-un șablon. La câțiva clienți se poate; la o sută nu s-ar mai putea.",
       "Ce ne cereți acum are șanse reale să ajungă în produs, tocmai pentru că produsul încă se scrie."
     ],
@@ -2400,6 +2246,48 @@
         "scenarioCustom": "Scenariu adaptat afacerii dumneavoastră, nu doar standardul nișei",
         "secondLanguage": "A doua limbă de comunicare"
       }
-    }
+    },
+    "navLabel": "Agenți",
+    "soon": "În curând",
+    "bundle": {
+      "volumeTitle": "Mai mulți agenți",
+      "agentsFrom": "De la {count} agenți",
+      "allAgents": "Toți agenții",
+      "individualPrice": "Preț individual",
+      "stacking": "Reducerile se înmulțesc, nu se adună: doi agenți cu plată anuală înseamnă −{volume} și −{annual}, adică −{total} din suma lunară — nu −30%.",
+      "setupTitle": "Configurare",
+      "setupFirst": "Primul agent",
+      "setupNext": "Fiecare următor",
+      "setupPilot": "Clienți-pilot în nișa lor",
+      "setupNote": "Taxă unică, la pornire. Nu se reduce nici cu plata anuală, nici cu numărul de agenți: este muncă făcută o dată, nu abonament."
+    },
+    "faq": [
+      {
+        "q": "Ce înseamnă o conversație?",
+        "a": "Un vizitator care a scris cel puțin o dată, cu tot ce a urmat în aceeași sesiune. Zece întrebări una după alta rămân o conversație. Dacă același om revine peste trei zile, este a doua."
+      },
+      {
+        "q": "Cum se numără minutele la asistentul telefonic?",
+        "a": "Pe secunde, din momentul în care agentul răspunde până când se închide. La sfârșitul lunii secundele se adună și se rotunjesc o singură dată, în sus, la minut întreg — nu fiecare apel separat. Un apel de 40 de secunde nu costă un minut."
+      },
+      {
+        "q": "Ce se întâmplă dacă depășesc limita?",
+        "a": "Nu se oprește nimic. Agentul continuă să lucreze, iar peste limită se adaugă un pachet suplimentar la prețul pachetului dumneavoastră. Vă anunțăm când ați ajuns la 80%, ca să decideți dumneavoastră: pachet în plus sau trecere la Pro."
+      },
+      {
+        "q": "Pot schimba pachetul?",
+        "a": "În orice lună, în ambele sensuri. Trecerea la Pro se aplică imediat, diferența se calculează pentru zilele rămase. Trecerea înapoi la Basic se aplică din luna următoare."
+      },
+      {
+        "q": "Există contract pe termen lung?",
+        "a": "Nu. Plata lunară se face lună de lună și se oprește când doriți. Plata anuală este o reducere pentru un an plătit înainte, nu o obligație de a rămâne."
+      },
+      {
+        "q": "Ce se întâmplă dacă anulez abonamentul anual?",
+        "a": "Returnăm lunile neutilizate, recalculate la prețul lunar standard. Exemplu: ați plătit 1 430 € pentru Chatbot Pro anual și anulați după 5 luni. Cele 5 luni se recalculează la 149 €, adică 745 €. Vă returnăm 685 €."
+      }
+    ],
+    "priceFrom": "de la {price} €",
+    "homeNote": "Fiecare agent se ia separat, cu abonament lunar. De la doi agenți prețul scade; configurarea se plătește o singură dată."
   }
 }

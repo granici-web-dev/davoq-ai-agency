@@ -279,9 +279,9 @@
     },
     "pricing": {
       "eyebrow": "Pricing",
-      "title": "Three packages, fixed contents",
-      "lead": "You pay monthly for the agents that run. Separately, once at the start, you pay for the setup: reading your materials and turning your price list into the rules the agent prices by.",
-      "compare": "Compare the plans"
+      "title": "Each agent has its own price",
+      "lead": "You pay monthly only for the agents that are running. Setup is paid once, at launch: reading your material and embedding on your site.",
+      "compare": "See all prices"
     },
     "portal": {
       "eyebrow": "The portal",
@@ -411,7 +411,7 @@
     "soonTitle": "This agent is still being built",
     "soonText": "We are not selling it yet. If it interests you, write to us: in a demo we show what it already does and tell you when it will be ready.",
     "soonInPlanTitle": "This agent has not shipped yet",
-    "soonInPlanText": "It is included in the Growth package: you can connect it now, at today's price, and the agent switches on in your account at launch. What you read below is what it will do, written as such. We do not sell as finished something that is still being written.",
+    "soonInPlanText": "Its price is already set and you can reserve it now: at launch it stays what it is today. What you read below is what it will do — written as such. We do not sell something still being built as if it were finished.",
     "backToAgents": "All agents",
     "featuresEyebrow": "What it does",
     "sourcesEyebrow": "What it answers from",
@@ -544,7 +544,7 @@
     },
     "voice-assistant": {
       "metaTitle": "AI phone assistant — answers calls and books appointments",
-      "metaDescription": "An AI agent that picks up at any hour, finds out what the caller wants, books into your calendar and passes urgent calls on. It says from the start that it is an agent. Included in the Growth package.",
+      "metaDescription": "An AI agent that picks up at any hour, finds out what the caller wants, books into your calendar and passes urgent calls on. It says from the start that it is an agent.",
       "title": "A phone ringing out is the most expensive thing in the company",
       "lead": "The agent picks up on the first ring, at any hour, finds out what the caller wants and books them straight into your calendar. Anything urgent reaches a person during the call. After every conversation you get the summary in writing.",
       "call": {
@@ -655,7 +655,7 @@
         },
         {
           "q": "When will it be ready?",
-          "a": "We do not give a date we cannot keep. It is included in the Growth package: if you connect it now, the phone assistant switches on for your account at launch, at the price you connected at."
+          "a": "We do not give a date we cannot keep. Its price is set, though, and if you reserve it now, at launch it stays what it is today."
         }
       ],
       "closingTitle": "Call it and hear how it sounds",
@@ -663,7 +663,7 @@
     },
     "configurator": {
       "metaTitle": "AI request configurator — a specification ready to price",
-      "metaDescription": "An AI agent that asks the questions the price depends on and hands your sales team a structured specification: dimensions, materials, installation, deadline. Included in the Growth package.",
+      "metaDescription": "An AI agent that asks the questions the price depends on and hands your sales team a structured specification: dimensions, materials, installation, deadline.",
       "title": "A configurator that collects the specification, not just the contact details",
       "lead": "It asks, one at a time, the questions the price depends on: dimensions, materials, installation, deadline. Your salesperson gets a filled-in sheet and goes straight to pricing, without three days of messages back and forth.",
       "spec": {
@@ -776,7 +776,7 @@
         },
         {
           "q": "When will it be ready?",
-          "a": "We do not give a date we cannot keep. It is included in the Growth package: connect it now and the configurator switches on in your account at launch, at the price you joined at."
+          "a": "We do not give a date we cannot keep. Its price is set, though, and if you reserve it now, at launch it stays what it is today."
         }
       ],
       "closingTitle": "See what sheet it would collect from your own requests",
@@ -784,7 +784,7 @@
     },
     "follow-up": {
       "metaTitle": "Follow-up agent — automatic returns to leads that went quiet",
-      "metaDescription": "An AI agent that comes back to customers who never replied: on a schedule you set, about what was actually discussed, on their own channel. It stops the moment they answer. Included in the Growth package.",
+      "metaDescription": "An AI agent that comes back to customers who never replied: on a schedule you set, about what was actually discussed, on their own channel. It stops the moment they answer.",
       "title": "It comes back to the customers who went quiet — and stops when they answer",
       "lead": "Most quotes are not lost on price. They are lost in the silence afterwards. The agent comes back on a schedule you set, writes about what was actually discussed, and stops the moment the person replies.",
       "plan": {
@@ -892,7 +892,7 @@
         },
         {
           "q": "When will it be ready?",
-          "a": "We do not give a date we cannot keep. It is included in the Growth package: connect it now and the follow-up agent switches on in your account at launch, at the price you joined at."
+          "a": "We do not give a date we cannot keep. Its price is set, though, and if you reserve it now, at launch it stays what it is today."
         }
       ],
       "closingTitle": "See how many of your quotes went quiet",
@@ -900,7 +900,7 @@
     },
     "order-status": {
       "metaTitle": "Order status for customers — automatic updates at each stage",
-      "metaDescription": "An AI agent that tells your customer at every stage of the order and gives them a page showing where it stands. It announces delays too, in time. Included in the Growth package.",
+      "metaDescription": "An AI agent that tells your customer at every stage of the order and gives them a page showing where it stands. It announces delays too, in time.",
       "title": "Your customer finds out where the order is without phoning",
       "lead": "At every stage you mark, a short message goes out with a link to the order page. Delays are announced the same way, and whatever you marked as internal stays internal.",
       "order": {
@@ -1010,7 +1010,7 @@
         },
         {
           "q": "When will it be ready?",
-          "a": "We do not give a date we cannot keep. It is included in the Growth package: connect it now and the order status agent switches on in your account at launch, at the price you joined at."
+          "a": "We do not give a date we cannot keep. Its price is set, though, and if you reserve it now, at launch it stays what it is today."
         }
       ],
       "closingTitle": "See what your order looks like to your customer",
@@ -1018,7 +1018,7 @@
     },
     "content-engine": {
       "metaTitle": "AI content agent for social media — from your own finished work",
-      "metaDescription": "An AI agent that turns photos of your finished projects into posts for Instagram, TikTok and Pinterest. Nothing is published without your approval. Included in the Growth package.",
+      "metaDescription": "An AI agent that turns photos of your finished projects into posts for Instagram, TikTok and Pinterest. Nothing is published without your approval.",
       "title": "Content from the work you are doing anyway",
       "lead": "An installation photographed on a phone becomes three posts, each in its own platform's format. You read them, correct them if needed, and only then do they go out. Nothing is published without you pressing approve.",
       "draft": {
@@ -1125,7 +1125,7 @@
         },
         {
           "q": "When will it be ready?",
-          "a": "We do not give a date we cannot keep. It is included in the Growth package: if you connect it now, the content engine switches on for your account at launch, at the price you connected at."
+          "a": "We do not give a date we cannot keep. Its price is set, though, and if you reserve it now, at launch it stays what it is today."
         }
       ],
       "closingTitle": "See what would come out of one of your own jobs",
@@ -1858,175 +1858,21 @@
       }
     }
   },
-  "plans": {
-    "perMonth": "/ month",
-    "setup": "One-off setup fee of €{fee}",
-    "setupCustom": "Setup fee agreed individually",
-    "recommended": "Recommended",
-    "priceOnRequest": "Custom pricing",
-    "soon": "Coming soon",
-    "includedIn": "Included in {plan}",
-    "start": {
-      "name": "Start",
-      "subtitle": "AI assistant",
-      "tagline": "One agent that answers around the clock and brings you qualified leads.",
-      "cta": "Book a demo",
-      "features": {
-        "chatbot": "AI chatbot for your site: 24/7 answers from your knowledge base",
-        "contacts": "Contact capture, delivered by email or into your CRM",
-        "qualify": "Lead qualification following your niche's script",
-        "portal": "Portal: leads, issued quotes, statistics and agent settings",
-        "limit": "Up to 500 conversations a month",
-        "language": "One language, standard industry script"
-      }
-    },
-    "growth": {
-      "name": "Growth",
-      "subtitle": "AI sales",
-      "tagline": "All of our agents, on one account.",
-      "cta": "Book a demo",
-      "features": {
-        "inherits": "Everything in Start, up to 2,000 conversations a month",
-        "scenario": "A script adapted to your business, not just the industry standard",
-        "languages": "A second language for conversations",
-        "voice": "Phone assistant: it answers calls and books appointments",
-        "configurator": "AI request configurator: a structured specification for your sales team",
-        "followUp": "Follow-up agent: automatic returns to undecided leads",
-        "orderStatus": "Order status for customers: automatic notifications at each stage",
-        "content": "Content engine for social media",
-        "priority": "Priority support"
-      }
-    },
-    "platform": {
-      "name": "Platform",
-      "subtitle": "Custom",
-      "tagline": "For when you need something that does not exist yet.",
-      "cta": "Talk to us",
-      "features": {
-        "inherits": "Everything in Growth, with limits agreed individually",
-        "customAgent": "Any agent, built to your order",
-        "automation": "Bespoke automations and integrations with the systems you already use",
-        "website": "A new website, or a rebuild of the one you have",
-        "seo": "SEO: structure, copy, speed, rankings",
-        "marketing": "Digital marketing: campaigns, content, analytics",
-        "sla": "Dedicated support, SLA"
-      }
-    },
-    "soonNote": "Agents marked \"coming soon\" are included in the package: you can connect it now, at today's price, and the agents switch on as they are released. The price stays the one you joined at.",
-    "matrix": {
-      "title": "What each package includes",
-      "lead": "For those comparing in detail. Rows marked \"coming soon\" are included in the package, but the agent has not been released yet.",
-      "feature": "What is included",
-      "yes": "Included",
-      "no": "Not included",
-      "rows": {
-        "conversations": {
-          "label": "Conversations a month",
-          "start": "500",
-          "growth": "2,000",
-          "platform": "Agreed individually"
-        },
-        "chatbot": {
-          "label": "AI chatbot, 24/7, from your knowledge base"
-        },
-        "scenario": {
-          "label": "Script",
-          "start": "Standard for the industry",
-          "growth": "Adapted",
-          "platform": "Written from scratch around your process"
-        },
-        "languages": {
-          "label": "Conversation languages",
-          "start": "1",
-          "growth": "2",
-          "platform": "Agreed individually"
-        },
-        "voice": {
-          "label": "Phone assistant: calls answered and appointments booked"
-        },
-        "qualify": {
-          "label": "Lead qualification by niche script"
-        },
-        "contacts": {
-          "label": "Contacts by email or into your CRM"
-        },
-        "portal": {
-          "label": "Portal with leads, quotes and statistics"
-        },
-        "configurator": {
-          "label": "AI request configurator"
-        },
-        "followUp": {
-          "label": "Follow-up agent"
-        },
-        "orderStatus": {
-          "label": "Order status for customers"
-        },
-        "content": {
-          "label": "Content engine"
-        },
-        "priority": {
-          "label": "Priority support"
-        },
-        "customAgent": {
-          "label": "Agent built to order"
-        },
-        "automation": {
-          "label": "Bespoke automations and integrations"
-        },
-        "website": {
-          "label": "New or rebuilt website"
-        },
-        "seo": {
-          "label": "SEO"
-        },
-        "marketing": {
-          "label": "Digital marketing"
-        },
-        "sla": {
-          "label": "Dedicated support, SLA"
-        },
-        "setup": {
-          "label": "One-off setup fee",
-          "start": "€490",
-          "growth": "€890",
-          "platform": "Individual"
-        }
-      }
-    },
-    "faq": [
-      {
-        "q": "What counts as a conversation?",
-        "a": "One dialogue with a visitor, however many messages it contains. If the person comes back a few days later and writes again, that is a new conversation. Your own test messages are not counted."
-      },
-      {
-        "q": "What does the setup fee cover?",
-        "a": "The conversation, reading your materials line by line, turning your price list into the rules the agent prices by, the script for your niche, your brand on the quote, and checking it together with you before launch. It is paid once, at the start."
-      },
-      {
-        "q": "Can I change package?",
-        "a": "Yes, in both directions, from the start of the following month. Moving up, you pay the difference in setup if the new package takes more work."
-      },
-      {
-        "q": "What happens if I exceed the conversation limit?",
-        "a": "The agent does not stop and customers are not left without an answer. The excess is covered by an additional conversation pack, and if it repeats month after month we suggest moving to the next package — it usually works out cheaper."
-      },
-      {
-        "q": "Is there a minimum contract term?",
-        "a": "No. The subscription is monthly and can be stopped from the following month. What happens to your data and to quotes already issued after you stop is written in the contract, and you read it before signing."
-      }
-    ]
-  },
   "pricingPage": {
     "metaTitle": "Pricing — AI agents on a monthly subscription",
     "metaDescription": "Three packages: Start from €199/month, Growth at €449/month and Platform with custom pricing. The initial setup is paid once. No minimum contract term.",
     "eyebrow": "Pricing",
-    "title": "Three packages, fixed contents",
-    "lead": "You pay monthly for the agents that run. The initial setup — reading your materials and turning your price list into pricing rules — is paid once, at the start.",
+    "title": "Each agent is bought on its own",
+    "lead": "Different niches need different agents. Pay for the ones you need, not for a bundle where half of it does nothing for you.",
     "faqEyebrow": "Pricing questions",
     "faqTitle": "What people ask before choosing",
     "closingTitle": "Not sure which package you need?",
-    "closingLead": "In the demo we look at what you sell and how many enquiries you get, and tell you which package you need — including when that is Start."
+    "closingLead": "In the demo we look at what you sell and how many enquiries you get, and tell you which package you need — including when that is Start.",
+    "soonNote": "Agents marked «coming soon» are still being built. Their price is already set and you can reserve it now — at launch it stays what it is today.",
+    "bundleTitle": "More agents, and setup",
+    "bundleLead": "A second agent costs less to launch than the first: the catalogue, the material and the embed on your site are done once.",
+    "closingCta": "Request a demo",
+    "closingSecondary": "See the chatbot"
   },
   "agentsHub": {
     "metaTitle": "AI agents for business — six agents, rented separately",
@@ -2065,15 +1911,15 @@
         "without": "The work gets done and nobody sees it. And nobody arrives at the first question up there any more."
       }
     },
-    "plansEyebrow": "How you rent them",
-    "plansTitle": "Two steps, not six subscriptions",
-    "plansLead": "Agents are not bought one at a time: they come in packages. Start switches on the chatbot, Growth adds the rest as they ship — at the price you connected at.",
+    "plansEyebrow": "How renting works",
+    "plansTitle": "Each on its own, monthly",
+    "plansLead": "There are no bundles. Take the agent you need, at Basic or Pro, and stop it when you no longer do.",
     "startLabel": "Starts with",
     "growthLabel": "Adds",
     "plansLink": "See the prices",
     "closingTitle": "Not sure where to start?",
     "closingLead": "At the demo we look at your customer's path and tell you where you are losing the most. It is usually one or two places, not six.",
-    "plansNote": "The packages also contain what is not an agent: the portal, qualification, languages, the number of conversations included. The full list is on the pricing page."
+    "plansNote": "From two agents the price drops, and setup is paid once — the second agent starts cheaper than the first."
   },
   "industriesHub": {
     "metaTitle": "AI agents by industry — a scenario written for your niche",
@@ -2258,15 +2104,15 @@
         "title": "The prices shown",
         "intro": "The prices on the pricing page are the monthly subscription and the one-off setup fee for the standard packages. They are informational: they do not constitute a binding offer in the legal sense, and the contract is concluded separately, in writing.",
         "list": [
-          "For the Platform package the price is set individually, because the work is different every time.",
-          "Prices may change for the future. A client already connected does not have the price changed for the package they hold, under the terms of their contract.",
+          "For work made to order — automations, integrations, a website, SEO — the price is agreed individually, because the work is different every time.",
+          "Prices may change for the future. A client already connected does not have the price changed for the agents they have, under the terms of the contract.",
           "VAT treatment and the invoicing currency are stated in the contract and on the invoice."
         ]
       },
       {
         "title": "Agents marked «coming soon»",
         "intro": "Some of the agents are still being built and do not work yet. Their pages describe what they will do, not what they do today, and are written as such.",
-        "outro": "«Included in the package» means the package can be connected now, at today's price, and the agent switches on for your account when it is ready. It does not mean a particular date: we do not promise deadlines we cannot keep. If an agent does not appear within a reasonable time, you have the right to leave the package under the terms of your contract."
+        "outro": "«Reserved price» means the agent can be reserved now, at today's price, and switches on in your account when it is ready. It does not mean a particular date."
       },
       {
         "title": "The images on the pages",
@@ -2338,10 +2184,10 @@
     ],
     "nowEyebrow": "Where we are now",
     "nowTitle": "One agent works, five are being written",
-    "nowLead": "The chatbot sells and works today. The other five join the Growth package as they ship. That has two sides and we write both of them.",
+    "nowLead": "The chatbot sells and works today. The other five are being built and are sold separately as they ship. That has two sides and we write both of them.",
     "gainTitle": "What you gain by coming in now",
     "gain": [
-      "Today's price stays yours for the package you take.",
+      "Today's price stays yours for the agent you take.",
       "We write the scenario together with you rather than adapting it from a template. With a handful of clients that is possible; with a hundred it would not be.",
       "What you ask for now has a real chance of reaching the product, precisely because the product is still being written."
     ],
@@ -2400,6 +2246,48 @@
         "scenarioCustom": "A scenario adapted to your business, not just the niche standard",
         "secondLanguage": "A second language"
       }
-    }
+    },
+    "navLabel": "Agents",
+    "soon": "Coming soon",
+    "bundle": {
+      "volumeTitle": "More than one agent",
+      "agentsFrom": "From {count} agents",
+      "allAgents": "All agents",
+      "individualPrice": "Individual price",
+      "stacking": "Discounts multiply, they don't add up: two agents paid annually means −{volume} and −{annual}, which is −{total} off the monthly total — not −30%.",
+      "setupTitle": "Setup",
+      "setupFirst": "First agent",
+      "setupNext": "Each further one",
+      "setupPilot": "Pilot clients in their niche",
+      "setupNote": "One-off, at launch. It is not reduced by annual billing or by the number of agents: it is work done once, not a subscription."
+    },
+    "faq": [
+      {
+        "q": "What counts as a conversation?",
+        "a": "One visitor who wrote at least once, together with everything that followed in the same session. Ten questions in a row stay one conversation. If the same person comes back three days later, that is a second one."
+      },
+      {
+        "q": "How are the phone assistant's minutes counted?",
+        "a": "By the second, from the moment the agent answers until the call ends. At the end of the month the seconds are added up and rounded up to a whole minute once — not per call. A 40-second call does not cost a minute."
+      },
+      {
+        "q": "What happens if I go over the limit?",
+        "a": "Nothing stops. The agent keeps working, and anything above the limit is added as a further package at your plan's rate. We tell you when you reach 80%, so the choice is yours: an extra package, or moving to Pro."
+      },
+      {
+        "q": "Can I change plan?",
+        "a": "Any month, in either direction. Moving to Pro applies immediately and the difference is calculated for the remaining days. Moving back to Basic applies from the following month."
+      },
+      {
+        "q": "Is there a long-term contract?",
+        "a": "No. Monthly billing runs month by month and stops whenever you want. Annual billing is a discount for a year paid up front, not an obligation to stay."
+      },
+      {
+        "q": "What happens if I cancel an annual subscription?",
+        "a": "We refund the unused months, recalculated at the standard monthly price. For example: you paid 1,430 € for Chatbot Pro annually and cancel after 5 months. Those 5 months are recalculated at 149 €, which is 745 €. We refund you 685 €."
+      }
+    ],
+    "priceFrom": "from {price} €",
+    "homeNote": "Each agent is bought on its own, billed monthly. From two agents the price drops; setup is paid once."
   }
 }
