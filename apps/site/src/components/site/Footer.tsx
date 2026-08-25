@@ -2,6 +2,7 @@ import { useTranslations } from 'next-intl';
 import { Link } from '@/i18n/routing';
 import { AGENTS, INDUSTRIES } from '@/lib/catalog';
 import { Logo } from './Logo';
+import { SERVICES } from '@/lib/services';
 
 /**
  * Подвал.
@@ -16,6 +17,7 @@ export function Footer() {
   const tNav = useTranslations('nav');
   const tAgents = useTranslations('agents');
   const tIndustries = useTranslations('industries');
+  const tServices = useTranslations('services');
   const tBrand = useTranslations('brand');
 
   const year = new Date().getFullYear();
@@ -41,6 +43,14 @@ export function Footer() {
             {INDUSTRIES.map((i) => (
               <FooterLink key={i.slug} href={`/industries/${i.slug}`}>
                 {tIndustries(`${i.slug}.name`)}
+              </FooterLink>
+            ))}
+          </FooterColumn>
+
+          <FooterColumn title={tNav('services')}>
+            {SERVICES.map((sv) => (
+              <FooterLink key={sv.slug} href={`/services/${sv.slug}`}>
+                {tServices(`${sv.slug}.name`)}
               </FooterLink>
             ))}
           </FooterColumn>

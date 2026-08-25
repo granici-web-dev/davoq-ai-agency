@@ -5,6 +5,7 @@ import { useLocale, useTranslations } from 'next-intl';
 import { Logo } from './Logo';
 import { Link, usePathname } from '@/i18n/routing';
 import { AGENTS, INDUSTRIES } from '@/lib/catalog';
+import { SERVICES } from '@/lib/services';
 import { DemoButton } from '@/components/ui/DemoButton';
 
 /**
@@ -17,14 +18,27 @@ import { DemoButton } from '@/components/ui/DemoButton';
  * Выпадающие меню открываются наведением И фокусом. Только наведение
  * означало бы, что с клавиатуры каталог недоступен, а он — половина сайта.
  */
+type MenuKey = 'agents' | 'industries' | 'services';
+
+interface Menu {
+  href: string;
+  label: string;
+  all: string;
+  items: { href: string; name: string; short: string; badge: string | null }[];
+}
+
 export function Header() {
   const t = useTranslations('nav');
   const tAgents = useTranslations('agents');
   const tIndustries = useTranslations('industries');
+  const tServices = useTranslations('services');
   const tStatus = useTranslations('status');
   const pathname = usePathname();
 
-  const [open, setOpen] = useState<'agents' | 'industries' | null>(null);
+  /* Какое меню раскрыто. Тип выведен из самих меню, а не перечислен руками:
+     список уже расходился — при добавлении услуг он остался из двух пунктов,
+     и сборка встала. Теперь новое меню в `menus` расширяет тип само. */
+  const [open, setOpen] = useState<MenuKey | null>(null);
   const [mobile, setMobile] = useState(false);
   const [scrolled, setScrolled] = useState(false);
 
@@ -47,7 +61,7 @@ export function Header() {
     return () => document.removeEventListener('keydown', onKey);
   }, []);
 
-  const menus = {
+  const menus: Record<MenuKey, Menu> = {
     agents: {
       href: '/agents',
       label: t('agents'),
@@ -70,7 +84,18 @@ export function Header() {
         badge: null,
       })),
     },
-  } as const;
+    services: {
+      href: '/services',
+      label: t('services'),
+      all: t('allServices'),
+      items: SERVICES.map((sv) => ({
+        href: `/services/${sv.slug}`,
+        name: tServices(`${sv.slug}.name`),
+        short: tServices(`${sv.slug}.short`),
+        badge: null,
+      })),
+    },
+  };
 
   return (
     <header className="fixed inset-x-0 top-0 z-50 px-4 pt-4 sm:pt-5">
@@ -112,7 +137,7 @@ export function Header() {
           }`}
           onMouseLeave={() => setOpen(null)}
         >
-          {(['agents', 'industries'] as const).map((key) => (
+          {(['agents', 'industries', 'services'] as const).map((key) => (
             <div key={key} className="relative" onMouseEnter={() => setOpen(key)}>
               <Link
                 href={menus[key].href}
@@ -199,7 +224,7 @@ export function Header() {
       {mobile && (
         <div className="mx-auto mt-3 max-w-7xl lg:hidden">
           <div className="glass-panel max-h-[70vh] overflow-y-auto rounded-card p-5">
-            {(['agents', 'industries'] as const).map((key) => (
+            {(['agents', 'industries', 'services'] as const).map((key) => (
               <div key={key} className="mb-5">
                 <p className="eyebrow mb-2">{menus[key].label}</p>
                 <ul className="grid gap-1">

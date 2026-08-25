@@ -6,6 +6,7 @@
   "nav": {
     "agents": "Agents",
     "industries": "Industries",
+    "services": "Services",
     "pricing": "Pricing",
     "about": "About",
     "contact": "Contact",
@@ -14,7 +15,8 @@
     "allIndustries": "All industries",
     "openMenu": "Open menu",
     "closeMenu": "Close menu",
-    "skipToContent": "Skip to content"
+    "skipToContent": "Skip to content",
+    "allServices": "All services"
   },
   "status": {
     "available": "Available",
@@ -2289,5 +2291,326 @@
     ],
     "priceFrom": "from {price} €",
     "homeNote": "Each agent is bought on its own, billed monthly. From two agents the price drops; setup is paid once."
+  },
+  "services": {
+    "site-web": {
+      "name": "Websites and online shops",
+      "short": "From a one-page presence to a shop with thousands of products. On whichever CMS suits you — or on none at all."
+    },
+    "seo": {
+      "name": "SEO",
+      "short": "Structure, copy, speed, rankings. Without promising you first place by next month."
+    },
+    "marketing-digital": {
+      "name": "Digital marketing",
+      "short": "Campaigns, content, analytics. With numbers you can check, not reports about reach."
+    },
+    "automatizari": {
+      "name": "Automations and integrations",
+      "short": "We connect the systems you already use, so nobody moves data by hand any more."
+    }
+  },
+  "servicePage": {
+    "site-web": {
+      "metaTitle": "Websites and online shops — from a business card to a store",
+      "metaDescription": "We build presentation sites, company sites and online shops, on WordPress, another CMS, or no CMS at all. We also rebuild existing sites.",
+      "title": "Sites from scratch, and rebuilds for the ones that stopped coping",
+      "lead": "A one-page presence and a shop with thousands of products are two different jobs with two different timelines. We start from what the site has to do, not from how many pages it has.",
+      "includesTitle": "What we build",
+      "includes": [
+        {
+          "title": "Presentation site",
+          "text": "A few pages saying who you are and what you do, with a form that reaches the right inbox. The shortest way from «we have nothing» to «we have somewhere to send the customer»."
+        },
+        {
+          "title": "Company site",
+          "text": "Services, portfolio, team, blog. A structure that grows: you add a section without rewriting the site."
+        },
+        {
+          "title": "Online shop",
+          "text": "Catalogue, cart, payments, delivery, a link to your stock. From a few dozen products to thousands, with filters that don't stall."
+        },
+        {
+          "title": "CMS of your choice",
+          "text": "WordPress, if you want to edit it yourself and easily find someone to carry it on. Another CMS, if you already have one. Or none, if the copy changes once a year — then the site is faster and there is less to break."
+        },
+        {
+          "title": "Rebuild",
+          "text": "The site exists, but it loads slowly, looks dated, or breaks on a phone. We look at what is worth keeping: sometimes only the surface needs redoing, not everything."
+        },
+        {
+          "title": "Moving without losses",
+          "text": "When the site changes, the old addresses keep working. Otherwise you lose your rankings and every link other people made to you."
+        }
+      ],
+      "stepsTitle": "How it goes",
+      "stepsLead": "No stage where we disappear for a month and come back with a site you are seeing for the first time.",
+      "steps": [
+        {
+          "title": "Conversation",
+          "text": "What the site has to do, and for whom. If the answer is «just to exist», we keep asking: without it neither the structure nor the CMS can be chosen."
+        },
+        {
+          "title": "Structure",
+          "text": "Which pages there are, what sits on each, how you get from one to another. Agreed before anything is drawn."
+        },
+        {
+          "title": "Design",
+          "text": "The pages that decide come first — the home page and the product or service page. The rest follows once those are settled."
+        },
+        {
+          "title": "Going live",
+          "text": "The site gets built, filled with your material, checked on a phone and put on your domain. We show you how to edit what is meant to be edited."
+        }
+      ],
+      "faqTitle": "What people ask",
+      "faq": [
+        {
+          "q": "What does it cost?",
+          "a": "It depends on the job, which is why we don't price by the page. A presentation site and a shop wired into your accounting are different months of work. After the first conversation we give an estimate with bounds: «between this and that, and more if this comes up»."
+        },
+        {
+          "q": "How long does it take?",
+          "a": "A presentation site — weeks, not months. A shop — it depends on the catalogue and the integrations. We give the deadline once we know the structure, not before."
+        },
+        {
+          "q": "Can I edit it myself?",
+          "a": "Yes, if we pick a CMS. Copy, photos and pages change from the admin panel without us. Structure stays with us — that is where things break."
+        },
+        {
+          "q": "What happens to the old site?",
+          "a": "It keeps working until the new one is ready and checked. The switch happens on a day agreed in advance, and the old addresses lead to the new pages."
+        }
+      ],
+      "closingTitle": "Tell us what the site has to do",
+      "closingLead": "Not how many pages it has, but what should happen after someone opens it. Everything else follows from that."
+    },
+    "seo": {
+      "metaTitle": "SEO — structure, copy, speed, rankings",
+      "metaDescription": "Search engine optimisation: site structure, copy, loading speed, rankings. Without promising first place in the first month.",
+      "title": "SEO without promises nobody can keep",
+      "lead": "No one can guarantee first place: the algorithm is not ours. What can be done is make the site findable, and make the growth measurable and explainable.",
+      "includesTitle": "What we do",
+      "includes": [
+        {
+          "title": "Audit",
+          "text": "What is stopping the site from being found right now. Not a hundred-page report: a list of what to fix, in the order that matters."
+        },
+        {
+          "title": "Structure and addresses",
+          "text": "Pages for the queries people actually search, readable addresses, links between pages. Without that, good copy sits on pages nobody finds."
+        },
+        {
+          "title": "Copy",
+          "text": "Written for a person, not a robot, but with the words people search by. Text written only for the algorithm reads like text written for the algorithm — to people and to Google alike."
+        },
+        {
+          "title": "Speed",
+          "text": "A page that loads slowly loses visitors before it is read. Measured, fixed, measured again."
+        },
+        {
+          "title": "Rankings and reports",
+          "text": "Which queries went up, which didn't, and why. Monthly, with numbers you can check in Search Console — not «reach» and «impressions»."
+        }
+      ],
+      "stepsTitle": "How it goes",
+      "stepsLead": "SEO has no launch day. It has the month when the first movement shows.",
+      "steps": [
+        {
+          "title": "Audit",
+          "text": "We see what is there and what is missing. This is where it is decided whether to start with copy, structure or speed."
+        },
+        {
+          "title": "Fix what blocks",
+          "text": "First the things preventing indexing. New copy on a site Google doesn't read helps nobody."
+        },
+        {
+          "title": "Content",
+          "text": "Pages for the queries that bring customers, not just traffic. A query with ten searches a month and buying intent beats one with thousands of browsers."
+        },
+        {
+          "title": "Measurement",
+          "text": "Monthly: what moved, what didn't, what we do next. The first changes usually show in two or three months."
+        }
+      ],
+      "faqTitle": "What people ask",
+      "faq": [
+        {
+          "q": "How soon are there results?",
+          "a": "Usually two to three months to the first movement, and longer to stable positions. Anyone promising the first month is either selling something else or not telling you everything."
+        },
+        {
+          "q": "Do you guarantee first place?",
+          "a": "No. The algorithm is not ours and it changes. We guarantee the work and the numbers: what we did, what moved, what comes next."
+        },
+        {
+          "q": "Does the site have to change?",
+          "a": "Sometimes yes — if the structure or the speed is what stops it being found. We tell you that at the audit, before you start paying for copy that will have no effect."
+        },
+        {
+          "q": "Does SEO work without paid ads?",
+          "a": "It does, but more slowly. Ads bring visitors tomorrow and stop when you stop paying; SEO brings them later and stays. Usually they are done together."
+        }
+      ],
+      "closingTitle": "Start with the audit",
+      "closingLead": "See what is holding you back now. If the audit says it isn't worth it, we say so — that is cheaper for both of us than a year of work with no effect."
+    },
+    "marketing-digital": {
+      "metaTitle": "Digital marketing — campaigns, content, analytics",
+      "metaDescription": "Paid campaigns, content and analytics. With numbers you can check: what a customer cost, not how many impressions there were.",
+      "title": "Digital marketing measured in customers, not impressions",
+      "lead": "«Reach» and «impressions» don't go in the bank. We look at what a customer cost and what they brought, and if a channel doesn't justify itself, we stop it.",
+      "includesTitle": "What we do",
+      "includes": [
+        {
+          "title": "Paid campaigns",
+          "text": "Google, Meta, depending on where your customers are. We start with small budgets across several variants and scale only what works."
+        },
+        {
+          "title": "Content",
+          "text": "Posts and material for the networks where being present makes sense. From your own work, not from bought stock photos."
+        },
+        {
+          "title": "Analytics",
+          "text": "Measurement set up properly: where someone came from, what they did, where they stopped. Without it, any conversation about efficiency is an opinion."
+        },
+        {
+          "title": "Landing pages",
+          "text": "A good ad pointing at your home page loses half the people. The page is built for the campaign and for the question they clicked with."
+        },
+        {
+          "title": "Monthly report",
+          "text": "What was spent, how many enquiries came, what one cost, what changes next month. One page, not twenty."
+        }
+      ],
+      "stepsTitle": "How it goes",
+      "stepsLead": "The first budget is for finding out, not for selling. That is worth knowing up front.",
+      "steps": [
+        {
+          "title": "Starting numbers",
+          "text": "What a customer costs you now and what you can afford them to cost. Without those two numbers there is no saying whether a campaign is doing well."
+        },
+        {
+          "title": "Measurement",
+          "text": "We set up analytics before the first euro is spent. A campaign without proper measurement can neither be stopped in time nor scaled."
+        },
+        {
+          "title": "Test",
+          "text": "Several variants on a small budget. It shows which brings enquiries and at what price — usually not the one we expected."
+        },
+        {
+          "title": "Scaling",
+          "text": "What works gets budget, what doesn't gets stopped. Monthly, with a report you can read in five minutes."
+        }
+      ],
+      "faqTitle": "What people ask",
+      "faq": [
+        {
+          "q": "What budget is needed?",
+          "a": "It depends on the niche and the competition. A budget too small produces no data to learn from — then it is more honest not to start than to spend for nothing."
+        },
+        {
+          "q": "What am I paying for?",
+          "a": "Our work is separate from the ad budget. The budget goes entirely to the platform, and you see what was spent in your own account."
+        },
+        {
+          "q": "How soon do enquiries come?",
+          "a": "The first ones — within days, if the campaign is set up well. But the first month is for finding out what works; conclusions come from the second."
+        },
+        {
+          "q": "Do you handle social media?",
+          "a": "Yes, if your customers are there. If they are not, we say so: being present «because you should» costs time and brings nothing."
+        }
+      ],
+      "closingTitle": "Start from the numbers",
+      "closingLead": "Tell us what a customer costs you now. If you don't know — we start with measurement, which is cheaper than finding out after six months of budget."
+    },
+    "automatizari": {
+      "metaTitle": "Custom automations and integrations",
+      "metaDescription": "We connect the systems you use: CRM, accounting, stock, website. So data stops being moved by hand from one place to another.",
+      "title": "Automation for the work somebody is doing by hand right now",
+      "lead": "If a person copies data from one place to another every day, that is not work — that is a missing link between two systems.",
+      "includesTitle": "What we do",
+      "includes": [
+        {
+          "title": "Links between systems",
+          "text": "Website, CRM, accounting, stock, calendar. An order from the site reaches where it needs to without anyone retyping it."
+        },
+        {
+          "title": "Custom scenarios",
+          "text": "«When this happens — check that and tell whoever needs to know.» You set the rules, we make them run."
+        },
+        {
+          "title": "Documents",
+          "text": "Invoices, quotes and paperwork generated from data that already exists, on your own letterhead. No copying between files."
+        },
+        {
+          "title": "Reports",
+          "text": "Numbers collected on their own, at the hour you choose. Instead of a day a month spent in spreadsheets."
+        },
+        {
+          "title": "Links to the agents",
+          "text": "If you already run an agent, the automation connects it to your systems: the agent learns an order's status from where it actually lives."
+        }
+      ],
+      "stepsTitle": "How it goes",
+      "stepsLead": "It starts with one operation, not with all of them at once.",
+      "steps": [
+        {
+          "title": "What is done by hand",
+          "text": "You show us the working day. Almost always two or three things turn up that repeat and shouldn't exist."
+        },
+        {
+          "title": "What connects to what",
+          "text": "We look at which systems you have and what they can do. Sometimes the link already exists and nobody uses it."
+        },
+        {
+          "title": "One, end to end",
+          "text": "We build the first automation and let it run for a week. It shows quickly whether we understood how things actually work at your place."
+        },
+        {
+          "title": "The rest",
+          "text": "Once the first one runs, the next ones follow. In the order of what costs you time, not what is easy to build."
+        }
+      ],
+      "faqTitle": "What people ask",
+      "faq": [
+        {
+          "q": "What if our system is old?",
+          "a": "It can often be connected anyway — through an export, a database, a file. We check before promising: if it can't be done, we say so at the first conversation."
+        },
+        {
+          "q": "What if it breaks?",
+          "a": "An automation that fails must say so, not go quiet. We put an alert on every step that can fail, and the data stays where it was — nothing is lost on the way."
+        },
+        {
+          "q": "Are we then tied to you?",
+          "a": "The scenarios are built on ordinary tools, not on something only we know. If you work with someone else tomorrow, there is something for them to take over."
+        },
+        {
+          "q": "Where do we start?",
+          "a": "With the operation that eats the most of your time. Not the easiest one — that one usually isn't felt."
+        }
+      ],
+      "closingTitle": "Show us the working day",
+      "closingLead": "No prepared list needed. We look together at what repeats, and from there it is clear what is worth automating first."
+    }
+  },
+  "servicesPage": {
+    "metaTitle": "Services — websites, SEO, digital marketing, automation",
+    "metaDescription": "Beyond the agents: websites and online shops, SEO, digital marketing, automations and integrations with the systems you use.",
+    "eyebrow": "Services",
+    "title": "What else we do, besides the agents",
+    "lead": "An agent needs somewhere to live and customers who get there. That is why we also build sites, do SEO and run campaigns — but each is bought on its own, not as a bundle.",
+    "open": "Details",
+    "priceNote": "Each of these is priced individually, and not out of secrecy: a presentation site and a shop wired into your accounting are different months of work. After the first conversation we give an estimate with bounds, not a figure pulled out of the air.",
+    "includesEyebrow": "What we do",
+    "stepsEyebrow": "How we work",
+    "faqEyebrow": "Questions",
+    "cta": "Let's discuss the project",
+    "allServices": "All services",
+    "closingTitle": "Tell us what you need",
+    "closingLead": "If you are not sure which service solves your problem — describe the problem and we'll pick together.",
+    "closingSecondary": "See the agents"
   }
 }

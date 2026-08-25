@@ -6,6 +6,7 @@
   "nav": {
     "agents": "Agenți",
     "industries": "Industrii",
+    "services": "Servicii",
     "pricing": "Prețuri",
     "about": "Despre",
     "contact": "Contact",
@@ -14,7 +15,8 @@
     "allIndustries": "Toate industriile",
     "openMenu": "Deschide meniul",
     "closeMenu": "Închide meniul",
-    "skipToContent": "Sari la conținut"
+    "skipToContent": "Sari la conținut",
+    "allServices": "Toate serviciile"
   },
   "status": {
     "available": "Disponibil",
@@ -2289,5 +2291,326 @@
     ],
     "priceFrom": "de la {price} €",
     "homeNote": "Fiecare agent se ia separat, cu abonament lunar. De la doi agenți prețul scade; configurarea se plătește o singură dată."
+  },
+  "services": {
+    "site-web": {
+      "name": "Site-uri și magazine online",
+      "short": "De la site de prezentare până la magazin cu mii de produse. Pe CMS-ul care vă convine, sau fără CMS deloc."
+    },
+    "seo": {
+      "name": "SEO",
+      "short": "Structură, texte, viteză, poziții. Fără promisiuni de «locul întâi luna viitoare»."
+    },
+    "marketing-digital": {
+      "name": "Marketing digital",
+      "short": "Campanii, conținut, analitică. Cu cifre care se verifică, nu cu rapoarte despre acoperire."
+    },
+    "automatizari": {
+      "name": "Automatizări și integrări",
+      "short": "Legăm sistemele pe care le folosiți deja, ca datele să nu mai fie mutate cu mâna."
+    }
+  },
+  "servicePage": {
+    "site-web": {
+      "metaTitle": "Creare site-uri și magazine online — de la vizită până la magazin",
+      "metaDescription": "Facem site-uri de prezentare, site-uri de firmă și magazine online, pe WordPress, pe alt CMS sau fără CMS. Refacem și site-urile existente.",
+      "title": "Site-uri de la zero și refacerea celor care nu mai fac față",
+      "lead": "Un site de prezentare și un magazin cu mii de produse sunt două lucrări diferite, cu termene diferite. Începem de la ce trebuie să facă site-ul, nu de la câte pagini are.",
+      "includesTitle": "Ce facem",
+      "includes": [
+        {
+          "title": "Site de prezentare",
+          "text": "Câteva pagini care spun cine sunteți și ce faceți, cu formular care ajunge unde trebuie. Cel mai scurt drum de la «nu avem nimic» la «avem unde trimite clientul»."
+        },
+        {
+          "title": "Site de firmă",
+          "text": "Servicii, portofoliu, echipă, blog. Structură care crește: adăugați o secțiune fără să rescrieți site-ul."
+        },
+        {
+          "title": "Magazin online",
+          "text": "Catalog, coș, plăți, livrare, legătura cu stocul. De la câteva zeci de produse până la mii, cu filtre care nu se blochează."
+        },
+        {
+          "title": "CMS la alegere",
+          "text": "WordPress, dacă vreți să editați singuri și să găsiți ușor pe cineva care continuă. Alt CMS, dacă aveți deja unul. Sau fără CMS, dacă textele se schimbă o dată pe an — atunci site-ul e mai rapid și nu are ce să se strice."
+        },
+        {
+          "title": "Refacere",
+          "text": "Site-ul există, dar se încarcă greu, arată vechi sau nu se vede pe telefon. Ne uităm ce merită păstrat: uneori e de refăcut doar aspectul, nu tot."
+        },
+        {
+          "title": "Mutare fără pierderi",
+          "text": "La schimbarea site-ului, adresele vechi rămân să funcționeze. Altfel pierdeți poziții în Google și legăturile pe care le-au dat alții spre dumneavoastră."
+        }
+      ],
+      "stepsTitle": "Cum decurge",
+      "stepsLead": "Fără etapă în care dispărem pentru o lună și revenim cu un site pe care îl vedeți prima oară.",
+      "steps": [
+        {
+          "title": "Discuție",
+          "text": "Ce trebuie să facă site-ul și pentru cine. Dacă răspunsul e «să fie», întrebăm mai departe: fără el nu se poate alege nici structura, nici CMS-ul."
+        },
+        {
+          "title": "Structură",
+          "text": "Ce pagini sunt, ce stă pe fiecare, cum se ajunge dintr-una în alta. Se aprobă înainte de orice desen."
+        },
+        {
+          "title": "Design",
+          "text": "Întâi paginile care decid — prima pagină și pagina de produs sau serviciu. Restul se face după ce ele sunt bătute în cuie."
+        },
+        {
+          "title": "Punere în funcțiune",
+          "text": "Site-ul se face, se umple cu materialele dumneavoastră, se verifică pe telefon și se pune pe domeniu. Vă arătăm cum să editați ce se editează."
+        }
+      ],
+      "faqTitle": "Ce se întreabă",
+      "faq": [
+        {
+          "q": "Cât costă?",
+          "a": "Depinde de lucrare, și de aceea nu punem un preț pe pagină. Un site de prezentare și un magazin cu integrare în contabilitate sunt luni diferite. După prima discuție dăm o estimare cu limite: «între atât și atât, iar mai mult devine dacă apare asta»."
+        },
+        {
+          "q": "Cât durează?",
+          "a": "Un site de prezentare — săptămâni, nu luni. Un magazin — depinde de catalog și de integrări. Termenul îl dăm după ce știm structura, nu înainte."
+        },
+        {
+          "q": "Pot edita singur?",
+          "a": "Da, dacă alegem un CMS. Textele, pozele și paginile se schimbă din panou, fără noi. Ce ține de structură rămâne la noi — acolo se strică lucrurile."
+        },
+        {
+          "q": "Ce se întâmplă cu site-ul vechi?",
+          "a": "Rămâne să funcționeze până când cel nou este gata și verificat. Trecerea se face într-o zi anunțată dinainte, iar adresele vechi duc la paginile noi."
+        }
+      ],
+      "closingTitle": "Spuneți ce trebuie să facă site-ul",
+      "closingLead": "Nu câte pagini are, ci ce trebuie să se întâmple după ce omul l-a deschis. Restul se așază de la asta."
+    },
+    "seo": {
+      "metaTitle": "SEO — structură, texte, viteză, poziții",
+      "metaDescription": "Optimizare pentru motoarele de căutare: structura site-ului, textele, viteza de încărcare, pozițiile. Fără promisiuni de locul întâi în prima lună.",
+      "title": "SEO fără promisiuni pe care nu le poate ține nimeni",
+      "lead": "Nimeni nu poate garanta locul întâi: algoritmul nu este al nostru. Ce se poate — să facem site-ul de găsit, iar creșterea să fie măsurabilă și explicabilă.",
+      "includesTitle": "Ce facem",
+      "includes": [
+        {
+          "title": "Audit",
+          "text": "Ce împiedică site-ul să fie găsit acum. Fără o sută de pagini de raport: lista lucrurilor de reparat, în ordinea în care contează."
+        },
+        {
+          "title": "Structură și adrese",
+          "text": "Pagini pentru interogările după care vă caută oamenii, adrese citibile, legături între pagini. Fără asta textele bune stau pe pagini pe care nu le găsește nimeni."
+        },
+        {
+          "title": "Texte",
+          "text": "Scrise pentru om, nu pentru robot, dar cu cuvintele după care se caută. Text scris doar pentru algoritm se citește ca text scris pentru algoritm — și de om, și de Google."
+        },
+        {
+          "title": "Viteză",
+          "text": "Pagina care se încarcă greu pierde vizitatori înainte să fie citită. Se măsoară, se repară, se măsoară din nou."
+        },
+        {
+          "title": "Poziții și rapoarte",
+          "text": "Ce interogări au crescut, ce nu, și de ce. Lunar, cu cifre care se verifică în Search Console — nu cu «acoperire» și «impresii»."
+        }
+      ],
+      "stepsTitle": "Cum decurge",
+      "stepsLead": "SEO nu are zi de lansare. Are lună în care se vede prima mișcare.",
+      "steps": [
+        {
+          "title": "Audit",
+          "text": "Vedem ce este și ce lipsește. Aici se decide dacă merită început cu texte, cu structură sau cu viteza."
+        },
+        {
+          "title": "Reparat ce blochează",
+          "text": "Întâi lucrurile care împiedică indexarea. Textele noi pe un site pe care Google nu îl citește nu ajută la nimic."
+        },
+        {
+          "title": "Conținut",
+          "text": "Pagini pentru interogările care aduc clienți, nu doar trafic. O interogare cu zece căutări pe lună și intenție de cumpărare bate una cu mii de curioși."
+        },
+        {
+          "title": "Măsurare",
+          "text": "Lunar: ce s-a mișcat, ce nu, ce facem mai departe. Primele schimbări se văd de obicei în două-trei luni."
+        }
+      ],
+      "faqTitle": "Ce se întreabă",
+      "faq": [
+        {
+          "q": "În cât timp se văde rezultatul?",
+          "a": "De obicei două-trei luni până la primele mișcări și mai mult până la poziții stabile. Cine promite prima lună fie vinde altceva, fie nu spune tot."
+        },
+        {
+          "q": "Garantați locul întâi?",
+          "a": "Nu. Algoritmul nu este al nostru și se schimbă. Garantăm munca și cifrele: ce am făcut, ce s-a mișcat, ce urmează."
+        },
+        {
+          "q": "Trebuie schimbat site-ul?",
+          "a": "Uneori da — dacă structura sau viteza îl împiedică să fie găsit. Vă spunem asta la audit, înainte să începeți să plătiți pentru texte care nu vor avea efect."
+        },
+        {
+          "q": "Merge SEO fără reclamă plătită?",
+          "a": "Merge, dar mai încet. Reclama aduce vizitatori mâine și se oprește când opriți plata; SEO aduce mai târziu și rămâne. De obicei se fac împreună."
+        }
+      ],
+      "closingTitle": "Începeți cu auditul",
+      "closingLead": "Vedeți ce vă împiedică acum. Dacă din audit reiese că nu merită, o spunem — e mai ieftin pentru amândoi decât un an de muncă fără efect."
+    },
+    "marketing-digital": {
+      "metaTitle": "Marketing digital — campanii, conținut, analitică",
+      "metaDescription": "Campanii plătite, conținut și analitică. Cu cifre care se verifică: cât a costat clientul, nu câte impresii au fost.",
+      "title": "Marketing digital care se măsoară în clienți, nu în impresii",
+      "lead": "«Acoperire» și «impresii» nu se depun la bancă. Ne uităm la cât a costat un client și la ce a adus, iar dacă un canal nu se justifică, îl oprim.",
+      "includesTitle": "Ce facem",
+      "includes": [
+        {
+          "title": "Campanii plătite",
+          "text": "Google, Meta, în funcție de unde sunt clienții dumneavoastră. Începem cu bugete mici pe mai multe variante și creștem doar ce funcționează."
+        },
+        {
+          "title": "Conținut",
+          "text": "Postări și materiale pentru rețelele în care are rost să fiți. Din lucrările dumneavoastră, nu din poze de stoc cumpărate."
+        },
+        {
+          "title": "Analitică",
+          "text": "Măsurare pusă corect: de unde a venit omul, ce a făcut, unde s-a oprit. Fără asta orice discuție despre eficiență e o părere."
+        },
+        {
+          "title": "Pagini de aterizare",
+          "text": "Reclama bună care duce spre pagina de start pierde jumătate din oameni. Pagina se face sub campanie și sub întrebarea cu care omul a dat clic."
+        },
+        {
+          "title": "Raport lunar",
+          "text": "Cât s-a cheltuit, câte cereri au venit, cât a costat una, ce se schimbă luna viitoare. O pagină, nu douăzeci."
+        }
+      ],
+      "stepsTitle": "Cum decurge",
+      "stepsLead": "Primul buget este pentru aflat, nu pentru vândut. Asta trebuie știut de la început.",
+      "steps": [
+        {
+          "title": "Cifre de pornire",
+          "text": "Cât costă un client acum și cât vă permiteți să coste. Fără aceste două numere nu se poate spune dacă o campanie merge bine."
+        },
+        {
+          "title": "Măsurare",
+          "text": "Punem analitica înainte de primul leu cheltuit. Campania fără măsurare corectă nu se poate nici opri la timp, nici crește."
+        },
+        {
+          "title": "Test",
+          "text": "Mai multe variante cu buget mic. Se vede care aduce cereri și la ce preț — de obicei nu cea la care ne așteptam."
+        },
+        {
+          "title": "Creștere",
+          "text": "Ce funcționează primește buget, ce nu — se oprește. Lunar, cu raport care se citește în cinci minute."
+        }
+      ],
+      "faqTitle": "Ce se întreabă",
+      "faq": [
+        {
+          "q": "Ce buget e nevoie?",
+          "a": "Depinde de nișă și de concurență. Un buget prea mic nu dă date din care se poate învăța ceva — atunci e mai onest să nu începem decât să cheltuim degeaba."
+        },
+        {
+          "q": "Din ce se compune plata?",
+          "a": "Munca noastră este separată de bugetul de reclamă. Bugetul merge integral la platformă, iar dumneavoastră vedeți în contul propriu cât s-a cheltuit."
+        },
+        {
+          "q": "În cât timp vin cererile?",
+          "a": "Primele — în zile, dacă campania e pusă bine. Dar prima lună este pentru aflat ce funcționează; concluziile se trag din a doua."
+        },
+        {
+          "q": "Lucrați și cu rețelele sociale?",
+          "a": "Da, dacă în nișa dumneavoastră acolo sunt clienți. Dacă nu sunt, o spunem: prezența «pentru că trebuie» costă timp și nu aduce nimic."
+        }
+      ],
+      "closingTitle": "Începeți de la cifre",
+      "closingLead": "Spuneți cât vă costă un client acum. Dacă nu știți — începem de la măsurare, e mai ieftin decât să aflați după șase luni de buget."
+    },
+    "automatizari": {
+      "metaTitle": "Automatizări și integrări la comandă",
+      "metaDescription": "Legăm sistemele pe care le folosiți: CRM, contabilitate, stocuri, site. Ca datele să nu mai fie mutate cu mâna dintr-o parte în alta.",
+      "title": "Automatizări pentru munca pe care o face acum cineva cu mâna",
+      "lead": "Dacă un om copiază în fiecare zi date dintr-un loc în altul, aceea nu e muncă — e o legătură care lipsește între două sisteme.",
+      "includesTitle": "Ce facem",
+      "includes": [
+        {
+          "title": "Legături între sisteme",
+          "text": "Site, CRM, contabilitate, stocuri, calendar. Comanda de pe site ajunge unde trebuie fără ca cineva să o retasteze."
+        },
+        {
+          "title": "Scenarii la comandă",
+          "text": "«Când se întâmplă asta — verifică asta și anunță pe cine trebuie.» Regulile le puneți dumneavoastră, noi le facem să meargă."
+        },
+        {
+          "title": "Documente",
+          "text": "Facturi, oferte, acte generate din datele care există deja, pe formularul dumneavoastră. Fără copiat între fișiere."
+        },
+        {
+          "title": "Rapoarte",
+          "text": "Cifrele adunate singure, la ora pe care o alegeți. În loc de o zi pe lună petrecută cu tabele."
+        },
+        {
+          "title": "Legături cu agenții",
+          "text": "Dacă folosiți deja un agent, automatizarea îl prinde de sistemele dumneavoastră: agentul află statusul comenzii de acolo de unde el este cu adevărat."
+        }
+      ],
+      "stepsTitle": "Cum decurge",
+      "stepsLead": "Se începe de la o singură operațiune, nu de la toate deodată.",
+      "steps": [
+        {
+          "title": "Ce se face cu mâna",
+          "text": "Ne arătați ziua de lucru. Aproape întotdeauna se găsesc două-trei lucruri care se repetă și nu ar trebui să existe."
+        },
+        {
+          "title": "Ce se leagă cu ce",
+          "text": "Vedem ce sisteme aveți și ce pot ele. Uneori legătura există deja și nu o folosește nimeni."
+        },
+        {
+          "title": "Una singură, până la capăt",
+          "text": "Facem prima automatizare și o lăsăm să lucreze o săptămână. Se vede repede dacă am înțeles corect cum funcționează la dumneavoastră."
+        },
+        {
+          "title": "Restul",
+          "text": "După ce prima merge, se adaugă următoarele. În ordinea în care vă costă timp, nu în ordinea în care sunt ușor de făcut."
+        }
+      ],
+      "faqTitle": "Ce se întreabă",
+      "faq": [
+        {
+          "q": "Dacă sistemul nostru e vechi?",
+          "a": "De multe ori se poate lega oricum — prin export, prin bază, prin fișier. Verificăm înainte să promitem: dacă nu se poate, o spunem la prima discuție."
+        },
+        {
+          "q": "Ce se întâmplă dacă se strică?",
+          "a": "Automatizarea care cade trebuie să anunțe, nu să tacă. Punem alertă la fiecare pas care poate eșua, iar datele rămân acolo unde erau — nu se pierd pe drum."
+        },
+        {
+          "q": "Rămânem legați de voi?",
+          "a": "Scenariile se fac pe unelte obișnuite, nu pe ceva ce știm doar noi. Dacă mâine lucrați cu altcineva, are ce prelua."
+        },
+        {
+          "q": "De unde începem?",
+          "a": "De la operațiunea care vă mănâncă cel mai mult timp. Nu de la cea mai ușoară — aceea de obicei nu se simte."
+        }
+      ],
+      "closingTitle": "Arătați-ne ziua de lucru",
+      "closingLead": "Nu e nevoie de listă pregătită. Ne uităm împreună ce se repetă și de acolo se vede ce merită automatizat întâi."
+    }
+  },
+  "servicesPage": {
+    "metaTitle": "Servicii — site-uri, SEO, marketing digital, automatizări",
+    "metaDescription": "Pe lângă agenți: site-uri și magazine online, SEO, marketing digital, automatizări și integrări cu sistemele pe care le folosiți.",
+    "eyebrow": "Servicii",
+    "title": "Ce mai facem, în afară de agenți",
+    "lead": "Agentul are nevoie de un loc în care să stea și de clienți care ajung acolo. De aceea facem și site-uri, și SEO, și campanii — dar fiecare se ia separat, nu la pachet.",
+    "open": "Detalii",
+    "priceNote": "Prețul la fiecare dintre ele se stabilește individual, și nu din secretomanie: un site de prezentare și un magazin cu integrare în contabilitate sunt luni de muncă diferite. După prima discuție dăm o estimare cu limite, nu o cifră scoasă din aer.",
+    "includesEyebrow": "Ce facem",
+    "stepsEyebrow": "Cum lucrăm",
+    "faqEyebrow": "Întrebări",
+    "cta": "Discutăm proiectul",
+    "allServices": "Toate serviciile",
+    "closingTitle": "Spuneți ce vă trebuie",
+    "closingLead": "Dacă nu sunteți sigur care serviciu vă rezolvă problema — descrieți problema, alegem împreună.",
+    "closingSecondary": "Vezi agenții"
   }
 }
