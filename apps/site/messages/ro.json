@@ -1,0 +1,2357 @@
+{
+  "brand": {
+    "name": "AssistWidget",
+    "tagline": "Agenți AI pentru afaceri cu ofertă calculată individual"
+  },
+  "nav": {
+    "agents": "Agenți",
+    "industries": "Industrii",
+    "pricing": "Prețuri",
+    "about": "Despre",
+    "contact": "Contact",
+    "cta": "Cere o demonstrație",
+    "allAgents": "Toți agenții",
+    "allIndustries": "Toate industriile",
+    "openMenu": "Deschide meniul",
+    "closeMenu": "Închide meniul",
+    "skipToContent": "Sari la conținut"
+  },
+  "status": {
+    "available": "Disponibil",
+    "soon": "În curând"
+  },
+  "agents": {
+    "chatbot": {
+      "name": "Chatbot AI",
+      "short": "Răspunde 24/7 din materialele companiei și califică lead-ul după scenariul nișei."
+    },
+    "voice-assistant": {
+      "name": "Asistent telefonic",
+      "short": "Răspunde la telefon când nu are cine și programează în calendarul dumneavoastră."
+    },
+    "configurator": {
+      "name": "Configurator de cerere",
+      "short": "Pune întrebările, adună specificația, predă vânzărilor o cerere gata de calculat."
+    },
+    "follow-up": {
+      "name": "Follow-up automat",
+      "short": "Readuce lead-urile care s-au gândit și au tăcut, la momentul potrivit."
+    },
+    "order-status": {
+      "name": "Statusul comenzii",
+      "short": "Anunță clientul la fiecare etapă, fără ca cineva să scrie mesajul."
+    },
+    "content-engine": {
+      "name": "Motor de conținut",
+      "short": "O sursă, adaptată pentru Instagram, TikTok și Pinterest."
+    }
+  },
+  "industries": {
+    "mobilier": {
+      "name": "Mobilă și bucătării la comandă",
+      "short": "Preț pe schiță, țesături, termene de producție.",
+      "panel": "Clientul nu gândește în termeni de producție. Agentul întreabă în ordinea în care întrebați și dumneavoastră — spațiu, material, termen — și predă vânzătorului o cerere gata de calculat.",
+      "dialog": [
+        {
+          "role": "agent",
+          "text": "Ce dimensiuni are peretele pe care îl mobilați?"
+        },
+        {
+          "role": "client",
+          "text": "3,2 metri, cu o fereastră la mijloc."
+        },
+        {
+          "role": "agent",
+          "text": "Țesătură sau piele? Vă arăt diferența de preț pe aceeași configurație."
+        }
+      ]
+    },
+    "constructii": {
+      "name": "Renovări și design interior",
+      "short": "Deviz pe metraj, etape, echipe.",
+      "panel": "Devizul începe de la metraj și de la starea în care e spațiul acum. Agentul află amândouă înainte să vă ocupe o deplasare la fața locului.",
+      "dialog": [
+        {
+          "role": "agent",
+          "text": "Ce suprafață are spațiul și în ce stare este acum?"
+        },
+        {
+          "role": "client",
+          "text": "68 m², apartament nou, la gri."
+        },
+        {
+          "role": "agent",
+          "text": "Renovare completă sau doar finisaje? Devizul diferă de două ori."
+        }
+      ]
+    },
+    "imobiliare": {
+      "name": "Dezvoltatori și agenții imobiliare",
+      "short": "Cerere, buget, programare la vizionare.",
+      "panel": "Bugetul și termenul se află în primele două întrebări. Agentul le pune el, iar agentul imobiliar primește lead-ul deja calificat, cu vizionarea propusă.",
+      "dialog": [
+        {
+          "role": "agent",
+          "text": "Ce buget aveți în vedere și pentru ce termen?"
+        },
+        {
+          "role": "client",
+          "text": "Până la 90 000 €, până la primăvară."
+        },
+        {
+          "role": "agent",
+          "text": "Am trei variante în buget. Sâmbătă dimineața vă convine la vizionare?"
+        }
+      ]
+    },
+    "auto": {
+      "name": "Dealeri auto",
+      "short": "Configurație, test drive, finanțare.",
+      "panel": "Configurația, finanțarea și test drive-ul sunt trei conversații care de obicei se poartă separat. Agentul le ține pe toate trei într-una singură.",
+      "dialog": [
+        {
+          "role": "agent",
+          "text": "Ce conduceți acum și ce vă lipsește?"
+        },
+        {
+          "role": "client",
+          "text": "Un break, dar am nevoie de mai mult spațiu."
+        },
+        {
+          "role": "agent",
+          "text": "Două configurații se potrivesc. Programăm test drive sâmbătă?"
+        }
+      ]
+    },
+    "energie": {
+      "name": "Panouri solare și HVAC",
+      "short": "Consum, acoperiș, calcul de rentabilitate.",
+      "panel": "Calculul de rentabilitate ține de consum și de acoperiș. Agentul strânge ambele date și trimite oferta cu perioada de amortizare deja calculată.",
+      "dialog": [
+        {
+          "role": "agent",
+          "text": "Cât plătiți lunar pe energie electrică?"
+        },
+        {
+          "role": "client",
+          "text": "În jur de 2 400 de lei."
+        },
+        {
+          "role": "agent",
+          "text": "Ce tip de acoperiș aveți? De asta depinde numărul de panouri."
+        }
+      ]
+    },
+    "clinici": {
+      "name": "Stomatologie și medicină estetică",
+      "short": "Procedură, programare, întrebări delicate.",
+      "panel": "Întrebările despre durere, preț și timp de recuperare se pun greu unui om și ușor unui agent. Pacientul ajunge la recepție deja hotărât.",
+      "dialog": [
+        {
+          "role": "agent",
+          "text": "Ce vă deranjează și de cât timp?"
+        },
+        {
+          "role": "client",
+          "text": "Am nevoie de un implant, dar mi-e teamă de durere."
+        },
+        {
+          "role": "agent",
+          "text": "Vă explic exact cum decurge și cât costă. Preferați dimineața?"
+        }
+      ]
+    },
+    "other": {
+      "name": "Altă industrie?",
+      "short": "Configurăm agentul pentru nișa dumneavoastră."
+    }
+  },
+  "footer": {
+    "productsTitle": "Agenți",
+    "industriesTitle": "Industrii",
+    "companyTitle": "Companie",
+    "legalTitle": "Legal",
+    "privacy": "Confidențialitate",
+    "terms": "Termeni",
+    "rights": "Toate drepturile rezervate.",
+    "note": "Fiecare agent este configurat pentru nișa și brandul clientului. Datele fiecărui client rămân izolate."
+  },
+  "common": {
+    "learnMore": "Află mai multe",
+    "seeAll": "Vezi toate",
+    "language": "Limbă"
+  },
+  "home": {
+    "hero": {
+      "title": "Agenți AI pentru afaceri unde prețul se calculează",
+      "lead": "Închiriați agentul de care aveți nevoie — configurat pentru nișa și brandul dumneavoastră, pe abonament lunar. Fără proiect de implementare și fără echipă tehnică.",
+      "ctaPrimary": "Cere o demonstrație",
+      "ctaSecondary": "Vezi agenții"
+    },
+    "problem": {
+      "eyebrow": "Problema",
+      "title": "Oferta se calculează. Clientul, între timp, întreabă în altă parte.",
+      "afterHours": {
+        "title": "Întrebarea vine după program",
+        "text": "Cele mai multe cereri ajung seara și în weekend. Răspunsul pleacă a doua zi dimineața — când omul a scris deja la încă trei firme și compară."
+      },
+      "everyRequestDiffers": {
+        "title": "Fiecare cerere e altfel",
+        "text": "Dimensiuni, materiale, termene, buget. Până nu le aveți pe toate, nu aveți ce calcula — și fiecare clarificare mai costă o zi."
+      },
+      "sameAnswers": {
+        "title": "Vânzătorul repetă aceleași zece răspunsuri",
+        "text": "Timpul lui pleacă în întrebări la care răspunsul e mereu același, nu în ofertele care chiar se închid."
+      }
+    },
+    "agents": {
+      "eyebrow": "Agenții",
+      "title": "Șase agenți. Închiriați doar pe cei de care aveți nevoie.",
+      "lead": "Fiecare agent este un produs separat, configurat pentru nișa și brandul dumneavoastră. Începeți cu unul, adăugați altul când primul își arată rezultatul.",
+      "open": "Vezi agentul",
+      "custom": {
+        "title": "Aveți nevoie de altceva?",
+        "text": "Spuneți-ne ce ar trebui să facă agentul în afacerea dumneavoastră și vă spunem dacă se poate.",
+        "cta": "Scrieți-ne"
+      }
+    },
+    "industries": {
+      "eyebrow": "Industrii",
+      "title": "Configurat pentru nișa dumneavoastră",
+      "lead": "Nu «pentru orice afacere»: alte întrebări, alte materiale, alt mod de a ajunge la preț. Alegeți industria și vedeți cum arată conversația.",
+      "otherText": "Lucrăm și în nișe care nu sunt în listă. Dacă prețul se calculează, scenariul se poate configura.",
+      "otherCta": "Scrieți-ne",
+      "view": "Vezi industria",
+      "agentsLabel": "Agenți potriviți"
+    },
+    "onboarding": {
+      "eyebrow": "Cum începe",
+      "title": "De la prima discuție la agent pe site",
+      "lead": "Nu este un proiect de implementare. Nu aveți nevoie de programator, de departament IT sau de un site nou — agentul se așază peste ce aveți acum.",
+      "timeLabel": "Timpul dumneavoastră",
+      "steps": {
+        "talk": {
+          "title": "Discuția",
+          "text": "Ce vindeți, cum se calculează prețul la dumneavoastră și ce vă întreabă oamenii cel mai des. Nu trebuie să pregătiți nimic dinainte.",
+          "time": "30–40 de minute"
+        },
+        "materials": {
+          "title": "Materialele",
+          "text": "Site, fișe de produs, lista de prețuri, condiții. În forma în care există — Excel, PDF, Word, poze. Să le punem în ordine este treaba noastră.",
+          "time": "Cât durează un e-mail"
+        },
+        "config": {
+          "title": "Configurarea",
+          "text": "Scenariul nișei, regulile de preț, brandul pe ofertă. Vedeți agentul înainte să îl vadă clienții și corectați ce nu sună a dumneavoastră.",
+          "time": "O jumătate de oră de verificat"
+        },
+        "embed": {
+          "title": "O linie de cod",
+          "text": "Un script pe site. Widgetul rulează izolat de stilurile paginii, deci nu strică nimic din ce aveți. Dacă nu aveți cui, îl punem noi.",
+          "time": "Câteva minute"
+        }
+      },
+      "total": "În total, de obicei sub două ore din timpul dumneavoastră. Restul este la noi — inclusiv partea neplăcută, în care lista de prețuri trebuie citită rând cu rând.",
+      "priceLink": "Costul configurării inițiale",
+      "visuals": {
+        "talk": {
+          "a": "Ce vindeți și cum arată o comandă obișnuită",
+          "b": "Cum se calculează prețul la dumneavoastră",
+          "c": "Ce vă întreabă oamenii cel mai des"
+        },
+        "materials": {
+          "xlsx": "lista-de-preturi.xlsx",
+          "pdf": "catalog.pdf",
+          "docx": "conditii-livrare.docx",
+          "zip": "poze-produse.zip"
+        },
+        "config": {
+          "tone": "Tonul cu care vorbește",
+          "price": "Calculează prețul",
+          "offer": "Trimite ofertă PDF",
+          "language": "Cere datele de facturare"
+        },
+        "embed": {
+          "label": "Scriptul de pe site",
+          "note": "O singură linie, la finalul paginii. Widgetul rulează izolat de stilurile site-ului."
+        }
+      }
+    },
+    "pricing": {
+      "eyebrow": "Prețuri",
+      "title": "Trei pachete, componență fixă",
+      "lead": "Plătiți lunar pentru agenții care rulează. Separat, o singură dată la început, se plătește configurarea: citirea materialelor dumneavoastră și transformarea listei de prețuri în regulile după care agentul calculează.",
+      "compare": "Comparați planurile"
+    },
+    "portal": {
+      "eyebrow": "Portalul",
+      "title": "Un loc unde vedeți tot ce a făcut agentul",
+      "lead": "Agentul lucrează pe site. Ce a ieșit din munca lui — cereri, oferte, cifre — vă așteaptă în portal, nu împrăștiat printre e-mailuri.",
+      "panelTitle": "Contul dumneavoastră, nu al nostru",
+      "panelText": "Fiecare client are portalul lui, cu datele lui. Nu ne cereți un raport și nu așteptați până vi-l trimitem — intrați și vă uitați. Inclus în toate pachetele, de la Start.",
+      "capabilities": {
+        "leads": "Lead-uri — fiecare cerere, cu tot ce a spus clientul",
+        "offers": "Oferte — fiecare PDF emis, cu număr și dată",
+        "stats": "Statistici — unde se opresc oamenii și ce întreabă",
+        "agents": "Agenți — porniți, opriți, corectați răspunsurile",
+        "billing": "Abonament — plan, facturi, plăți"
+      },
+      "cta": "Vedeți portalul la o demonstrație",
+      "mock": {
+        "brand": "Portal",
+        "range": "Ultimele 7 zile",
+        "nav": {
+          "leads": "Lead-uri",
+          "offers": "Oferte",
+          "agents": "Agenți",
+          "stats": "Statistici",
+          "billing": "Abonament"
+        },
+        "tiles": {
+          "requests": "Cereri",
+          "offers": "Oferte",
+          "inProgress": "În lucru"
+        },
+        "states": {
+          "sent": "Ofertă trimisă",
+          "open": "În lucru"
+        },
+        "rows": {
+          "a": "Bucătărie la comandă, 3,2 m",
+          "b": "Canapea 3 locuri, țesătură",
+          "c": "Dressing, colț",
+          "d": "Masă extensibilă, stejar"
+        }
+      }
+    },
+    "faq": {
+      "eyebrow": "Întrebări",
+      "title": "Ce ne întreabă oamenii înainte să înceapă",
+      "lead": "Dacă nu găsiți întrebarea dumneavoastră aici,",
+      "leadLink": "scrieți-ne.",
+      "items": {
+        "timeline": {
+          "q": "Cât durează până agentul e pe site?",
+          "a": "Din partea dumneavoastră — o discuție și materialele pe care le aveți deja. Termenul depinde de forma în care e lista de prețuri: un tabel în Excel este una, un catalog scanat este alta. Vă spunem un termen concret după prima discuție, nu înainte."
+        },
+        "setup": {
+          "q": "Ce este taxa de configurare și de ce se plătește separat?",
+          "a": "Este munca de la început, care se face o singură dată: citim materialele dumneavoastră rând cu rând, transformăm lista de prețuri în regulile după care agentul calculează, scriem scenariul nișei și verificăm totul împreună cu dumneavoastră înainte de lansare. Abonamentul lunar acoperă agentul care rulează, nu această muncă. Suma depinde de pachet și este scrisă sub preț."
+        },
+        "unknown": {
+          "q": "Ce face agentul când nu știe răspunsul?",
+          "a": "Nu îl inventează. Răspunde din materialele dumneavoastră, iar când răspunsul nu e acolo spune că verifică și lasă cererea, cu tot ce s-a discutat până în acel moment. Vânzătorul primește conversația, nu un „client interesat”."
+        },
+        "data": {
+          "q": "Unde ajung datele clienților mei?",
+          "a": "Rămân ale dumneavoastră și sunt izolate de datele oricărui alt client al platformei — nu printr-o promisiune, ci prin felul în care e construită baza de date. Un cont nu are cum să ajungă la datele altui cont."
+        },
+        "site": {
+          "q": "Trebuie să-mi schimb site-ul?",
+          "a": "Nu. Se adaugă un script și atât. Widgetul rulează izolat de stilurile paginii, deci nu poate strica ce aveți acum — nici fonturile, nici așezarea. Dacă nu aveți cui, îl punem noi."
+        },
+        "language": {
+          "q": "În ce limbă vorbește agentul?",
+          "a": "În limba în care i se scrie, dintre cele configurate pentru dumneavoastră. Româna, rusa și engleza sunt cele cu care lucrăm cel mai des. Câte limbi sunt active ține de pachet: Start include una, Growth două, la Platformă se convine individual. Tonul îl potrivim după cum vorbiți dumneavoastră cu clienții, nu după un manual."
+        },
+        "priceChange": {
+          "q": "Ce se întâmplă când îmi schimb prețurile?",
+          "a": "Ne trimiteți lista nouă. Agentul calculează după reguli, nu după prețuri scrise de mână în răspunsuri, așa că o modificare de preț nu cere reconfigurare de la zero."
+        },
+        "cancel": {
+          "q": "Pot să opresc abonamentul?",
+          "a": "Da, abonamentul este lunar. Ce se întâmplă după oprire cu datele și cu ofertele deja emise este scris în contract și îl citiți înainte să semnați, nu după."
+        },
+        "reviews": {
+          "q": "De ce nu aveți recenzii și logo-uri de clienți pe site?",
+          "a": "Pentru că nu avem încă destule ca să însemne ceva. Platforma se rodează pe un client real din producția de mobilă la comandă, pe care nu îl numim până nu primim acordul. Preferăm să nu punem logo-uri decât să punem logo-uri care nu spun adevărul."
+        }
+      }
+    },
+    "finalCta": {
+      "title": "Vedeți agentul pe produsele dumneavoastră, nu pe un demo generic",
+      "lead": "La demonstrație luăm câteva produse din catalogul dumneavoastră și vă arătăm exact ce ar răspunde agentul unui client real.",
+      "note": "Fără prezentare de o oră. Treizeci de minute și agentul pe ecran.",
+      "primary": "Cere o demonstrație",
+      "secondary": "Vezi prețurile"
+    }
+  },
+  "contact": {
+    "form": {
+      "name": "Cum vă numiți",
+      "contact": "E-mail sau telefon",
+      "contactHint": "Unde vă răspundem. Nu vă înscriem la nimic.",
+      "site": "Site-ul companiei",
+      "message": "Ce vindeți și ce v-ar trebui",
+      "optional": "opțional",
+      "submit": "Trimite cererea",
+      "sending": "Se trimite…",
+      "failed": "Nu am reușit să trimitem. Încercați din nou sau scrieți-ne direct pe e-mail.",
+      "sentTitle": "Am primit cererea",
+      "sentText": "Vă răspundem în aceeași zi lucrătoare, cu pașii pentru nișa dumneavoastră — nu cu o broșură.",
+      "sendAnother": "Trimite încă una",
+      "privacy": "Datele din formular le folosim doar ca să vă răspundem.",
+      "privacyLink": "Politica de confidențialitate",
+      "errors": {
+        "name": "Scrieți-ne cum vă numiți.",
+        "contact": "Avem nevoie de un e-mail sau de un telefon ca să vă răspundem.",
+        "contactFormat": "Verificați adresa sau numărul — nu par complete.",
+        "tooLong": "Textul este prea lung.",
+        "site": "Verificați adresa site-ului.",
+        "message": "Textul este prea lung."
+      }
+    },
+    "dialog": {
+      "title": "Cere o demonstrație",
+      "text": "Completați formularul și vă răspundem în aceeași zi lucrătoare, cu pașii pentru nișa dumneavoastră.",
+      "close": "Închide"
+    }
+  },
+  "agentPage": {
+    "soonTitle": "Agentul acesta este în lucru",
+    "soonText": "Nu îl vindem încă. Dacă vă interesează, scrieți-ne: la demonstrație vă arătăm ce face deja și vă spunem când e gata.",
+    "soonInPlanTitle": "Agentul acesta încă nu a ieșit",
+    "soonInPlanText": "Este inclus în pachetul Growth: îl puteți conecta acum, la prețul de azi, iar agentul se activează pe contul dumneavoastră la lansare. Ce citiți mai jos este ce va face — scris ca atare. Nu vindem ca gata ceva ce încă se scrie.",
+    "backToAgents": "Toți agenții",
+    "featuresEyebrow": "Ce face",
+    "sourcesEyebrow": "Din ce răspunde",
+    "platformsEyebrow": "Unde se pune",
+    "industriesEyebrow": "Industrii",
+    "faqEyebrow": "Întrebări",
+    "industriesTitle": "Același agent, alt scenariu pentru fiecare nișă",
+    "industriesLead": "Alegeți industria și vedeți cum se schimbă întrebările, materialele și modul de a ajunge la preț.",
+    "chatbot": {
+      "metaTitle": "Chatbot AI pentru site — răspunde din prețurile dumneavoastră",
+      "metaDescription": "Chatbot AI care răspunde 24/7 din materialele companiei dumneavoastră, califică lead-ul și nu inventează prețuri. Configurat pentru nișa dumneavoastră, pe abonament lunar.",
+      "title": "Chatbot AI care răspunde din prețurile dumneavoastră, nu din texte generale",
+      "lead": "Răspunde 24/7 pe site-ul dumneavoastră. Când nu are răspunsul în materialele dumneavoastră, nu îl inventează — lasă cererea, cu tot ce s-a discutat până acolo.",
+      "featuresTitle": "Ce face, concret",
+      "features": {
+        "always": {
+          "title": "Răspunde și la ora unsprezece seara",
+          "text": "Cele mai multe întrebări vin seara și în weekend. Agentul este acolo atunci, nu a doua zi la nouă."
+        },
+        "sources": {
+          "title": "Din materialele dumneavoastră",
+          "text": "Fișe de produs, listă de prețuri, termene, condiții de livrare și garanție. Nu din articole generale despre domeniu."
+        },
+        "qualify": {
+          "title": "Califică cererea",
+          "text": "Pune întrebările pe care le-ar pune vânzătorul: dimensiuni, material, buget, termen. Vânzătorul primește o cerere, nu un «a scris cineva»."
+        },
+        "languages": {
+          "title": "Româna, rusa, engleza",
+          "text": "Comută singur, fără să întrebe și fără buton de schimbat limba. Câte limbi sunt active ține de pachet: Start include una, Growth două."
+        },
+        "install": {
+          "title": "Se pune cu o linie de cod",
+          "text": "Un script pe site. Rulează izolat de stilurile paginii, deci nu poate strica nimic din ce aveți."
+        },
+        "portal": {
+          "title": "Totul ajunge în portal",
+          "text": "Fiecare conversație, cu tot contextul ei. Nimic nu rămâne doar în fereastra de chat."
+        }
+      },
+      "conversationNote": "Exemplu pentru mobilă la comandă. Prețurile din răspuns vin din lista clientului, nu de la noi.",
+      "dialog": [
+        {
+          "role": "client",
+          "text": "Bună ziua. Cât ar costa o bucătărie pe un perete de 3,2 metri?"
+        },
+        {
+          "role": "agent",
+          "text": "Depinde în primul rând de fronturi și de blat. Aveți o preferință — MDF vopsit, furnir sau folie?"
+        },
+        {
+          "role": "client",
+          "text": "MDF vopsit. Și blat de piatră."
+        },
+        {
+          "role": "agent",
+          "text": "Pentru 3,2 m cu MDF vopsit și blat de cuarț, intervalul din lista noastră este 38 000 – 46 000 lei, în funcție de feronerie și de electrocasnice."
+        },
+        {
+          "role": "client",
+          "text": "Și în cât timp se face?"
+        },
+        {
+          "role": "agent",
+          "text": "Producția durează în jur de 30 de zile lucrătoare de la confirmarea proiectului. Dacă îmi lăsați un e-mail, vă trimit astăzi oferta exactă — aveți o poză sau schița spațiului?"
+        }
+      ],
+      "sourcesTitle": "Din ce răspunde — și ce nu face niciodată",
+      "sourcesYes": {
+        "title": "Răspunde din",
+        "items": [
+          "Lista dumneavoastră de prețuri, cu regulile de calcul",
+          "Fișele de produs: materiale, dimensiuni, opțiuni",
+          "Termenele de producție și de livrare",
+          "Condițiile de garanție și de plată",
+          "Întrebările pe care le primiți deja cel mai des"
+        ]
+      },
+      "sourcesNo": {
+        "title": "Nu face",
+        "items": [
+          "Nu inventează prețuri care nu sunt în listă",
+          "Nu promite termene care nu sunt în materiale",
+          "Nu răspunde la ce nu ține de afacerea dumneavoastră",
+          "Nu insistă când omul cere să vorbească cu un om",
+          "Nu trimite oferta fără ca dumneavoastră să fi stabilit regulile"
+        ]
+      },
+      "platformsTitle": "Funcționează pe site-ul pe care îl aveți deja",
+      "platformsLead": "Este un script. Dacă puteți adăuga un script în pagină — direct, prin plugin sau prin Google Tag Manager — agentul funcționează. Dacă nu aveți cui, îl punem noi.",
+      "platforms": [
+        "WordPress",
+        "WooCommerce",
+        "Shopify",
+        "Wix",
+        "Tilda",
+        "Webflow",
+        "Squarespace",
+        "Site scris la comandă"
+      ],
+      "faqTitle": "Ce se întreabă despre chatbot",
+      "faq": [
+        {
+          "q": "Cât durează până e pe site?",
+          "a": "Din partea dumneavoastră — o discuție și materialele pe care le aveți deja. Termenul depinde de forma în care e lista de prețuri: un tabel în Excel este una, un catalog scanat este alta. Vă spunem un termen concret după prima discuție."
+        },
+        {
+          "q": "Ce se întâmplă dacă răspunde greșit?",
+          "a": "Vedeți fiecare conversație în portal. Când ceva sună greșit, se corectează sursa din care a răspuns — și corecția intră imediat, nu la următoarea versiune. Greșelile din prima săptămână sunt normale și de aceea vă uitați la conversații."
+        },
+        {
+          "q": "Poate să preia comenzi și plăți?",
+          "a": "Poate să adune cererea completă și să o predea vânzătorului. Confirmarea comenzii și plata rămân la dumneavoastră — nu vrem ca un agent să încaseze bani în locul dumneavoastră."
+        },
+        {
+          "q": "Ce se întâmplă cu datele clienților mei?",
+          "a": "Rămân ale dumneavoastră și sunt izolate de datele oricărui alt client al platformei — nu printr-o promisiune, ci prin felul în care e construită baza de date."
+        },
+        {
+          "q": "Merge pe telefon?",
+          "a": "Da, și este gândit pentru ecran mic în primul rând: de acolo vin cele mai multe întrebări. Fereastra nu acoperă pagina și se închide cu un gest."
+        }
+      ],
+      "closingTitle": "Vedeți chatbotul răspunzând despre produsele dumneavoastră",
+      "closingLead": "La demonstrație luăm câteva produse din catalogul dumneavoastră și vă arătăm exact ce ar răspunde unui client real.",
+      "widgetTitle": "Chatbot",
+      "widgetStatus": "Răspunde imediat",
+      "widgetPlaceholder": "Scrieți un mesaj…",
+      "widgetInitial": "AI"
+    },
+    "voice-assistant": {
+      "metaTitle": "Asistent telefonic AI — răspunde la apeluri și face programări",
+      "metaDescription": "Agent AI care preia apelurile la orice oră, află ce vrea omul, programează în calendarul dumneavoastră și trimite urgențele mai departe. Spune de la început că este agent. Inclus în pachetul Growth.",
+      "title": "Telefonul care sună în gol este cel mai scump lucru din firmă",
+      "lead": "Agentul preia apelul de la primul semnal, la orice oră, află ce vrea omul și îl programează direct în calendarul dumneavoastră. Ce este urgent ajunge la un om în timpul apelului. După fiecare convorbire primiți rezumatul scris.",
+      "call": {
+        "title": "Apel preluat",
+        "time": "19:42",
+        "fromLabel": "De la",
+        "from": "+373 ·· ··· 418",
+        "duration": "1:48",
+        "rows": [
+          {
+            "k": "Ce vrea",
+            "v": "Bucătărie la comandă, perete de 3,2 m"
+          },
+          {
+            "k": "Programat",
+            "v": "Vineri, 15:00, la showroom"
+          },
+          {
+            "k": "Confirmare",
+            "v": "Trimisă prin SMS, cu adresa"
+          }
+        ],
+        "afterLabel": "În afara programului",
+        "after": "Nu era nimeni la birou. Apelul a devenit o programare, nu un apel pierdut.",
+        "note": "Așa arată apelul după ce s-a încheiat: ce s-a stabilit și ce a intrat în calendar. Agentul spune de la început că este un agent, iar cine cere un om primește un om."
+      },
+      "featuresTitle": "Ce face, concret",
+      "features": {
+        "phone": {
+          "title": "Răspunde la primul apel, la orice oră",
+          "text": "Seara, sâmbăta, în timp ce vorbiți cu un client în showroom. Nu există apel al doilea client care sună — există doar apelul care nu a fost preluat."
+        },
+        "task": {
+          "title": "Programează în calendarul dumneavoastră",
+          "text": "Vede orele libere și pune întâlnirea acolo unde încape, apoi trimite confirmarea. Fără dublă rezervare și fără «vă sunăm noi să stabilim»."
+        },
+        "handoff": {
+          "title": "Ce e urgent ajunge la om în timpul apelului",
+          "text": "Regulile le scrieți dumneavoastră: ce înseamnă urgent la dumneavoastră și către ce număr se transferă. Restul așteaptă până dimineață, fără să vă sune."
+        },
+        "read": {
+          "title": "După fiecare apel primiți rezumatul",
+          "text": "Cine a sunat, ce a vrut, ce s-a stabilit și ce a rămas nelămurit. Scris, pe e-mail — nu o înregistrare de patru minute pe care nu o ascultă nimeni."
+        },
+        "sources": {
+          "title": "Vorbește din materialele dumneavoastră",
+          "text": "Prețuri, termene, condiții, adresa showroomului, ce se face și ce nu. Ce nu i-ați dat nu are de unde să spună, și atunci nu spune."
+        },
+        "disclose": {
+          "title": "Spune că este un agent",
+          "text": "De la început, nu după ce se prinde omul. Un asistent care se dă drept persoană câștigă un apel și pierde clientul care își dă seama mai târziu."
+        }
+      },
+      "sourcesEyebrow": "Din ce vorbește",
+      "sourcesTitle": "Din ce vorbește — și ce nu face",
+      "sourcesYes": {
+        "title": "Vorbește din",
+        "items": [
+          "Prețurile, termenele și condițiile pe care ni le dați, la fel ca la chatbot — aceleași materiale, alt canal.",
+          "Calendarul în care țineți programările, ca să vadă ce ore sunt libere cu adevărat.",
+          "Regulile dumneavoastră de transfer: ce este urgent, cine îl preia și în ce interval.",
+          "Întrebările pe care le primiți cel mai des la telefon, așa cum le răspundeți dumneavoastră."
+        ]
+      },
+      "sourcesNo": {
+        "title": "Nu face",
+        "items": [
+          "Nu se dă drept om. Spune că este un agent, iar dacă interlocutorul cere o persoană, transferă apelul sau notează să fie sunat.",
+          "Nu inventează prețuri, termene sau disponibilitate. Când nu știe, o spune și lasă întrebarea pentru un om — nu improvizează la telefon.",
+          "Nu ține discuții de negociere și nu ia decizii în locul dumneavoastră. Adună, programează, predă.",
+          "Nu înregistrează pe ascuns. Dacă apelul se înregistrează, interlocutorul este anunțat, așa cum cere legea."
+        ]
+      },
+      "platformsTitle": "Cum ajunge la numărul dumneavoastră",
+      "platformsLead": "Numărul rămâne al dumneavoastră. Apelurile se redirecționează către agent — toate, sau doar cele la care nu răspunde nimeni în câteva semnale.",
+      "platforms": [
+        "Numărul actual, prin redirecționare",
+        "Doar apelurile nepreluate",
+        "Doar în afara programului",
+        "Un număr nou, dacă preferați",
+        "Calendarul în care lucrați deja"
+      ],
+      "faqTitle": "Ce se întreabă despre asistentul telefonic",
+      "faq": [
+        {
+          "q": "Trebuie să-mi schimb numărul?",
+          "a": "Nu. Numărul rămâne al dumneavoastră, iar apelurile se redirecționează către agent. Puteți alege să treacă toate, sau doar cele la care nu răspunde nimeni după câteva semnale, sau doar cele din afara programului. Portarea numărului nu este necesară."
+        },
+        {
+          "q": "Se aude că e o mașină?",
+          "a": "Se aude că vorbește curat și fără pauze de gândire. Oricum nu ascundem asta: agentul spune de la început că este un agent. Ideea nu este să păcălim pe cineva, ci ca omul care sună la 21:40 să primească un răspuns în loc de nimic."
+        },
+        {
+          "q": "Ce face când nu înțelege sau nu știe?",
+          "a": "O spune și duce apelul mai departe: fie transferă către un om, dacă e cineva disponibil și regula o permite, fie notează întrebarea și cere un număr de contact. Nu improvizează un răspuns ca să încheie apelul frumos — un preț inventat la telefon devine reclamație a doua zi."
+        },
+        {
+          "q": "Cum știe ce e urgent?",
+          "a": "Din regulile pe care le scrieți dumneavoastră. La o clinică urgent înseamnă altceva decât la un service auto, iar noi nu ghicim: stabilim împreună ce cuvinte și ce situații pornesc transferul și către ce număr."
+        },
+        {
+          "q": "Cum aflu ce s-a vorbit?",
+          "a": "După fiecare apel primiți un rezumat scris: cine a sunat, ce a vrut, ce s-a stabilit, ce a rămas deschis. Tot acolo apare și ce a intrat în calendar. În portal rămâne istoricul, ca să nu căutați prin e-mailuri peste o lună."
+        },
+        {
+          "q": "Ce se întâmplă cu înregistrările apelurilor?",
+          "a": "Înregistrarea nu este pornită implicit. Dacă o porniți, interlocutorul este anunțat la începutul apelului, așa cum cere legea, iar termenul de păstrare îl stabiliți dumneavoastră. Datele fiecărui client rămân separate."
+        },
+        {
+          "q": "Când este gata?",
+          "a": "Nu dăm o dată pe care nu o putem ține. Este inclus în pachetul Growth: dacă îl conectați acum, asistentul telefonic se activează pe contul dumneavoastră la lansare, la prețul de la conectare."
+        }
+      ],
+      "closingTitle": "Sunați-ne și ascultați cum sună",
+      "closingLead": "La demonstrație configurăm agentul pe cazul dumneavoastră și îl sunați dumneavoastră înșivă. Este singurul agent care se poate asculta înainte să îl luați."
+    },
+    "configurator": {
+      "metaTitle": "Configurator AI de cereri — specificație gata de calculat",
+      "metaDescription": "Agent AI care pune întrebările de care depinde prețul și predă vânzărilor o specificație structurată: dimensiuni, materiale, montaj, termen. Inclus în pachetul Growth.",
+      "title": "Configurator care adună specificația, nu doar datele de contact",
+      "lead": "Pune, pe rând, întrebările de care depinde prețul: dimensiuni, materiale, montaj, termen. Vânzătorul primește o fișă completată și trece direct la calcul, fără trei zile de mesaje înainte și înapoi.",
+      "spec": {
+        "title": "Specificație cerere",
+        "number": "A-2148",
+        "rows": [
+          {
+            "k": "Tip instalare",
+            "v": "Panouri pe acoperiș, casă"
+          },
+          {
+            "k": "Acoperiș",
+            "v": "Țiglă ceramică, două ape"
+          },
+          {
+            "k": "Suprafață liberă",
+            "v": "48 m²"
+          },
+          {
+            "k": "Consum lunar",
+            "v": "540 kWh"
+          },
+          {
+            "k": "Racord",
+            "v": "Trifazat"
+          },
+          {
+            "k": "Termen dorit",
+            "v": "Până în octombrie"
+          }
+        ],
+        "pendingLabel": "De clarificat",
+        "pending": "Distanța de la tablou până la acoperiș",
+        "footer": "6 din 7 puncte, completate din răspunsurile clientului",
+        "note": "Așa va arăta fișa pe care o primește vânzătorul. Exemplu pentru instalări de panouri solare — întrebările și câmpurile se scriu pentru nișa dumneavoastră."
+      },
+      "featuresTitle": "Ce face, concret",
+      "features": {
+        "questions": {
+          "title": "Întreabă în ordinea care contează",
+          "text": "Nu aruncă un formular cu douăzeci de câmpuri. Întrebarea următoare depinde de răspunsul anterior, ca la un vânzător care știe ce urmează."
+        },
+        "spec": {
+          "title": "Predă o fișă, nu o conversație",
+          "text": "Vânzătorul primește câmpuri completate: tip, dimensiuni, material, montaj, termen. Nu are de citit trei ecrane de mesaje ca să afle ce vrea omul."
+        },
+        "gaps": {
+          "title": "Spune ce lipsește",
+          "text": "Ce nu s-a putut afla rămâne marcat, nu ghicit. Se vede din prima ce mai e de întrebat, nu la mijlocul calculului."
+        },
+        "rules": {
+          "title": "Merge după regulile dumneavoastră",
+          "text": "Ce combinații există, ce nu se poate face, ce cere măsurare la fața locului. Regulile sunt ale dumneavoastră, nu presupuneri ale agentului."
+        },
+        "handoff": {
+          "title": "Ajunge unde lucrați deja",
+          "text": "Pe e-mail, în portal sau direct în CRM, ca fișă completată. Vânzătorul nu are de învățat un program nou."
+        },
+        "portal": {
+          "title": "Totul rămâne în portal",
+          "text": "Fiecare fișă, cu data și cu tot ce a răspuns clientul. Nimic nu rămâne doar în cutia poștală a unui om."
+        }
+      },
+      "sourcesEyebrow": "Din ce se construiește",
+      "sourcesTitle": "Din ce iese fișa — și ce nu face agentul",
+      "sourcesYes": {
+        "title": "Adună din",
+        "items": [
+          "Lista dumneavoastră de opțiuni: materiale, dimensiuni, finisaje, variante de montaj.",
+          "Regulile de compatibilitate: ce merge cu ce și ce nu se poate face deloc.",
+          "Întrebările pe care le pune vânzătorul dumneavoastră astăzi, scrise o dată și puse de fiecare dată.",
+          "Ce cere măsurare sau vizită la fața locului, ca să nu promită ce nu se poate promite."
+        ]
+      },
+      "sourcesNo": {
+        "title": "Nu face",
+        "items": [
+          "Nu dă prețul final. Adună datele din care se calculează; calculul rămâne la dumneavoastră.",
+          "Nu inventează o opțiune care nu există în lista dumneavoastră.",
+          "Nu completează câmpurile pe care clientul nu le-a confirmat — le lasă marcate.",
+          "Nu trimite oferta în locul vânzătorului și nu promite un termen în numele producției."
+        ]
+      },
+      "platformsTitle": "Pornește de acolo unde vine cererea",
+      "platformsLead": "Aceeași fișă, indiferent de unde a început discuția. Rezultatul ajunge la fel: completat, în portal și pe e-mail.",
+      "platforms": [
+        "Widget pe site",
+        "Buton pe pagina produsului",
+        "Link trimis clientului",
+        "Cod QR în showroom",
+        "Completat de vânzător, în portal"
+      ],
+      "faqTitle": "Ce se întreabă despre configurator",
+      "faq": [
+        {
+          "q": "Prin ce diferă de un formular obișnuit?",
+          "a": "Formularul pune toate întrebările deodată și aceleași pentru toți. Configuratorul pune întrebarea următoare în funcție de răspunsul anterior: dacă omul a spus că montajul nu îl interesează, nu îl mai întreabă despre etaj și lift. Câmpurile rămân aceleași, drumul până la ele este mai scurt — și de aceea se ajunge la capăt."
+        },
+        {
+          "q": "Dă un preț clientului?",
+          "a": "Nu. Adună datele de care depinde prețul și predă fișa vânzătorului. Prețul îl calculați dumneavoastră, cu marja și cu excepțiile pe care nu le scrieți nicăieri. Dacă vreți ca în discuție să se spună și un preț orientativ, asta face chatbotul, din lista dumneavoastră."
+        },
+        {
+          "q": "Ce se întâmplă când clientul nu știe răspunsul?",
+          "a": "Merge mai departe și marchează punctul. Fișa ajunge cu «de clarificat: înălțimea tavanului», nu cu o valoare inventată. Un câmp gol care se vede este mai ieftin decât un câmp plin care e greșit."
+        },
+        {
+          "q": "Cine scrie întrebările?",
+          "a": "Le scriem noi, la configurare, din felul în care lucrați acum: ce întreabă vânzătorii dumneavoastră, în ce ordine, ce combinații nu se pot face. Se schimbă din portal, fără să ne cereți nouă."
+        },
+        {
+          "q": "Când este gata?",
+          "a": "Nu dăm o dată pe care nu o putem ține. Este inclus în pachetul Growth: dacă îl conectați acum, configuratorul se activează pe contul dumneavoastră la lansare, la prețul de la conectare."
+        }
+      ],
+      "closingTitle": "Vedeți ce fișă ar strânge din cererile dumneavoastră",
+      "closingLead": "La demonstrație luăm un produs din catalogul dumneavoastră, scriem întrebările pentru el și vă arătăm fișa pe care ar primi-o vânzătorul."
+    },
+    "follow-up": {
+      "metaTitle": "Agent follow-up — reveniri automate la lead-urile care tac",
+      "metaDescription": "Agent AI care revine la clienții care nu au răspuns: după un orar stabilit de dumneavoastră, despre ce s-a discutat, pe canalul lor. Se oprește când omul răspunde. Inclus în pachetul Growth.",
+      "title": "Revine la clienții care au tăcut — și se oprește când răspund",
+      "lead": "Cele mai multe oferte nu se pierd la preț, ci în tăcerea de după. Agentul revine după un orar pe care îl stabiliți dumneavoastră, scrie despre ce s-a discutat și se oprește în clipa în care omul răspunde.",
+      "plan": {
+        "title": "Plan de revenire",
+        "number": "L-274",
+        "steps": [
+          {
+            "day": "Ziua 0",
+            "text": "Ofertă trimisă de vânzător",
+            "state": "origin"
+          },
+          {
+            "day": "Ziua 2",
+            "text": "«A ajuns oferta? Dacă ceva nu e clar acolo, spuneți-mi și lămurim.»",
+            "state": "done"
+          },
+          {
+            "day": "Ziua 6",
+            "text": "«Prețul din ofertă e valabil până pe 30. Vă țin un loc în producție?»",
+            "state": "done"
+          },
+          {
+            "day": "Ziua 12",
+            "text": "A treia revenire, programată",
+            "state": "stopped"
+          }
+        ],
+        "stopLabel": "Oprit automat",
+        "stop": "Clientul a răspuns în ziua a șaptea. Revenirile rămase se anulează.",
+        "note": "Așa va arăta planul unui lead. Numărul de reveniri, intervalul și motivele de oprire sunt cele stabilite de dumneavoastră."
+      },
+      "featuresTitle": "Ce face, concret",
+      "features": {
+        "stop": {
+          "title": "Se oprește când omul răspunde",
+          "text": "Nu duce scenariul până la capăt din inerție. Un răspuns — și restul revenirilor se anulează, inclusiv cele programate peste două săptămâni."
+        },
+        "task": {
+          "title": "Revine după un orar, nu după cum vă amintiți",
+          "text": "A doua zi, a șasea, a douăsprezecea — cum stabiliți. Nu depinde de cine e în concediu și de cât de plină a fost ziua."
+        },
+        "sources": {
+          "title": "Scrie despre ce s-a discutat",
+          "text": "Se referă la produsul cerut, la prețul din ofertă, la termenul discutat. Nu un «vă mai interesează?» trimis la toată lumea."
+        },
+        "read": {
+          "title": "Pe canalul pe care a venit clientul",
+          "text": "Dacă a scris pe chat, primește pe chat. Dacă a lăsat e-mailul, primește e-mail. Nu îl mutăm noi unde ne e comod nouă."
+        },
+        "rules": {
+          "title": "Limitele le puneți dumneavoastră",
+          "text": "Câte reveniri, la ce interval, în ce zile și la ce ore, când se oprește definitiv. Ce nu ați permis nu se întâmplă."
+        },
+        "portal": {
+          "title": "Fiecare revenire rămâne în portal",
+          "text": "Se vede ce s-a trimis, când și ce a urmat. Inclusiv lead-urile la care agentul a încetat să scrie, și din ce motiv."
+        }
+      },
+      "sourcesEyebrow": "Din ce scrie",
+      "sourcesTitle": "Din ce scrie revenirile — și ce nu face",
+      "sourcesYes": {
+        "title": "Scrie din",
+        "items": [
+          "Discuția purtată cu clientul: ce a cerut, ce s-a discutat, unde s-a oprit.",
+          "Oferta trimisă: pozițiile, prețul, termenul de valabilitate.",
+          "Orarul și limitele scrise de dumneavoastră: câte reveniri, la ce interval, în ce zile.",
+          "Motivele de oprire pe care le stabiliți: a răspuns, a cumpărat, a cerut să nu mai fie contactat."
+        ]
+      },
+      "sourcesNo": {
+        "title": "Nu face",
+        "items": [
+          "Nu scrie la nesfârșit. Numărul de reveniri este cel pe care l-ați pus, și după el se oprește.",
+          "Nu scrie celor care au cerut să nu mai fie contactați. În niciun scenariu și în nicio campanie.",
+          "Nu inventează reduceri și nu prelungește termene ca să obțină un răspuns.",
+          "Nu scrie la liste cumpărate sau la contacte care nu au vorbit niciodată cu dumneavoastră."
+        ]
+      },
+      "platformsTitle": "Revine acolo unde a vorbit clientul",
+      "platformsLead": "Canalul îl alege clientul, nu noi. Ce anume se conectează la dumneavoastră stabilim la prima discuție, după ce vedem pe unde vă vin cererile.",
+      "platforms": [
+        "E-mail",
+        "Chatul de pe site",
+        "SMS",
+        "Mesagerie, unde este conectată",
+        "Sarcină pentru vânzător, dacă preferați să sune un om"
+      ],
+      "faqTitle": "Ce se întreabă despre follow-up",
+      "faq": [
+        {
+          "q": "Nu devine spam?",
+          "a": "Depinde de limite, iar limitele le puneți dumneavoastră: câte reveniri, la ce interval, în ce zile și ore. Agentul se oprește la primul răspuns și nu scrie niciodată celor care au cerut să nu mai fie contactați. O revenire despre o discuție reală, la un om care a întrebat el primul, nu este spam. Trei mesaje pe săptămână la o listă cumpărată este — și asta nu facem."
+        },
+        {
+          "q": "Cine scrie textele revenirilor?",
+          "a": "Le scriem la configurare, în felul în care vorbiți dumneavoastră cu clienții, și le vedeți înainte să plece prima. Se schimbă din portal, fără să ne cereți nouă."
+        },
+        {
+          "q": "Ce se întâmplă dacă clientul răspunde supărat?",
+          "a": "Se oprește, ca la orice răspuns, iar discuția ajunge la vânzător cu tot ce s-a trimis înainte. Agentul nu poartă o discuție în contradictoriu în locul dumneavoastră."
+        },
+        {
+          "q": "Pot să opresc revenirile pentru un client anume?",
+          "a": "Da, din portal, în orice moment. Există și oprire pe toată baza, dacă vreți să suspendați revenirile într-o perioadă — în concediu, la inventar, când producția e plină."
+        },
+        {
+          "q": "Când este gata?",
+          "a": "Nu dăm o dată pe care nu o putem ține. Este inclus în pachetul Growth: dacă îl conectați acum, agentul de follow-up se activează pe contul dumneavoastră la lansare, la prețul de la conectare."
+        }
+      ],
+      "closingTitle": "Vedeți câte oferte tac în urma dumneavoastră",
+      "closingLead": "La demonstrație ne uităm la ofertele trimise în ultimele luni și vă arătăm ce ar fi scris agentul, când — și în ce moment s-ar fi oprit."
+    },
+    "order-status": {
+      "metaTitle": "Statusuri comenzi pentru clienți — anunțuri automate pe etape",
+      "metaDescription": "Agent AI care anunță clientul la fiecare etapă a comenzii și îi dă o pagină cu starea ei. Anunță și întârzierile, la timp. Inclus în pachetul Growth.",
+      "title": "Clientul află unde e comanda fără să sune",
+      "lead": "La fiecare etapă marcată pleacă un mesaj scurt și un link către pagina comenzii. Întârzierile se anunță la fel, iar ce ați marcat ca intern rămâne intern.",
+      "order": {
+        "title": "Comanda",
+        "number": "№ 4118",
+        "etaLabel": "Livrare estimată",
+        "eta": "12 – 14 noiembrie",
+        "stages": [
+          {
+            "name": "Confirmată",
+            "state": "done"
+          },
+          {
+            "name": "Producție",
+            "state": "current"
+          },
+          {
+            "name": "Finisare",
+            "state": "next"
+          },
+          {
+            "name": "Livrare",
+            "state": "next"
+          }
+        ],
+        "currentLabel": "Acum",
+        "updated": "12 nov, 09:40",
+        "current": "În producție",
+        "text": "Corpurile sunt asamblate. Urmează vopsirea fronturilor.",
+        "nextLabel": "Următoarea știre",
+        "next": "Când comanda intră la finisare",
+        "note": "Așa vede clientul comanda lui, după un link primit prin SMS sau e-mail. Etapele sunt cele din procesul dumneavoastră, nu unele generice."
+      },
+      "featuresTitle": "Ce face, concret",
+      "features": {
+        "stage": {
+          "title": "Anunță la fiecare etapă",
+          "text": "Comanda a intrat în producție, a ieșit la finisare, pleacă mâine. Clientul află când se întâmplă, nu când se hotărăște să sune."
+        },
+        "task": {
+          "title": "Spune și când termenul se mută",
+          "text": "O întârziere anunțată la timp costă un telefon. Una descoperită de client în ziua livrării costă comanda următoare."
+        },
+        "read": {
+          "title": "Pe canalul pe care îl citește clientul",
+          "text": "SMS, e-mail, chat. Un mesaj scurt și un link către pagina comenzii, care se deschide fără cont și fără parolă."
+        },
+        "handoff": {
+          "title": "Când clientul întreabă, răspunde un om",
+          "text": "Răspunsul la mesaj ajunge la vânzătorul care ține comanda, cu tot contextul. Agentul nu poartă discuția în locul lui."
+        },
+        "rules": {
+          "title": "Ce se comunică și ce rămâne intern",
+          "text": "Etapele pe care le arătați clientului le alegeți dumneavoastră. Costuri, furnizori și motivele reale ale unei întârzieri nu pleacă nicăieri."
+        },
+        "portal": {
+          "title": "Se vede și la dumneavoastră, în portal",
+          "text": "Ce a fost trimis, când și ce comenzi stau prea mult pe aceeași etapă. Aceleași date pe care le vede clientul, plus cele care rămân la dumneavoastră."
+        }
+      },
+      "sourcesEyebrow": "De unde știe",
+      "sourcesTitle": "De unde știe unde e comanda — și ce nu face",
+      "sourcesYes": {
+        "title": "Află din",
+        "items": [
+          "Etapele pe care le marcați: intrată în producție, la finisare, gata de livrare.",
+          "Sistemul în care țineți comenzile, dacă are un API sau poate trimite date.",
+          "Foaia de calcul în care se ține evidența, dacă acolo se ține — se marchează dintr-un singur loc.",
+          "Termenul din comandă și schimbările lui, în momentul în care le înregistrați."
+        ]
+      },
+      "sourcesNo": {
+        "title": "Nu face",
+        "items": [
+          "Nu ghicește unde e comanda. Dacă etapa nu a fost marcată, agentul tace — nu inventează o mișcare care nu s-a întâmplat.",
+          "Nu promite o dată pe care nu ați dat-o. Termenul comunicat este cel din comanda dumneavoastră.",
+          "Nu trimite clientului ce ați marcat ca intern: costuri, furnizori, motivele reale ale unei întârzieri.",
+          "Nu răspunde în locul dumneavoastră la întrebări despre comandă. Le predă omului care o ține."
+        ]
+      },
+      "platformsTitle": "Ajunge la client acolo unde citește",
+      "platformsLead": "Un mesaj scurt și un link către pagina comenzii. Pagina se deschide fără cont și fără parolă: o comandă, un link, nimic de instalat pentru client.",
+      "platforms": [
+        "SMS",
+        "E-mail",
+        "Chatul de pe site",
+        "Mesagerie, unde este conectată",
+        "Pagina comenzii, prin link"
+      ],
+      "faqTitle": "Ce se întreabă despre statusuri",
+      "faq": [
+        {
+          "q": "De unde știe agentul unde e comanda?",
+          "a": "Din ce marcați dumneavoastră. Dacă țineți comenzile într-un sistem cu API, le citește de acolo; dacă le țineți într-o foaie de calcul, se marchează acolo; dacă nu le țineți nicăieri, se marchează în portal, dintr-un singur ecran. Ce nu a fost marcat nu se comunică — agentul nu are de unde ști singur ce se întâmplă în atelier."
+        },
+        {
+          "q": "Ce se întâmplă când comanda întârzie?",
+          "a": "Se anunță întârzierea, dacă ați ales asta. Motivul îl scrieți dumneavoastră sau nu îl scrieți deloc: clientul află că termenul s-a mutat și data nouă, nu de ce s-a mutat. Ce e intern rămâne intern."
+        },
+        {
+          "q": "Clientul poate răspunde la mesaj?",
+          "a": "Da, iar răspunsul ajunge la omul care ține comanda, cu tot contextul. Un mesaj automat la care nu se poate răspunde este mai rău decât niciun mesaj."
+        },
+        {
+          "q": "Trebuie ca atelierul să învețe un program nou?",
+          "a": "Nu. Marcarea unei etape este o singură apăsare, din telefon sau din portal. Dacă aveți deja un sistem în care se marchează, nu se schimbă nimic în felul în care lucrați."
+        },
+        {
+          "q": "Când este gata?",
+          "a": "Nu dăm o dată pe care nu o putem ține. Este inclus în pachetul Growth: dacă îl conectați acum, agentul de statusuri se activează pe contul dumneavoastră la lansare, la prețul de la conectare."
+        }
+      ],
+      "closingTitle": "Vedeți cum arată comanda dumneavoastră pentru client",
+      "closingLead": "La demonstrație luăm etapele reale din procesul dumneavoastră și vă arătăm ce mesaje ar primi clientul și ce ar vedea în pagina comenzii."
+    },
+    "content-engine": {
+      "metaTitle": "Agent AI pentru conținut pe rețele — din lucrările dumneavoastră reale",
+      "metaDescription": "Agent AI care face postări pentru Instagram, TikTok și Pinterest din fotografiile lucrărilor dumneavoastră. Nimic nu se publică fără aprobarea dumneavoastră. Inclus în pachetul Growth.",
+      "title": "Conținut din lucrările pe care le faceți oricum",
+      "lead": "Un montaj fotografiat pe telefon devine trei postări, fiecare în formatul platformei ei. Le citiți, le corectați dacă e cazul, și abia atunci pleacă. Fără apăsarea dumneavoastră nu se publică nimic.",
+      "draft": {
+        "title": "Propuneri",
+        "count": "3 variante",
+        "sourceLabel": "Sursă",
+        "source": "Bucătărie stejar natural, montaj finalizat",
+        "sourceMeta": "6 fotografii de pe șantier · materiale · termen de execuție",
+        "variants": [
+          {
+            "on": "Instagram",
+            "format": "4:5",
+            "text": "Stejar natural, fronturi fără mânere. De la comandă la montaj — șase săptămâni."
+          },
+          {
+            "on": "TikTok",
+            "format": "9:16",
+            "text": "Montajul, din corpuri goale până la bucătărie gata. Paisprezece secunde."
+          },
+          {
+            "on": "Pinterest",
+            "format": "2:3",
+            "text": "Bucătărie la comandă din stejar natural, fronturi fără mânere, iluminare sub corpuri."
+          }
+        ],
+        "holdLabel": "Așteaptă aprobarea",
+        "hold": "Nimic nu se publică până nu apăsați. Textele se pot schimba înainte.",
+        "note": "Trei variante dintr-un singur material al dumneavoastră. Le aprobați, le rescrieți sau le respingeți — publicarea începe după apăsarea dumneavoastră, nu înainte."
+      },
+      "featuresTitle": "Ce face, concret",
+      "features": {
+        "many": {
+          "title": "Dintr-o lucrare, mai multe postări",
+          "text": "Un montaj fotografiat pe telefon ajunge material pentru o săptămână. Nu pentru că se scriu o sută de texte, ci pentru că același proiect are mai multe unghiuri: rezultatul, detaliul, procesul."
+        },
+        "formats": {
+          "title": "Fiecare platformă, în formatul ei",
+          "text": "Aceeași lucrare, alt cadru și alt text: vertical acolo unde se derulează cu degetul, pătrat acolo unde se privește, descriere lungă acolo unde se caută. Nu același text copiat de trei ori."
+        },
+        "sources": {
+          "title": "Scrie din ce i-ați dat",
+          "text": "Fotografiile, materialele, dimensiunile și termenele lucrărilor dumneavoastră. Nu inventează proiecte care nu s-au făcut și nu pune prețuri pe care nu le-ați dat."
+        },
+        "approve": {
+          "title": "Publică doar ce ați aprobat",
+          "text": "Propunerile stau într-un singur ecran: aprobați, corectați textul sau respingeți. Un agent care publică singur pe numele firmei este o problemă, nu un serviciu."
+        },
+        "task": {
+          "title": "Un ritm, nu un val",
+          "text": "Un calendar cu ce iese și când, pe fiecare platformă. Zece postări într-o zi și apoi liniște o lună arată exact ca ceea ce sunt."
+        },
+        "portal": {
+          "title": "Tot ce a ieșit, într-un singur loc",
+          "text": "Ce s-a publicat, unde și când, împreună cu materialul din care a plecat. Când cineva întreabă din ce proiect e fotografia aceea, răspunsul se găsește, nu se caută."
+        }
+      },
+      "sourcesEyebrow": "Din ce scrie",
+      "sourcesTitle": "Din ce scrie — și ce nu face",
+      "sourcesYes": {
+        "title": "Scrie din",
+        "items": [
+          "Fotografiile și filmările lucrărilor dumneavoastră, așa cum le faceți: de pe telefon, de pe șantier, la montaj.",
+          "Datele proiectului: materiale, dimensiuni, termen de execuție, orașul în care s-a lucrat.",
+          "Felul în care vorbiți deja despre lucrări — din textele, ofertele și postările pe care le aveți.",
+          "Ce a mers și ce nu: postările vechi cu rezultat rămân exemplu, cele fără rezultat rămân la fel de utile."
+        ]
+      },
+      "sourcesNo": {
+        "title": "Nu face",
+        "items": [
+          "Nu inventează lucrări. Fără fotografie și fără proiect nu există postare — nu se generează un interior care nu e al dumneavoastră.",
+          "Nu publică singur. Fiecare text și fiecare cadru trec prin aprobarea dumneavoastră, iar pe un cont la care nu i-ați dat acces nu ajunge nimic.",
+          "Nu scrie prețuri, reduceri și termene pe care nu le-ați dat. O cifră apărută într-o postare devine promisiune.",
+          "Nu poartă conversația din comentarii și mesaje în locul dumneavoastră. Întrebările despre preț merg la om — sau la agentul de chat, dacă îl aveți."
+        ]
+      },
+      "platformsTitle": "Unde ajunge conținutul",
+      "platformsLead": "Textul și cadrul se pregătesc separat pentru fiecare platformă. Publicarea se face pe conturile la care ne dați acces; unde nu dați acces, primiți materialul gata de postat.",
+      "platforms": [
+        "Instagram",
+        "TikTok",
+        "Pinterest",
+        "Facebook",
+        "Blogul de pe site",
+        "Materialul gata, dacă publicați singuri"
+      ],
+      "faqTitle": "Ce se întreabă despre conținut",
+      "faq": [
+        {
+          "q": "Cine hotărăște ce se publică?",
+          "a": "Dumneavoastră. Agentul pregătește propunerile, dar între text și publicare stă o apăsare a dumneavoastră. Se poate porni și publicarea automată pentru un anumit tip de postări, dacă la un moment dat vreți asta — dar nu așa se începe și nu asta recomandăm."
+        },
+        {
+          "q": "De unde ia fotografiile?",
+          "a": "De la dumneavoastră. Un montaj fotografiat pe telefon este suficient, nu e nevoie de ședință foto. Ce nu ne dați nu apare: agentul nu caută imagini pe internet și nu generează interioare care nu sunt ale dumneavoastră."
+        },
+        {
+          "q": "Nu se va vedea că textele sunt scrise de o mașină?",
+          "a": "Se vede atunci când textul e scris din nimic. Aici pleacă de la o lucrare reală, cu materialul, dimensiunile și termenul ei, iar felul de a scrie se ia din ce ați scris deja. Și oricum îl citiți înainte să plece."
+        },
+        {
+          "q": "Câte postări ies pe lună?",
+          "a": "Depinde de câte lucrări faceți și de câte apucați să fotografiați. Nu vindem un număr: o sută de postări dintr-un singur proiect ar fi o sută de variante ale aceluiași lucru. Ritmul îl stabilim împreună, pe calendar."
+        },
+        {
+          "q": "Când este gata?",
+          "a": "Nu dăm o dată pe care nu o putem ține. Este inclus în pachetul Growth: dacă îl conectați acum, motorul de conținut se activează pe contul dumneavoastră la lansare, la prețul de la conectare."
+        }
+      ],
+      "closingTitle": "Vedeți ce ar ieși dintr-o lucrare de-a dumneavoastră",
+      "closingLead": "La demonstrație luăm fotografiile unui proiect real făcut de dumneavoastră și vă arătăm ce postări ar ieși din el, în formatul fiecărei platforme."
+    }
+  },
+  "industryPage": {
+    "back": "Toate industriile",
+    "eyebrowIndustry": "Industrie",
+    "questionsEyebrow": "Ce vă întreabă",
+    "agentsEyebrow": "Agenți",
+    "leadEyebrow": "Ce primiți",
+    "faqEyebrow": "Întrebări",
+    "agentsTitle": "Agenții care lucrează în această nișă",
+    "agentsLead": "Fiecare este un produs separat. Puteți începe cu unul și adăuga altul când primul își arată rezultatul.",
+    "openAgent": "Vezi agentul",
+    "mobilier": {
+      "metaTitle": "Agenți AI pentru mobilă la comandă — chatbot, configurator, follow-up",
+      "metaDescription": "Agenți AI pentru producătorii de mobilă și bucătării la comandă: răspund la întrebările de preț din lista dumneavoastră, adună dimensiunile și materialul și predau vânzătorului o cerere gata de calculat.",
+      "title": "Agenți AI pentru mobilă la comandă",
+      "lead": "Răspund la întrebările de preț din lista dumneavoastră, adună dimensiunile și materialul înainte de măsurare, readuc clienții care au tăcut și anunță la fiecare etapă a producției. Fiecare este un produs separat — luați doar pe cei de care aveți nevoie.",
+      "questionsTitle": "Întrebările pe care le primiți de zece ori pe zi",
+      "questions": [
+        {
+          "q": "«Cât costă o bucătărie de 3 metri?»",
+          "a": "Întrebarea la care nu există un răspuns scurt — și pe care o primiți înainte de orice altceva. Agentul întreabă ce trebuie ca să dea un interval, în loc să răspundă «depinde»."
+        },
+        {
+          "q": "«Aveți țesătura asta?»",
+          "a": "Cu o poză de pe Instagram, fără nume și fără cod. Agentul cunoaște catalogul dumneavoastră de țesături și spune dacă există și în ce grupă de preț intră."
+        },
+        {
+          "q": "«În cât timp o faceți?»",
+          "a": "Termenul depinde de încărcarea atelierului și de materiale. Agentul răspunde cu termenul pe care l-ați stabilit dumneavoastră, nu cu unul inventat."
+        },
+        {
+          "q": "«Veniți la măsurat?»",
+          "a": "Înainte de măsurare aveți nevoie de dimensiuni aproximative și de buget. Agentul le adună, ca deplasarea să nu fie în gol."
+        }
+      ],
+      "agents": {
+        "chatbot": "Răspunde la întrebările de preț și materiale din lista dumneavoastră, la orice oră.",
+        "voice-assistant": "Preia apelurile când showroomul e gol sau atelierul e zgomotos, află ce perete se mobilează și programează vizita.",
+        "configurator": "Clientul alege dimensiuni, fronturi și țesătură; prețul se calculează după regulile atelierului.",
+        "follow-up": "Revine la clientul care a cerut ofertă și a tăcut — la momentul în care mai are sens.",
+        "order-status": "Anunță la fiecare etapă a producției, fără ca cineva să scrie mesajul.",
+        "content-engine": "Din aceeași lucrare finisată face postări pentru Instagram și Pinterest, acolo unde se caută mobila."
+      },
+      "leadTitle": "Vânzătorul primește asta, nu «a scris cineva»",
+      "leadLead": "Toată conversația se strânge într-o fișă. Vânzătorul o deschide și poate calcula, fără să sune ca să afle ce voia omul.",
+      "leadCard": {
+        "title": "Cerere",
+        "number": "№ 1042",
+        "rows": [
+          {
+            "k": "Produs",
+            "v": "Dressing pe colț"
+          },
+          {
+            "k": "Dimensiuni",
+            "v": "2,4 × 1,8 m"
+          },
+          {
+            "k": "Uși",
+            "v": "Glisante, o oglindă"
+          },
+          {
+            "k": "Interval discutat",
+            "v": "24 000 – 31 000 lei"
+          },
+          {
+            "k": "Montaj",
+            "v": "Inclus, în oraș"
+          },
+          {
+            "k": "Pas următor",
+            "v": "Măsurare la domiciliu"
+          }
+        ],
+        "footer": "Conversația completă este atașată la fișă."
+      },
+      "faqTitle": "Ce întreabă atelierele înainte să înceapă",
+      "faq": [
+        {
+          "q": "Prețurile mele nu sunt fixe, se calculează de fiecare dată. Cum poate agentul să răspundă?",
+          "a": "Exact de aceea începe cu întrebări. Agentul nu ține o listă de prețuri finale, ci regulile după care le calculați: preț pe metru liniar, coeficient pe grupa de țesătură, adaosuri pentru feronerie. Din ele iese un interval, iar oferta exactă rămâne la dumneavoastră."
+        },
+        {
+          "q": "Am catalogul de țesături într-un PDF de la furnizor. E de ajuns?",
+          "a": "Da. PDF, Excel, poze ale mostrelor — le luăm în forma în care sunt. Să le punem în ordine este partea noastră din muncă, și pentru asta se plătește configurarea inițială."
+        },
+        {
+          "q": "Ce se întâmplă dacă clientul cere o reducere?",
+          "a": "Agentul nu dă reduceri. Spune că întrebarea ține de vânzător și lasă cererea marcată — ca să știți că omul a întrebat de preț înainte să sunați."
+        },
+        {
+          "q": "Lucrăm și cu proiecte de la designeri. Agentul încurcă lucrurile?",
+          "a": "Nu, dacă îi spuneți din start că există două fluxuri. Clientul care vine cu proiect primește alte întrebări decât cel care vine cu o idee — asta se stabilește la configurare."
+        }
+      ],
+      "closingTitle": "Vedeți agenții la lucru pe catalogul dumneavoastră",
+      "closingLead": "La demonstrație luăm câteva poziții din catalogul dumneavoastră și vă arătăm exact ce ar răspunde unui client real.",
+      "day": {
+        "title": "O zi în atelier",
+        "label": "Exemplu",
+        "note": "Așa arată o zi în care lucrează toți agenții. Astăzi este disponibil chatbotul; ceilalți sunt în lucru.",
+        "entries": [
+          {
+            "time": "08:40",
+            "agent": "Configurator",
+            "text": "Un client a configurat un dressing pe colț și a primit intervalul de preț."
+          },
+          {
+            "time": "12:05",
+            "agent": "Chatbot",
+            "text": "A răspuns în ce grupă de preț intră țesătura dintr-o poză de pe Instagram."
+          },
+          {
+            "time": "16:20",
+            "agent": "Follow-up",
+            "text": "A revenit la clientul care a cerut ofertă acum două săptămâni și a tăcut."
+          },
+          {
+            "time": "18:30",
+            "agent": "Statusul comenzii",
+            "text": "A anunțat clientul că bucătăria a intrat în montaj."
+          },
+          {
+            "time": "22:14",
+            "agent": "Chatbot",
+            "text": "A adunat dimensiunile pentru o bucătărie de 3,2 m și a lăsat cererea vânzătorului."
+          }
+        ],
+        "scale": "Ziua, ora cu oră"
+      }
+    },
+    "constructii": {
+      "metaTitle": "Agenți AI pentru firme de renovări — chatbot, deviz, statusul lucrării",
+      "metaDescription": "Agenți AI pentru renovări și design interior: răspund la întrebările de preț pe metru pătrat, adună metrajul și starea spațiului înainte de deplasare și anunță clientul la fiecare etapă a șantierului.",
+      "title": "Agenți AI pentru renovări și design interior",
+      "lead": "Răspund la întrebările de preț din devizul dumneavoastră, adună metrajul și starea spațiului înainte să trimiteți pe cineva la fața locului și anunță clientul la fiecare etapă a lucrării. Fiecare este un produs separat — luați doar pe cei de care aveți nevoie.",
+      "questionsTitle": "Întrebările pe care le primiți înainte de orice deviz",
+      "questions": [
+        {
+          "q": "«Cât costă renovarea unui apartament de 60 de metri?»",
+          "a": "Depinde de ce se face și de ce este acum acolo. Agentul întreabă exact asta — regimul lucrării, starea instalațiilor, dacă se mută pereți — și dă un interval, în loc de «depinde»."
+        },
+        {
+          "q": "«Materialele sunt incluse?»",
+          "a": "Cea mai frecventă neînțelegere din domeniu, și cea care strică relația la mijlocul lucrării. Agentul spune din start ce intră în prețul dumneavoastră și ce se cumpără separat, cu aceleași cuvinte de fiecare dată."
+        },
+        {
+          "q": "«Când puteți începe?»",
+          "a": "Termenul depinde de echipele libere. Agentul răspunde cu perioada pe care ați marcat-o dumneavoastră, nu cu una inventată ca să nu piardă clientul."
+        },
+        {
+          "q": "«Veniți să vedeți?»",
+          "a": "O deplasare la fața locului costă o jumătate de zi de om. Agentul adună metrajul, anul blocului și fotografiile înainte, ca deplasarea să nu fie în gol."
+        }
+      ],
+      "agents": {
+        "chatbot": "Răspunde la întrebările de preț pe metru pătrat și de materiale, din devizul dumneavoastră.",
+        "voice-assistant": "Preia apelurile de pe șantier, unde nimeni nu poate răspunde, și programează evaluarea.",
+        "configurator": "Clientul alege regimul lucrării, metrajul și finisajele; intervalul se calculează după normele dumneavoastră.",
+        "order-status": "Anunță la fiecare etapă — demolare, instalații, finisaje — fără ca cineva de pe șantier să scrie mesajul.",
+        "content-engine": "Din aceeași lucrare terminată face «înainte și după» pentru rețele, în formatul fiecărei platforme."
+      },
+      "leadTitle": "Devizul începe de la o fișă, nu de la un telefon",
+      "leadLead": "Toată conversația se strânge într-o fișă. Devizantul o deschide și poate calcula, fără să sune ca să afle ce metraj are apartamentul.",
+      "leadCard": {
+        "title": "Cerere",
+        "number": "№ 318",
+        "rows": [
+          {
+            "k": "Obiect",
+            "v": "Apartament, 2 camere"
+          },
+          {
+            "k": "Suprafață",
+            "v": "58 m², bloc din 1986"
+          },
+          {
+            "k": "Regim",
+            "v": "Capitală, cu schimbarea instalațiilor"
+          },
+          {
+            "k": "Pereți",
+            "v": "Se mută unul, între bucătărie și hol"
+          },
+          {
+            "k": "Interval discutat",
+            "v": "185 000 – 240 000 lei"
+          },
+          {
+            "k": "Pas următor",
+            "v": "Evaluare la fața locului, marți"
+          }
+        ],
+        "footer": "Fotografiile trimise de client sunt atașate la fișă."
+      },
+      "faqTitle": "Ce întreabă firmele de renovări înainte să înceapă",
+      "faq": [
+        {
+          "q": "Devizul meu are trei sute de poziții. Cum poate agentul să răspundă?",
+          "a": "Nu răspunde din deviz, ci din regulile după care îl faceți: preț pe metru pătrat pentru fiecare regim, coeficienți pentru starea spațiului, ce intră și ce nu. Din ele iese un interval; devizul exact rămâne al devizantului."
+        },
+        {
+          "q": "Clienții cer prețuri, apoi dispar. Ce schimbă asta?",
+          "a": "Ce vă rămâne. Azi, dintr-o discuție care nu s-a transformat în comandă nu rămâne nimic. Cu agentul rămâne o fișă cu metraj, regim și buget — adică o listă cu care se poate lucra iarna, când șantierele sunt mai puține."
+        },
+        {
+          "q": "Lucrăm și cu designeri, și direct cu proprietarii. Se încurcă?",
+          "a": "Nu, dacă spuneți din start că sunt două fluxuri. Cine vine cu proiect de la designer primește alte întrebări decât cine vine cu o idee și o poză de pe internet."
+        },
+        {
+          "q": "Cine anunță clientul când lucrarea întârzie?",
+          "a": "Agentul, dacă marcați întârzierea. Motivul îl scrieți dumneavoastră sau nu îl scrieți deloc — clientul află că termenul s-a mutat și data nouă. O întârziere anunțată costă un telefon; una descoperită la fața locului costă recomandarea."
+        }
+      ],
+      "closingTitle": "Vedeți agenții la lucru pe devizul dumneavoastră",
+      "closingLead": "La demonstrație luăm câteva poziții din devizul dumneavoastră și vă arătăm exact ce ar răspunde unui client real.",
+      "day": {
+        "title": "O zi pe șantier",
+        "label": "Exemplu",
+        "note": "Așa arată o zi în care lucrează toți agenții. Astăzi este disponibil chatbotul; ceilalți sunt în lucru.",
+        "entries": [
+          {
+            "time": "07:50",
+            "agent": "Statusul comenzii",
+            "text": "A anunțat clientul că astăzi începe demolarea și că se lucrează până la ora 17."
+          },
+          {
+            "time": "11:30",
+            "agent": "Chatbot",
+            "text": "A spus ce intră în prețul pe metru pătrat și ce se cumpără separat."
+          },
+          {
+            "time": "14:15",
+            "agent": "Asistent telefonic",
+            "text": "A preluat un apel în timp ce echipa turna șapă și a programat evaluarea pentru marți."
+          },
+          {
+            "time": "17:40",
+            "agent": "Configurator",
+            "text": "Un client a configurat o renovare de 58 m² și a primit intervalul de preț."
+          },
+          {
+            "time": "21:35",
+            "agent": "Chatbot",
+            "text": "A adunat metrajul și anul blocului pentru un apartament cu două camere."
+          }
+        ],
+        "scale": "Ziua, ora cu oră"
+      }
+    },
+    "imobiliare": {
+      "metaTitle": "Agenți AI pentru agenții imobiliare și dezvoltatori — chatbot și vizionări",
+      "metaDescription": "Agenți AI care califică lead-urile imobiliare: află bugetul, zona și termenul, propun vizionarea și o pun în calendar, apoi revin la cei care s-au gândit și au tăcut.",
+      "title": "Agenți AI pentru imobiliare",
+      "lead": "Află bugetul, zona și termenul în primele întrebări, propun vizionarea și o pun în calendar, iar la cei care au tăcut revin la momentul potrivit. Agentul imobiliar primește lead-ul deja calificat, nu «a scris cineva».",
+      "questionsTitle": "Întrebările care se repetă la fiecare anunț",
+      "questions": [
+        {
+          "q": "«Care e prețul final, cu tot cu comision?»",
+          "a": "Se întreabă la fiecare anunț, iar un răspuns care vine în trei mesaje pierde omul. Agentul spune ce intră în preț și ce se plătește separat, din regulile dumneavoastră."
+        },
+        {
+          "q": "«Se poate în rate de la dezvoltator?»",
+          "a": "Condițiile diferă de la proiect la proiect și se schimbă în timpul vânzării. Agentul răspunde cu ce este valabil azi, nu cu ce scria în broșura de anul trecut."
+        },
+        {
+          "q": "«Când pot să văd?»",
+          "a": "Vizionarea se pierde între mesaje și programul agentului imobiliar. Agentul vede orele libere, propune două și confirmă."
+        },
+        {
+          "q": "«Ce e în jur — școală, parcare, transport?»",
+          "a": "Întrebarea care de multe ori hotărăște, și la care se răspunde de zece ori pe zi cu același text scris din nou. Agentul îl are scris o dată, corect."
+        }
+      ],
+      "agents": {
+        "chatbot": "Răspunde la întrebările despre preț, rate și dotări, din condițiile valabile azi.",
+        "voice-assistant": "Preia apelurile în timp ce sunteți la o vizionare și o programează pe următoarea, direct în calendar.",
+        "follow-up": "Revine la cei care au văzut apartamentul și au tăcut — o dată, la momentul în care mai are sens.",
+        "order-status": "Anunță cumpărătorul la fiecare etapă: rezervare, contract, notar, predarea cheilor.",
+        "content-engine": "Dintr-un apartament fotografiat face postările pentru rețele, în formatul fiecărei platforme."
+      },
+      "leadTitle": "Agentul imobiliar primește un lead calificat",
+      "leadLead": "Bugetul, zona și termenul sunt aflate înainte de primul telefon, iar vizionarea este deja propusă.",
+      "leadCard": {
+        "title": "Lead",
+        "number": "№ 2207",
+        "rows": [
+          {
+            "k": "Caută",
+            "v": "2 camere, bloc nou"
+          },
+          {
+            "k": "Zonă",
+            "v": "Două sectoare, aproape de școală"
+          },
+          {
+            "k": "Buget",
+            "v": "68 000 – 79 000 €"
+          },
+          {
+            "k": "Plată",
+            "v": "Credit ipotecar, avans 20%"
+          },
+          {
+            "k": "Termen",
+            "v": "Se mută în primăvară"
+          },
+          {
+            "k": "Pas următor",
+            "v": "Vizionare joi, 18:00"
+          }
+        ],
+        "footer": "Conversația completă este atașată la lead."
+      },
+      "faqTitle": "Ce întreabă agențiile înainte să înceapă",
+      "faq": [
+        {
+          "q": "Am o sută de anunțuri care se schimbă săptămânal. Cine le ține la zi?",
+          "a": "Agentul citește lista dumneavoastră de obiecte acolo unde o țineți deja — foaie de calcul, CRM sau feed. Ce ați scos din vânzare dispare și din răspunsuri: nu se răspunde despre un apartament vândut."
+        },
+        {
+          "q": "Nu vreau ca agentul să dea prețul minim la care aș coborî.",
+          "a": "Nici nu îl dă. Agentul spune prețul din anunț și nimic sub el. Negocierea rămâne a agentului imobiliar, iar în fișă rămâne notat că omul a întrebat de reducere — ceea ce este o informație utilă înainte de telefon."
+        },
+        {
+          "q": "Lead-urile noastre vin de pe portaluri, nu de pe site.",
+          "a": "Atunci agentul lucrează acolo unde ajunge conversația: chat pe site, mesagerie sau telefon. Un cumpărător venit de pe portal care sună seara primește oricum un răspuns, nu un apel pierdut."
+        },
+        {
+          "q": "Cine răspunde când agentul imobiliar este la vizionare?",
+          "a": "Asistentul telefonic. Preia apelul, află ce caută omul și propune o vizionare. Alternativa de azi este un apel pierdut, din care nu rămâne nici măcar numărul."
+        }
+      ],
+      "closingTitle": "Vedeți agenții la lucru pe obiectele dumneavoastră",
+      "closingLead": "La demonstrație luăm câteva anunțuri reale de la dumneavoastră și vă arătăm ce ar răspunde unui cumpărător.",
+      "day": {
+        "title": "O zi în agenție",
+        "label": "Exemplu",
+        "note": "Așa arată o zi în care lucrează toți agenții. Astăzi este disponibil chatbotul; ceilalți sunt în lucru.",
+        "entries": [
+          {
+            "time": "08:15",
+            "agent": "Chatbot",
+            "text": "A răspuns ce intră în preț și ce se plătește separat, la un apartament din blocul nou."
+          },
+          {
+            "time": "11:40",
+            "agent": "Asistent telefonic",
+            "text": "A preluat un apel în timpul unei vizionări și a propus două ore libere pentru joi."
+          },
+          {
+            "time": "15:05",
+            "agent": "Statusul comenzii",
+            "text": "A anunțat cumpărătorul că dosarul a trecut la notar."
+          },
+          {
+            "time": "19:20",
+            "agent": "Follow-up",
+            "text": "A revenit la un client care a văzut apartamentul acum zece zile și a tăcut."
+          },
+          {
+            "time": "22:40",
+            "agent": "Chatbot",
+            "text": "A aflat bugetul și zona pentru un cumpărător care căuta două camere."
+          }
+        ],
+        "scale": "Ziua, ora cu oră"
+      }
+    },
+    "auto": {
+      "metaTitle": "Agenți AI pentru dealeri auto — chatbot, test drive și statusul comenzii",
+      "metaDescription": "Agenți AI pentru dealeri auto: răspund despre configurații și finanțare, programează test drive-ul în calendar, revin la cei care au tăcut și anunță când mașina comandată se apropie de livrare.",
+      "title": "Agenți AI pentru dealeri auto",
+      "lead": "Răspund despre configurație și finanțare într-o singură conversație, programează test drive-ul direct în calendar, revin la cei care au tăcut și anunță unde este mașina comandată. Fiecare este un produs separat.",
+      "questionsTitle": "Întrebările care se pun înainte de showroom",
+      "questions": [
+        {
+          "q": "«Ce rată iese la mașina asta?»",
+          "a": "Depinde de avans, de perioadă și de venit — trei întrebări, nu una. Agentul le pune în ordine și dă un interval din condițiile dumneavoastră, fără să promită vreo aprobare."
+        },
+        {
+          "q": "«O aveți pe stoc, în alb?»",
+          "a": "Se întreabă despre o configurație anume, iar răspunsul stă într-un stoc care se schimbă zilnic. Agentul citește stocul dumneavoastră și spune ce este azi, nu ce era luni."
+        },
+        {
+          "q": "«Cât se așteaptă dacă o comand?»",
+          "a": "Termenul de la fabrică nu este un secret, dar nici o cifră fixă. Agentul spune perioada pe care ați marcat-o, iar după comandă anunță când se schimbă."
+        },
+        {
+          "q": "«Se poate un test drive sâmbătă?»",
+          "a": "Sâmbăta se cere cel mai des și tot atunci showroomul este plin. Agentul vede orele libere, propune două și confirmă."
+        }
+      ],
+      "agents": {
+        "chatbot": "Răspunde despre configurații, dotări și condiții de finanțare, din datele dumneavoastră.",
+        "voice-assistant": "Preia apelurile când consultanții sunt cu clienți și programează test drive-ul în calendar.",
+        "follow-up": "Revine la cel care a făcut test drive și nu a mai sunat — o dată, la momentul potrivit.",
+        "order-status": "Anunță la fiecare etapă a mașinii comandate, până în ziua predării.",
+        "content-engine": "Din mașinile de pe stoc și din predări face postările pentru rețele."
+      },
+      "leadTitle": "Consultantul primește o fișă, nu «a întrebat cineva de un SUV»",
+      "leadLead": "Configurația, bugetul și forma de plată sunt aflate înainte de primul telefon, iar test drive-ul este deja propus.",
+      "leadCard": {
+        "title": "Cerere",
+        "number": "№ 771",
+        "rows": [
+          {
+            "k": "Model",
+            "v": "SUV compact, benzină"
+          },
+          {
+            "k": "Configurație",
+            "v": "Nivel mediu, trapă, cameră 360"
+          },
+          {
+            "k": "Culoare",
+            "v": "Alb sau gri, nu negru"
+          },
+          {
+            "k": "Finanțare",
+            "v": "Leasing, avans 30%, 5 ani"
+          },
+          {
+            "k": "La schimb",
+            "v": "Mașina actuală, 7 ani vechime"
+          },
+          {
+            "k": "Pas următor",
+            "v": "Test drive sâmbătă, 11:00"
+          }
+        ],
+        "footer": "Conversația completă este atașată la fișă."
+      },
+      "faqTitle": "Ce întreabă dealerii înainte să înceapă",
+      "faq": [
+        {
+          "q": "Stocul se schimbă zilnic. De unde știe agentul ce avem?",
+          "a": "Din lista dumneavoastră de stoc, acolo unde o țineți. Ce s-a vândut dispare din răspunsuri în aceeași zi: agentul nu propune o mașină care nu mai este pe platformă."
+        },
+        {
+          "q": "Nu vreau să promită aprobări de credit.",
+          "a": "Nici nu promite. Spune ce condiții aveți și ce rată ar ieși la un avans dat, apoi precizează că aprobarea o dă banca. Un «da» spus de un robot devine reclamație la ghișeu."
+        },
+        {
+          "q": "Service-ul primește și el zeci de apeluri pe zi. Ajută?",
+          "a": "Da, dar altfel: asistentul telefonic preia apelul, află mașina și problema și pune programarea în calendarul service-ului. Diagnosticul rămâne al mecanicului — agentul nu spune ce are mașina."
+        },
+        {
+          "q": "Ce facem cu cei care fac test drive și dispar?",
+          "a": "Aici lucrează follow-up-ul: revine o dată, la câteva zile, cu ce s-a discutat efectiv — nu cu un mesaj de rutină. Dacă omul răspunde, revenirile se opresc automat."
+        }
+      ],
+      "closingTitle": "Vedeți agenții la lucru pe stocul dumneavoastră",
+      "closingLead": "La demonstrație luăm câteva mașini din stocul dumneavoastră real și vă arătăm ce ar răspunde unui client.",
+      "day": {
+        "title": "O zi în showroom",
+        "label": "Exemplu",
+        "note": "Așa arată o zi în care lucrează toți agenții. Astăzi este disponibil chatbotul; ceilalți sunt în lucru.",
+        "entries": [
+          {
+            "time": "09:10",
+            "agent": "Chatbot",
+            "text": "A spus ce configurații sunt azi pe stoc în alb și în gri."
+          },
+          {
+            "time": "12:45",
+            "agent": "Asistent telefonic",
+            "text": "A preluat un apel când toți consultanții erau cu clienți și a programat un test drive."
+          },
+          {
+            "time": "16:30",
+            "agent": "Statusul comenzii",
+            "text": "A anunțat un client că mașina comandată a plecat din port."
+          },
+          {
+            "time": "18:55",
+            "agent": "Follow-up",
+            "text": "A revenit la cel care a făcut test drive săptămâna trecută."
+          },
+          {
+            "time": "21:50",
+            "agent": "Chatbot",
+            "text": "A dat intervalul de rată pentru un avans de 30% și a lăsat cererea consultantului."
+          }
+        ],
+        "scale": "Ziua, ora cu oră"
+      }
+    },
+    "energie": {
+      "metaTitle": "Agenți AI pentru panouri solare și HVAC — chatbot și calcul de amortizare",
+      "metaDescription": "Agenți AI pentru firmele de panouri fotovoltaice și HVAC: adună consumul și datele acoperișului, dau un interval de preț cu perioada de amortizare și anunță la fiecare etapă a montajului.",
+      "title": "Agenți AI pentru panouri solare și HVAC",
+      "lead": "Adună consumul lunar și datele acoperișului, dau un interval de preț cu perioada de amortizare calculată pe cazul omului și anunță clientul la fiecare etapă a montajului. Fiecare este un produs separat.",
+      "questionsTitle": "Întrebările care vin înaintea oricărei oferte",
+      "questions": [
+        {
+          "q": "«Cât costă un sistem pentru casa mea?»",
+          "a": "Fără consum și fără acoperiș, orice cifră este ghicită. Agentul cere factura ultimei luni și câteva date despre acoperiș, apoi dă un interval — nu o cifră care se va schimba oricum."
+        },
+        {
+          "q": "«În cât timp se amortizează?»",
+          "a": "Întrebarea care hotărăște cumpărarea. Agentul o estimează din consumul real al omului și din prețul dumneavoastră, nu dintr-un exemplu de broșură cu un consum care nu este al lui."
+        },
+        {
+          "q": "«Se poate cu subvenție?»",
+          "a": "Condițiile se schimbă și se încurcă ușor. Agentul spune ce este valabil azi la dumneavoastră și ce documente trebuie, cu aceleași cuvinte de fiecare dată."
+        },
+        {
+          "q": "«Rezistă acoperișul meu?»",
+          "a": "Răspunsul cere o verificare, dar întrebările dinaintea ei se pun o singură dată: tipul învelitorii, anul casei, orientarea. Agentul le adună înainte de deplasare."
+        }
+      ],
+      "agents": {
+        "chatbot": "Răspunde despre prețuri, subvenții și garanții, din condițiile valabile azi la dumneavoastră.",
+        "voice-assistant": "Preia apelurile când echipele sunt pe acoperiș și programează evaluarea tehnică.",
+        "configurator": "Clientul dă consumul și datele acoperișului; iese puterea sistemului, intervalul de preț și amortizarea.",
+        "order-status": "Anunță la fiecare etapă: avizare, livrare, montaj, punere în funcțiune.",
+        "content-engine": "Din montajele terminate face postări cu obiectul, puterea instalată și economia."
+      },
+      "leadTitle": "Inginerul primește datele, nu «a întrebat cineva de panouri»",
+      "leadLead": "Consumul, acoperișul și tipul sistemului sunt aflate înainte de deplasare. Evaluarea tehnică este deja propusă.",
+      "leadCard": {
+        "title": "Cerere",
+        "number": "№ 604",
+        "rows": [
+          {
+            "k": "Obiect",
+            "v": "Casă individuală, două niveluri"
+          },
+          {
+            "k": "Consum",
+            "v": "540 kWh pe lună, media pe an"
+          },
+          {
+            "k": "Acoperiș",
+            "v": "Țiglă metalică, 62 m², sud-est"
+          },
+          {
+            "k": "Sistem",
+            "v": "On-grid, fără acumulatori"
+          },
+          {
+            "k": "Interval discutat",
+            "v": "5,8 – 7,2 kW · 4 800 – 6 100 €"
+          },
+          {
+            "k": "Pas următor",
+            "v": "Evaluare tehnică, joi"
+          }
+        ],
+        "footer": "Factura trimisă de client este atașată la fișă."
+      },
+      "faqTitle": "Ce întreabă firmele de energie înainte să înceapă",
+      "faq": [
+        {
+          "q": "Amortizarea depinde de zeci de lucruri. Poate agentul să o calculeze?",
+          "a": "Poate să o estimeze, după formula dumneavoastră și după consumul real al omului — și așa o și prezintă: ca interval, nu ca promisiune. Calculul exact rămâne al inginerului, după evaluarea la fața locului."
+        },
+        {
+          "q": "Subvențiile se schimbă. Cine actualizează?",
+          "a": "Dumneavoastră, într-un singur loc, iar agentul răspunde din el. Tocmai de aceea nu ținem condițiile în textul agentului: o schimbare de regulament nu trebuie să însemne rescrierea lui."
+        },
+        {
+          "q": "Jumătate din apeluri sunt de la oameni care nu vor cumpăra niciodată.",
+          "a": "Și este util să aflați asta în trei întrebări, nu într-o deplasare. Agentul cere consumul din start; cine nu îl are la îndemână de obicei nu este încă la etapa de cumpărat — iar cine îl trimite în două minute, este."
+        },
+        {
+          "q": "Montajul durează săptămâni și clienții sună. Ce se schimbă?",
+          "a": "Sună mai puțin, pentru că află singuri. Agentul de statusuri anunță la fiecare etapă marcată și, dacă se mută un termen, spune și asta la timp — nu în ziua în care echipa trebuia să vină."
+        }
+      ],
+      "closingTitle": "Vedeți agenții la lucru pe sistemele dumneavoastră",
+      "closingLead": "La demonstrație luăm sistemele pe care le montați și vă arătăm ce interval și ce amortizare ar primi un client real.",
+      "day": {
+        "title": "O zi în firmă",
+        "label": "Exemplu",
+        "note": "Așa arată o zi în care lucrează toți agenții. Astăzi este disponibil chatbotul; ceilalți sunt în lucru.",
+        "entries": [
+          {
+            "time": "08:25",
+            "agent": "Chatbot",
+            "text": "A explicat ce documente trebuie pentru subvenție, din condițiile de azi."
+          },
+          {
+            "time": "13:10",
+            "agent": "Configurator",
+            "text": "Un client a dat consumul și acoperișul și a primit puterea sistemului și amortizarea."
+          },
+          {
+            "time": "15:50",
+            "agent": "Asistent telefonic",
+            "text": "A preluat un apel în timp ce echipa era pe acoperiș și a programat evaluarea tehnică."
+          },
+          {
+            "time": "17:35",
+            "agent": "Statusul comenzii",
+            "text": "A anunțat un client că sistemul a trecut de avizare și urmează livrarea."
+          },
+          {
+            "time": "21:15",
+            "agent": "Chatbot",
+            "text": "A cerut factura ultimei luni și a lăsat cererea inginerului."
+          }
+        ],
+        "scale": "Ziua, ora cu oră"
+      }
+    },
+    "clinici": {
+      "metaTitle": "Agenți AI pentru clinici stomatologice și estetice — programări și întrebări",
+      "metaDescription": "Agenți AI pentru clinici: răspund la întrebările despre preț, durere și recuperare, programează pacienții în calendarul clinicii și le amintesc de vizită. Nu pun diagnostice.",
+      "title": "Agenți AI pentru stomatologie și medicină estetică",
+      "lead": "Răspund la întrebările pe care pacientul le pune greu unui om — cât doare, cât costă, cât durează recuperarea — și îl programează direct în calendarul clinicii. Diagnosticul rămâne al medicului: agentul nu îl atinge.",
+      "questionsTitle": "Întrebările care amână vizita cu luni de zile",
+      "questions": [
+        {
+          "q": "«Doare?»",
+          "a": "Întrebarea care amână vizita cel mai mult și pe care mulți nu o pun la telefon, de jenă. Agentul răspunde cu ce ați scris dumneavoastră despre anestezie și despre ce simte pacientul — fără să promită că nu doare."
+        },
+        {
+          "q": "«Cât costă un implant?»",
+          "a": "Prețul depinde de sistem, de os și de ce se face înainte. Agentul spune intervalul dumneavoastră și explică de ce nu poate fi o cifră unică, în loc să tacă până la consultație."
+        },
+        {
+          "q": "«În cât timp mă vindec?»",
+          "a": "Perioada de recuperare hotărăște când își ia omul concediu. Agentul o spune ca interval, din protocolul clinicii, și adaugă că medicul o precizează la consultație."
+        },
+        {
+          "q": "«Aveți loc mâine?»",
+          "a": "Cea mai simplă întrebare și cea mai des ratată: recepția este ocupată sau clinica este închisă. Agentul vede orele libere și programează."
+        }
+      ],
+      "agents": {
+        "chatbot": "Răspunde la întrebările despre preț, durere și recuperare, din textele clinicii.",
+        "voice-assistant": "Preia apelurile când recepția este ocupată sau clinica este închisă și programează pacientul în calendar.",
+        "follow-up": "Îi amintește pacientului de vizită și revine la cel care a întrebat de preț și nu a mai venit.",
+        "order-status": "Anunță când lucrarea de la laborator a sosit: coroană, proteză, gutiere.",
+        "content-engine": "Din cazurile pe care le puteți arăta face postări — numai cu acordul pacientului și numai ce aprobați dumneavoastră."
+      },
+      "leadTitle": "Recepția primește o fișă, nu «a sunat cineva»",
+      "leadLead": "Ce vrea pacientul, ce l-a îngrijorat și pe ce oră este programat. Recepția confirmă, nu reconstituie.",
+      "leadCard": {
+        "title": "Programare",
+        "number": "№ 4409",
+        "rows": [
+          {
+            "k": "Motiv",
+            "v": "Implant, un molar lipsă"
+          },
+          {
+            "k": "Situație",
+            "v": "Extracție acum patru luni"
+          },
+          {
+            "k": "Ce a întrebat",
+            "v": "Anestezia și durata recuperării"
+          },
+          {
+            "k": "Preț discutat",
+            "v": "Interval, din lista clinicii"
+          },
+          {
+            "k": "Programat",
+            "v": "Marți, 10:30, consultație"
+          },
+          {
+            "k": "Reamintire",
+            "v": "Cu o zi înainte, prin SMS"
+          }
+        ],
+        "footer": "Conversația completă este atașată la programare."
+      },
+      "faqTitle": "Ce întreabă clinicile înainte să înceapă",
+      "faq": [
+        {
+          "q": "Agentul nu va da sfaturi medicale?",
+          "a": "Nu. Nu pune diagnostice, nu recomandă tratamente și nu interpretează simptome sau radiografii. Răspunde la întrebări de organizare și de preț, din textele pe care le scrieți dumneavoastră, iar tot ce ține de medicină îl trimite la consultație. Aceasta este o limită scrisă în configurare, nu o recomandare."
+        },
+        {
+          "q": "Ce se întâmplă cu datele pacienților?",
+          "a": "Se cere strict cât este nevoie pentru o programare: nume, contact, motivul vizitei. Nu construim un dosar medical și nu amestecăm datele între clinici. Ce prelucrează agentul se stabilește prin contract și printr-un acord de prelucrare, în care clinica este operatorul."
+        },
+        {
+          "q": "Recepția noastră are deja un program de programări.",
+          "a": "Agentul lucrează în el, dacă are unde să se conecteze. Scopul nu este încă un calendar, ci ca ora liberă din calendarul dumneavoastră să fie ocupată și la 22:00, când recepția este acasă."
+        },
+        {
+          "q": "Cum arătăm cazuri fără să încălcăm confidențialitatea?",
+          "a": "Numai cu acordul scris al pacientului și numai ce ați aprobat dumneavoastră. Agentul de conținut nu publică nimic singur: propune, iar dumneavoastră apăsați — sau nu."
+        }
+      ],
+      "closingTitle": "Vedeți agenții la lucru pe lista clinicii",
+      "closingLead": "La demonstrație luăm câteva proceduri din lista dumneavoastră și vă arătăm ce ar răspunde unui pacient real.",
+      "day": {
+        "title": "O zi la clinică",
+        "label": "Exemplu",
+        "note": "Așa arată o zi în care lucrează toți agenții. Astăzi este disponibil chatbotul; ceilalți sunt în lucru.",
+        "entries": [
+          {
+            "time": "07:55",
+            "agent": "Follow-up",
+            "text": "I-a amintit unui pacient de consultația de azi, de la 10:30."
+          },
+          {
+            "time": "12:20",
+            "agent": "Chatbot",
+            "text": "A explicat ce înseamnă anestezia la o extracție, din textul clinicii."
+          },
+          {
+            "time": "16:45",
+            "agent": "Statusul comenzii",
+            "text": "A anunțat un pacient că a sosit coroana de la laborator."
+          },
+          {
+            "time": "20:10",
+            "agent": "Asistent telefonic",
+            "text": "A preluat un apel după închidere și a programat o consultație pentru joi."
+          },
+          {
+            "time": "23:05",
+            "agent": "Chatbot",
+            "text": "A dat intervalul de preț pentru un implant și a lăsat cererea recepției."
+          }
+        ],
+        "scale": "Ziua, ora cu oră"
+      }
+    }
+  },
+  "plans": {
+    "perMonth": "/ lună",
+    "setup": "Taxă unică de configurare {fee} €",
+    "setupCustom": "Taxă de configurare convenită individual",
+    "recommended": "Recomandat",
+    "priceOnRequest": "Preț individual",
+    "soon": "În curând",
+    "includedIn": "Inclus în {plan}",
+    "start": {
+      "name": "Start",
+      "subtitle": "Asistent AI",
+      "tagline": "Un agent care răspunde non-stop și vă aduce lead-urile gata calificate.",
+      "cta": "Cere o demonstrație",
+      "features": {
+        "chatbot": "Chatbot AI pentru site: răspunsuri 24/7 din baza de cunoștințe",
+        "contacts": "Colectare contacte, transmitere pe e-mail sau în CRM",
+        "qualify": "Calificarea lead-urilor după scenariul nișei",
+        "portal": "Portal: lead-uri, oferte emise, statistici și setările agenților",
+        "limit": "Până la 500 de conversații pe lună",
+        "language": "O limbă, scenariu standard al industriei"
+      }
+    },
+    "growth": {
+      "name": "Growth",
+      "subtitle": "Vânzări AI",
+      "tagline": "Toți agenții noștri, pe un singur cont.",
+      "cta": "Cere o demonstrație",
+      "features": {
+        "inherits": "Tot din Start, până la 2 000 de conversații pe lună",
+        "scenario": "Scenariu adaptat afacerii dumneavoastră, nu doar standardul industriei",
+        "languages": "A doua limbă de comunicare",
+        "voice": "Asistent telefonic: preia apelurile și face programări",
+        "configurator": "Configurator AI de cereri: specificație structurată pentru echipa de vânzări",
+        "followUp": "Agent follow-up: reveniri automate la lead-urile indecise",
+        "orderStatus": "Statusuri comenzi pentru clienți: notificări automate pe etape",
+        "content": "Motor de conținut pentru social media",
+        "priority": "Suport prioritar"
+      }
+    },
+    "platform": {
+      "name": "Platformă",
+      "subtitle": "Custom",
+      "tagline": "Când aveți nevoie de ceva ce nu există încă.",
+      "cta": "Discută cu noi",
+      "features": {
+        "inherits": "Tot din Growth, limite convenite individual",
+        "customAgent": "Orice agent, construit pe comanda dumneavoastră",
+        "automation": "Automatizări la comandă și integrări cu sistemele pe care le folosiți",
+        "website": "Site nou sau refacerea celui existent",
+        "seo": "SEO: structură, texte, viteză, poziții",
+        "marketing": "Marketing digital: campanii, conținut, analitică",
+        "sla": "Însoțire dedicată, SLA"
+      }
+    },
+    "soonNote": "Agenții marcați «în curând» sunt incluși în pachet: îl puteți conecta acum, la prețul de azi, iar agenții se activează pe măsură ce ies. Prețul rămâne cel de la conectare.",
+    "matrix": {
+      "title": "Ce intră în fiecare pachet",
+      "lead": "Pentru cei care compară în detaliu. Rândurile marcate «în curând» sunt incluse în pachet, dar agentul încă nu a ieșit.",
+      "feature": "Ce include",
+      "yes": "Inclus",
+      "no": "Nu este inclus",
+      "rows": {
+        "conversations": {
+          "label": "Conversații pe lună",
+          "start": "500",
+          "growth": "2 000",
+          "platform": "Convenit individual"
+        },
+        "chatbot": {
+          "label": "Chatbot AI 24/7 din baza de cunoștințe"
+        },
+        "scenario": {
+          "label": "Scenariu",
+          "start": "Standard al industriei",
+          "growth": "Adaptat",
+          "platform": "Scris de la zero, sub procesul dumneavoastră"
+        },
+        "languages": {
+          "label": "Limbi de comunicare",
+          "start": "1",
+          "growth": "2",
+          "platform": "Convenit individual"
+        },
+        "voice": {
+          "label": "Asistent telefonic: apeluri preluate și programări"
+        },
+        "qualify": {
+          "label": "Calificarea lead-urilor după scenariul nișei"
+        },
+        "contacts": {
+          "label": "Contacte pe e-mail sau în CRM"
+        },
+        "portal": {
+          "label": "Portal cu lead-uri, oferte și statistici"
+        },
+        "configurator": {
+          "label": "Configurator AI de cereri"
+        },
+        "followUp": {
+          "label": "Agent follow-up"
+        },
+        "orderStatus": {
+          "label": "Statusuri comenzi pentru clienți"
+        },
+        "content": {
+          "label": "Motor de conținut"
+        },
+        "priority": {
+          "label": "Suport prioritar"
+        },
+        "customAgent": {
+          "label": "Agent construit pe comandă"
+        },
+        "automation": {
+          "label": "Automatizări și integrări la comandă"
+        },
+        "website": {
+          "label": "Site nou sau refăcut"
+        },
+        "seo": {
+          "label": "SEO"
+        },
+        "marketing": {
+          "label": "Marketing digital"
+        },
+        "sla": {
+          "label": "Însoțire dedicată, SLA"
+        },
+        "setup": {
+          "label": "Taxă unică de configurare",
+          "start": "490 €",
+          "growth": "890 €",
+          "platform": "Individual"
+        }
+      }
+    },
+    "faq": [
+      {
+        "q": "Ce se consideră o conversație?",
+        "a": "Un dialog cu un vizitator, indiferent câte mesaje conține. Dacă omul revine peste câteva zile și scrie din nou, este o conversație nouă. Mesajele dumneavoastră de test nu se numără."
+      },
+      {
+        "q": "Ce intră în taxa de configurare?",
+        "a": "Discuția, citirea materialelor rând cu rând, transformarea listei de prețuri în regulile după care agentul calculează, scenariul nișei, brandul pe ofertă și verificarea împreună cu dumneavoastră înainte de lansare. Se plătește o singură dată, la început."
+      },
+      {
+        "q": "Pot schimba pachetul?",
+        "a": "Da, în ambele direcții, de la începutul lunii următoare. La trecerea în sus se plătește diferența de configurare, dacă pachetul nou cere mai multă muncă."
+      },
+      {
+        "q": "Ce se întâmplă dacă depășesc limita de conversații?",
+        "a": "Agentul nu se oprește și clienții nu rămân fără răspuns. Depășirea se acoperă cu un pachet suplimentar de conversații, iar dacă se repetă lună de lună vă propunem trecerea la pachetul următor — de obicei iese mai ieftin."
+      },
+      {
+        "q": "Există un termen minim de contract?",
+        "a": "Nu. Abonamentul este lunar și se poate opri de la luna următoare. Ce se întâmplă după oprire cu datele și cu ofertele deja emise este scris în contract, și îl citiți înainte să semnați."
+      }
+    ]
+  },
+  "pricingPage": {
+    "metaTitle": "Prețuri — agenți AI pe abonament lunar",
+    "metaDescription": "Trei pachete: Start de la 199 €/lună, Growth 449 €/lună și Platformă cu preț individual. Configurarea inițială se plătește o singură dată. Fără termen minim de contract.",
+    "eyebrow": "Prețuri",
+    "title": "Trei pachete, componență fixă",
+    "lead": "Plătiți lunar pentru agenții care rulează. Configurarea inițială — citirea materialelor și transformarea listei de prețuri în reguli de calcul — se plătește o singură dată, la început.",
+    "faqEyebrow": "Întrebări despre prețuri",
+    "faqTitle": "Ce se întreabă înainte de a alege",
+    "closingTitle": "Nu sunteți sigur ce pachet vă trebuie?",
+    "closingLead": "La demonstrație ne uităm la ce vindeți și la câte întrebări primiți, și vă spunem de care pachet aveți nevoie — inclusiv dacă acela este Start."
+  },
+  "agentsHub": {
+    "metaTitle": "Agenți AI pentru afaceri — șase agenți, închiriați separat",
+    "metaDescription": "Șase agenți AI care acoperă drumul clientului: de la prima întrebare pe site până la comanda livrată. Închiriați doar agenții de care aveți nevoie, cu abonament lunar.",
+    "eyebrow": "Agenții",
+    "title": "Șase agenți, un singur drum al clientului",
+    "lead": "Nu vindem șase abonamente. Fiecare agent stă într-un loc anume pe drumul pe care îl face clientul — de la prima întrebare până la comanda livrată. Aveți nevoie de cei care stau exact acolo unde pierdeți.",
+    "pathEyebrow": "Drumul clientului",
+    "pathTitle": "Unde stă fiecare",
+    "pathLead": "Ordinea nu este a noastră, este a clientului: întreabă, se hotărăște, tace, cumpără, așteaptă. Ultimul agent închide cercul și aduce următorul om la prima întrebare.",
+    "withoutLabel": "Fără el",
+    "open": "Vezi agentul",
+    "steps": {
+      "chatbot": {
+        "stage": "Prima întrebare",
+        "without": "Întrebarea pusă sâmbătă seara primește răspuns luni dimineață. Până luni, omul a întrebat în altă parte."
+      },
+      "voice-assistant": {
+        "stage": "Aceeași întrebare, la telefon",
+        "without": "Telefonul sună de patru ori și se închide. Nu rămâne nici măcar urma că cineva a vrut să cumpere."
+      },
+      "configurator": {
+        "stage": "Din discuție în cerere",
+        "without": "Discuția s-a purtat, dar din ea nu a rămas nimic de calculat. Vânzătorul sună a doua oară ca să întrebe ce s-a spus deja."
+      },
+      "follow-up": {
+        "stage": "Revenirea",
+        "without": "«Mă mai gândesc» nu înseamnă «nu». Dar dacă nu revine nimeni, ajunge să însemne."
+      },
+      "order-status": {
+        "stage": "După vânzare",
+        "without": "Clientul sună să întrebe unde e comanda. De trei ori. Și tot nu știe."
+      },
+      "content-engine": {
+        "stage": "Înapoi la început",
+        "without": "Lucrările se fac și nu le vede nimeni. Iar la prima întrebare, sus, nu mai ajunge nimeni."
+      }
+    },
+    "plansEyebrow": "Cum se închiriază",
+    "plansTitle": "Doi pași, nu șase abonamente",
+    "plansLead": "Agenții nu se cumpără la bucată: intră în pachete. Start pornește chatbotul, Growth adaugă restul pe măsură ce ies — la prețul de la conectare.",
+    "startLabel": "Pornește cu",
+    "growthLabel": "Adaugă",
+    "plansLink": "Vedeți prețurile",
+    "closingTitle": "Nu știți de unde să începeți?",
+    "closingLead": "La demonstrație ne uităm la drumul clientului dumneavoastră și vă spunem unde pierdeți cel mai mult. De obicei sunt unul sau două locuri, nu șase.",
+    "plansNote": "Pachetele conțin și ce nu este agent: portalul, calificarea, limbile, numărul de conversații incluse. Lista completă stă la prețuri."
+  },
+  "industriesHub": {
+    "metaTitle": "Agenți AI pe industrii — scenariu configurat pentru nișa dumneavoastră",
+    "metaDescription": "Chatbot și agenți AI configurați pentru mobilă, renovări, imobiliare, auto, energie și clinici. Alte întrebări, alt mod de a ajunge la preț, același agent.",
+    "eyebrow": "Industrii",
+    "title": "Același agent, alt scenariu",
+    "lead": "Diferența dintre nișe nu stă în cuvinte, ci în întrebări: la mobilă se începe de la perete, la panouri solare de la consum, la clinică de la teama de durere. Scenariul se scrie sub întrebările dumneavoastră.",
+    "listEyebrow": "Nișele",
+    "listTitle": "Șase nișe, scrise până la capăt",
+    "listLead": "Pentru fiecare știm de la ce depinde prețul și în ce ordine se află lucrurile. Deschideți nișa dumneavoastră: veți vedea conversația și agenții care lucrează acolo.",
+    "otherEyebrow": "Altă nișă",
+    "otherTitle": "Dacă nu vă găsiți în listă",
+    "otherLead": "Lista nu este o limită, este ordinea în care am scris scenariile. Un agent se poate configura oriunde sunt îndeplinite trei lucruri:",
+    "signs": [
+      "Prețul se calculează, nu se citește de pe etichetă. Dacă aveți un preț fix pe produs, aveți nevoie de un magazin, nu de un agent.",
+      "Clientul pune de fiecare dată cam aceleași cinci întrebări înainte să se hotărască.",
+      "Ca să dați un preț aveți nevoie de date pe care le are doar clientul: dimensiuni, consum, starea de acum, termenul."
+    ],
+    "otherCta": "Spuneți-ne ce faceți",
+    "closingTitle": "Vedeți scenariul pentru nișa dumneavoastră",
+    "closingLead": "La demonstrație scriem conversația pe cazul dumneavoastră real, cu întrebările pe care le puneți și dumneavoastră — nu cu un exemplu general."
+  },
+  "contactPage": {
+    "metaTitle": "Contact — scrieți-ne ce vindeți și ce v-ar trebui",
+    "metaDescription": "Patru câmpuri, două obligatorii. Vă răspunde un om în aceeași zi lucrătoare, cu pașii pentru nișa dumneavoastră. Fără liste de e-mailuri și fără broșuri.",
+    "eyebrow": "Contact",
+    "title": "Scrieți-ne ce vindeți",
+    "lead": "Patru câmpuri, dintre care două obligatorii. Vă răspunde un om în aceeași zi lucrătoare — cu pașii pentru nișa dumneavoastră, nu cu o broșură.",
+    "stepsLabel": "Ce se întâmplă după",
+    "steps": [
+      {
+        "when": "În aceeași zi lucrătoare",
+        "text": "Vă răspunde un om și, dacă e nevoie, mai întreabă câte ceva despre ce ne-ați scris."
+      },
+      {
+        "when": "Demonstrația, o jumătate de oră",
+        "text": "Ne uităm la site-ul dumneavoastră și la întrebările pe care le primiți, apoi vă arătăm conversația scrisă pe cazul dumneavoastră."
+      },
+      {
+        "when": "Oferta, dacă are sens",
+        "text": "Ce pachet, ce termen, ce taxă de configurare. Dacă nu are sens, v-o spunem atunci — nu peste trei discuții."
+      }
+    ],
+    "usefulTitle": "E util să ne scrieți",
+    "useful": [
+      "Ce vindeți și cui. Două rânduri sunt de ajuns.",
+      "Cum ajungeți azi la preț: cine calculează, din ce date și cât durează.",
+      "Unde simțiți că pierdeți: la prima întrebare, între discuție și ofertă, sau după ofertă."
+    ],
+    "neverTitle": "Ce nu se întâmplă",
+    "never": [
+      "Nu vă sunăm dacă nu ne-ați lăsat numărul.",
+      "Nu vă înscriem la nicio listă de e-mailuri.",
+      "Nu vă trimitem o broșură de douăzeci de pagini în locul unui răspuns."
+    ],
+    "faqText": "Dacă întrebarea este despre prețuri, pachete sau termene, s-ar putea să aibă deja un răspuns scris.",
+    "faqLink": "Întrebări frecvente"
+  },
+  "legal": {
+    "eyebrow": "Legal",
+    "updated": "Ultima actualizare",
+    "updatedDate": "25 august 2026",
+    "tocLabel": "Cuprins",
+    "entity": [
+      {
+        "label": "Operator",
+        "value": "— de completat: denumirea juridică"
+      },
+      {
+        "label": "Înregistrare",
+        "value": "— de completat: cod fiscal / IDNO"
+      },
+      {
+        "label": "Adresă",
+        "value": "— de completat: sediul social"
+      },
+      {
+        "label": "E-mail",
+        "value": "— de completat: adresa pentru cereri"
+      }
+    ]
+  },
+  "privacyPage": {
+    "metaTitle": "Politica de confidențialitate",
+    "metaDescription": "Ce date primim prin formularul de pe site, de ce, cui ajung și cât le păstrăm. Un singur cookie, tehnic. Fără analitică, fără pixeli, fără vânzarea datelor.",
+    "title": "Politica de confidențialitate",
+    "lead": "Scrisă pe ce face site-ul acesta, nu copiată de undeva. Dacă găsiți în ea ceva ce nu se potrivește cu ce vedeți, scrieți-ne — greșeala e a noastră.",
+    "sections": [
+      {
+        "title": "Cine răspunde de date",
+        "intro": "Datele trimise prin acest site le primește operatorul de mai jos. Tot acolo se trimit și cererile privind drepturile dumneavoastră.",
+        "entity": true
+      },
+      {
+        "title": "Ce date primim",
+        "intro": "Site-ul are un singur formular. Din el primim doar ce scrieți dumneavoastră:",
+        "list": [
+          "Numele — ca să știm cum să vă spunem.",
+          "E-mailul sau telefonul — ca să vă putem răspunde.",
+          "Site-ul companiei, dacă îl completați. Este opțional.",
+          "Mesajul, dacă îl scrieți. Este opțional."
+        ],
+        "outro": "În plus, ca orice site, serverul înregistrează cererile: adresa IP, ora, pagina cerută și tipul browserului. Aceste jurnale sunt tehnice și nu sunt legate de formular."
+      },
+      {
+        "title": "De ce le primim",
+        "intro": "Datele din formular le folosim ca să vă răspundem și ca să pregătim demonstrația sau oferta pe care le-ați cerut — adică pentru pașii dinaintea unui eventual contract, la cererea dumneavoastră. Jurnalele serverului există ca site-ul să funcționeze și să poată fi apărat de abuzuri; temeiul este interesul nostru legitim de a ține un serviciu în stare de funcționare.",
+        "outro": "Nu le folosim pentru altceva. Dacă ne scrieți despre mobilă, nu vă vom scrie peste o lună despre altă temă."
+      },
+      {
+        "title": "Cine le mai vede",
+        "intro": "În afară de noi, datele trec prin două servicii, fiecare cu un rol strict:",
+        "list": [
+          "Vercel — găzduiește site-ul. Prin el trec cererile către pagini și tot el ține jurnalele tehnice.",
+          "Resend — livrează e-mailul cu cererea dumneavoastră către noi. Conținutul formularului trece prin acest serviciu ca să ajungă în cutia noastră poștală."
+        ],
+        "outro": "Altcuiva nu le dăm. Nu le vindem, nu le schimbăm și nu le trimitem către rețele de publicitate."
+      },
+      {
+        "title": "Unde ajung și cât le păstrăm",
+        "intro": "Cererea din formular nu se salvează într-o bază de date: pleacă prin e-mail și rămâne în corespondența noastră. O bază de date pentru un singur formular ar însemna copii de siguranță, migrări și date personale de care ar trebui să răspundă cineva — fără niciun câștig pentru dumneavoastră.",
+        "outro": "Corespondența o păstrăm atât timp cât discuția este în curs și douăsprezece luni după ultimul mesaj, ca să putem relua conversația dacă reveniți. După aceea o ștergem. Jurnalele tehnice le păstrează furnizorul de găzduire, pentru o perioadă scurtă, potrivit propriilor reguli."
+      },
+      {
+        "title": "Cookie-uri",
+        "intro": "Site-ul pune un singur cookie, numit NEXT_LOCALE. El ține minte în ce limbă citiți, ca să nu vă trimită la versiunea greșită la următoarea pagină. Nu identifică pe nimeni și nu urmărește nimic.",
+        "list": [
+          "Nu avem analitică: nici Google Analytics, nici altceva de acest fel.",
+          "Nu avem pixeli de publicitate și nici butoane de rețele sociale care încarcă cod străin.",
+          "Fonturile sunt servite de pe domeniul nostru, nu de pe un CDN străin — browserul dumneavoastră nu cere nimic de la alt server."
+        ],
+        "outro": "De aceea site-ul nu vă întâmpină cu o fereastră de consimțământ: nu este nimic la care să consimțiți."
+      },
+      {
+        "title": "Drepturile dumneavoastră",
+        "intro": "Asupra datelor pe care le avem despre dumneavoastră aveți dreptul:",
+        "list": [
+          "Să aflați ce date avem și să primiți o copie.",
+          "Să cereți corectarea a ceea ce este greșit.",
+          "Să cereți ștergerea lor.",
+          "Să cereți limitarea folosirii lor sau să vă opuneți folosirii întemeiate pe interesul nostru legitim.",
+          "Să primiți datele într-un format care se poate muta în altă parte."
+        ],
+        "outro": "Scrieți-ne la adresa de mai sus și vă răspundem în cel mult o lună. Dacă răspunsul nu vă mulțumește, aveți dreptul să vă adresați autorității de supraveghere a protecției datelor din țara în care locuiți."
+      },
+      {
+        "title": "Ce nu facem",
+        "list": [
+          "Nu vindem și nu închiriem datele nimănui.",
+          "Nu construim profiluri și nu luăm decizii automate despre dumneavoastră.",
+          "Nu vă adăugăm la nicio listă de e-mailuri pentru că ați completat formularul.",
+          "Nu urmărim ce pagini ați citit înainte să scrieți."
+        ]
+      },
+      {
+        "title": "Datele clienților dumneavoastră",
+        "intro": "Această politică este despre site. Dacă deveniți client și un agent ajunge să prelucreze datele clienților dumneavoastră, acel lucru se reglementează separat, prin contract și printr-un acord de prelucrare a datelor, în care dumneavoastră sunteți operatorul, iar noi persoana împuternicită.",
+        "outro": "Datele fiecărui client rămân izolate: nu le amestecăm între conturi și nu antrenăm nimic pe ele pentru alți clienți."
+      },
+      {
+        "title": "Modificări",
+        "intro": "Dacă schimbăm ceva în felul în care lucrăm cu datele, schimbăm și acest text, iar data de sus se actualizează. Dacă schimbarea este importantă, o spunem în mod vizibil, nu doar prin înlocuirea tăcută a unui paragraf."
+      }
+    ]
+  },
+  "termsPage": {
+    "metaTitle": "Termeni și condiții",
+    "metaDescription": "Ce este acest site, ce înseamnă prețurile afișate, ce înseamnă «în curând» și ce nu promitem. Scris pe scurt, fără paragrafe care nu spun nimic.",
+    "title": "Termeni și condiții",
+    "lead": "Site-ul este o prezentare, nu un magazin: nu se cumpără nimic din el și nu se creează niciun cont. Textul de mai jos spune ce înseamnă totuși ce citiți pe el.",
+    "sections": [
+      {
+        "title": "Cine publică acest site",
+        "entity": true
+      },
+      {
+        "title": "Ce este site-ul",
+        "intro": "O prezentare a unor agenți AI care se închiriază cu abonament lunar. Nu are coș de cumpărături, nu are plată online și nu are conturi de utilizator. Singura acțiune posibilă este formularul prin care ne scrieți.",
+        "outro": "Trimiterea formularului nu încheie niciun contract și nu ne obligă să acceptăm colaborarea, la fel cum nu vă obligă pe dumneavoastră la nimic."
+      },
+      {
+        "title": "Prețurile afișate",
+        "intro": "Prețurile de pe pagina de prețuri sunt abonamentul lunar și taxa unică de configurare pentru pachetele standard. Ele au caracter informativ: nu constituie o ofertă fermă în sens juridic, iar contractul se încheie separat, în scris.",
+        "list": [
+          "Pentru pachetul Platformă prețul se stabilește individual, pentru că munca este de fiecare dată alta.",
+          "Prețurile pot fi schimbate pentru viitor. Clientului deja conectat nu i se schimbă prețul pentru pachetul pe care îl are, în condițiile din contract.",
+          "Regimul de TVA și moneda de facturare se precizează în contract și pe factură."
+        ]
+      },
+      {
+        "title": "Agenții marcați «în curând»",
+        "intro": "O parte dintre agenți sunt în lucru și nu funcționează încă. Paginile lor descriu ce vor face, nu ce fac azi, și sunt scrise ca atare.",
+        "outro": "«Inclus în pachet» înseamnă că pachetul se poate conecta acum, la prețul de acum, iar agentul se activează pe contul dumneavoastră când este gata. Nu înseamnă o dată anume: nu promitem termene pe care nu le putem ține. Dacă un agent nu apare într-un timp rezonabil, aveți dreptul să renunțați la pachet în condițiile din contract."
+      },
+      {
+        "title": "Imaginile din pagini",
+        "intro": "Ecranele desenate în pagini — conversația din widget, fișa cererii, cartela clientului, planul de revenire, statusul comenzii, propunerile de conținut — sunt ilustrații construite de noi, nu capturi dintr-un produs care rulează. Datele din ele sunt inventate ca exemplu.",
+        "outro": "Nu conțin clienți reali, comenzi reale sau prețuri reale ale cuiva. Nu afișăm logo-uri de clienți, recomandări sau cifre de rezultat pe care nu le putem dovedi."
+      },
+      {
+        "title": "Conținutul site-ului",
+        "intro": "Textele, structura, codul, ilustrațiile și identitatea vizuală ne aparțin. Puteți citi și distribui linkuri, dar nu puteți copia conținutul ca să îl publicați ca al dumneavoastră.",
+        "outro": "Numele altor companii sau platforme, dacă apar, aparțin deținătorilor lor și sunt folosite doar ca să spunem unde ajunge conținutul sau de unde vin datele."
+      },
+      {
+        "title": "Linkurile către alte site-uri",
+        "intro": "Dacă trimitem către un site care nu este al nostru, nu răspundem de ce se află acolo și nici de felul în care acel site tratează datele dumneavoastră."
+      },
+      {
+        "title": "Răspundere",
+        "intro": "Facem tot ce putem ca informația de aici să fie exactă și site-ul să funcționeze. Nu putem însă garanta că nu există greșeli de scriere, că site-ul nu va fi niciodată indisponibil sau că un rezultat obținut de altcineva se va repeta la dumneavoastră.",
+        "outro": "Deciziile de afaceri luate exclusiv pe baza informațiilor de pe acest site rămân ale dumneavoastră. Ce garantăm efectiv se scrie în contract, nu aici."
+      },
+      {
+        "title": "Modificări și lege aplicabilă",
+        "intro": "Putem modifica acest text; data de sus arată ultima versiune. Raporturile născute din folosirea site-ului sunt guvernate de legea de la sediul operatorului, iar litigiile se soluționează de instanțele competente de acolo.",
+        "outro": "— de completat: legea aplicabilă și instanța competentă, după stabilirea formei juridice."
+      }
+    ]
+  },
+  "aboutPage": {
+    "metaTitle": "Despre noi — cum lucrăm și de ce nu vedeți recenzii pe acest site",
+    "metaDescription": "Închiriem agenți AI cu abonament lunar, configurați pentru nișa fiecărui client. Un agent lucrează, cinci se scriu. Fără recenzii inventate și fără cifre pe care nu le putem dovedi.",
+    "eyebrow": "Despre",
+    "title": "Suntem la început și o scriem aici",
+    "lead": "Închiriem agenți AI cu abonament lunar, configurați pentru nișa și brandul fiecărui client. Un agent lucrează azi, cinci se scriu. Mai jos e cum lucrăm și ce înseamnă asta pentru dumneavoastră — inclusiv partea incomodă.",
+    "absenceEyebrow": "Ce lipsește de pe site",
+    "absenceTitle": "De ce nu vedeți recenzii, logo-uri și cifre",
+    "absenceLead": "Probabil ați observat deja: pe acest site nu există nicio recenzie, niciun logo de client și nicio propoziție de tipul «300 de echipe ne folosesc deja».",
+    "absenceBody": "Nu din modestie. Pentru că nu le avem — iar ce nu ai se poate doar inventa. O recomandare scrisă de noi în numele altcuiva ar fi primul lucru pe care l-am face în relația cu dumneavoastră, și ar fi o minciună.",
+    "absenceOutro": "Când vor exista clienți care acceptă să fie numiți, vor apărea aici cu numele lor. Până atunci pagina rămâne fără ele, iar dumneavoastră vă rămâne de judecat ce se vede: produsul, prețul și felul în care scriem despre amândouă.",
+    "workEyebrow": "Cum lucrăm",
+    "workTitle": "Cinci reguli, toate verificabile pe acest site",
+    "workLead": "Nu sunt valori de pe o pagină «despre noi». Fiecare se vede undeva pe site, iar linkul din dreapta duce exact acolo unde se vede.",
+    "checkLabel": "Verificați",
+    "principles": [
+      {
+        "title": "Scenariul se scrie sub nișa dumneavoastră",
+        "text": "La mobilă se începe de la perete, la panouri solare de la consum, la clinică de la teama de durere. Nu punem același bot cu alt logo.",
+        "href": "/industries"
+      },
+      {
+        "title": "Scriem și ce nu face agentul",
+        "text": "Fiecare pagină de agent are o coloană cu ce nu face. Este mai utilă decât lista de funcții: acolo se văd limitele cu care veți trăi zilnic.",
+        "href": "/agents/chatbot"
+      },
+      {
+        "title": "Nu vindem ca gata ce încă se scrie",
+        "text": "Agenții nelansați sunt marcați «în curând» peste tot unde apar, iar paginile lor spun la timpul viitor ce vor face.",
+        "href": "/agents"
+      },
+      {
+        "title": "Prețul stă scris pe site",
+        "text": "Abonamentul lunar și taxa de configurare sunt publice. «Preț la cerere» avem doar acolo unde munca este de fiecare dată alta.",
+        "href": "/pricing"
+      },
+      {
+        "title": "Datele fiecărui client rămân separate",
+        "text": "Nu amestecăm conturile și nu antrenăm nimic pe datele unui client pentru altul. Scrie și în politica de confidențialitate, nu doar aici.",
+        "href": "/privacy"
+      }
+    ],
+    "nowEyebrow": "Unde suntem acum",
+    "nowTitle": "Un agent lucrează, cinci se scriu",
+    "nowLead": "Chatbotul se vinde și funcționează azi. Ceilalți cinci intră în pachetul Growth pe măsură ce ies. Asta are două fețe și le scriem pe amândouă.",
+    "gainTitle": "Ce câștigați dacă intrați acum",
+    "gain": [
+      "Prețul de azi rămâne al dumneavoastră pentru pachetul pe care îl luați.",
+      "Scenariul îl scriem împreună cu dumneavoastră, nu îl adaptăm dintr-un șablon. La câțiva clienți se poate; la o sută nu s-ar mai putea.",
+      "Ce ne cereți acum are șanse reale să ajungă în produs, tocmai pentru că produsul încă se scrie."
+    ],
+    "riskTitle": "Ce riscați",
+    "risk": [
+      "Cinci agenți din șase încă nu funcționează, și nu vă dăm o dată la care vor funcționa.",
+      "Nu avem în spate ani de exploatare la sute de clienți. Avem ce se vede pe acest site.",
+      "Dacă un agent nu apare într-un timp rezonabil, plecați — și este drept că puteți."
+    ],
+    "closingTitle": "Cel mai simplu este să ne puneți o întrebare grea",
+    "closingLead": "La demonstrație vă arătăm conversația scrisă pe cazul dumneavoastră real. Dacă ceva nu se potrivește, v-o spunem atunci — nu peste trei discuții."
+  }
+}

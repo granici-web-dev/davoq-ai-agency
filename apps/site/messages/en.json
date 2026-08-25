@@ -1,0 +1,2357 @@
+{
+  "brand": {
+    "name": "AssistWidget",
+    "tagline": "AI agents for businesses whose price is quoted, not listed"
+  },
+  "nav": {
+    "agents": "Agents",
+    "industries": "Industries",
+    "pricing": "Pricing",
+    "about": "About",
+    "contact": "Contact",
+    "cta": "Book a demo",
+    "allAgents": "All agents",
+    "allIndustries": "All industries",
+    "openMenu": "Open menu",
+    "closeMenu": "Close menu",
+    "skipToContent": "Skip to content"
+  },
+  "status": {
+    "available": "Available",
+    "soon": "Coming soon"
+  },
+  "agents": {
+    "chatbot": {
+      "name": "AI chatbot",
+      "short": "Answers 24/7 from your own materials and qualifies the lead the way your niche does."
+    },
+    "voice-assistant": {
+      "name": "Phone assistant",
+      "short": "Answers the phone when nobody can and books straight into your calendar."
+    },
+    "configurator": {
+      "name": "Request configurator",
+      "short": "Asks the questions, collects the specification, hands sales a request ready to price."
+    },
+    "follow-up": {
+      "name": "Automatic follow-up",
+      "short": "Brings back the leads who said they would think about it and went quiet."
+    },
+    "order-status": {
+      "name": "Order status",
+      "short": "Tells the customer at every stage, without anyone writing the message."
+    },
+    "content-engine": {
+      "name": "Content engine",
+      "short": "One source, adapted for Instagram, TikTok and Pinterest."
+    }
+  },
+  "industries": {
+    "mobilier": {
+      "name": "Custom furniture and kitchens",
+      "short": "Priced from a sketch: fabrics, finishes, lead times.",
+      "panel": "Customers do not think in production terms. The agent asks in the order you would ask yourself — space, material, deadline — and hands sales a request that is ready to price.",
+      "dialog": [
+        {
+          "role": "agent",
+          "text": "What are the dimensions of the wall you are furnishing?"
+        },
+        {
+          "role": "client",
+          "text": "3.2 metres, with a window in the middle."
+        },
+        {
+          "role": "agent",
+          "text": "Fabric or leather? I can show you the price difference on the same configuration."
+        }
+      ]
+    },
+    "constructii": {
+      "name": "Renovation and interior design",
+      "short": "Quoted by area: stages, crews, schedules.",
+      "panel": "A quote starts from the area and from the state the space is in right now. The agent finds out both before a site visit takes up your day.",
+      "dialog": [
+        {
+          "role": "agent",
+          "text": "What is the area, and what state is the space in now?"
+        },
+        {
+          "role": "client",
+          "text": "68 m², a new flat, bare shell."
+        },
+        {
+          "role": "agent",
+          "text": "Full renovation or finishes only? The quote differs by a factor of two."
+        }
+      ]
+    },
+    "imobiliare": {
+      "name": "Developers and estate agencies",
+      "short": "Requirements, budget, a viewing in the calendar.",
+      "panel": "Budget and timing are settled in the first two questions. The agent asks them, and the estate agent gets a qualified lead with a viewing already proposed.",
+      "dialog": [
+        {
+          "role": "agent",
+          "text": "What budget do you have in mind, and by when?"
+        },
+        {
+          "role": "client",
+          "text": "Up to €90,000, by spring."
+        },
+        {
+          "role": "agent",
+          "text": "I have three options within budget. Does Saturday morning suit you for a viewing?"
+        }
+      ]
+    },
+    "auto": {
+      "name": "Car dealerships",
+      "short": "Configuration, test drive, financing.",
+      "panel": "Configuration, financing and the test drive are three conversations usually held separately. The agent keeps all three inside one.",
+      "dialog": [
+        {
+          "role": "agent",
+          "text": "What do you drive now, and what is missing?"
+        },
+        {
+          "role": "client",
+          "text": "An estate, but I need more space."
+        },
+        {
+          "role": "agent",
+          "text": "Two configurations fit. Shall we book a test drive on Saturday?"
+        }
+      ]
+    },
+    "energie": {
+      "name": "Solar and HVAC",
+      "short": "Consumption, roof, payback calculation.",
+      "panel": "The payback calculation depends on consumption and on the roof. The agent collects both and sends the quote with the payback period already worked out.",
+      "dialog": [
+        {
+          "role": "agent",
+          "text": "How much do you pay for electricity each month?"
+        },
+        {
+          "role": "client",
+          "text": "Around 2,400 lei."
+        },
+        {
+          "role": "agent",
+          "text": "What kind of roof do you have? The number of panels depends on it."
+        }
+      ]
+    },
+    "clinici": {
+      "name": "Dental and aesthetic medicine",
+      "short": "Procedure, appointment, the awkward questions.",
+      "panel": "Questions about pain, price and recovery time are hard to ask a person and easy to ask an agent. The patient reaches reception already decided.",
+      "dialog": [
+        {
+          "role": "agent",
+          "text": "What is bothering you, and for how long?"
+        },
+        {
+          "role": "client",
+          "text": "I need an implant, but I am afraid of the pain."
+        },
+        {
+          "role": "agent",
+          "text": "I will explain exactly how it goes and what it costs. Do you prefer mornings?"
+        }
+      ]
+    },
+    "other": {
+      "name": "A different industry?",
+      "short": "We configure the agent for your niche."
+    }
+  },
+  "footer": {
+    "productsTitle": "Agents",
+    "industriesTitle": "Industries",
+    "companyTitle": "Company",
+    "legalTitle": "Legal",
+    "privacy": "Privacy",
+    "terms": "Terms",
+    "rights": "All rights reserved.",
+    "note": "Every agent is configured for the client's niche and brand. Each client's data stays isolated."
+  },
+  "common": {
+    "learnMore": "Learn more",
+    "seeAll": "See all",
+    "language": "Language"
+  },
+  "home": {
+    "hero": {
+      "title": "AI agents for businesses where the price is calculated",
+      "lead": "Rent the agent you need — configured for your niche and your brand, on a monthly subscription. No implementation project, no technical team.",
+      "ctaPrimary": "Book a demo",
+      "ctaSecondary": "See the agents"
+    },
+    "problem": {
+      "eyebrow": "The problem",
+      "title": "The quote is being worked out. Meanwhile the customer is asking somewhere else.",
+      "afterHours": {
+        "title": "The question arrives after hours",
+        "text": "Most enquiries land in the evening and at weekends. The answer goes out the next morning — by which time the person has written to three other firms and is comparing."
+      },
+      "everyRequestDiffers": {
+        "title": "Every enquiry is different",
+        "text": "Dimensions, materials, lead times, budget. Until you have all of them there is nothing to price — and each round of clarification costs another day."
+      },
+      "sameAnswers": {
+        "title": "Your salesperson repeats the same ten answers",
+        "text": "Their time goes into questions whose answer never changes, instead of the quotes that actually close."
+      }
+    },
+    "agents": {
+      "eyebrow": "The agents",
+      "title": "Six agents. Rent only the ones you need.",
+      "lead": "Each agent is a separate product, configured for your niche and your brand. Start with one, add another once the first has shown its result.",
+      "open": "See the agent",
+      "custom": {
+        "title": "Need something else?",
+        "text": "Tell us what the agent should do in your business and we will tell you whether it can be done.",
+        "cta": "Write to us"
+      }
+    },
+    "industries": {
+      "eyebrow": "Industries",
+      "title": "Configured for your niche",
+      "lead": "Not \"for any business\": different questions, different materials, a different route to the price. Pick your industry and see what the conversation looks like.",
+      "otherText": "We work in niches that are not on this list too. If the price has to be calculated, the script can be configured.",
+      "otherCta": "Write to us",
+      "view": "See the industry",
+      "agentsLabel": "Agents that fit"
+    },
+    "onboarding": {
+      "eyebrow": "How it starts",
+      "title": "From the first conversation to an agent on your site",
+      "lead": "This is not an implementation project. You need no developer, no IT department and no new website — the agent sits on top of what you already have.",
+      "timeLabel": "Your time",
+      "steps": {
+        "talk": {
+          "title": "The conversation",
+          "text": "What you sell, how the price is worked out at your company, and what people ask you most often. Nothing to prepare in advance.",
+          "time": "30–40 minutes"
+        },
+        "materials": {
+          "title": "The materials",
+          "text": "Website, product sheets, price list, terms. In whatever form they exist — Excel, PDF, Word, photos. Putting them in order is our job.",
+          "time": "As long as an email takes"
+        },
+        "config": {
+          "title": "The configuration",
+          "text": "The script for your niche, your pricing rules, your brand on the quote. You see the agent before your customers do and correct anything that does not sound like you.",
+          "time": "Half an hour of checking"
+        },
+        "embed": {
+          "title": "One line of code",
+          "text": "A script on your site. The widget runs isolated from the page styles, so it breaks nothing you already have. If there is nobody to do it, we do it.",
+          "time": "A few minutes"
+        }
+      },
+      "total": "Usually under two hours of your time in total. The rest is on us — including the unpleasant part, where the price list has to be read line by line.",
+      "priceLink": "What the initial setup costs",
+      "visuals": {
+        "talk": {
+          "a": "What you sell and what a typical order looks like",
+          "b": "How the price is worked out at your company",
+          "c": "What people ask you most often"
+        },
+        "materials": {
+          "xlsx": "price-list.xlsx",
+          "pdf": "catalogue.pdf",
+          "docx": "delivery-terms.docx",
+          "zip": "product-photos.zip"
+        },
+        "config": {
+          "tone": "The tone it speaks in",
+          "price": "Works out the price",
+          "offer": "Sends a PDF quote",
+          "language": "Asks for billing details"
+        },
+        "embed": {
+          "label": "The script on your site",
+          "note": "One line, at the end of the page. The widget runs isolated from the site styles."
+        }
+      }
+    },
+    "pricing": {
+      "eyebrow": "Pricing",
+      "title": "Three packages, fixed contents",
+      "lead": "You pay monthly for the agents that run. Separately, once at the start, you pay for the setup: reading your materials and turning your price list into the rules the agent prices by.",
+      "compare": "Compare the plans"
+    },
+    "portal": {
+      "eyebrow": "The portal",
+      "title": "One place where you see everything the agent did",
+      "lead": "The agent works on your site. What comes out of that work — requests, quotes, numbers — waits for you in the portal, not scattered across an inbox.",
+      "panelTitle": "Your account, not ours",
+      "panelText": "Every client has their own portal with their own data. You do not ask us for a report and wait until we send it — you log in and look. Included in every package, from Start upwards.",
+      "capabilities": {
+        "leads": "Leads — every request, with everything the customer said",
+        "offers": "Quotes — every PDF issued, with its number and date",
+        "stats": "Statistics — where people stop and what they ask",
+        "agents": "Agents — switch on, switch off, correct the answers",
+        "billing": "Subscription — plan, invoices, payments"
+      },
+      "cta": "See the portal in a demo",
+      "mock": {
+        "brand": "Portal",
+        "range": "Last 7 days",
+        "nav": {
+          "leads": "Leads",
+          "offers": "Quotes",
+          "agents": "Agents",
+          "stats": "Statistics",
+          "billing": "Subscription"
+        },
+        "tiles": {
+          "requests": "Requests",
+          "offers": "Quotes",
+          "inProgress": "In progress"
+        },
+        "states": {
+          "sent": "Quote sent",
+          "open": "In progress"
+        },
+        "rows": {
+          "a": "Fitted kitchen, 3.2 m",
+          "b": "Three-seat sofa, fabric",
+          "c": "Corner wardrobe",
+          "d": "Extending table, oak"
+        }
+      }
+    },
+    "faq": {
+      "eyebrow": "Questions",
+      "title": "What people ask before they start",
+      "lead": "If your question is not here,",
+      "leadLink": "write to us.",
+      "items": {
+        "timeline": {
+          "q": "How long until the agent is on my site?",
+          "a": "From your side — one conversation and the materials you already have. The timeline depends on the shape your price list is in: a spreadsheet is one thing, a scanned catalogue is another. We give you a concrete date after the first conversation, not before."
+        },
+        "setup": {
+          "q": "What is the setup fee, and why is it paid separately?",
+          "a": "It is the work at the start, done once: we read your materials line by line, turn your price list into the rules the agent prices by, write the script for your niche and check it all together with you before launch. The monthly subscription covers the agent running, not that work. The amount depends on the package and is written under the price."
+        },
+        "unknown": {
+          "q": "What does the agent do when it does not know the answer?",
+          "a": "It does not invent one. It answers from your materials, and when the answer is not there it says it will check and captures the request, with everything discussed up to that point. Your salesperson gets the conversation, not an \"interested lead\"."
+        },
+        "data": {
+          "q": "Where does my customers' data go?",
+          "a": "It stays yours and is isolated from every other client on the platform — not by a promise, but by the way the database is built. One account cannot reach another account's data."
+        },
+        "site": {
+          "q": "Do I have to change my website?",
+          "a": "No. One script is added, and that is all. The widget runs isolated from the page styles, so it cannot break what you have — not the fonts, not the layout. If there is nobody to add it, we do it."
+        },
+        "language": {
+          "q": "What language does the agent speak?",
+          "a": "Whichever one it is written to, among those configured for you. Romanian, Russian and English are the ones we work with most often. How many are active depends on the package: Start includes one, Growth two, and Platform is agreed individually. We match the tone to how you speak to your customers, not to a manual."
+        },
+        "priceChange": {
+          "q": "What happens when I change my prices?",
+          "a": "You send us the new list. The agent prices by rules rather than by figures written by hand into answers, so a price change does not require reconfiguring from scratch."
+        },
+        "cancel": {
+          "q": "Can I stop the subscription?",
+          "a": "Yes, it is monthly. What happens to your data and to quotes already issued after you stop is written in the contract, and you read it before signing, not after."
+        },
+        "reviews": {
+          "q": "Why are there no reviews or client logos on this site?",
+          "a": "Because we do not have enough of them yet to mean anything. The platform is being run in on a real client in made-to-order furniture, whom we do not name until they agree. We would rather show no logos than logos that do not tell the truth."
+        }
+      }
+    },
+    "finalCta": {
+      "title": "See the agent on your own products, not on a generic demo",
+      "lead": "In the demo we take a few products from your catalogue and show you exactly what the agent would answer a real customer.",
+      "note": "No hour-long presentation. Thirty minutes and the agent on screen.",
+      "primary": "Book a demo",
+      "secondary": "See the pricing"
+    }
+  },
+  "contact": {
+    "form": {
+      "name": "Your name",
+      "contact": "Email or phone",
+      "contactHint": "Where we reply. We will not sign you up to anything.",
+      "site": "Company website",
+      "message": "What you sell and what you would need",
+      "optional": "optional",
+      "submit": "Send the request",
+      "sending": "Sending…",
+      "failed": "We could not send it. Try again, or write to us by email.",
+      "sentTitle": "We have your request",
+      "sentText": "We reply the same working day, with the steps for your niche — not with a brochure.",
+      "sendAnother": "Send another one",
+      "privacy": "We use what you enter here only to reply to you.",
+      "privacyLink": "Privacy policy",
+      "errors": {
+        "name": "Please tell us your name.",
+        "contact": "We need an email or a phone number to reply.",
+        "contactFormat": "Check the address or number — they do not look complete.",
+        "tooLong": "This text is too long.",
+        "site": "Check the website address.",
+        "message": "This text is too long."
+      }
+    },
+    "dialog": {
+      "title": "Book a demo",
+      "text": "Fill in the form and we reply the same working day, with the steps for your niche.",
+      "close": "Close"
+    }
+  },
+  "agentPage": {
+    "soonTitle": "This agent is still being built",
+    "soonText": "We are not selling it yet. If it interests you, write to us: in a demo we show what it already does and tell you when it will be ready.",
+    "soonInPlanTitle": "This agent has not shipped yet",
+    "soonInPlanText": "It is included in the Growth package: you can connect it now, at today's price, and the agent switches on in your account at launch. What you read below is what it will do, written as such. We do not sell as finished something that is still being written.",
+    "backToAgents": "All agents",
+    "featuresEyebrow": "What it does",
+    "sourcesEyebrow": "What it answers from",
+    "platformsEyebrow": "Where it goes",
+    "industriesEyebrow": "Industries",
+    "faqEyebrow": "Questions",
+    "industriesTitle": "The same agent, a different script for every niche",
+    "industriesLead": "Pick your industry and see how the questions, the materials and the route to the price change.",
+    "chatbot": {
+      "metaTitle": "AI chatbot for your website — answers from your own prices",
+      "metaDescription": "An AI chatbot that answers 24/7 from your company materials, qualifies the lead and never invents prices. Configured for your niche, on a monthly subscription.",
+      "title": "An AI chatbot that answers from your prices, not from general copy",
+      "lead": "It answers 24/7 on your site. When the answer is not in your materials it does not invent one — it captures the request, with everything discussed up to that point.",
+      "featuresTitle": "What it does, concretely",
+      "features": {
+        "always": {
+          "title": "It answers at eleven at night too",
+          "text": "Most questions arrive in the evening and at weekends. The agent is there then, not the next morning at nine."
+        },
+        "sources": {
+          "title": "From your own materials",
+          "text": "Product sheets, price list, lead times, delivery and warranty terms. Not from general articles about the trade."
+        },
+        "qualify": {
+          "title": "It qualifies the request",
+          "text": "It asks what your salesperson would ask: dimensions, material, budget, timing. Sales gets a request, not a \"someone wrote in\"."
+        },
+        "languages": {
+          "title": "Romanian, Russian, English",
+          "text": "It switches on its own, without asking and without a language switcher. How many are active depends on the package: Start includes one, Growth two."
+        },
+        "install": {
+          "title": "One line of code to install",
+          "text": "A script on your site. It runs isolated from the page styles, so it cannot break anything you have."
+        },
+        "portal": {
+          "title": "Everything lands in the portal",
+          "text": "Every conversation, with its full context. Nothing stays only in the chat window."
+        }
+      },
+      "conversationNote": "An example for made-to-order furniture. The prices in the answer come from the client's list, not from us.",
+      "dialog": [
+        {
+          "role": "client",
+          "text": "Hello. How much would a kitchen along a 3.2 metre wall cost?"
+        },
+        {
+          "role": "agent",
+          "text": "That depends first of all on the fronts and the worktop. Do you have a preference — painted MDF, veneer or foil?"
+        },
+        {
+          "role": "client",
+          "text": "Painted MDF. And a stone worktop."
+        },
+        {
+          "role": "agent",
+          "text": "For 3.2 m with painted MDF and a quartz worktop, the range in our list is 38,000 – 46,000 lei, depending on the hardware and the appliances."
+        },
+        {
+          "role": "client",
+          "text": "And how long does it take?"
+        },
+        {
+          "role": "agent",
+          "text": "Production takes around 30 working days from the moment the design is confirmed. If you leave me an email I will send the exact quote today — do you have a photo or a drawing of the space?"
+        }
+      ],
+      "sourcesTitle": "What it answers from — and what it never does",
+      "sourcesYes": {
+        "title": "It answers from",
+        "items": [
+          "Your price list, with its calculation rules",
+          "Your product sheets: materials, dimensions, options",
+          "Production and delivery lead times",
+          "Warranty and payment terms",
+          "The questions you already get most often"
+        ]
+      },
+      "sourcesNo": {
+        "title": "It never",
+        "items": [
+          "Invents prices that are not in the list",
+          "Promises lead times that are not in the materials",
+          "Answers things that have nothing to do with your business",
+          "Insists when the person asks to speak to a human",
+          "Sends a quote before you have set the rules"
+        ]
+      },
+      "platformsTitle": "It works on the site you already have",
+      "platformsLead": "It is a script. If you can add a script to the page — directly, through a plugin or through Google Tag Manager — the agent works. If there is nobody to do it, we do it.",
+      "platforms": [
+        "WordPress",
+        "WooCommerce",
+        "Shopify",
+        "Wix",
+        "Tilda",
+        "Webflow",
+        "Squarespace",
+        "Custom-built site"
+      ],
+      "faqTitle": "What people ask about the chatbot",
+      "faq": [
+        {
+          "q": "How long until it is on my site?",
+          "a": "From your side — one conversation and the materials you already have. The timeline depends on the shape your price list is in: a spreadsheet is one thing, a scanned catalogue is another. We give you a concrete date after the first conversation."
+        },
+        {
+          "q": "What if it answers something wrong?",
+          "a": "You see every conversation in the portal. When something sounds wrong, the source it answered from gets corrected — and the correction takes effect immediately, not in the next release. Mistakes in the first week are normal, which is exactly why you read the conversations."
+        },
+        {
+          "q": "Can it take orders and payments?",
+          "a": "It can collect the complete request and hand it to your salesperson. Order confirmation and payment stay with you — we do not want an agent taking money on your behalf."
+        },
+        {
+          "q": "What happens to my customers' data?",
+          "a": "It stays yours and is isolated from every other client on the platform — not by a promise, but by the way the database is built."
+        },
+        {
+          "q": "Does it work on a phone?",
+          "a": "Yes, and it is designed for the small screen first: that is where most questions come from. The window does not cover the page and closes with one gesture."
+        }
+      ],
+      "closingTitle": "See the chatbot answering about your own products",
+      "closingLead": "In the demo we take a few products from your catalogue and show you exactly what it would answer a real customer.",
+      "widgetTitle": "Chatbot",
+      "widgetStatus": "Replies instantly",
+      "widgetPlaceholder": "Write a message…",
+      "widgetInitial": "AI"
+    },
+    "voice-assistant": {
+      "metaTitle": "AI phone assistant — answers calls and books appointments",
+      "metaDescription": "An AI agent that picks up at any hour, finds out what the caller wants, books into your calendar and passes urgent calls on. It says from the start that it is an agent. Included in the Growth package.",
+      "title": "A phone ringing out is the most expensive thing in the company",
+      "lead": "The agent picks up on the first ring, at any hour, finds out what the caller wants and books them straight into your calendar. Anything urgent reaches a person during the call. After every conversation you get the summary in writing.",
+      "call": {
+        "title": "Call answered",
+        "time": "19:42",
+        "fromLabel": "From",
+        "from": "+373 ·· ··· 418",
+        "duration": "1:48",
+        "rows": [
+          {
+            "k": "Wants",
+            "v": "Bespoke kitchen, a 3.2 m wall"
+          },
+          {
+            "k": "Booked",
+            "v": "Friday, 15:00, at the showroom"
+          },
+          {
+            "k": "Confirmation",
+            "v": "Sent by SMS, with the address"
+          }
+        ],
+        "afterLabel": "Outside working hours",
+        "after": "Nobody was in the office. The call became a booking, not a missed call.",
+        "note": "This is what the call looks like once it has ended: what was established and what went into the calendar. The agent says from the start that it is an agent, and anyone who asks for a person gets a person."
+      },
+      "featuresTitle": "What it does, concretely",
+      "features": {
+        "phone": {
+          "title": "It picks up on the first ring, at any hour",
+          "text": "In the evening, on a Saturday, while you are with a client in the showroom. There is no such thing as a second caller — there is only the call nobody took."
+        },
+        "task": {
+          "title": "It books into your own calendar",
+          "text": "It sees the free slots and puts the meeting where it fits, then sends the confirmation. No double bookings and no «we'll call you back to arrange it»."
+        },
+        "handoff": {
+          "title": "Anything urgent reaches a person during the call",
+          "text": "You write the rules: what counts as urgent in your business and which number it transfers to. The rest waits until morning without ringing you."
+        },
+        "read": {
+          "title": "After every call you get the summary",
+          "text": "Who called, what they wanted, what was agreed and what stayed open. In writing, by email — not a four-minute recording nobody listens to."
+        },
+        "sources": {
+          "title": "It speaks from your own materials",
+          "text": "Prices, lead times, conditions, the showroom address, what you do and what you do not. What you did not give it, it has no way of saying — so it does not."
+        },
+        "disclose": {
+          "title": "It says that it is an agent",
+          "text": "From the start, not once the caller works it out. An assistant that passes itself off as a person wins one call and loses the customer who realises later."
+        }
+      },
+      "sourcesEyebrow": "What it speaks from",
+      "sourcesTitle": "What it speaks from — and what it does not do",
+      "sourcesYes": {
+        "title": "It speaks from",
+        "items": [
+          "The prices, lead times and conditions you give us, the same as for the chatbot — the same materials, a different channel.",
+          "The calendar you keep bookings in, so it sees which hours are genuinely free.",
+          "Your own transfer rules: what counts as urgent, who takes it and in what hours.",
+          "The questions you get most often on the phone, answered the way you answer them."
+        ]
+      },
+      "sourcesNo": {
+        "title": "It does not",
+        "items": [
+          "It does not pass itself off as a person. It says it is an agent, and if the caller asks for a human it transfers the call or notes them down for a callback.",
+          "It does not invent prices, lead times or availability. When it does not know, it says so and leaves the question for a person — it does not improvise on the phone.",
+          "It does not negotiate and does not take decisions for you. It gathers, books, hands over.",
+          "It does not record in secret. If the call is recorded, the caller is told, as the law requires."
+        ]
+      },
+      "platformsTitle": "How it reaches your number",
+      "platformsLead": "The number stays yours. Calls are forwarded to the agent — all of them, or only the ones nobody answers within a few rings.",
+      "platforms": [
+        "Your current number, by forwarding",
+        "Only unanswered calls",
+        "Only outside working hours",
+        "A new number, if you prefer",
+        "The calendar you already work in"
+      ],
+      "faqTitle": "What people ask about the phone assistant",
+      "faq": [
+        {
+          "q": "Do I have to change my number?",
+          "a": "No. The number stays yours and calls are forwarded to the agent. You can choose to send all of them, or only those nobody answers after a few rings, or only those outside working hours. Porting the number is not necessary."
+        },
+        {
+          "q": "Can you hear that it is a machine?",
+          "a": "You can hear that it speaks cleanly and without pauses for thought. We do not hide it either: the agent says from the start that it is an agent. The point is not to fool anyone, it is that the person calling at 21:40 gets an answer instead of nothing."
+        },
+        {
+          "q": "What does it do when it does not understand or does not know?",
+          "a": "It says so and takes the call further: it either transfers to a person, if somebody is available and the rule allows it, or writes the question down and asks for a contact number. It does not improvise an answer to end the call neatly — a price invented on the phone becomes a complaint the next day."
+        },
+        {
+          "q": "How does it know what is urgent?",
+          "a": "From the rules you write. Urgent means something different at a clinic than at a car service, and we do not guess: together we set which words and which situations trigger a transfer, and to which number."
+        },
+        {
+          "q": "How do I find out what was said?",
+          "a": "After every call you get a written summary: who called, what they wanted, what was agreed, what stayed open. What went into the calendar is in there too. The history stays in the portal, so you are not searching through emails a month later."
+        },
+        {
+          "q": "What happens to call recordings?",
+          "a": "Recording is not switched on by default. If you switch it on, the caller is told at the start of the call, as the law requires, and you set how long recordings are kept. Each client's data stays separate."
+        },
+        {
+          "q": "When will it be ready?",
+          "a": "We do not give a date we cannot keep. It is included in the Growth package: if you connect it now, the phone assistant switches on for your account at launch, at the price you connected at."
+        }
+      ],
+      "closingTitle": "Call it and hear how it sounds",
+      "closingLead": "At the demo we configure the agent on your own case and you call it yourself. It is the only agent you can listen to before you take it."
+    },
+    "configurator": {
+      "metaTitle": "AI request configurator — a specification ready to price",
+      "metaDescription": "An AI agent that asks the questions the price depends on and hands your sales team a structured specification: dimensions, materials, installation, deadline. Included in the Growth package.",
+      "title": "A configurator that collects the specification, not just the contact details",
+      "lead": "It asks, one at a time, the questions the price depends on: dimensions, materials, installation, deadline. Your salesperson gets a filled-in sheet and goes straight to pricing, without three days of messages back and forth.",
+      "spec": {
+        "title": "Request specification",
+        "number": "A-2148",
+        "rows": [
+          {
+            "k": "Installation",
+            "v": "Roof panels, house"
+          },
+          {
+            "k": "Roof",
+            "v": "Ceramic tile, two slopes"
+          },
+          {
+            "k": "Clear area",
+            "v": "48 m²"
+          },
+          {
+            "k": "Monthly use",
+            "v": "540 kWh"
+          },
+          {
+            "k": "Supply",
+            "v": "Three-phase"
+          },
+          {
+            "k": "Wanted by",
+            "v": "End of October"
+          }
+        ],
+        "pendingLabel": "To clarify",
+        "pending": "Distance from the panel board to the roof",
+        "footer": "6 of 7 points, filled in from the customer's answers",
+        "note": "This is the sheet your salesperson will receive. The example is a solar installation — the questions and fields are written for your own niche."
+      },
+      "featuresTitle": "What it does, concretely",
+      "features": {
+        "questions": {
+          "title": "It asks in the order that matters",
+          "text": "No twenty-field form thrown at the visitor. The next question depends on the last answer, the way a salesperson who knows what comes next would ask."
+        },
+        "spec": {
+          "title": "It hands over a sheet, not a conversation",
+          "text": "Your salesperson gets filled-in fields: type, dimensions, material, installation, deadline. No three screens of messages to read before knowing what the person wants."
+        },
+        "gaps": {
+          "title": "It says what is missing",
+          "text": "What could not be established stays flagged, not guessed. You see what is still to be asked straight away, not halfway through the calculation."
+        },
+        "rules": {
+          "title": "It follows your rules",
+          "text": "Which combinations exist, what cannot be done at all, what needs measuring on site. The rules are yours, not the agent's assumptions."
+        },
+        "handoff": {
+          "title": "It arrives where you already work",
+          "text": "By email, in the portal, or straight into your CRM as a filled-in record. Your salesperson has no new program to learn."
+        },
+        "portal": {
+          "title": "Everything stays in the portal",
+          "text": "Every sheet, with its date and everything the customer answered. Nothing lives only in one person's inbox."
+        }
+      },
+      "sourcesEyebrow": "What it is built from",
+      "sourcesTitle": "What the sheet is built from — and what the agent does not do",
+      "sourcesYes": {
+        "title": "It collects from",
+        "items": [
+          "Your list of options: materials, dimensions, finishes, installation variants.",
+          "Your compatibility rules: what goes with what, and what cannot be done at all.",
+          "The questions your salespeople ask today, written down once and asked every time.",
+          "What requires measuring or a site visit, so that nothing impossible gets promised."
+        ]
+      },
+      "sourcesNo": {
+        "title": "It never",
+        "items": [
+          "It does not give a final price. It collects the data the price is calculated from; the calculation stays with you.",
+          "It does not invent an option that is not on your list.",
+          "It does not fill in fields the customer has not confirmed — it leaves them flagged.",
+          "It does not send the quote in the salesperson's place, and does not promise a deadline on production's behalf."
+        ]
+      },
+      "platformsTitle": "It starts wherever the request comes in",
+      "platformsLead": "The same sheet, wherever the conversation began. The result arrives the same way: filled in, in the portal and by email.",
+      "platforms": [
+        "Widget on your site",
+        "Button on the product page",
+        "A link sent to the customer",
+        "QR code in the showroom",
+        "Filled in by the salesperson, in the portal"
+      ],
+      "faqTitle": "What people ask about the configurator",
+      "faq": [
+        {
+          "q": "How is it different from an ordinary form?",
+          "a": "A form asks every question at once, and the same ones for everybody. The configurator asks the next question based on the last answer: if the person said installation is not needed, it does not go on to ask about floors and lifts. The fields stay the same, the road to them is shorter — which is why people reach the end."
+        },
+        {
+          "q": "Does it give the customer a price?",
+          "a": "No. It collects the data the price depends on and hands the sheet to your salesperson. You do the pricing, with the margin and the exceptions you never write down anywhere. If you want an indicative price said in the conversation itself, that is the chatbot's job, from your own price list."
+        },
+        {
+          "q": "What happens when the customer does not know the answer?",
+          "a": "It moves on and flags the point. The sheet arrives saying \"to clarify: ceiling height\", not with an invented value. An empty field you can see is cheaper than a full field that is wrong."
+        },
+        {
+          "q": "Who writes the questions?",
+          "a": "We do, during setup, from the way you already work: what your salespeople ask, in what order, which combinations are impossible. They are changed from the portal, without asking us."
+        },
+        {
+          "q": "When will it be ready?",
+          "a": "We do not give a date we cannot keep. It is included in the Growth package: connect it now and the configurator switches on in your account at launch, at the price you joined at."
+        }
+      ],
+      "closingTitle": "See what sheet it would collect from your own requests",
+      "closingLead": "At the demo we take one product from your catalogue, write the questions for it, and show you the sheet your salesperson would receive."
+    },
+    "follow-up": {
+      "metaTitle": "Follow-up agent — automatic returns to leads that went quiet",
+      "metaDescription": "An AI agent that comes back to customers who never replied: on a schedule you set, about what was actually discussed, on their own channel. It stops the moment they answer. Included in the Growth package.",
+      "title": "It comes back to the customers who went quiet — and stops when they answer",
+      "lead": "Most quotes are not lost on price. They are lost in the silence afterwards. The agent comes back on a schedule you set, writes about what was actually discussed, and stops the moment the person replies.",
+      "plan": {
+        "title": "Follow-up plan",
+        "number": "L-274",
+        "steps": [
+          {
+            "day": "Day 0",
+            "text": "Quote sent by the salesperson",
+            "state": "origin"
+          },
+          {
+            "day": "Day 2",
+            "text": "\"Did the quote arrive? If anything in it is unclear, tell me and we'll sort it out.\"",
+            "state": "done"
+          },
+          {
+            "day": "Day 6",
+            "text": "\"The price in the quote holds until the 30th. Shall I hold you a production slot?\"",
+            "state": "done"
+          },
+          {
+            "day": "Day 12",
+            "text": "Third follow-up, scheduled",
+            "state": "stopped"
+          }
+        ],
+        "stopLabel": "Stopped automatically",
+        "stop": "The customer replied on day seven. The remaining follow-ups are cancelled.",
+        "note": "This is how one lead's plan looks. The number of follow-ups, the intervals and the reasons to stop are the ones you set."
+      },
+      "featuresTitle": "What it does, concretely",
+      "features": {
+        "stop": {
+          "title": "It stops when the person answers",
+          "text": "It does not run the sequence to the end out of inertia. One reply and the rest is cancelled, including what was scheduled a fortnight out."
+        },
+        "task": {
+          "title": "It returns on a schedule, not when you happen to remember",
+          "text": "Day two, day six, day twelve — as you decide. It does not depend on who is on holiday or how full the day was."
+        },
+        "sources": {
+          "title": "It writes about what was discussed",
+          "text": "It refers to the product asked about, the price in the quote, the deadline talked through. Not a \"still interested?\" sent to everybody."
+        },
+        "read": {
+          "title": "On the channel the customer came in on",
+          "text": "If they wrote in the chat, they hear back in the chat. If they left an email, they get an email. We do not move them to wherever suits us."
+        },
+        "rules": {
+          "title": "You set the limits",
+          "text": "How many follow-ups, at what intervals, on which days and at what hours, when it stops for good. What you have not allowed does not happen."
+        },
+        "portal": {
+          "title": "Every follow-up stays in the portal",
+          "text": "You can see what was sent, when, and what came of it. Including the leads the agent stopped writing to, and why."
+        }
+      },
+      "sourcesEyebrow": "What it writes from",
+      "sourcesTitle": "What it writes the follow-ups from — and what it does not do",
+      "sourcesYes": {
+        "title": "It writes from",
+        "items": [
+          "The conversation held with the customer: what they asked for, what was discussed, where it stopped.",
+          "The quote that was sent: the items, the price, how long it holds.",
+          "The schedule and limits you wrote: how many follow-ups, at what intervals, on which days.",
+          "The reasons to stop that you set: they replied, they bought, they asked not to be contacted."
+        ]
+      },
+      "sourcesNo": {
+        "title": "It never",
+        "items": [
+          "It does not write indefinitely. The number of follow-ups is the one you set, and after it the agent stops.",
+          "It does not write to people who asked not to be contacted. Not in any scenario and not in any campaign.",
+          "It does not invent discounts or extend deadlines to get an answer out of somebody.",
+          "It does not write to bought lists or to contacts who never spoke to you."
+        ]
+      },
+      "platformsTitle": "It comes back where the customer spoke",
+      "platformsLead": "The customer picks the channel, not us. Which ones get connected for you is decided at the first conversation, once we see where your requests actually arrive.",
+      "platforms": [
+        "Email",
+        "The chat on your site",
+        "SMS",
+        "Messaging, where it is connected",
+        "A task for the salesperson, if you would rather a person called"
+      ],
+      "faqTitle": "What people ask about follow-up",
+      "faq": [
+        {
+          "q": "Does it not turn into spam?",
+          "a": "That depends on the limits, and you set the limits: how many follow-ups, at what intervals, on which days and at what hours. The agent stops at the first reply and never writes to people who asked not to be contacted. One follow-up about a real conversation, to a person who asked you first, is not spam. Three messages a week to a bought list is — and that we do not do."
+        },
+        {
+          "q": "Who writes the follow-up texts?",
+          "a": "We do, during setup, in the way you speak to your customers, and you see them before the first one goes out. They are changed from the portal, without asking us."
+        },
+        {
+          "q": "What happens if the customer replies angrily?",
+          "a": "It stops, as it does on any reply, and the conversation reaches the salesperson with everything that was sent before it. The agent does not argue on your behalf."
+        },
+        {
+          "q": "Can I stop the follow-ups for one particular customer?",
+          "a": "Yes, from the portal, at any time. There is also a stop across the whole base, if you want to suspend follow-ups for a period — over the holidays, during stocktaking, when production is full."
+        },
+        {
+          "q": "When will it be ready?",
+          "a": "We do not give a date we cannot keep. It is included in the Growth package: connect it now and the follow-up agent switches on in your account at launch, at the price you joined at."
+        }
+      ],
+      "closingTitle": "See how many of your quotes went quiet",
+      "closingLead": "At the demo we look at the quotes you sent over the last few months and show you what the agent would have written, when — and at which point it would have stopped."
+    },
+    "order-status": {
+      "metaTitle": "Order status for customers — automatic updates at each stage",
+      "metaDescription": "An AI agent that tells your customer at every stage of the order and gives them a page showing where it stands. It announces delays too, in time. Included in the Growth package.",
+      "title": "Your customer finds out where the order is without phoning",
+      "lead": "At every stage you mark, a short message goes out with a link to the order page. Delays are announced the same way, and whatever you marked as internal stays internal.",
+      "order": {
+        "title": "Order",
+        "number": "No. 4118",
+        "etaLabel": "Estimated delivery",
+        "eta": "12 – 14 November",
+        "stages": [
+          {
+            "name": "Confirmed",
+            "state": "done"
+          },
+          {
+            "name": "Production",
+            "state": "current"
+          },
+          {
+            "name": "Finishing",
+            "state": "next"
+          },
+          {
+            "name": "Delivery",
+            "state": "next"
+          }
+        ],
+        "currentLabel": "Now",
+        "updated": "12 Nov, 09:40",
+        "current": "In production",
+        "text": "The carcasses are assembled. The fronts go for painting next.",
+        "nextLabel": "Next update",
+        "next": "When the order goes into finishing",
+        "note": "This is how your customer sees their order, from a link received by SMS or email. The stages are the ones in your own process, not generic ones."
+      },
+      "featuresTitle": "What it does, concretely",
+      "features": {
+        "stage": {
+          "title": "It tells them at every stage",
+          "text": "The order went into production, came out of finishing, ships tomorrow. The customer finds out when it happens, not when they decide to call."
+        },
+        "task": {
+          "title": "It also says when the date moves",
+          "text": "A delay announced in time costs one phone call. A delay the customer discovers on delivery day costs the next order."
+        },
+        "read": {
+          "title": "On the channel your customer actually reads",
+          "text": "SMS, email, chat. A short message and a link to the order page, which opens with no account and no password."
+        },
+        "handoff": {
+          "title": "When the customer asks, a person answers",
+          "text": "A reply to the message reaches the salesperson who owns the order, with the full context. The agent does not hold that conversation in their place."
+        },
+        "rules": {
+          "title": "What is communicated, and what stays internal",
+          "text": "You choose which stages the customer sees. Costs, suppliers and the real reasons behind a delay go nowhere."
+        },
+        "portal": {
+          "title": "You see it too, in the portal",
+          "text": "What was sent, when, and which orders have been sitting on the same stage too long. The same data the customer sees, plus the part that stays with you."
+        }
+      },
+      "sourcesEyebrow": "How it knows",
+      "sourcesTitle": "How it knows where the order is — and what it does not do",
+      "sourcesYes": {
+        "title": "It finds out from",
+        "items": [
+          "The stages you mark: gone into production, in finishing, ready to ship.",
+          "The system you keep orders in, if it has an API or can send data out.",
+          "The spreadsheet the records live in, if that is where they live — marked in one place only.",
+          "The date in the order and any changes to it, the moment you record them."
+        ]
+      },
+      "sourcesNo": {
+        "title": "It never",
+        "items": [
+          "It does not guess where the order is. If a stage was not marked, the agent says nothing — it does not invent a move that did not happen.",
+          "It does not promise a date you did not give. The date communicated is the one in your order.",
+          "It does not send the customer what you marked as internal: costs, suppliers, the real reasons behind a delay.",
+          "It does not answer questions about the order in your place. It hands them to the person who owns it."
+        ]
+      },
+      "platformsTitle": "It reaches the customer where they read",
+      "platformsLead": "A short message and a link to the order page. The page opens with no account and no password: one order, one link, nothing for the customer to install.",
+      "platforms": [
+        "SMS",
+        "Email",
+        "The chat on your site",
+        "Messaging, where it is connected",
+        "The order page, by link"
+      ],
+      "faqTitle": "What people ask about order status",
+      "faq": [
+        {
+          "q": "How does the agent know where the order is?",
+          "a": "From what you mark. If you keep orders in a system with an API, it reads them from there; if you keep them in a spreadsheet, they are marked there; if you keep them nowhere, they are marked in the portal, from a single screen. What was not marked is not communicated — the agent has no way of knowing on its own what is happening on the shop floor."
+        },
+        {
+          "q": "What happens when an order runs late?",
+          "a": "The delay is announced, if that is what you chose. You either write the reason or you do not: the customer learns that the date moved and what the new one is, not why it moved. What is internal stays internal."
+        },
+        {
+          "q": "Can the customer reply to the message?",
+          "a": "Yes, and the reply reaches the person who owns the order, with the full context. An automatic message you cannot reply to is worse than no message at all."
+        },
+        {
+          "q": "Does the workshop have to learn a new program?",
+          "a": "No. Marking a stage is one tap, from a phone or from the portal. If you already have a system where stages are marked, nothing changes in the way you work."
+        },
+        {
+          "q": "When will it be ready?",
+          "a": "We do not give a date we cannot keep. It is included in the Growth package: connect it now and the order status agent switches on in your account at launch, at the price you joined at."
+        }
+      ],
+      "closingTitle": "See what your order looks like to your customer",
+      "closingLead": "At the demo we take the real stages from your process and show you what messages the customer would get and what they would see on the order page."
+    },
+    "content-engine": {
+      "metaTitle": "AI content agent for social media — from your own finished work",
+      "metaDescription": "An AI agent that turns photos of your finished projects into posts for Instagram, TikTok and Pinterest. Nothing is published without your approval. Included in the Growth package.",
+      "title": "Content from the work you are doing anyway",
+      "lead": "An installation photographed on a phone becomes three posts, each in its own platform's format. You read them, correct them if needed, and only then do they go out. Nothing is published without you pressing approve.",
+      "draft": {
+        "title": "Drafts",
+        "count": "3 variants",
+        "sourceLabel": "Source",
+        "source": "Natural oak kitchen, installation finished",
+        "sourceMeta": "6 photos from site · materials · lead time",
+        "variants": [
+          {
+            "on": "Instagram",
+            "format": "4:5",
+            "text": "Natural oak, handleless fronts. From order to installation — six weeks."
+          },
+          {
+            "on": "TikTok",
+            "format": "9:16",
+            "text": "The installation, from empty carcasses to a finished kitchen. Fourteen seconds."
+          },
+          {
+            "on": "Pinterest",
+            "format": "2:3",
+            "text": "Bespoke natural oak kitchen, handleless fronts, lighting under the cabinets."
+          }
+        ],
+        "holdLabel": "Waiting for approval",
+        "hold": "Nothing is published until you press. The texts can still be changed.",
+        "note": "Three variants from one piece of your own material. You approve them, rewrite them or reject them — publishing starts after you press, not before."
+      },
+      "featuresTitle": "What it does, concretely",
+      "features": {
+        "many": {
+          "title": "One job, several posts",
+          "text": "An installation photographed on a phone becomes a week of material. Not because a hundred texts get written, but because the same project has several angles: the result, the detail, the process."
+        },
+        "formats": {
+          "title": "Each platform in its own format",
+          "text": "The same job, a different frame and a different text: vertical where people scroll with a thumb, square where they look, a long description where they search. Not one text copied three times."
+        },
+        "sources": {
+          "title": "It writes from what you gave it",
+          "text": "The photos, materials, dimensions and lead times of your own jobs. It does not invent projects that were never built and does not put prices on them that you never gave."
+        },
+        "approve": {
+          "title": "It publishes only what you approved",
+          "text": "The drafts sit on one screen: approve, correct the text, or reject. An agent that publishes on the company's name by itself is a problem, not a service."
+        },
+        "task": {
+          "title": "A rhythm, not a wave",
+          "text": "A calendar of what goes out and when, per platform. Ten posts in one day and then a month of silence looks exactly like what it is."
+        },
+        "portal": {
+          "title": "Everything published, in one place",
+          "text": "What went out, where and when, together with the material it came from. When someone asks which project that photo is from, the answer is found rather than hunted for."
+        }
+      },
+      "sourcesEyebrow": "What it writes from",
+      "sourcesTitle": "What it writes from — and what it does not do",
+      "sourcesYes": {
+        "title": "It writes from",
+        "items": [
+          "Photos and clips of your own jobs, taken the way you already take them: on a phone, on site, at the installation.",
+          "The project's own data: materials, dimensions, lead time, the town the job was done in.",
+          "The way you already talk about your work — from the texts, quotes and posts you have.",
+          "What worked and what did not: old posts that got a response stay as examples, and so do the ones that got none."
+        ]
+      },
+      "sourcesNo": {
+        "title": "It does not",
+        "items": [
+          "It does not invent jobs. No photo and no project means no post — it will not generate an interior that is not yours.",
+          "It does not publish on its own. Every text and every frame goes through your approval, and nothing reaches an account you have not given it access to.",
+          "It does not write prices, discounts or lead times you never gave. A number that appears in a post becomes a promise.",
+          "It does not hold the conversation in comments and messages for you. Questions about price go to a person — or to the chat agent, if you have one."
+        ]
+      },
+      "platformsTitle": "Where the content goes",
+      "platformsLead": "Text and frame are prepared separately for each platform. Publishing happens on the accounts you give us access to; where you give none, you get the material ready to post yourself.",
+      "platforms": [
+        "Instagram",
+        "TikTok",
+        "Pinterest",
+        "Facebook",
+        "The blog on your site",
+        "Ready-made material, if you publish yourself"
+      ],
+      "faqTitle": "What people ask about content",
+      "faq": [
+        {
+          "q": "Who decides what gets published?",
+          "a": "You do. The agent prepares the drafts, but between the text and the publishing there is a press of your button. Automatic publishing can be switched on for a certain kind of post, if at some point you want that — but it is not how you start and not what we recommend."
+        },
+        {
+          "q": "Where does it get the photos?",
+          "a": "From you. An installation photographed on a phone is enough; no photo shoot is needed. What you do not give it does not appear: the agent does not search the internet for images and does not generate interiors that are not yours."
+        },
+        {
+          "q": "Won't it show that the texts were written by a machine?",
+          "a": "It shows when a text is written out of nothing. Here it starts from a real job, with its material, its dimensions and its lead time, and the way of writing is taken from what you have already written. And you read it before it goes out anyway."
+        },
+        {
+          "q": "How many posts come out per month?",
+          "a": "It depends on how many jobs you do and how many of them you manage to photograph. We do not sell a number: a hundred posts from a single project would be a hundred variants of the same thing. We set the rhythm together, on the calendar."
+        },
+        {
+          "q": "When will it be ready?",
+          "a": "We do not give a date we cannot keep. It is included in the Growth package: if you connect it now, the content engine switches on for your account at launch, at the price you connected at."
+        }
+      ],
+      "closingTitle": "See what would come out of one of your own jobs",
+      "closingLead": "At the demo we take the photos of a real project you have built and show you what posts would come out of it, in each platform's format."
+    }
+  },
+  "industryPage": {
+    "back": "All industries",
+    "eyebrowIndustry": "Industry",
+    "questionsEyebrow": "What you get asked",
+    "agentsEyebrow": "Agents",
+    "leadEyebrow": "What you get",
+    "faqEyebrow": "Questions",
+    "agentsTitle": "The agents that work in this niche",
+    "agentsLead": "Each is a separate product. You can start with one and add another once the first has shown its result.",
+    "openAgent": "See the agent",
+    "mobilier": {
+      "metaTitle": "AI agents for made-to-order furniture — chatbot, configurator, follow-up",
+      "metaDescription": "AI agents for makers of made-to-order furniture and kitchens: they answer pricing questions from your own list, collect dimensions and materials, and hand sales a request that is ready to price.",
+      "title": "AI agents for made-to-order furniture",
+      "lead": "They answer pricing questions from your own list, collect dimensions and materials before a survey visit, bring back customers who went quiet, and report at every production stage. Each is a separate product — take only the ones you need.",
+      "questionsTitle": "The questions you get ten times a day",
+      "questions": [
+        {
+          "q": "\"How much does a three-metre kitchen cost?\"",
+          "a": "The question with no short answer — and the one you get before anything else. The agent asks what it needs in order to give a range, instead of answering \"it depends\"."
+        },
+        {
+          "q": "\"Do you have this fabric?\"",
+          "a": "With a photo from Instagram, no name and no code. The agent knows your fabric catalogue and says whether it exists and which price group it falls into."
+        },
+        {
+          "q": "\"How long does it take?\"",
+          "a": "Lead time depends on the workshop load and on materials. The agent answers with the lead time you set, not one it made up."
+        },
+        {
+          "q": "\"Will you come and measure?\"",
+          "a": "Before a survey you need rough dimensions and a budget. The agent collects them, so the trip is not wasted."
+        }
+      ],
+      "agents": {
+        "chatbot": "Answers questions about price and materials from your own list, at any hour.",
+        "voice-assistant": "It answers when the showroom is empty or the workshop is loud, finds out which wall is being fitted and books the visit.",
+        "configurator": "The customer picks dimensions, fronts and fabric; the price follows the workshop's rules.",
+        "follow-up": "Comes back to the customer who asked for a quote and went quiet — at the moment it still makes sense.",
+        "order-status": "Reports at every production stage, without anyone writing the message.",
+        "content-engine": "Turns the same finished job into posts for Instagram and Pinterest, where furniture is actually searched for."
+      },
+      "leadTitle": "Your salesperson gets this, not \"someone wrote in\"",
+      "leadLead": "The whole conversation collects into one record. Your salesperson opens it and can price the job, without ringing back to find out what the person wanted.",
+      "leadCard": {
+        "title": "Request",
+        "number": "No. 1042",
+        "rows": [
+          {
+            "k": "Product",
+            "v": "Corner wardrobe"
+          },
+          {
+            "k": "Dimensions",
+            "v": "2.4 × 1.8 m"
+          },
+          {
+            "k": "Doors",
+            "v": "Sliding, one mirror"
+          },
+          {
+            "k": "Range discussed",
+            "v": "24,000 – 31,000 lei"
+          },
+          {
+            "k": "Installation",
+            "v": "Included, within the city"
+          },
+          {
+            "k": "Next step",
+            "v": "Survey at the customer's home"
+          }
+        ],
+        "footer": "The full conversation is attached to the record."
+      },
+      "faqTitle": "What workshops ask before they start",
+      "faq": [
+        {
+          "q": "My prices are not fixed, they are worked out every time. How can the agent answer?",
+          "a": "That is exactly why it starts with questions. The agent does not hold a list of final prices, but the rules you price by: price per linear metre, coefficient per fabric group, additions for hardware. A range comes out of those, and the exact quote stays with you."
+        },
+        {
+          "q": "My fabric catalogue is a PDF from the supplier. Is that enough?",
+          "a": "Yes. PDF, Excel, photos of the samples — we take them in whatever form they are in. Putting them in order is our part of the work, and that is what the initial setup pays for."
+        },
+        {
+          "q": "What if the customer asks for a discount?",
+          "a": "The agent does not give discounts. It says the question is for a salesperson and flags the request — so you know the person asked about price before you call."
+        },
+        {
+          "q": "We also work from designers' drawings. Does the agent get confused?",
+          "a": "Not if you tell it from the start that there are two flows. A customer who arrives with a drawing gets different questions from one who arrives with an idea — that is settled during configuration."
+        }
+      ],
+      "closingTitle": "See the agents at work on your own catalogue",
+      "closingLead": "In the demo we take a few items from your catalogue and show you exactly what they would answer a real customer.",
+      "day": {
+        "title": "A day in the workshop",
+        "label": "Example",
+        "note": "This is what a day looks like when all the agents are working. The chatbot is available today; the others are still being built.",
+        "entries": [
+          {
+            "time": "08:40",
+            "agent": "Configurator",
+            "text": "A customer configured a corner wardrobe and got the price range."
+          },
+          {
+            "time": "12:05",
+            "agent": "Chatbot",
+            "text": "Answered which price group a fabric from an Instagram photo falls into."
+          },
+          {
+            "time": "16:20",
+            "agent": "Follow-up",
+            "text": "Came back to the customer who asked for a quote two weeks ago and went quiet."
+          },
+          {
+            "time": "18:30",
+            "agent": "Order status",
+            "text": "Told the customer their kitchen had gone into installation."
+          },
+          {
+            "time": "22:14",
+            "agent": "Chatbot",
+            "text": "Collected the dimensions for a 3.2 m kitchen and left the request for sales."
+          }
+        ],
+        "scale": "The day, hour by hour"
+      }
+    },
+    "constructii": {
+      "metaTitle": "AI agents for renovation companies — chatbot, quotes, job status",
+      "metaDescription": "AI agents for renovation and interior design firms: they answer price-per-square-metre questions, collect the floor area and the state of the space before a site visit, and tell the client at every stage of the job.",
+      "title": "AI agents for renovation and interior design",
+      "lead": "They answer price questions from your own quote rules, collect the floor area and the state of the space before you send anyone out, and tell the client at every stage of the job. Each one is a separate product — take only the ones you need.",
+      "questionsTitle": "The questions that come before any quote",
+      "questions": [
+        {
+          "q": "«How much does it cost to renovate a 60-square-metre flat?»",
+          "a": "It depends on what is being done and on what is there now. The agent asks exactly that — the scope of work, the state of the wiring and plumbing, whether walls are moving — and gives a range instead of «it depends»."
+        },
+        {
+          "q": "«Are materials included?»",
+          "a": "The most common misunderstanding in the trade, and the one that sours the relationship halfway through. The agent says up front what is in your price and what is bought separately, in the same words every time."
+        },
+        {
+          "q": "«When can you start?»",
+          "a": "The date depends on which crews are free. The agent answers with the window you marked yourself, not with one invented to avoid losing the client."
+        },
+        {
+          "q": "«Will you come and look?»",
+          "a": "A site visit costs half a person-day. The agent collects the floor area, the age of the building and the photos beforehand, so the visit is not wasted."
+        }
+      ],
+      "agents": {
+        "chatbot": "It answers price-per-square-metre and materials questions from your own quote rules.",
+        "voice-assistant": "It picks up calls from the site, where nobody can answer, and books the assessment visit.",
+        "configurator": "The client picks the scope, the floor area and the finishes; the range is calculated by your own norms.",
+        "order-status": "It reports at every stage — strip-out, services, finishes — without anyone on site writing the message.",
+        "content-engine": "From the same finished job it makes «before and after» posts, in each platform's format."
+      },
+      "leadTitle": "The quote starts from a record, not from a phone call",
+      "leadLead": "The whole conversation collects into one record. Your estimator opens it and can price, without calling to find out how big the flat is.",
+      "leadCard": {
+        "title": "Request",
+        "number": "No. 318",
+        "rows": [
+          {
+            "k": "Property",
+            "v": "Flat, 2 rooms"
+          },
+          {
+            "k": "Area",
+            "v": "58 m², building from 1986"
+          },
+          {
+            "k": "Scope",
+            "v": "Full, including new services"
+          },
+          {
+            "k": "Walls",
+            "v": "One moves, kitchen to hallway"
+          },
+          {
+            "k": "Range discussed",
+            "v": "185,000 – 240,000 lei"
+          },
+          {
+            "k": "Next step",
+            "v": "On-site assessment, Tuesday"
+          }
+        ],
+        "footer": "The photos the client sent are attached to the record."
+      },
+      "faqTitle": "What renovation firms ask before they start",
+      "faq": [
+        {
+          "q": "My quote has three hundred line items. How can the agent answer?",
+          "a": "It does not answer from the quote, but from the rules you build it with: a price per square metre for each scope, coefficients for the state of the space, what is in and what is out. Those give a range; the exact quote stays with the estimator."
+        },
+        {
+          "q": "Clients ask for prices and then disappear. What does this change?",
+          "a": "What you are left with. Today a conversation that did not become a job leaves nothing behind. With the agent it leaves a record with area, scope and budget — a list you can work through in winter, when there are fewer sites."
+        },
+        {
+          "q": "We work both with designers and directly with owners. Does it get confused?",
+          "a": "No, if you say up front that there are two flows. Someone arriving with a designer's drawings gets different questions than someone arriving with an idea and a photo from the internet."
+        },
+        {
+          "q": "Who tells the client when the job runs late?",
+          "a": "The agent, if you mark the delay. You write the reason or you do not write one at all — the client learns that the date has moved and what the new one is. A delay announced costs one phone call; a delay discovered on site costs the referral."
+        }
+      ],
+      "closingTitle": "See the agents working on your own quote",
+      "closingLead": "At the demo we take a few line items from your quote and show you exactly what it would answer a real client.",
+      "day": {
+        "title": "A day on site",
+        "label": "Example",
+        "note": "This is what a day looks like with all the agents working. The chatbot is available today; the others are being built.",
+        "entries": [
+          {
+            "time": "07:50",
+            "agent": "Order status",
+            "text": "Told the client that strip-out starts today and that work runs until 17:00."
+          },
+          {
+            "time": "11:30",
+            "agent": "Chatbot",
+            "text": "Explained what is in the price per square metre and what is bought separately."
+          },
+          {
+            "time": "14:15",
+            "agent": "Phone assistant",
+            "text": "Took a call while the crew was pouring screed and booked the assessment for Tuesday."
+          },
+          {
+            "time": "17:40",
+            "agent": "Configurator",
+            "text": "A client configured a 58 m² renovation and got the price range."
+          },
+          {
+            "time": "21:35",
+            "agent": "Chatbot",
+            "text": "Collected the area and the building's age for a two-room flat."
+          }
+        ],
+        "scale": "The day, hour by hour"
+      }
+    },
+    "imobiliare": {
+      "metaTitle": "AI agents for estate agencies and developers — chatbot and viewings",
+      "metaDescription": "AI agents that qualify property leads: they find out the budget, the area and the timing, propose a viewing and put it in the calendar, then come back to those who went quiet.",
+      "title": "AI agents for real estate",
+      "lead": "They find out the budget, the area and the timing in the first questions, propose a viewing and put it in the calendar, and come back to those who went quiet at the right moment. Your agent gets a qualified lead, not «somebody wrote in».",
+      "questionsTitle": "The questions that repeat on every listing",
+      "questions": [
+        {
+          "q": "«What is the final price, commission included?»",
+          "a": "Asked on every listing, and an answer that takes three messages loses the person. The agent says what is in the price and what is paid separately, from your own rules."
+        },
+        {
+          "q": "«Can I pay in instalments from the developer?»",
+          "a": "The terms differ from project to project and change during the sale. The agent answers with what is valid today, not with what the last brochure said."
+        },
+        {
+          "q": "«When can I see it?»",
+          "a": "Viewings get lost between messages and the agent's own schedule. The agent sees the free slots, proposes two and confirms."
+        },
+        {
+          "q": "«What is nearby — school, parking, transport?»",
+          "a": "Often the question that decides it, and one answered ten times a day by retyping the same text. The agent has it written once, correctly."
+        }
+      ],
+      "agents": {
+        "chatbot": "It answers questions about price, instalments and specification, from the terms valid today.",
+        "voice-assistant": "It picks up calls while you are at a viewing and books the next one straight into the calendar.",
+        "follow-up": "It comes back to those who saw the flat and went quiet — once, at the moment it still makes sense.",
+        "order-status": "It tells the buyer at every stage: reservation, contract, notary, keys.",
+        "content-engine": "From one photographed flat it makes the posts for social, in each platform's format."
+      },
+      "leadTitle": "Your agent gets a qualified lead",
+      "leadLead": "The budget, the area and the timing are established before the first phone call, and the viewing is already proposed.",
+      "leadCard": {
+        "title": "Lead",
+        "number": "No. 2207",
+        "rows": [
+          {
+            "k": "Looking for",
+            "v": "2 rooms, new build"
+          },
+          {
+            "k": "Area",
+            "v": "Two districts, close to a school"
+          },
+          {
+            "k": "Budget",
+            "v": "68,000 – 79,000 €"
+          },
+          {
+            "k": "Payment",
+            "v": "Mortgage, 20% deposit"
+          },
+          {
+            "k": "Timing",
+            "v": "Moving in spring"
+          },
+          {
+            "k": "Next step",
+            "v": "Viewing Thursday, 18:00"
+          }
+        ],
+        "footer": "The full conversation is attached to the lead."
+      },
+      "faqTitle": "What agencies ask before they start",
+      "faq": [
+        {
+          "q": "I have a hundred listings that change weekly. Who keeps them current?",
+          "a": "The agent reads your list of properties wherever you already keep it — spreadsheet, CRM or feed. What you took off the market disappears from the answers too: it does not answer about a flat that is sold."
+        },
+        {
+          "q": "I do not want the agent giving away the lowest price I would accept.",
+          "a": "It does not. The agent quotes the listed price and nothing below it. Negotiation stays with your agent, and the record notes that the person asked about a discount — which is useful to know before the call."
+        },
+        {
+          "q": "Our leads come from portals, not from our site.",
+          "a": "Then the agent works where the conversation arrives: chat on the site, messaging or the phone. A buyer who came from a portal and calls in the evening still gets an answer rather than a missed call."
+        },
+        {
+          "q": "Who answers when the agent is at a viewing?",
+          "a": "The phone assistant. It takes the call, finds out what the person is looking for and proposes a viewing. Today's alternative is a missed call that does not even leave a number behind."
+        }
+      ],
+      "closingTitle": "See the agents working on your own listings",
+      "closingLead": "At the demo we take a few of your real listings and show you what it would answer a buyer.",
+      "day": {
+        "title": "A day at the agency",
+        "label": "Example",
+        "note": "This is what a day looks like with all the agents working. The chatbot is available today; the others are being built.",
+        "entries": [
+          {
+            "time": "08:15",
+            "agent": "Chatbot",
+            "text": "Explained what is in the price and what is paid separately, on a new-build flat."
+          },
+          {
+            "time": "11:40",
+            "agent": "Phone assistant",
+            "text": "Took a call during a viewing and proposed two free slots for Thursday."
+          },
+          {
+            "time": "15:05",
+            "agent": "Order status",
+            "text": "Told the buyer that the file has gone to the notary."
+          },
+          {
+            "time": "19:20",
+            "agent": "Follow-up",
+            "text": "Came back to a client who saw the flat ten days ago and went quiet."
+          },
+          {
+            "time": "22:40",
+            "agent": "Chatbot",
+            "text": "Established the budget and the area for a buyer looking at two-room flats."
+          }
+        ],
+        "scale": "The day, hour by hour"
+      }
+    },
+    "auto": {
+      "metaTitle": "AI agents for car dealers — chatbot, test drives and order status",
+      "metaDescription": "AI agents for car dealerships: they answer questions on specification and finance, book test drives into the calendar, come back to those who went quiet, and report where an ordered car is.",
+      "title": "AI agents for car dealers",
+      "lead": "They answer specification and finance questions in one conversation, book the test drive straight into the calendar, come back to those who went quiet and report where the ordered car is. Each one is a separate product.",
+      "questionsTitle": "The questions asked before anyone walks into the showroom",
+      "questions": [
+        {
+          "q": "«What would the monthly payment be on this car?»",
+          "a": "It depends on the deposit, the term and the income — three questions, not one. The agent asks them in order and gives a range from your own terms, without promising any approval."
+        },
+        {
+          "q": "«Do you have it in stock, in white?»",
+          "a": "The question is about one specific configuration, and the answer sits in stock that changes daily. The agent reads your stock and says what is there today, not what was there on Monday."
+        },
+        {
+          "q": "«How long is the wait if I order one?»",
+          "a": "The factory lead time is no secret, but it is not a fixed number either. The agent gives the window you marked, and once the car is ordered it reports when that window moves."
+        },
+        {
+          "q": "«Can I have a test drive on Saturday?»",
+          "a": "Saturday is asked for most often, and that is exactly when the showroom is full. The agent sees the free slots, proposes two and confirms."
+        }
+      ],
+      "agents": {
+        "chatbot": "It answers questions on configurations, equipment and finance terms, from your own data.",
+        "voice-assistant": "It picks up calls when every consultant is with a client and books the test drive into the calendar.",
+        "follow-up": "It comes back to the person who took a test drive and never called — once, at the right moment.",
+        "order-status": "It reports at every stage of an ordered car, right up to handover day.",
+        "content-engine": "From the cars in stock and from handovers it makes the posts for social."
+      },
+      "leadTitle": "The consultant gets a record, not «somebody asked about an SUV»",
+      "leadLead": "The configuration, the budget and the form of payment are established before the first phone call, and the test drive is already proposed.",
+      "leadCard": {
+        "title": "Request",
+        "number": "No. 771",
+        "rows": [
+          {
+            "k": "Model",
+            "v": "Compact SUV, petrol"
+          },
+          {
+            "k": "Configuration",
+            "v": "Mid trim, sunroof, 360 camera"
+          },
+          {
+            "k": "Colour",
+            "v": "White or grey, not black"
+          },
+          {
+            "k": "Finance",
+            "v": "Lease, 30% deposit, 5 years"
+          },
+          {
+            "k": "Part exchange",
+            "v": "Current car, 7 years old"
+          },
+          {
+            "k": "Next step",
+            "v": "Test drive Saturday, 11:00"
+          }
+        ],
+        "footer": "The full conversation is attached to the record."
+      },
+      "faqTitle": "What dealers ask before they start",
+      "faq": [
+        {
+          "q": "Stock changes daily. How does the agent know what we have?",
+          "a": "From your own stock list, wherever you keep it. What has sold disappears from the answers the same day: the agent does not offer a car that is no longer on the forecourt."
+        },
+        {
+          "q": "I do not want it promising credit approvals.",
+          "a": "It does not. It says what terms you have and what the payment would be at a given deposit, then says plainly that approval comes from the bank. A «yes» from a robot becomes a complaint at the desk."
+        },
+        {
+          "q": "The service department also takes dozens of calls a day. Does this help?",
+          "a": "Yes, but differently: the phone assistant takes the call, finds out the car and the problem and puts the booking into the service calendar. The diagnosis stays with the mechanic — the agent does not say what is wrong with the car."
+        },
+        {
+          "q": "What do we do about people who test drive and vanish?",
+          "a": "That is where follow-up works: it comes back once, a few days later, referring to what was actually discussed — not with a routine message. If the person replies, the follow-ups stop by themselves."
+        }
+      ],
+      "closingTitle": "See the agents working on your own stock",
+      "closingLead": "At the demo we take a few cars from your real stock and show you what it would answer a client.",
+      "day": {
+        "title": "A day in the showroom",
+        "label": "Example",
+        "note": "This is what a day looks like with all the agents working. The chatbot is available today; the others are being built.",
+        "entries": [
+          {
+            "time": "09:10",
+            "agent": "Chatbot",
+            "text": "Said which configurations are in stock today in white and in grey."
+          },
+          {
+            "time": "12:45",
+            "agent": "Phone assistant",
+            "text": "Took a call when every consultant was with a client and booked a test drive."
+          },
+          {
+            "time": "16:30",
+            "agent": "Order status",
+            "text": "Told a client that their ordered car has left the port."
+          },
+          {
+            "time": "18:55",
+            "agent": "Follow-up",
+            "text": "Came back to the person who test drove last week."
+          },
+          {
+            "time": "21:50",
+            "agent": "Chatbot",
+            "text": "Gave the payment range at a 30% deposit and left the request for the consultant."
+          }
+        ],
+        "scale": "The day, hour by hour"
+      }
+    },
+    "energie": {
+      "metaTitle": "AI agents for solar and HVAC — chatbot and payback calculation",
+      "metaDescription": "AI agents for solar PV and HVAC installers: they collect the consumption and the roof data, give a price range with the payback period, and report at every stage of the installation.",
+      "title": "AI agents for solar panels and HVAC",
+      "lead": "They collect the monthly consumption and the roof data, give a price range with a payback period worked out on that person's own case, and tell the client at every stage of the installation. Each one is a separate product.",
+      "questionsTitle": "The questions that come before any quote",
+      "questions": [
+        {
+          "q": "«How much would a system for my house cost?»",
+          "a": "Without the consumption and without the roof, any figure is a guess. The agent asks for last month's bill and a few facts about the roof, then gives a range — not a number that will change anyway."
+        },
+        {
+          "q": "«How long until it pays for itself?»",
+          "a": "The question that decides the purchase. The agent estimates it from that person's real consumption and from your price, not from a brochure example built on somebody else's usage."
+        },
+        {
+          "q": "«Can I get it with a subsidy?»",
+          "a": "The terms change and are easy to get wrong. The agent says what is valid today at your company and which documents are needed, in the same words every time."
+        },
+        {
+          "q": "«Will my roof take it?»",
+          "a": "The answer needs a survey, but the questions that come before it are asked once: the covering, the age of the house, the orientation. The agent collects them before anyone drives out."
+        }
+      ],
+      "agents": {
+        "chatbot": "It answers questions on prices, subsidies and warranties, from the terms valid today at your company.",
+        "voice-assistant": "It picks up calls while the crews are on a roof and books the technical survey.",
+        "configurator": "The client gives the consumption and the roof data; out comes the system size, the price range and the payback.",
+        "order-status": "It reports at every stage: approval, delivery, installation, commissioning.",
+        "content-engine": "From finished installations it makes posts with the site, the installed capacity and the saving."
+      },
+      "leadTitle": "The engineer gets the data, not «somebody asked about solar»",
+      "leadLead": "The consumption, the roof and the type of system are established before anyone drives out. The technical survey is already proposed.",
+      "leadCard": {
+        "title": "Request",
+        "number": "No. 604",
+        "rows": [
+          {
+            "k": "Property",
+            "v": "Detached house, two storeys"
+          },
+          {
+            "k": "Consumption",
+            "v": "540 kWh a month, yearly average"
+          },
+          {
+            "k": "Roof",
+            "v": "Metal tile, 62 m², south-east"
+          },
+          {
+            "k": "System",
+            "v": "On-grid, no batteries"
+          },
+          {
+            "k": "Range discussed",
+            "v": "5.8 – 7.2 kW · 4,800 – 6,100 €"
+          },
+          {
+            "k": "Next step",
+            "v": "Technical survey, Thursday"
+          }
+        ],
+        "footer": "The bill the client sent is attached to the record."
+      },
+      "faqTitle": "What energy companies ask before they start",
+      "faq": [
+        {
+          "q": "Payback depends on dozens of things. Can the agent calculate it?",
+          "a": "It can estimate it, from your formula and that person's real consumption — and it presents it as exactly that: a range, not a promise. The exact calculation stays with the engineer, after the survey."
+        },
+        {
+          "q": "Subsidies change. Who updates them?",
+          "a": "You do, in one place, and the agent answers from it. That is precisely why we do not keep the terms inside the agent's own text: a change in the rules should not mean rewriting it."
+        },
+        {
+          "q": "Half our calls are from people who will never buy.",
+          "a": "And it is useful to find that out in three questions rather than in a site visit. The agent asks for the consumption up front; someone who does not have it to hand is usually not at the buying stage yet — and someone who sends it in two minutes is."
+        },
+        {
+          "q": "Installation takes weeks and clients call. What changes?",
+          "a": "They call less, because they find out on their own. The status agent reports at every stage you mark and, if a date moves, says so in time — not on the day the crew was supposed to arrive."
+        }
+      ],
+      "closingTitle": "See the agents working on your own systems",
+      "closingLead": "At the demo we take the systems you actually install and show you what range and what payback a real client would get.",
+      "day": {
+        "title": "A day at the company",
+        "label": "Example",
+        "note": "This is what a day looks like with all the agents working. The chatbot is available today; the others are being built.",
+        "entries": [
+          {
+            "time": "08:25",
+            "agent": "Chatbot",
+            "text": "Explained which documents the subsidy needs, from today's terms."
+          },
+          {
+            "time": "13:10",
+            "agent": "Configurator",
+            "text": "A client gave the consumption and the roof and got the system size and the payback."
+          },
+          {
+            "time": "15:50",
+            "agent": "Phone assistant",
+            "text": "Took a call while the crew was on a roof and booked the technical survey."
+          },
+          {
+            "time": "17:35",
+            "agent": "Order status",
+            "text": "Told a client the system passed approval and delivery is next."
+          },
+          {
+            "time": "21:15",
+            "agent": "Chatbot",
+            "text": "Asked for last month's bill and left the request for the engineer."
+          }
+        ],
+        "scale": "The day, hour by hour"
+      }
+    },
+    "clinici": {
+      "metaTitle": "AI agents for dental and aesthetic clinics — bookings and questions",
+      "metaDescription": "AI agents for clinics: they answer questions about price, pain and recovery, book patients into the clinic's calendar and remind them of the appointment. They do not diagnose.",
+      "title": "AI agents for dentistry and aesthetic medicine",
+      "lead": "They answer the questions a patient finds hard to ask a person — does it hurt, what does it cost, how long is the recovery — and book them straight into the clinic's calendar. The diagnosis stays with the doctor: the agent does not touch it.",
+      "questionsTitle": "The questions that delay the visit by months",
+      "questions": [
+        {
+          "q": "«Does it hurt?»",
+          "a": "The question that delays the visit longest, and one many people are too embarrassed to ask on the phone. The agent answers with what you wrote about anaesthesia and about what the patient feels — without promising that it will not hurt."
+        },
+        {
+          "q": "«How much does an implant cost?»",
+          "a": "The price depends on the system, on the bone and on what has to be done first. The agent gives your range and explains why it cannot be a single figure, instead of staying silent until the consultation."
+        },
+        {
+          "q": "«How long until I heal?»",
+          "a": "The recovery period decides when the person books time off. The agent gives it as a range, from the clinic's own protocol, and adds that the doctor confirms it at the consultation."
+        },
+        {
+          "q": "«Do you have a slot tomorrow?»",
+          "a": "The simplest question and the most often missed: reception is busy or the clinic is closed. The agent sees the free slots and books."
+        }
+      ],
+      "agents": {
+        "chatbot": "It answers questions about price, pain and recovery, from the clinic's own texts.",
+        "voice-assistant": "It picks up calls when reception is busy or the clinic is closed and books the patient into the calendar.",
+        "follow-up": "It reminds the patient of the appointment and comes back to the one who asked about price and never came.",
+        "order-status": "It reports when the lab work has arrived: crown, denture, aligners.",
+        "content-engine": "From the cases you are allowed to show it makes posts — only with the patient's consent and only what you approve."
+      },
+      "leadTitle": "Reception gets a record, not «somebody called»",
+      "leadLead": "What the patient wants, what worried them and which slot they are booked into. Reception confirms rather than reconstructs.",
+      "leadCard": {
+        "title": "Booking",
+        "number": "No. 4409",
+        "rows": [
+          {
+            "k": "Reason",
+            "v": "Implant, one missing molar"
+          },
+          {
+            "k": "Situation",
+            "v": "Extraction four months ago"
+          },
+          {
+            "k": "Asked about",
+            "v": "Anaesthesia and recovery time"
+          },
+          {
+            "k": "Price discussed",
+            "v": "Range, from the clinic's list"
+          },
+          {
+            "k": "Booked",
+            "v": "Tuesday, 10:30, consultation"
+          },
+          {
+            "k": "Reminder",
+            "v": "The day before, by SMS"
+          }
+        ],
+        "footer": "The full conversation is attached to the booking."
+      },
+      "faqTitle": "What clinics ask before they start",
+      "faq": [
+        {
+          "q": "The agent will not give medical advice, will it?",
+          "a": "No. It does not diagnose, does not recommend treatments and does not interpret symptoms or X-rays. It answers questions about organisation and price, from the texts you write, and sends everything medical to the consultation. That is a limit written into the configuration, not a recommendation."
+        },
+        {
+          "q": "What happens to patient data?",
+          "a": "It asks strictly what a booking needs: name, contact, reason for the visit. We do not build a medical file and we do not mix data between clinics. What the agent processes is set out in the contract and in a data processing agreement, in which the clinic is the controller."
+        },
+        {
+          "q": "Our reception already has a booking program.",
+          "a": "The agent works inside it, if there is somewhere to connect. The point is not another calendar, it is that the free slot in your calendar also gets filled at 22:00, when reception is at home."
+        },
+        {
+          "q": "How do we show cases without breaching confidentiality?",
+          "a": "Only with the patient's written consent and only what you have approved. The content agent publishes nothing by itself: it proposes, and you press — or you do not."
+        }
+      ],
+      "closingTitle": "See the agents working on the clinic's own list",
+      "closingLead": "At the demo we take a few procedures from your list and show you what it would answer a real patient.",
+      "day": {
+        "title": "A day at the clinic",
+        "label": "Example",
+        "note": "This is what a day looks like with all the agents working. The chatbot is available today; the others are being built.",
+        "entries": [
+          {
+            "time": "07:55",
+            "agent": "Follow-up",
+            "text": "Reminded a patient of today's consultation, at 10:30."
+          },
+          {
+            "time": "12:20",
+            "agent": "Chatbot",
+            "text": "Explained what anaesthesia means for an extraction, from the clinic's text."
+          },
+          {
+            "time": "16:45",
+            "agent": "Order status",
+            "text": "Told a patient that the crown has arrived from the lab."
+          },
+          {
+            "time": "20:10",
+            "agent": "Phone assistant",
+            "text": "Took a call after closing and booked a consultation for Thursday."
+          },
+          {
+            "time": "23:05",
+            "agent": "Chatbot",
+            "text": "Gave the price range for an implant and left the request for reception."
+          }
+        ],
+        "scale": "The day, hour by hour"
+      }
+    }
+  },
+  "plans": {
+    "perMonth": "/ month",
+    "setup": "One-off setup fee of €{fee}",
+    "setupCustom": "Setup fee agreed individually",
+    "recommended": "Recommended",
+    "priceOnRequest": "Custom pricing",
+    "soon": "Coming soon",
+    "includedIn": "Included in {plan}",
+    "start": {
+      "name": "Start",
+      "subtitle": "AI assistant",
+      "tagline": "One agent that answers around the clock and brings you qualified leads.",
+      "cta": "Book a demo",
+      "features": {
+        "chatbot": "AI chatbot for your site: 24/7 answers from your knowledge base",
+        "contacts": "Contact capture, delivered by email or into your CRM",
+        "qualify": "Lead qualification following your niche's script",
+        "portal": "Portal: leads, issued quotes, statistics and agent settings",
+        "limit": "Up to 500 conversations a month",
+        "language": "One language, standard industry script"
+      }
+    },
+    "growth": {
+      "name": "Growth",
+      "subtitle": "AI sales",
+      "tagline": "All of our agents, on one account.",
+      "cta": "Book a demo",
+      "features": {
+        "inherits": "Everything in Start, up to 2,000 conversations a month",
+        "scenario": "A script adapted to your business, not just the industry standard",
+        "languages": "A second language for conversations",
+        "voice": "Phone assistant: it answers calls and books appointments",
+        "configurator": "AI request configurator: a structured specification for your sales team",
+        "followUp": "Follow-up agent: automatic returns to undecided leads",
+        "orderStatus": "Order status for customers: automatic notifications at each stage",
+        "content": "Content engine for social media",
+        "priority": "Priority support"
+      }
+    },
+    "platform": {
+      "name": "Platform",
+      "subtitle": "Custom",
+      "tagline": "For when you need something that does not exist yet.",
+      "cta": "Talk to us",
+      "features": {
+        "inherits": "Everything in Growth, with limits agreed individually",
+        "customAgent": "Any agent, built to your order",
+        "automation": "Bespoke automations and integrations with the systems you already use",
+        "website": "A new website, or a rebuild of the one you have",
+        "seo": "SEO: structure, copy, speed, rankings",
+        "marketing": "Digital marketing: campaigns, content, analytics",
+        "sla": "Dedicated support, SLA"
+      }
+    },
+    "soonNote": "Agents marked \"coming soon\" are included in the package: you can connect it now, at today's price, and the agents switch on as they are released. The price stays the one you joined at.",
+    "matrix": {
+      "title": "What each package includes",
+      "lead": "For those comparing in detail. Rows marked \"coming soon\" are included in the package, but the agent has not been released yet.",
+      "feature": "What is included",
+      "yes": "Included",
+      "no": "Not included",
+      "rows": {
+        "conversations": {
+          "label": "Conversations a month",
+          "start": "500",
+          "growth": "2,000",
+          "platform": "Agreed individually"
+        },
+        "chatbot": {
+          "label": "AI chatbot, 24/7, from your knowledge base"
+        },
+        "scenario": {
+          "label": "Script",
+          "start": "Standard for the industry",
+          "growth": "Adapted",
+          "platform": "Written from scratch around your process"
+        },
+        "languages": {
+          "label": "Conversation languages",
+          "start": "1",
+          "growth": "2",
+          "platform": "Agreed individually"
+        },
+        "voice": {
+          "label": "Phone assistant: calls answered and appointments booked"
+        },
+        "qualify": {
+          "label": "Lead qualification by niche script"
+        },
+        "contacts": {
+          "label": "Contacts by email or into your CRM"
+        },
+        "portal": {
+          "label": "Portal with leads, quotes and statistics"
+        },
+        "configurator": {
+          "label": "AI request configurator"
+        },
+        "followUp": {
+          "label": "Follow-up agent"
+        },
+        "orderStatus": {
+          "label": "Order status for customers"
+        },
+        "content": {
+          "label": "Content engine"
+        },
+        "priority": {
+          "label": "Priority support"
+        },
+        "customAgent": {
+          "label": "Agent built to order"
+        },
+        "automation": {
+          "label": "Bespoke automations and integrations"
+        },
+        "website": {
+          "label": "New or rebuilt website"
+        },
+        "seo": {
+          "label": "SEO"
+        },
+        "marketing": {
+          "label": "Digital marketing"
+        },
+        "sla": {
+          "label": "Dedicated support, SLA"
+        },
+        "setup": {
+          "label": "One-off setup fee",
+          "start": "€490",
+          "growth": "€890",
+          "platform": "Individual"
+        }
+      }
+    },
+    "faq": [
+      {
+        "q": "What counts as a conversation?",
+        "a": "One dialogue with a visitor, however many messages it contains. If the person comes back a few days later and writes again, that is a new conversation. Your own test messages are not counted."
+      },
+      {
+        "q": "What does the setup fee cover?",
+        "a": "The conversation, reading your materials line by line, turning your price list into the rules the agent prices by, the script for your niche, your brand on the quote, and checking it together with you before launch. It is paid once, at the start."
+      },
+      {
+        "q": "Can I change package?",
+        "a": "Yes, in both directions, from the start of the following month. Moving up, you pay the difference in setup if the new package takes more work."
+      },
+      {
+        "q": "What happens if I exceed the conversation limit?",
+        "a": "The agent does not stop and customers are not left without an answer. The excess is covered by an additional conversation pack, and if it repeats month after month we suggest moving to the next package — it usually works out cheaper."
+      },
+      {
+        "q": "Is there a minimum contract term?",
+        "a": "No. The subscription is monthly and can be stopped from the following month. What happens to your data and to quotes already issued after you stop is written in the contract, and you read it before signing."
+      }
+    ]
+  },
+  "pricingPage": {
+    "metaTitle": "Pricing — AI agents on a monthly subscription",
+    "metaDescription": "Three packages: Start from €199/month, Growth at €449/month and Platform with custom pricing. The initial setup is paid once. No minimum contract term.",
+    "eyebrow": "Pricing",
+    "title": "Three packages, fixed contents",
+    "lead": "You pay monthly for the agents that run. The initial setup — reading your materials and turning your price list into pricing rules — is paid once, at the start.",
+    "faqEyebrow": "Pricing questions",
+    "faqTitle": "What people ask before choosing",
+    "closingTitle": "Not sure which package you need?",
+    "closingLead": "In the demo we look at what you sell and how many enquiries you get, and tell you which package you need — including when that is Start."
+  },
+  "agentsHub": {
+    "metaTitle": "AI agents for business — six agents, rented separately",
+    "metaDescription": "Six AI agents covering the customer's path: from the first question on your site to the delivered order. Rent only the agents you need, on a monthly subscription.",
+    "eyebrow": "The agents",
+    "title": "Six agents, one customer's path",
+    "lead": "We are not selling six subscriptions. Each agent sits at a particular place on the path your customer walks — from the first question to the delivered order. You need the ones standing exactly where you are losing people.",
+    "pathEyebrow": "The customer's path",
+    "pathTitle": "Where each one stands",
+    "pathLead": "The order is not ours, it is the customer's: they ask, they decide, they go quiet, they buy, they wait. The last agent closes the circle and brings the next person to the first question.",
+    "withoutLabel": "Without it",
+    "open": "See the agent",
+    "steps": {
+      "chatbot": {
+        "stage": "The first question",
+        "without": "A question asked on Saturday evening gets an answer on Monday morning. By Monday they have asked somebody else."
+      },
+      "voice-assistant": {
+        "stage": "The same question, by phone",
+        "without": "The phone rings four times and hangs up. Not even a trace is left that somebody wanted to buy."
+      },
+      "configurator": {
+        "stage": "From conversation to request",
+        "without": "The conversation happened, but nothing came out of it that anyone can price. The salesperson calls back to ask what was already said."
+      },
+      "follow-up": {
+        "stage": "The return",
+        "without": "«I'll think about it» does not mean no. But if nobody comes back, it ends up meaning it."
+      },
+      "order-status": {
+        "stage": "After the sale",
+        "without": "The customer calls to ask where the order is. Three times. And still does not know."
+      },
+      "content-engine": {
+        "stage": "Back to the start",
+        "without": "The work gets done and nobody sees it. And nobody arrives at the first question up there any more."
+      }
+    },
+    "plansEyebrow": "How you rent them",
+    "plansTitle": "Two steps, not six subscriptions",
+    "plansLead": "Agents are not bought one at a time: they come in packages. Start switches on the chatbot, Growth adds the rest as they ship — at the price you connected at.",
+    "startLabel": "Starts with",
+    "growthLabel": "Adds",
+    "plansLink": "See the prices",
+    "closingTitle": "Not sure where to start?",
+    "closingLead": "At the demo we look at your customer's path and tell you where you are losing the most. It is usually one or two places, not six.",
+    "plansNote": "The packages also contain what is not an agent: the portal, qualification, languages, the number of conversations included. The full list is on the pricing page."
+  },
+  "industriesHub": {
+    "metaTitle": "AI agents by industry — a scenario written for your niche",
+    "metaDescription": "Chatbots and AI agents configured for furniture, renovation, real estate, car dealers, energy and clinics. Different questions, a different route to the price, the same agent.",
+    "eyebrow": "Industries",
+    "title": "The same agent, a different scenario",
+    "lead": "The difference between niches is not in the wording, it is in the questions: furniture starts from the wall, solar starts from the consumption, a clinic starts from the fear of pain. The scenario is written under your questions.",
+    "listEyebrow": "The niches",
+    "listTitle": "Six niches, written all the way through",
+    "listLead": "For each of them we know what the price depends on and in what order things get established. Open your niche: you will see the conversation and the agents that work there.",
+    "otherEyebrow": "Another niche",
+    "otherTitle": "If you are not on the list",
+    "otherLead": "The list is not a limit, it is the order in which we wrote the scenarios. An agent can be configured anywhere three things are true:",
+    "signs": [
+      "The price is calculated, not read off a label. If you have a fixed price per product, you need a shop, not an agent.",
+      "Customers ask roughly the same five questions every time before they decide.",
+      "To give a price you need data only the customer has: dimensions, consumption, the current state of things, the deadline."
+    ],
+    "otherCta": "Tell us what you do",
+    "closingTitle": "See the scenario for your own niche",
+    "closingLead": "At the demo we write the conversation on your real case, with the questions you ask yourself — not with a generic example."
+  },
+  "contactPage": {
+    "metaTitle": "Contact — tell us what you sell and what you would need",
+    "metaDescription": "Four fields, two of them required. A person answers you on the same working day, with the steps for your niche. No mailing lists and no brochures.",
+    "eyebrow": "Contact",
+    "title": "Tell us what you sell",
+    "lead": "Four fields, two of them required. A person answers you on the same working day — with the steps for your niche, not with a brochure.",
+    "stepsLabel": "What happens next",
+    "steps": [
+      {
+        "when": "The same working day",
+        "text": "A person answers you and, if needed, asks a little more about what you wrote."
+      },
+      {
+        "when": "The demo, half an hour",
+        "text": "We look at your site and at the questions you actually get, then show you the conversation written on your own case."
+      },
+      {
+        "when": "The quote, if it makes sense",
+        "text": "Which package, what timeline, what setup fee. If it does not make sense, we say so then — not three conversations later."
+      }
+    ],
+    "usefulTitle": "It helps if you write",
+    "useful": [
+      "What you sell and to whom. Two lines are enough.",
+      "How you arrive at a price today: who calculates it, from what data, and how long it takes.",
+      "Where you feel you are losing people: at the first question, between the conversation and the quote, or after the quote."
+    ],
+    "neverTitle": "What does not happen",
+    "never": [
+      "We do not call you if you did not leave a number.",
+      "We do not add you to any mailing list.",
+      "We do not send a twenty-page brochure instead of an answer."
+    ],
+    "faqText": "If your question is about prices, packages or timelines, it may already have a written answer.",
+    "faqLink": "Frequently asked questions"
+  },
+  "legal": {
+    "eyebrow": "Legal",
+    "updated": "Last updated",
+    "updatedDate": "25 August 2026",
+    "tocLabel": "Contents",
+    "entity": [
+      {
+        "label": "Controller",
+        "value": "— to be filled in: legal name"
+      },
+      {
+        "label": "Registration",
+        "value": "— to be filled in: company number"
+      },
+      {
+        "label": "Address",
+        "value": "— to be filled in: registered office"
+      },
+      {
+        "label": "Email",
+        "value": "— to be filled in: address for requests"
+      }
+    ]
+  },
+  "privacyPage": {
+    "metaTitle": "Privacy policy",
+    "metaDescription": "What data the form on this site collects, why, who else sees it and how long we keep it. One technical cookie. No analytics, no pixels, no selling of data.",
+    "title": "Privacy policy",
+    "lead": "Written for what this site actually does, not copied from somewhere. If you find something in it that does not match what you see, write to us — the mistake is ours.",
+    "sections": [
+      {
+        "title": "Who is responsible for the data",
+        "intro": "Data sent through this site is received by the controller below. Requests about your rights go to the same place.",
+        "entity": true
+      },
+      {
+        "title": "What data we receive",
+        "intro": "The site has a single form. From it we receive only what you write:",
+        "list": [
+          "Your name — so we know how to address you.",
+          "Your email or phone — so we can answer.",
+          "Your company's website, if you fill it in. It is optional.",
+          "Your message, if you write one. It is optional."
+        ],
+        "outro": "In addition, like any site, the server logs requests: IP address, time, the page requested and the browser type. These logs are technical and are not linked to the form."
+      },
+      {
+        "title": "Why we receive it",
+        "intro": "We use the form data to answer you and to prepare the demo or the quote you asked for — that is, for the steps before a possible contract, at your own request. Server logs exist so the site can run and be defended against abuse; the basis is our legitimate interest in keeping a service working.",
+        "outro": "We do not use it for anything else. If you write to us about furniture, we will not write to you a month later about something unrelated."
+      },
+      {
+        "title": "Who else sees it",
+        "intro": "Besides us, the data passes through two services, each with a strict role:",
+        "list": [
+          "Vercel — hosts the site. Requests to pages go through it, and it keeps the technical logs.",
+          "Resend — delivers the email with your request to us. The contents of the form pass through this service on the way to our mailbox."
+        ],
+        "outro": "We give it to nobody else. We do not sell it, trade it, or send it to advertising networks."
+      },
+      {
+        "title": "Where it goes and how long we keep it",
+        "intro": "A form submission is not saved into a database: it leaves by email and stays in our correspondence. A database for a single form would mean backups, migrations and personal data somebody has to answer for — with no gain for you.",
+        "outro": "We keep the correspondence for as long as the discussion is live and for twelve months after the last message, so we can pick the conversation back up if you return. After that we delete it. Technical logs are kept by the hosting provider, for a short period, under its own rules."
+      },
+      {
+        "title": "Cookies",
+        "intro": "The site sets a single cookie, called NEXT_LOCALE. It remembers which language you are reading in, so the next page does not send you to the wrong version. It identifies nobody and tracks nothing.",
+        "list": [
+          "We have no analytics: no Google Analytics, nothing of that kind.",
+          "We have no advertising pixels and no social buttons that load somebody else's code.",
+          "Fonts are served from our own domain, not from a third-party CDN — your browser asks nothing of another server."
+        ],
+        "outro": "That is why the site does not greet you with a consent banner: there is nothing to consent to."
+      },
+      {
+        "title": "Your rights",
+        "intro": "Over the data we hold about you, you have the right:",
+        "list": [
+          "To find out what data we hold and to receive a copy.",
+          "To ask us to correct what is wrong.",
+          "To ask us to delete it.",
+          "To ask us to restrict its use, or to object to use based on our legitimate interest.",
+          "To receive the data in a format that can be moved elsewhere."
+        ],
+        "outro": "Write to the address above and we will answer within a month at the latest. If the answer does not satisfy you, you have the right to complain to the data protection supervisory authority of the country you live in."
+      },
+      {
+        "title": "What we do not do",
+        "list": [
+          "We do not sell or rent the data to anyone.",
+          "We do not build profiles and do not make automated decisions about you.",
+          "We do not add you to any mailing list because you filled in the form.",
+          "We do not track which pages you read before writing."
+        ]
+      },
+      {
+        "title": "Your own customers' data",
+        "intro": "This policy is about the site. If you become a client and an agent ends up processing your customers' data, that is governed separately, by contract and by a data processing agreement, in which you are the controller and we are the processor.",
+        "outro": "Each client's data stays isolated: we do not mix it between accounts and we do not train anything on it for other clients."
+      },
+      {
+        "title": "Changes",
+        "intro": "If we change how we work with data, we change this text too, and the date at the top is updated. If the change is significant, we say so visibly rather than quietly replacing a paragraph."
+      }
+    ]
+  },
+  "termsPage": {
+    "metaTitle": "Terms and conditions",
+    "metaDescription": "What this site is, what the displayed prices mean, what «coming soon» means and what we do not promise. Written short, without paragraphs that say nothing.",
+    "title": "Terms and conditions",
+    "lead": "The site is a presentation, not a shop: nothing is bought from it and no account is created. The text below says what it does mean, then.",
+    "sections": [
+      {
+        "title": "Who publishes this site",
+        "entity": true
+      },
+      {
+        "title": "What the site is",
+        "intro": "A presentation of AI agents rented on a monthly subscription. It has no cart, no online payment and no user accounts. The only possible action is the form through which you write to us.",
+        "outro": "Sending the form does not conclude any contract and does not oblige us to accept the work, just as it obliges you to nothing."
+      },
+      {
+        "title": "The prices shown",
+        "intro": "The prices on the pricing page are the monthly subscription and the one-off setup fee for the standard packages. They are informational: they do not constitute a binding offer in the legal sense, and the contract is concluded separately, in writing.",
+        "list": [
+          "For the Platform package the price is set individually, because the work is different every time.",
+          "Prices may change for the future. A client already connected does not have the price changed for the package they hold, under the terms of their contract.",
+          "VAT treatment and the invoicing currency are stated in the contract and on the invoice."
+        ]
+      },
+      {
+        "title": "Agents marked «coming soon»",
+        "intro": "Some of the agents are still being built and do not work yet. Their pages describe what they will do, not what they do today, and are written as such.",
+        "outro": "«Included in the package» means the package can be connected now, at today's price, and the agent switches on for your account when it is ready. It does not mean a particular date: we do not promise deadlines we cannot keep. If an agent does not appear within a reasonable time, you have the right to leave the package under the terms of your contract."
+      },
+      {
+        "title": "The images on the pages",
+        "intro": "The screens drawn on the pages — the widget conversation, the request sheet, the customer record, the follow-up plan, the order status, the content drafts — are illustrations we built, not captures from a running product. The data in them is invented as an example.",
+        "outro": "They contain no real customers, real orders or anyone's real prices. We display no client logos, testimonials or performance figures that we cannot prove."
+      },
+      {
+        "title": "The site's content",
+        "intro": "The texts, structure, code, illustrations and visual identity are ours. You may read them and share links, but you may not copy the content in order to publish it as your own.",
+        "outro": "The names of other companies or platforms, where they appear, belong to their owners and are used only to say where content goes or where data comes from."
+      },
+      {
+        "title": "Links to other sites",
+        "intro": "If we link to a site that is not ours, we are not responsible for what is there, nor for how that site treats your data."
+      },
+      {
+        "title": "Liability",
+        "intro": "We do everything we can to keep the information here accurate and the site working. We cannot, however, guarantee that there are no typing errors, that the site will never be unavailable, or that a result somebody else obtained will repeat for you.",
+        "outro": "Business decisions taken solely on the basis of information on this site remain yours. What we actually guarantee is written in the contract, not here."
+      },
+      {
+        "title": "Changes and governing law",
+        "intro": "We may amend this text; the date at the top shows the latest version. Relations arising from use of the site are governed by the law of the operator's registered seat, and disputes are settled by the competent courts there.",
+        "outro": "— to be filled in: governing law and competent court, once the legal form is settled."
+      }
+    ]
+  },
+  "aboutPage": {
+    "metaTitle": "About us — how we work and why there are no testimonials on this site",
+    "metaDescription": "We rent AI agents on a monthly subscription, configured for each client's niche. One agent works, five are being written. No invented testimonials and no figures we cannot prove.",
+    "eyebrow": "About",
+    "title": "We are at the beginning, and we write that here",
+    "lead": "We rent AI agents on a monthly subscription, configured for each client's niche and brand. One agent works today, five are being written. Below is how we work and what that means for you — including the uncomfortable part.",
+    "absenceEyebrow": "What is missing from this site",
+    "absenceTitle": "Why there are no testimonials, logos or figures",
+    "absenceLead": "You have probably noticed already: this site has not a single testimonial, not one client logo and no sentence along the lines of «300 teams already use us».",
+    "absenceBody": "Not out of modesty. Because we do not have them — and what you do not have can only be invented. A recommendation written by us in somebody else's name would be the first thing we did in our relationship with you, and it would be a lie.",
+    "absenceOutro": "When there are clients willing to be named, they will appear here under their own names. Until then the page stays without them, and what is left for you to judge is what you can see: the product, the price, and the way we write about both.",
+    "workEyebrow": "How we work",
+    "workTitle": "Five rules, every one of them checkable on this site",
+    "workLead": "These are not values off an about page. Each one shows somewhere on the site, and the link on the right goes exactly where it shows.",
+    "checkLabel": "Check it",
+    "principles": [
+      {
+        "title": "The scenario is written for your niche",
+        "text": "Furniture starts from the wall, solar starts from the consumption, a clinic starts from the fear of pain. We do not put up the same bot with a different logo.",
+        "href": "/industries"
+      },
+      {
+        "title": "We also write what the agent does not do",
+        "text": "Every agent page has a column of what it does not do. It is more useful than the feature list: that is where you see the limits you will live with daily.",
+        "href": "/agents/chatbot"
+      },
+      {
+        "title": "We do not sell as finished what is still being written",
+        "text": "Unreleased agents are marked «coming soon» everywhere they appear, and their pages say in the future tense what they will do.",
+        "href": "/agents"
+      },
+      {
+        "title": "The price is written on the site",
+        "text": "The monthly subscription and the setup fee are public. «Price on request» exists only where the work is different every time.",
+        "href": "/pricing"
+      },
+      {
+        "title": "Each client's data stays separate",
+        "text": "We do not mix accounts and we do not train anything on one client's data for another. It is written in the privacy policy too, not only here.",
+        "href": "/privacy"
+      }
+    ],
+    "nowEyebrow": "Where we are now",
+    "nowTitle": "One agent works, five are being written",
+    "nowLead": "The chatbot sells and works today. The other five join the Growth package as they ship. That has two sides and we write both of them.",
+    "gainTitle": "What you gain by coming in now",
+    "gain": [
+      "Today's price stays yours for the package you take.",
+      "We write the scenario together with you rather than adapting it from a template. With a handful of clients that is possible; with a hundred it would not be.",
+      "What you ask for now has a real chance of reaching the product, precisely because the product is still being written."
+    ],
+    "riskTitle": "What you risk",
+    "risk": [
+      "Five agents out of six do not work yet, and we will not give you a date on which they will.",
+      "We do not have years of running this for hundreds of clients behind us. We have what you can see on this site.",
+      "If an agent does not appear within a reasonable time, you leave — and it is right that you can."
+    ],
+    "closingTitle": "The simplest thing is to ask us a hard question",
+    "closingLead": "At the demo we show you the conversation written on your own real case. If something does not fit, we say so then — not three conversations later."
+  }
+}
