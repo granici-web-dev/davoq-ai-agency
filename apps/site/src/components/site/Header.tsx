@@ -100,7 +100,7 @@ export function Header() {
           aria-label="davoq"
           className="text-chalk transition-opacity hover:opacity-70"
         >
-          <Logo height={22} />
+          <Logo className="h-7 sm:h-11" />
         </Link>
 
         {/* Капсула с пунктами. Фон уплотняется при прокрутке — до прокрутки

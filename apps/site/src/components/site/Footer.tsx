@@ -25,7 +25,7 @@ export function Footer() {
       <div className="mx-auto max-w-7xl px-6 py-16 sm:px-8">
         <div className="grid gap-12 lg:grid-cols-[1.4fr_repeat(3,1fr)]">
           <div className="max-w-sm">
-            <Logo height={20} className="text-chalk" />
+            <Logo className="h-9 text-chalk" />
             <p className="mt-4 text-sm leading-relaxed text-chalk-faint">{t('note')}</p>
           </div>
 
