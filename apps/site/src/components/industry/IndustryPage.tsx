@@ -8,14 +8,6 @@ import { AgentDay } from './AgentDay';
 import { SectionHead } from '@/components/agent/SectionHead';
 import { AGENTS, type Industry } from '@/lib/catalog';
 
-/**
- * Ниши, у которых написана полная страница. Остальные пока собираются
- * из каталога: название, одна строка, разговор из трёх реплик и агенты.
- * Это меньше, чем нужно для продвижения, но честно — в отличие от
- * страницы, набитой водой ради объёма.
- */
-const FULL = new Set(['mobilier']);
-
 interface Row {
   k: string;
   v: string;
@@ -40,7 +32,7 @@ export function IndustryPage({ industry }: { industry: Industry }) {
   const tStatus = useTranslations('status');
   const tNav = useTranslations('nav');
 
-  const full = FULL.has(industry.slug);
+  const full = industry.full === true;
   const questions = full ? (t.raw('questions') as { q: string; a: string }[]) : [];
   const rows = full ? (t.raw('leadCard.rows') as Row[]) : [];
   const faqCount = full ? (t.raw('faq') as unknown[]).length : 0;

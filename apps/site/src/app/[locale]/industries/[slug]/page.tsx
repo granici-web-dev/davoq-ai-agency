@@ -17,23 +17,23 @@ export function generateStaticParams() {
   );
 }
 
-/** Ниши с написанной страницей. Дублирует список в компоненте намеренно:
- *  метаданные считаются на сервере до отрисовки и до messages компонента. */
-const FULL = new Set(['mobilier']);
-
 export async function generateMetadata({
   params,
 }: {
   params: Promise<{ locale: string; slug: string }>;
 }): Promise<Metadata> {
   const { locale, slug } = await params;
-  if (!industryBySlug(slug)) return {};
+  const industry = industryBySlug(slug);
+  if (!industry) return {};
 
   const t = await getTranslations({ locale, namespace: 'industries' });
   let title = t(`${slug}.name`);
   let description = t(`${slug}.short`);
 
-  if (FULL.has(slug)) {
+  /* Оптимизированный под поиск заголовок принадлежит той нише, у которой
+     написана страница. Признак берётся из каталога — того же места, что
+     и у компонента: два списка «полных ниш» уже расходились однажды. */
+  if (industry.full) {
     const page = await getTranslations({ locale, namespace: `industryPage.${slug}` });
     title = page('metaTitle');
     description = page('metaDescription');

@@ -1261,6 +1261,601 @@
         ],
         "scale": "The day, hour by hour"
       }
+    },
+    "constructii": {
+      "metaTitle": "AI agents for renovation companies — chatbot, quotes, job status",
+      "metaDescription": "AI agents for renovation and interior design firms: they answer price-per-square-metre questions, collect the floor area and the state of the space before a site visit, and tell the client at every stage of the job.",
+      "title": "AI agents for renovation and interior design",
+      "lead": "They answer price questions from your own quote rules, collect the floor area and the state of the space before you send anyone out, and tell the client at every stage of the job. Each one is a separate product — take only the ones you need.",
+      "questionsTitle": "The questions that come before any quote",
+      "questions": [
+        {
+          "q": "«How much does it cost to renovate a 60-square-metre flat?»",
+          "a": "It depends on what is being done and on what is there now. The agent asks exactly that — the scope of work, the state of the wiring and plumbing, whether walls are moving — and gives a range instead of «it depends»."
+        },
+        {
+          "q": "«Are materials included?»",
+          "a": "The most common misunderstanding in the trade, and the one that sours the relationship halfway through. The agent says up front what is in your price and what is bought separately, in the same words every time."
+        },
+        {
+          "q": "«When can you start?»",
+          "a": "The date depends on which crews are free. The agent answers with the window you marked yourself, not with one invented to avoid losing the client."
+        },
+        {
+          "q": "«Will you come and look?»",
+          "a": "A site visit costs half a person-day. The agent collects the floor area, the age of the building and the photos beforehand, so the visit is not wasted."
+        }
+      ],
+      "agents": {
+        "chatbot": "It answers price-per-square-metre and materials questions from your own quote rules.",
+        "voice-assistant": "It picks up calls from the site, where nobody can answer, and books the assessment visit.",
+        "configurator": "The client picks the scope, the floor area and the finishes; the range is calculated by your own norms.",
+        "order-status": "It reports at every stage — strip-out, services, finishes — without anyone on site writing the message.",
+        "content-engine": "From the same finished job it makes «before and after» posts, in each platform's format."
+      },
+      "leadTitle": "The quote starts from a record, not from a phone call",
+      "leadLead": "The whole conversation collects into one record. Your estimator opens it and can price, without calling to find out how big the flat is.",
+      "leadCard": {
+        "title": "Request",
+        "number": "No. 318",
+        "rows": [
+          {
+            "k": "Property",
+            "v": "Flat, 2 rooms"
+          },
+          {
+            "k": "Area",
+            "v": "58 m², building from 1986"
+          },
+          {
+            "k": "Scope",
+            "v": "Full, including new services"
+          },
+          {
+            "k": "Walls",
+            "v": "One moves, kitchen to hallway"
+          },
+          {
+            "k": "Range discussed",
+            "v": "185,000 – 240,000 lei"
+          },
+          {
+            "k": "Next step",
+            "v": "On-site assessment, Tuesday"
+          }
+        ],
+        "footer": "The photos the client sent are attached to the record."
+      },
+      "faqTitle": "What renovation firms ask before they start",
+      "faq": [
+        {
+          "q": "My quote has three hundred line items. How can the agent answer?",
+          "a": "It does not answer from the quote, but from the rules you build it with: a price per square metre for each scope, coefficients for the state of the space, what is in and what is out. Those give a range; the exact quote stays with the estimator."
+        },
+        {
+          "q": "Clients ask for prices and then disappear. What does this change?",
+          "a": "What you are left with. Today a conversation that did not become a job leaves nothing behind. With the agent it leaves a record with area, scope and budget — a list you can work through in winter, when there are fewer sites."
+        },
+        {
+          "q": "We work both with designers and directly with owners. Does it get confused?",
+          "a": "No, if you say up front that there are two flows. Someone arriving with a designer's drawings gets different questions than someone arriving with an idea and a photo from the internet."
+        },
+        {
+          "q": "Who tells the client when the job runs late?",
+          "a": "The agent, if you mark the delay. You write the reason or you do not write one at all — the client learns that the date has moved and what the new one is. A delay announced costs one phone call; a delay discovered on site costs the referral."
+        }
+      ],
+      "closingTitle": "See the agents working on your own quote",
+      "closingLead": "At the demo we take a few line items from your quote and show you exactly what it would answer a real client.",
+      "day": {
+        "title": "A day on site",
+        "label": "Example",
+        "note": "This is what a day looks like with all the agents working. The chatbot is available today; the others are being built.",
+        "entries": [
+          {
+            "time": "07:50",
+            "agent": "Order status",
+            "text": "Told the client that strip-out starts today and that work runs until 17:00."
+          },
+          {
+            "time": "11:30",
+            "agent": "Chatbot",
+            "text": "Explained what is in the price per square metre and what is bought separately."
+          },
+          {
+            "time": "14:15",
+            "agent": "Phone assistant",
+            "text": "Took a call while the crew was pouring screed and booked the assessment for Tuesday."
+          },
+          {
+            "time": "17:40",
+            "agent": "Configurator",
+            "text": "A client configured a 58 m² renovation and got the price range."
+          },
+          {
+            "time": "21:35",
+            "agent": "Chatbot",
+            "text": "Collected the area and the building's age for a two-room flat."
+          }
+        ],
+        "scale": "The day, hour by hour"
+      }
+    },
+    "imobiliare": {
+      "metaTitle": "AI agents for estate agencies and developers — chatbot and viewings",
+      "metaDescription": "AI agents that qualify property leads: they find out the budget, the area and the timing, propose a viewing and put it in the calendar, then come back to those who went quiet.",
+      "title": "AI agents for real estate",
+      "lead": "They find out the budget, the area and the timing in the first questions, propose a viewing and put it in the calendar, and come back to those who went quiet at the right moment. Your agent gets a qualified lead, not «somebody wrote in».",
+      "questionsTitle": "The questions that repeat on every listing",
+      "questions": [
+        {
+          "q": "«What is the final price, commission included?»",
+          "a": "Asked on every listing, and an answer that takes three messages loses the person. The agent says what is in the price and what is paid separately, from your own rules."
+        },
+        {
+          "q": "«Can I pay in instalments from the developer?»",
+          "a": "The terms differ from project to project and change during the sale. The agent answers with what is valid today, not with what the last brochure said."
+        },
+        {
+          "q": "«When can I see it?»",
+          "a": "Viewings get lost between messages and the agent's own schedule. The agent sees the free slots, proposes two and confirms."
+        },
+        {
+          "q": "«What is nearby — school, parking, transport?»",
+          "a": "Often the question that decides it, and one answered ten times a day by retyping the same text. The agent has it written once, correctly."
+        }
+      ],
+      "agents": {
+        "chatbot": "It answers questions about price, instalments and specification, from the terms valid today.",
+        "voice-assistant": "It picks up calls while you are at a viewing and books the next one straight into the calendar.",
+        "follow-up": "It comes back to those who saw the flat and went quiet — once, at the moment it still makes sense.",
+        "order-status": "It tells the buyer at every stage: reservation, contract, notary, keys.",
+        "content-engine": "From one photographed flat it makes the posts for social, in each platform's format."
+      },
+      "leadTitle": "Your agent gets a qualified lead",
+      "leadLead": "The budget, the area and the timing are established before the first phone call, and the viewing is already proposed.",
+      "leadCard": {
+        "title": "Lead",
+        "number": "No. 2207",
+        "rows": [
+          {
+            "k": "Looking for",
+            "v": "2 rooms, new build"
+          },
+          {
+            "k": "Area",
+            "v": "Two districts, close to a school"
+          },
+          {
+            "k": "Budget",
+            "v": "68,000 – 79,000 €"
+          },
+          {
+            "k": "Payment",
+            "v": "Mortgage, 20% deposit"
+          },
+          {
+            "k": "Timing",
+            "v": "Moving in spring"
+          },
+          {
+            "k": "Next step",
+            "v": "Viewing Thursday, 18:00"
+          }
+        ],
+        "footer": "The full conversation is attached to the lead."
+      },
+      "faqTitle": "What agencies ask before they start",
+      "faq": [
+        {
+          "q": "I have a hundred listings that change weekly. Who keeps them current?",
+          "a": "The agent reads your list of properties wherever you already keep it — spreadsheet, CRM or feed. What you took off the market disappears from the answers too: it does not answer about a flat that is sold."
+        },
+        {
+          "q": "I do not want the agent giving away the lowest price I would accept.",
+          "a": "It does not. The agent quotes the listed price and nothing below it. Negotiation stays with your agent, and the record notes that the person asked about a discount — which is useful to know before the call."
+        },
+        {
+          "q": "Our leads come from portals, not from our site.",
+          "a": "Then the agent works where the conversation arrives: chat on the site, messaging or the phone. A buyer who came from a portal and calls in the evening still gets an answer rather than a missed call."
+        },
+        {
+          "q": "Who answers when the agent is at a viewing?",
+          "a": "The phone assistant. It takes the call, finds out what the person is looking for and proposes a viewing. Today's alternative is a missed call that does not even leave a number behind."
+        }
+      ],
+      "closingTitle": "See the agents working on your own listings",
+      "closingLead": "At the demo we take a few of your real listings and show you what it would answer a buyer.",
+      "day": {
+        "title": "A day at the agency",
+        "label": "Example",
+        "note": "This is what a day looks like with all the agents working. The chatbot is available today; the others are being built.",
+        "entries": [
+          {
+            "time": "08:15",
+            "agent": "Chatbot",
+            "text": "Explained what is in the price and what is paid separately, on a new-build flat."
+          },
+          {
+            "time": "11:40",
+            "agent": "Phone assistant",
+            "text": "Took a call during a viewing and proposed two free slots for Thursday."
+          },
+          {
+            "time": "15:05",
+            "agent": "Order status",
+            "text": "Told the buyer that the file has gone to the notary."
+          },
+          {
+            "time": "19:20",
+            "agent": "Follow-up",
+            "text": "Came back to a client who saw the flat ten days ago and went quiet."
+          },
+          {
+            "time": "22:40",
+            "agent": "Chatbot",
+            "text": "Established the budget and the area for a buyer looking at two-room flats."
+          }
+        ],
+        "scale": "The day, hour by hour"
+      }
+    },
+    "auto": {
+      "metaTitle": "AI agents for car dealers — chatbot, test drives and order status",
+      "metaDescription": "AI agents for car dealerships: they answer questions on specification and finance, book test drives into the calendar, come back to those who went quiet, and report where an ordered car is.",
+      "title": "AI agents for car dealers",
+      "lead": "They answer specification and finance questions in one conversation, book the test drive straight into the calendar, come back to those who went quiet and report where the ordered car is. Each one is a separate product.",
+      "questionsTitle": "The questions asked before anyone walks into the showroom",
+      "questions": [
+        {
+          "q": "«What would the monthly payment be on this car?»",
+          "a": "It depends on the deposit, the term and the income — three questions, not one. The agent asks them in order and gives a range from your own terms, without promising any approval."
+        },
+        {
+          "q": "«Do you have it in stock, in white?»",
+          "a": "The question is about one specific configuration, and the answer sits in stock that changes daily. The agent reads your stock and says what is there today, not what was there on Monday."
+        },
+        {
+          "q": "«How long is the wait if I order one?»",
+          "a": "The factory lead time is no secret, but it is not a fixed number either. The agent gives the window you marked, and once the car is ordered it reports when that window moves."
+        },
+        {
+          "q": "«Can I have a test drive on Saturday?»",
+          "a": "Saturday is asked for most often, and that is exactly when the showroom is full. The agent sees the free slots, proposes two and confirms."
+        }
+      ],
+      "agents": {
+        "chatbot": "It answers questions on configurations, equipment and finance terms, from your own data.",
+        "voice-assistant": "It picks up calls when every consultant is with a client and books the test drive into the calendar.",
+        "follow-up": "It comes back to the person who took a test drive and never called — once, at the right moment.",
+        "order-status": "It reports at every stage of an ordered car, right up to handover day.",
+        "content-engine": "From the cars in stock and from handovers it makes the posts for social."
+      },
+      "leadTitle": "The consultant gets a record, not «somebody asked about an SUV»",
+      "leadLead": "The configuration, the budget and the form of payment are established before the first phone call, and the test drive is already proposed.",
+      "leadCard": {
+        "title": "Request",
+        "number": "No. 771",
+        "rows": [
+          {
+            "k": "Model",
+            "v": "Compact SUV, petrol"
+          },
+          {
+            "k": "Configuration",
+            "v": "Mid trim, sunroof, 360 camera"
+          },
+          {
+            "k": "Colour",
+            "v": "White or grey, not black"
+          },
+          {
+            "k": "Finance",
+            "v": "Lease, 30% deposit, 5 years"
+          },
+          {
+            "k": "Part exchange",
+            "v": "Current car, 7 years old"
+          },
+          {
+            "k": "Next step",
+            "v": "Test drive Saturday, 11:00"
+          }
+        ],
+        "footer": "The full conversation is attached to the record."
+      },
+      "faqTitle": "What dealers ask before they start",
+      "faq": [
+        {
+          "q": "Stock changes daily. How does the agent know what we have?",
+          "a": "From your own stock list, wherever you keep it. What has sold disappears from the answers the same day: the agent does not offer a car that is no longer on the forecourt."
+        },
+        {
+          "q": "I do not want it promising credit approvals.",
+          "a": "It does not. It says what terms you have and what the payment would be at a given deposit, then says plainly that approval comes from the bank. A «yes» from a robot becomes a complaint at the desk."
+        },
+        {
+          "q": "The service department also takes dozens of calls a day. Does this help?",
+          "a": "Yes, but differently: the phone assistant takes the call, finds out the car and the problem and puts the booking into the service calendar. The diagnosis stays with the mechanic — the agent does not say what is wrong with the car."
+        },
+        {
+          "q": "What do we do about people who test drive and vanish?",
+          "a": "That is where follow-up works: it comes back once, a few days later, referring to what was actually discussed — not with a routine message. If the person replies, the follow-ups stop by themselves."
+        }
+      ],
+      "closingTitle": "See the agents working on your own stock",
+      "closingLead": "At the demo we take a few cars from your real stock and show you what it would answer a client.",
+      "day": {
+        "title": "A day in the showroom",
+        "label": "Example",
+        "note": "This is what a day looks like with all the agents working. The chatbot is available today; the others are being built.",
+        "entries": [
+          {
+            "time": "09:10",
+            "agent": "Chatbot",
+            "text": "Said which configurations are in stock today in white and in grey."
+          },
+          {
+            "time": "12:45",
+            "agent": "Phone assistant",
+            "text": "Took a call when every consultant was with a client and booked a test drive."
+          },
+          {
+            "time": "16:30",
+            "agent": "Order status",
+            "text": "Told a client that their ordered car has left the port."
+          },
+          {
+            "time": "18:55",
+            "agent": "Follow-up",
+            "text": "Came back to the person who test drove last week."
+          },
+          {
+            "time": "21:50",
+            "agent": "Chatbot",
+            "text": "Gave the payment range at a 30% deposit and left the request for the consultant."
+          }
+        ],
+        "scale": "The day, hour by hour"
+      }
+    },
+    "energie": {
+      "metaTitle": "AI agents for solar and HVAC — chatbot and payback calculation",
+      "metaDescription": "AI agents for solar PV and HVAC installers: they collect the consumption and the roof data, give a price range with the payback period, and report at every stage of the installation.",
+      "title": "AI agents for solar panels and HVAC",
+      "lead": "They collect the monthly consumption and the roof data, give a price range with a payback period worked out on that person's own case, and tell the client at every stage of the installation. Each one is a separate product.",
+      "questionsTitle": "The questions that come before any quote",
+      "questions": [
+        {
+          "q": "«How much would a system for my house cost?»",
+          "a": "Without the consumption and without the roof, any figure is a guess. The agent asks for last month's bill and a few facts about the roof, then gives a range — not a number that will change anyway."
+        },
+        {
+          "q": "«How long until it pays for itself?»",
+          "a": "The question that decides the purchase. The agent estimates it from that person's real consumption and from your price, not from a brochure example built on somebody else's usage."
+        },
+        {
+          "q": "«Can I get it with a subsidy?»",
+          "a": "The terms change and are easy to get wrong. The agent says what is valid today at your company and which documents are needed, in the same words every time."
+        },
+        {
+          "q": "«Will my roof take it?»",
+          "a": "The answer needs a survey, but the questions that come before it are asked once: the covering, the age of the house, the orientation. The agent collects them before anyone drives out."
+        }
+      ],
+      "agents": {
+        "chatbot": "It answers questions on prices, subsidies and warranties, from the terms valid today at your company.",
+        "voice-assistant": "It picks up calls while the crews are on a roof and books the technical survey.",
+        "configurator": "The client gives the consumption and the roof data; out comes the system size, the price range and the payback.",
+        "order-status": "It reports at every stage: approval, delivery, installation, commissioning.",
+        "content-engine": "From finished installations it makes posts with the site, the installed capacity and the saving."
+      },
+      "leadTitle": "The engineer gets the data, not «somebody asked about solar»",
+      "leadLead": "The consumption, the roof and the type of system are established before anyone drives out. The technical survey is already proposed.",
+      "leadCard": {
+        "title": "Request",
+        "number": "No. 604",
+        "rows": [
+          {
+            "k": "Property",
+            "v": "Detached house, two storeys"
+          },
+          {
+            "k": "Consumption",
+            "v": "540 kWh a month, yearly average"
+          },
+          {
+            "k": "Roof",
+            "v": "Metal tile, 62 m², south-east"
+          },
+          {
+            "k": "System",
+            "v": "On-grid, no batteries"
+          },
+          {
+            "k": "Range discussed",
+            "v": "5.8 – 7.2 kW · 4,800 – 6,100 €"
+          },
+          {
+            "k": "Next step",
+            "v": "Technical survey, Thursday"
+          }
+        ],
+        "footer": "The bill the client sent is attached to the record."
+      },
+      "faqTitle": "What energy companies ask before they start",
+      "faq": [
+        {
+          "q": "Payback depends on dozens of things. Can the agent calculate it?",
+          "a": "It can estimate it, from your formula and that person's real consumption — and it presents it as exactly that: a range, not a promise. The exact calculation stays with the engineer, after the survey."
+        },
+        {
+          "q": "Subsidies change. Who updates them?",
+          "a": "You do, in one place, and the agent answers from it. That is precisely why we do not keep the terms inside the agent's own text: a change in the rules should not mean rewriting it."
+        },
+        {
+          "q": "Half our calls are from people who will never buy.",
+          "a": "And it is useful to find that out in three questions rather than in a site visit. The agent asks for the consumption up front; someone who does not have it to hand is usually not at the buying stage yet — and someone who sends it in two minutes is."
+        },
+        {
+          "q": "Installation takes weeks and clients call. What changes?",
+          "a": "They call less, because they find out on their own. The status agent reports at every stage you mark and, if a date moves, says so in time — not on the day the crew was supposed to arrive."
+        }
+      ],
+      "closingTitle": "See the agents working on your own systems",
+      "closingLead": "At the demo we take the systems you actually install and show you what range and what payback a real client would get.",
+      "day": {
+        "title": "A day at the company",
+        "label": "Example",
+        "note": "This is what a day looks like with all the agents working. The chatbot is available today; the others are being built.",
+        "entries": [
+          {
+            "time": "08:25",
+            "agent": "Chatbot",
+            "text": "Explained which documents the subsidy needs, from today's terms."
+          },
+          {
+            "time": "13:10",
+            "agent": "Configurator",
+            "text": "A client gave the consumption and the roof and got the system size and the payback."
+          },
+          {
+            "time": "15:50",
+            "agent": "Phone assistant",
+            "text": "Took a call while the crew was on a roof and booked the technical survey."
+          },
+          {
+            "time": "17:35",
+            "agent": "Order status",
+            "text": "Told a client the system passed approval and delivery is next."
+          },
+          {
+            "time": "21:15",
+            "agent": "Chatbot",
+            "text": "Asked for last month's bill and left the request for the engineer."
+          }
+        ],
+        "scale": "The day, hour by hour"
+      }
+    },
+    "clinici": {
+      "metaTitle": "AI agents for dental and aesthetic clinics — bookings and questions",
+      "metaDescription": "AI agents for clinics: they answer questions about price, pain and recovery, book patients into the clinic's calendar and remind them of the appointment. They do not diagnose.",
+      "title": "AI agents for dentistry and aesthetic medicine",
+      "lead": "They answer the questions a patient finds hard to ask a person — does it hurt, what does it cost, how long is the recovery — and book them straight into the clinic's calendar. The diagnosis stays with the doctor: the agent does not touch it.",
+      "questionsTitle": "The questions that delay the visit by months",
+      "questions": [
+        {
+          "q": "«Does it hurt?»",
+          "a": "The question that delays the visit longest, and one many people are too embarrassed to ask on the phone. The agent answers with what you wrote about anaesthesia and about what the patient feels — without promising that it will not hurt."
+        },
+        {
+          "q": "«How much does an implant cost?»",
+          "a": "The price depends on the system, on the bone and on what has to be done first. The agent gives your range and explains why it cannot be a single figure, instead of staying silent until the consultation."
+        },
+        {
+          "q": "«How long until I heal?»",
+          "a": "The recovery period decides when the person books time off. The agent gives it as a range, from the clinic's own protocol, and adds that the doctor confirms it at the consultation."
+        },
+        {
+          "q": "«Do you have a slot tomorrow?»",
+          "a": "The simplest question and the most often missed: reception is busy or the clinic is closed. The agent sees the free slots and books."
+        }
+      ],
+      "agents": {
+        "chatbot": "It answers questions about price, pain and recovery, from the clinic's own texts.",
+        "voice-assistant": "It picks up calls when reception is busy or the clinic is closed and books the patient into the calendar.",
+        "follow-up": "It reminds the patient of the appointment and comes back to the one who asked about price and never came.",
+        "order-status": "It reports when the lab work has arrived: crown, denture, aligners.",
+        "content-engine": "From the cases you are allowed to show it makes posts — only with the patient's consent and only what you approve."
+      },
+      "leadTitle": "Reception gets a record, not «somebody called»",
+      "leadLead": "What the patient wants, what worried them and which slot they are booked into. Reception confirms rather than reconstructs.",
+      "leadCard": {
+        "title": "Booking",
+        "number": "No. 4409",
+        "rows": [
+          {
+            "k": "Reason",
+            "v": "Implant, one missing molar"
+          },
+          {
+            "k": "Situation",
+            "v": "Extraction four months ago"
+          },
+          {
+            "k": "Asked about",
+            "v": "Anaesthesia and recovery time"
+          },
+          {
+            "k": "Price discussed",
+            "v": "Range, from the clinic's list"
+          },
+          {
+            "k": "Booked",
+            "v": "Tuesday, 10:30, consultation"
+          },
+          {
+            "k": "Reminder",
+            "v": "The day before, by SMS"
+          }
+        ],
+        "footer": "The full conversation is attached to the booking."
+      },
+      "faqTitle": "What clinics ask before they start",
+      "faq": [
+        {
+          "q": "The agent will not give medical advice, will it?",
+          "a": "No. It does not diagnose, does not recommend treatments and does not interpret symptoms or X-rays. It answers questions about organisation and price, from the texts you write, and sends everything medical to the consultation. That is a limit written into the configuration, not a recommendation."
+        },
+        {
+          "q": "What happens to patient data?",
+          "a": "It asks strictly what a booking needs: name, contact, reason for the visit. We do not build a medical file and we do not mix data between clinics. What the agent processes is set out in the contract and in a data processing agreement, in which the clinic is the controller."
+        },
+        {
+          "q": "Our reception already has a booking program.",
+          "a": "The agent works inside it, if there is somewhere to connect. The point is not another calendar, it is that the free slot in your calendar also gets filled at 22:00, when reception is at home."
+        },
+        {
+          "q": "How do we show cases without breaching confidentiality?",
+          "a": "Only with the patient's written consent and only what you have approved. The content agent publishes nothing by itself: it proposes, and you press — or you do not."
+        }
+      ],
+      "closingTitle": "See the agents working on the clinic's own list",
+      "closingLead": "At the demo we take a few procedures from your list and show you what it would answer a real patient.",
+      "day": {
+        "title": "A day at the clinic",
+        "label": "Example",
+        "note": "This is what a day looks like with all the agents working. The chatbot is available today; the others are being built.",
+        "entries": [
+          {
+            "time": "07:55",
+            "agent": "Follow-up",
+            "text": "Reminded a patient of today's consultation, at 10:30."
+          },
+          {
+            "time": "12:20",
+            "agent": "Chatbot",
+            "text": "Explained what anaesthesia means for an extraction, from the clinic's text."
+          },
+          {
+            "time": "16:45",
+            "agent": "Order status",
+            "text": "Told a patient that the crown has arrived from the lab."
+          },
+          {
+            "time": "20:10",
+            "agent": "Phone assistant",
+            "text": "Took a call after closing and booked a consultation for Thursday."
+          },
+          {
+            "time": "23:05",
+            "agent": "Chatbot",
+            "text": "Gave the price range for an implant and left the request for reception."
+          }
+        ],
+        "scale": "The day, hour by hour"
+      }
     }
   },
   "plans": {

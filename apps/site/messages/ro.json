@@ -1261,6 +1261,601 @@
         ],
         "scale": "Ziua, ora cu oră"
       }
+    },
+    "constructii": {
+      "metaTitle": "Agenți AI pentru firme de renovări — chatbot, deviz, statusul lucrării",
+      "metaDescription": "Agenți AI pentru renovări și design interior: răspund la întrebările de preț pe metru pătrat, adună metrajul și starea spațiului înainte de deplasare și anunță clientul la fiecare etapă a șantierului.",
+      "title": "Agenți AI pentru renovări și design interior",
+      "lead": "Răspund la întrebările de preț din devizul dumneavoastră, adună metrajul și starea spațiului înainte să trimiteți pe cineva la fața locului și anunță clientul la fiecare etapă a lucrării. Fiecare este un produs separat — luați doar pe cei de care aveți nevoie.",
+      "questionsTitle": "Întrebările pe care le primiți înainte de orice deviz",
+      "questions": [
+        {
+          "q": "«Cât costă renovarea unui apartament de 60 de metri?»",
+          "a": "Depinde de ce se face și de ce este acum acolo. Agentul întreabă exact asta — regimul lucrării, starea instalațiilor, dacă se mută pereți — și dă un interval, în loc de «depinde»."
+        },
+        {
+          "q": "«Materialele sunt incluse?»",
+          "a": "Cea mai frecventă neînțelegere din domeniu, și cea care strică relația la mijlocul lucrării. Agentul spune din start ce intră în prețul dumneavoastră și ce se cumpără separat, cu aceleași cuvinte de fiecare dată."
+        },
+        {
+          "q": "«Când puteți începe?»",
+          "a": "Termenul depinde de echipele libere. Agentul răspunde cu perioada pe care ați marcat-o dumneavoastră, nu cu una inventată ca să nu piardă clientul."
+        },
+        {
+          "q": "«Veniți să vedeți?»",
+          "a": "O deplasare la fața locului costă o jumătate de zi de om. Agentul adună metrajul, anul blocului și fotografiile înainte, ca deplasarea să nu fie în gol."
+        }
+      ],
+      "agents": {
+        "chatbot": "Răspunde la întrebările de preț pe metru pătrat și de materiale, din devizul dumneavoastră.",
+        "voice-assistant": "Preia apelurile de pe șantier, unde nimeni nu poate răspunde, și programează evaluarea.",
+        "configurator": "Clientul alege regimul lucrării, metrajul și finisajele; intervalul se calculează după normele dumneavoastră.",
+        "order-status": "Anunță la fiecare etapă — demolare, instalații, finisaje — fără ca cineva de pe șantier să scrie mesajul.",
+        "content-engine": "Din aceeași lucrare terminată face «înainte și după» pentru rețele, în formatul fiecărei platforme."
+      },
+      "leadTitle": "Devizul începe de la o fișă, nu de la un telefon",
+      "leadLead": "Toată conversația se strânge într-o fișă. Devizantul o deschide și poate calcula, fără să sune ca să afle ce metraj are apartamentul.",
+      "leadCard": {
+        "title": "Cerere",
+        "number": "№ 318",
+        "rows": [
+          {
+            "k": "Obiect",
+            "v": "Apartament, 2 camere"
+          },
+          {
+            "k": "Suprafață",
+            "v": "58 m², bloc din 1986"
+          },
+          {
+            "k": "Regim",
+            "v": "Capitală, cu schimbarea instalațiilor"
+          },
+          {
+            "k": "Pereți",
+            "v": "Se mută unul, între bucătărie și hol"
+          },
+          {
+            "k": "Interval discutat",
+            "v": "185 000 – 240 000 lei"
+          },
+          {
+            "k": "Pas următor",
+            "v": "Evaluare la fața locului, marți"
+          }
+        ],
+        "footer": "Fotografiile trimise de client sunt atașate la fișă."
+      },
+      "faqTitle": "Ce întreabă firmele de renovări înainte să înceapă",
+      "faq": [
+        {
+          "q": "Devizul meu are trei sute de poziții. Cum poate agentul să răspundă?",
+          "a": "Nu răspunde din deviz, ci din regulile după care îl faceți: preț pe metru pătrat pentru fiecare regim, coeficienți pentru starea spațiului, ce intră și ce nu. Din ele iese un interval; devizul exact rămâne al devizantului."
+        },
+        {
+          "q": "Clienții cer prețuri, apoi dispar. Ce schimbă asta?",
+          "a": "Ce vă rămâne. Azi, dintr-o discuție care nu s-a transformat în comandă nu rămâne nimic. Cu agentul rămâne o fișă cu metraj, regim și buget — adică o listă cu care se poate lucra iarna, când șantierele sunt mai puține."
+        },
+        {
+          "q": "Lucrăm și cu designeri, și direct cu proprietarii. Se încurcă?",
+          "a": "Nu, dacă spuneți din start că sunt două fluxuri. Cine vine cu proiect de la designer primește alte întrebări decât cine vine cu o idee și o poză de pe internet."
+        },
+        {
+          "q": "Cine anunță clientul când lucrarea întârzie?",
+          "a": "Agentul, dacă marcați întârzierea. Motivul îl scrieți dumneavoastră sau nu îl scrieți deloc — clientul află că termenul s-a mutat și data nouă. O întârziere anunțată costă un telefon; una descoperită la fața locului costă recomandarea."
+        }
+      ],
+      "closingTitle": "Vedeți agenții la lucru pe devizul dumneavoastră",
+      "closingLead": "La demonstrație luăm câteva poziții din devizul dumneavoastră și vă arătăm exact ce ar răspunde unui client real.",
+      "day": {
+        "title": "O zi pe șantier",
+        "label": "Exemplu",
+        "note": "Așa arată o zi în care lucrează toți agenții. Astăzi este disponibil chatbotul; ceilalți sunt în lucru.",
+        "entries": [
+          {
+            "time": "07:50",
+            "agent": "Statusul comenzii",
+            "text": "A anunțat clientul că astăzi începe demolarea și că se lucrează până la ora 17."
+          },
+          {
+            "time": "11:30",
+            "agent": "Chatbot",
+            "text": "A spus ce intră în prețul pe metru pătrat și ce se cumpără separat."
+          },
+          {
+            "time": "14:15",
+            "agent": "Asistent telefonic",
+            "text": "A preluat un apel în timp ce echipa turna șapă și a programat evaluarea pentru marți."
+          },
+          {
+            "time": "17:40",
+            "agent": "Configurator",
+            "text": "Un client a configurat o renovare de 58 m² și a primit intervalul de preț."
+          },
+          {
+            "time": "21:35",
+            "agent": "Chatbot",
+            "text": "A adunat metrajul și anul blocului pentru un apartament cu două camere."
+          }
+        ],
+        "scale": "Ziua, ora cu oră"
+      }
+    },
+    "imobiliare": {
+      "metaTitle": "Agenți AI pentru agenții imobiliare și dezvoltatori — chatbot și vizionări",
+      "metaDescription": "Agenți AI care califică lead-urile imobiliare: află bugetul, zona și termenul, propun vizionarea și o pun în calendar, apoi revin la cei care s-au gândit și au tăcut.",
+      "title": "Agenți AI pentru imobiliare",
+      "lead": "Află bugetul, zona și termenul în primele întrebări, propun vizionarea și o pun în calendar, iar la cei care au tăcut revin la momentul potrivit. Agentul imobiliar primește lead-ul deja calificat, nu «a scris cineva».",
+      "questionsTitle": "Întrebările care se repetă la fiecare anunț",
+      "questions": [
+        {
+          "q": "«Care e prețul final, cu tot cu comision?»",
+          "a": "Se întreabă la fiecare anunț, iar un răspuns care vine în trei mesaje pierde omul. Agentul spune ce intră în preț și ce se plătește separat, din regulile dumneavoastră."
+        },
+        {
+          "q": "«Se poate în rate de la dezvoltator?»",
+          "a": "Condițiile diferă de la proiect la proiect și se schimbă în timpul vânzării. Agentul răspunde cu ce este valabil azi, nu cu ce scria în broșura de anul trecut."
+        },
+        {
+          "q": "«Când pot să văd?»",
+          "a": "Vizionarea se pierde între mesaje și programul agentului imobiliar. Agentul vede orele libere, propune două și confirmă."
+        },
+        {
+          "q": "«Ce e în jur — școală, parcare, transport?»",
+          "a": "Întrebarea care de multe ori hotărăște, și la care se răspunde de zece ori pe zi cu același text scris din nou. Agentul îl are scris o dată, corect."
+        }
+      ],
+      "agents": {
+        "chatbot": "Răspunde la întrebările despre preț, rate și dotări, din condițiile valabile azi.",
+        "voice-assistant": "Preia apelurile în timp ce sunteți la o vizionare și o programează pe următoarea, direct în calendar.",
+        "follow-up": "Revine la cei care au văzut apartamentul și au tăcut — o dată, la momentul în care mai are sens.",
+        "order-status": "Anunță cumpărătorul la fiecare etapă: rezervare, contract, notar, predarea cheilor.",
+        "content-engine": "Dintr-un apartament fotografiat face postările pentru rețele, în formatul fiecărei platforme."
+      },
+      "leadTitle": "Agentul imobiliar primește un lead calificat",
+      "leadLead": "Bugetul, zona și termenul sunt aflate înainte de primul telefon, iar vizionarea este deja propusă.",
+      "leadCard": {
+        "title": "Lead",
+        "number": "№ 2207",
+        "rows": [
+          {
+            "k": "Caută",
+            "v": "2 camere, bloc nou"
+          },
+          {
+            "k": "Zonă",
+            "v": "Două sectoare, aproape de școală"
+          },
+          {
+            "k": "Buget",
+            "v": "68 000 – 79 000 €"
+          },
+          {
+            "k": "Plată",
+            "v": "Credit ipotecar, avans 20%"
+          },
+          {
+            "k": "Termen",
+            "v": "Se mută în primăvară"
+          },
+          {
+            "k": "Pas următor",
+            "v": "Vizionare joi, 18:00"
+          }
+        ],
+        "footer": "Conversația completă este atașată la lead."
+      },
+      "faqTitle": "Ce întreabă agențiile înainte să înceapă",
+      "faq": [
+        {
+          "q": "Am o sută de anunțuri care se schimbă săptămânal. Cine le ține la zi?",
+          "a": "Agentul citește lista dumneavoastră de obiecte acolo unde o țineți deja — foaie de calcul, CRM sau feed. Ce ați scos din vânzare dispare și din răspunsuri: nu se răspunde despre un apartament vândut."
+        },
+        {
+          "q": "Nu vreau ca agentul să dea prețul minim la care aș coborî.",
+          "a": "Nici nu îl dă. Agentul spune prețul din anunț și nimic sub el. Negocierea rămâne a agentului imobiliar, iar în fișă rămâne notat că omul a întrebat de reducere — ceea ce este o informație utilă înainte de telefon."
+        },
+        {
+          "q": "Lead-urile noastre vin de pe portaluri, nu de pe site.",
+          "a": "Atunci agentul lucrează acolo unde ajunge conversația: chat pe site, mesagerie sau telefon. Un cumpărător venit de pe portal care sună seara primește oricum un răspuns, nu un apel pierdut."
+        },
+        {
+          "q": "Cine răspunde când agentul imobiliar este la vizionare?",
+          "a": "Asistentul telefonic. Preia apelul, află ce caută omul și propune o vizionare. Alternativa de azi este un apel pierdut, din care nu rămâne nici măcar numărul."
+        }
+      ],
+      "closingTitle": "Vedeți agenții la lucru pe obiectele dumneavoastră",
+      "closingLead": "La demonstrație luăm câteva anunțuri reale de la dumneavoastră și vă arătăm ce ar răspunde unui cumpărător.",
+      "day": {
+        "title": "O zi în agenție",
+        "label": "Exemplu",
+        "note": "Așa arată o zi în care lucrează toți agenții. Astăzi este disponibil chatbotul; ceilalți sunt în lucru.",
+        "entries": [
+          {
+            "time": "08:15",
+            "agent": "Chatbot",
+            "text": "A răspuns ce intră în preț și ce se plătește separat, la un apartament din blocul nou."
+          },
+          {
+            "time": "11:40",
+            "agent": "Asistent telefonic",
+            "text": "A preluat un apel în timpul unei vizionări și a propus două ore libere pentru joi."
+          },
+          {
+            "time": "15:05",
+            "agent": "Statusul comenzii",
+            "text": "A anunțat cumpărătorul că dosarul a trecut la notar."
+          },
+          {
+            "time": "19:20",
+            "agent": "Follow-up",
+            "text": "A revenit la un client care a văzut apartamentul acum zece zile și a tăcut."
+          },
+          {
+            "time": "22:40",
+            "agent": "Chatbot",
+            "text": "A aflat bugetul și zona pentru un cumpărător care căuta două camere."
+          }
+        ],
+        "scale": "Ziua, ora cu oră"
+      }
+    },
+    "auto": {
+      "metaTitle": "Agenți AI pentru dealeri auto — chatbot, test drive și statusul comenzii",
+      "metaDescription": "Agenți AI pentru dealeri auto: răspund despre configurații și finanțare, programează test drive-ul în calendar, revin la cei care au tăcut și anunță când mașina comandată se apropie de livrare.",
+      "title": "Agenți AI pentru dealeri auto",
+      "lead": "Răspund despre configurație și finanțare într-o singură conversație, programează test drive-ul direct în calendar, revin la cei care au tăcut și anunță unde este mașina comandată. Fiecare este un produs separat.",
+      "questionsTitle": "Întrebările care se pun înainte de showroom",
+      "questions": [
+        {
+          "q": "«Ce rată iese la mașina asta?»",
+          "a": "Depinde de avans, de perioadă și de venit — trei întrebări, nu una. Agentul le pune în ordine și dă un interval din condițiile dumneavoastră, fără să promită vreo aprobare."
+        },
+        {
+          "q": "«O aveți pe stoc, în alb?»",
+          "a": "Se întreabă despre o configurație anume, iar răspunsul stă într-un stoc care se schimbă zilnic. Agentul citește stocul dumneavoastră și spune ce este azi, nu ce era luni."
+        },
+        {
+          "q": "«Cât se așteaptă dacă o comand?»",
+          "a": "Termenul de la fabrică nu este un secret, dar nici o cifră fixă. Agentul spune perioada pe care ați marcat-o, iar după comandă anunță când se schimbă."
+        },
+        {
+          "q": "«Se poate un test drive sâmbătă?»",
+          "a": "Sâmbăta se cere cel mai des și tot atunci showroomul este plin. Agentul vede orele libere, propune două și confirmă."
+        }
+      ],
+      "agents": {
+        "chatbot": "Răspunde despre configurații, dotări și condiții de finanțare, din datele dumneavoastră.",
+        "voice-assistant": "Preia apelurile când consultanții sunt cu clienți și programează test drive-ul în calendar.",
+        "follow-up": "Revine la cel care a făcut test drive și nu a mai sunat — o dată, la momentul potrivit.",
+        "order-status": "Anunță la fiecare etapă a mașinii comandate, până în ziua predării.",
+        "content-engine": "Din mașinile de pe stoc și din predări face postările pentru rețele."
+      },
+      "leadTitle": "Consultantul primește o fișă, nu «a întrebat cineva de un SUV»",
+      "leadLead": "Configurația, bugetul și forma de plată sunt aflate înainte de primul telefon, iar test drive-ul este deja propus.",
+      "leadCard": {
+        "title": "Cerere",
+        "number": "№ 771",
+        "rows": [
+          {
+            "k": "Model",
+            "v": "SUV compact, benzină"
+          },
+          {
+            "k": "Configurație",
+            "v": "Nivel mediu, trapă, cameră 360"
+          },
+          {
+            "k": "Culoare",
+            "v": "Alb sau gri, nu negru"
+          },
+          {
+            "k": "Finanțare",
+            "v": "Leasing, avans 30%, 5 ani"
+          },
+          {
+            "k": "La schimb",
+            "v": "Mașina actuală, 7 ani vechime"
+          },
+          {
+            "k": "Pas următor",
+            "v": "Test drive sâmbătă, 11:00"
+          }
+        ],
+        "footer": "Conversația completă este atașată la fișă."
+      },
+      "faqTitle": "Ce întreabă dealerii înainte să înceapă",
+      "faq": [
+        {
+          "q": "Stocul se schimbă zilnic. De unde știe agentul ce avem?",
+          "a": "Din lista dumneavoastră de stoc, acolo unde o țineți. Ce s-a vândut dispare din răspunsuri în aceeași zi: agentul nu propune o mașină care nu mai este pe platformă."
+        },
+        {
+          "q": "Nu vreau să promită aprobări de credit.",
+          "a": "Nici nu promite. Spune ce condiții aveți și ce rată ar ieși la un avans dat, apoi precizează că aprobarea o dă banca. Un «da» spus de un robot devine reclamație la ghișeu."
+        },
+        {
+          "q": "Service-ul primește și el zeci de apeluri pe zi. Ajută?",
+          "a": "Da, dar altfel: asistentul telefonic preia apelul, află mașina și problema și pune programarea în calendarul service-ului. Diagnosticul rămâne al mecanicului — agentul nu spune ce are mașina."
+        },
+        {
+          "q": "Ce facem cu cei care fac test drive și dispar?",
+          "a": "Aici lucrează follow-up-ul: revine o dată, la câteva zile, cu ce s-a discutat efectiv — nu cu un mesaj de rutină. Dacă omul răspunde, revenirile se opresc automat."
+        }
+      ],
+      "closingTitle": "Vedeți agenții la lucru pe stocul dumneavoastră",
+      "closingLead": "La demonstrație luăm câteva mașini din stocul dumneavoastră real și vă arătăm ce ar răspunde unui client.",
+      "day": {
+        "title": "O zi în showroom",
+        "label": "Exemplu",
+        "note": "Așa arată o zi în care lucrează toți agenții. Astăzi este disponibil chatbotul; ceilalți sunt în lucru.",
+        "entries": [
+          {
+            "time": "09:10",
+            "agent": "Chatbot",
+            "text": "A spus ce configurații sunt azi pe stoc în alb și în gri."
+          },
+          {
+            "time": "12:45",
+            "agent": "Asistent telefonic",
+            "text": "A preluat un apel când toți consultanții erau cu clienți și a programat un test drive."
+          },
+          {
+            "time": "16:30",
+            "agent": "Statusul comenzii",
+            "text": "A anunțat un client că mașina comandată a plecat din port."
+          },
+          {
+            "time": "18:55",
+            "agent": "Follow-up",
+            "text": "A revenit la cel care a făcut test drive săptămâna trecută."
+          },
+          {
+            "time": "21:50",
+            "agent": "Chatbot",
+            "text": "A dat intervalul de rată pentru un avans de 30% și a lăsat cererea consultantului."
+          }
+        ],
+        "scale": "Ziua, ora cu oră"
+      }
+    },
+    "energie": {
+      "metaTitle": "Agenți AI pentru panouri solare și HVAC — chatbot și calcul de amortizare",
+      "metaDescription": "Agenți AI pentru firmele de panouri fotovoltaice și HVAC: adună consumul și datele acoperișului, dau un interval de preț cu perioada de amortizare și anunță la fiecare etapă a montajului.",
+      "title": "Agenți AI pentru panouri solare și HVAC",
+      "lead": "Adună consumul lunar și datele acoperișului, dau un interval de preț cu perioada de amortizare calculată pe cazul omului și anunță clientul la fiecare etapă a montajului. Fiecare este un produs separat.",
+      "questionsTitle": "Întrebările care vin înaintea oricărei oferte",
+      "questions": [
+        {
+          "q": "«Cât costă un sistem pentru casa mea?»",
+          "a": "Fără consum și fără acoperiș, orice cifră este ghicită. Agentul cere factura ultimei luni și câteva date despre acoperiș, apoi dă un interval — nu o cifră care se va schimba oricum."
+        },
+        {
+          "q": "«În cât timp se amortizează?»",
+          "a": "Întrebarea care hotărăște cumpărarea. Agentul o estimează din consumul real al omului și din prețul dumneavoastră, nu dintr-un exemplu de broșură cu un consum care nu este al lui."
+        },
+        {
+          "q": "«Se poate cu subvenție?»",
+          "a": "Condițiile se schimbă și se încurcă ușor. Agentul spune ce este valabil azi la dumneavoastră și ce documente trebuie, cu aceleași cuvinte de fiecare dată."
+        },
+        {
+          "q": "«Rezistă acoperișul meu?»",
+          "a": "Răspunsul cere o verificare, dar întrebările dinaintea ei se pun o singură dată: tipul învelitorii, anul casei, orientarea. Agentul le adună înainte de deplasare."
+        }
+      ],
+      "agents": {
+        "chatbot": "Răspunde despre prețuri, subvenții și garanții, din condițiile valabile azi la dumneavoastră.",
+        "voice-assistant": "Preia apelurile când echipele sunt pe acoperiș și programează evaluarea tehnică.",
+        "configurator": "Clientul dă consumul și datele acoperișului; iese puterea sistemului, intervalul de preț și amortizarea.",
+        "order-status": "Anunță la fiecare etapă: avizare, livrare, montaj, punere în funcțiune.",
+        "content-engine": "Din montajele terminate face postări cu obiectul, puterea instalată și economia."
+      },
+      "leadTitle": "Inginerul primește datele, nu «a întrebat cineva de panouri»",
+      "leadLead": "Consumul, acoperișul și tipul sistemului sunt aflate înainte de deplasare. Evaluarea tehnică este deja propusă.",
+      "leadCard": {
+        "title": "Cerere",
+        "number": "№ 604",
+        "rows": [
+          {
+            "k": "Obiect",
+            "v": "Casă individuală, două niveluri"
+          },
+          {
+            "k": "Consum",
+            "v": "540 kWh pe lună, media pe an"
+          },
+          {
+            "k": "Acoperiș",
+            "v": "Țiglă metalică, 62 m², sud-est"
+          },
+          {
+            "k": "Sistem",
+            "v": "On-grid, fără acumulatori"
+          },
+          {
+            "k": "Interval discutat",
+            "v": "5,8 – 7,2 kW · 4 800 – 6 100 €"
+          },
+          {
+            "k": "Pas următor",
+            "v": "Evaluare tehnică, joi"
+          }
+        ],
+        "footer": "Factura trimisă de client este atașată la fișă."
+      },
+      "faqTitle": "Ce întreabă firmele de energie înainte să înceapă",
+      "faq": [
+        {
+          "q": "Amortizarea depinde de zeci de lucruri. Poate agentul să o calculeze?",
+          "a": "Poate să o estimeze, după formula dumneavoastră și după consumul real al omului — și așa o și prezintă: ca interval, nu ca promisiune. Calculul exact rămâne al inginerului, după evaluarea la fața locului."
+        },
+        {
+          "q": "Subvențiile se schimbă. Cine actualizează?",
+          "a": "Dumneavoastră, într-un singur loc, iar agentul răspunde din el. Tocmai de aceea nu ținem condițiile în textul agentului: o schimbare de regulament nu trebuie să însemne rescrierea lui."
+        },
+        {
+          "q": "Jumătate din apeluri sunt de la oameni care nu vor cumpăra niciodată.",
+          "a": "Și este util să aflați asta în trei întrebări, nu într-o deplasare. Agentul cere consumul din start; cine nu îl are la îndemână de obicei nu este încă la etapa de cumpărat — iar cine îl trimite în două minute, este."
+        },
+        {
+          "q": "Montajul durează săptămâni și clienții sună. Ce se schimbă?",
+          "a": "Sună mai puțin, pentru că află singuri. Agentul de statusuri anunță la fiecare etapă marcată și, dacă se mută un termen, spune și asta la timp — nu în ziua în care echipa trebuia să vină."
+        }
+      ],
+      "closingTitle": "Vedeți agenții la lucru pe sistemele dumneavoastră",
+      "closingLead": "La demonstrație luăm sistemele pe care le montați și vă arătăm ce interval și ce amortizare ar primi un client real.",
+      "day": {
+        "title": "O zi în firmă",
+        "label": "Exemplu",
+        "note": "Așa arată o zi în care lucrează toți agenții. Astăzi este disponibil chatbotul; ceilalți sunt în lucru.",
+        "entries": [
+          {
+            "time": "08:25",
+            "agent": "Chatbot",
+            "text": "A explicat ce documente trebuie pentru subvenție, din condițiile de azi."
+          },
+          {
+            "time": "13:10",
+            "agent": "Configurator",
+            "text": "Un client a dat consumul și acoperișul și a primit puterea sistemului și amortizarea."
+          },
+          {
+            "time": "15:50",
+            "agent": "Asistent telefonic",
+            "text": "A preluat un apel în timp ce echipa era pe acoperiș și a programat evaluarea tehnică."
+          },
+          {
+            "time": "17:35",
+            "agent": "Statusul comenzii",
+            "text": "A anunțat un client că sistemul a trecut de avizare și urmează livrarea."
+          },
+          {
+            "time": "21:15",
+            "agent": "Chatbot",
+            "text": "A cerut factura ultimei luni și a lăsat cererea inginerului."
+          }
+        ],
+        "scale": "Ziua, ora cu oră"
+      }
+    },
+    "clinici": {
+      "metaTitle": "Agenți AI pentru clinici stomatologice și estetice — programări și întrebări",
+      "metaDescription": "Agenți AI pentru clinici: răspund la întrebările despre preț, durere și recuperare, programează pacienții în calendarul clinicii și le amintesc de vizită. Nu pun diagnostice.",
+      "title": "Agenți AI pentru stomatologie și medicină estetică",
+      "lead": "Răspund la întrebările pe care pacientul le pune greu unui om — cât doare, cât costă, cât durează recuperarea — și îl programează direct în calendarul clinicii. Diagnosticul rămâne al medicului: agentul nu îl atinge.",
+      "questionsTitle": "Întrebările care amână vizita cu luni de zile",
+      "questions": [
+        {
+          "q": "«Doare?»",
+          "a": "Întrebarea care amână vizita cel mai mult și pe care mulți nu o pun la telefon, de jenă. Agentul răspunde cu ce ați scris dumneavoastră despre anestezie și despre ce simte pacientul — fără să promită că nu doare."
+        },
+        {
+          "q": "«Cât costă un implant?»",
+          "a": "Prețul depinde de sistem, de os și de ce se face înainte. Agentul spune intervalul dumneavoastră și explică de ce nu poate fi o cifră unică, în loc să tacă până la consultație."
+        },
+        {
+          "q": "«În cât timp mă vindec?»",
+          "a": "Perioada de recuperare hotărăște când își ia omul concediu. Agentul o spune ca interval, din protocolul clinicii, și adaugă că medicul o precizează la consultație."
+        },
+        {
+          "q": "«Aveți loc mâine?»",
+          "a": "Cea mai simplă întrebare și cea mai des ratată: recepția este ocupată sau clinica este închisă. Agentul vede orele libere și programează."
+        }
+      ],
+      "agents": {
+        "chatbot": "Răspunde la întrebările despre preț, durere și recuperare, din textele clinicii.",
+        "voice-assistant": "Preia apelurile când recepția este ocupată sau clinica este închisă și programează pacientul în calendar.",
+        "follow-up": "Îi amintește pacientului de vizită și revine la cel care a întrebat de preț și nu a mai venit.",
+        "order-status": "Anunță când lucrarea de la laborator a sosit: coroană, proteză, gutiere.",
+        "content-engine": "Din cazurile pe care le puteți arăta face postări — numai cu acordul pacientului și numai ce aprobați dumneavoastră."
+      },
+      "leadTitle": "Recepția primește o fișă, nu «a sunat cineva»",
+      "leadLead": "Ce vrea pacientul, ce l-a îngrijorat și pe ce oră este programat. Recepția confirmă, nu reconstituie.",
+      "leadCard": {
+        "title": "Programare",
+        "number": "№ 4409",
+        "rows": [
+          {
+            "k": "Motiv",
+            "v": "Implant, un molar lipsă"
+          },
+          {
+            "k": "Situație",
+            "v": "Extracție acum patru luni"
+          },
+          {
+            "k": "Ce a întrebat",
+            "v": "Anestezia și durata recuperării"
+          },
+          {
+            "k": "Preț discutat",
+            "v": "Interval, din lista clinicii"
+          },
+          {
+            "k": "Programat",
+            "v": "Marți, 10:30, consultație"
+          },
+          {
+            "k": "Reamintire",
+            "v": "Cu o zi înainte, prin SMS"
+          }
+        ],
+        "footer": "Conversația completă este atașată la programare."
+      },
+      "faqTitle": "Ce întreabă clinicile înainte să înceapă",
+      "faq": [
+        {
+          "q": "Agentul nu va da sfaturi medicale?",
+          "a": "Nu. Nu pune diagnostice, nu recomandă tratamente și nu interpretează simptome sau radiografii. Răspunde la întrebări de organizare și de preț, din textele pe care le scrieți dumneavoastră, iar tot ce ține de medicină îl trimite la consultație. Aceasta este o limită scrisă în configurare, nu o recomandare."
+        },
+        {
+          "q": "Ce se întâmplă cu datele pacienților?",
+          "a": "Se cere strict cât este nevoie pentru o programare: nume, contact, motivul vizitei. Nu construim un dosar medical și nu amestecăm datele între clinici. Ce prelucrează agentul se stabilește prin contract și printr-un acord de prelucrare, în care clinica este operatorul."
+        },
+        {
+          "q": "Recepția noastră are deja un program de programări.",
+          "a": "Agentul lucrează în el, dacă are unde să se conecteze. Scopul nu este încă un calendar, ci ca ora liberă din calendarul dumneavoastră să fie ocupată și la 22:00, când recepția este acasă."
+        },
+        {
+          "q": "Cum arătăm cazuri fără să încălcăm confidențialitatea?",
+          "a": "Numai cu acordul scris al pacientului și numai ce ați aprobat dumneavoastră. Agentul de conținut nu publică nimic singur: propune, iar dumneavoastră apăsați — sau nu."
+        }
+      ],
+      "closingTitle": "Vedeți agenții la lucru pe lista clinicii",
+      "closingLead": "La demonstrație luăm câteva proceduri din lista dumneavoastră și vă arătăm ce ar răspunde unui pacient real.",
+      "day": {
+        "title": "O zi la clinică",
+        "label": "Exemplu",
+        "note": "Așa arată o zi în care lucrează toți agenții. Astăzi este disponibil chatbotul; ceilalți sunt în lucru.",
+        "entries": [
+          {
+            "time": "07:55",
+            "agent": "Follow-up",
+            "text": "I-a amintit unui pacient de consultația de azi, de la 10:30."
+          },
+          {
+            "time": "12:20",
+            "agent": "Chatbot",
+            "text": "A explicat ce înseamnă anestezia la o extracție, din textul clinicii."
+          },
+          {
+            "time": "16:45",
+            "agent": "Statusul comenzii",
+            "text": "A anunțat un pacient că a sosit coroana de la laborator."
+          },
+          {
+            "time": "20:10",
+            "agent": "Asistent telefonic",
+            "text": "A preluat un apel după închidere și a programat o consultație pentru joi."
+          },
+          {
+            "time": "23:05",
+            "agent": "Chatbot",
+            "text": "A dat intervalul de preț pentru un implant și a lăsat cererea recepției."
+          }
+        ],
+        "scale": "Ziua, ora cu oră"
+      }
     }
   },
   "plans": {
