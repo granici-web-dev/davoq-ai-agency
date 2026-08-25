@@ -1430,5 +1430,73 @@
     "faqTitle": "Ce se întreabă înainte de a alege",
     "closingTitle": "Nu sunteți sigur ce pachet vă trebuie?",
     "closingLead": "La demonstrație ne uităm la ce vindeți și la câte întrebări primiți, și vă spunem de care pachet aveți nevoie — inclusiv dacă acela este Start."
+  },
+  "agentsHub": {
+    "metaTitle": "Agenți AI pentru afaceri — șase agenți, închiriați separat",
+    "metaDescription": "Șase agenți AI care acoperă drumul clientului: de la prima întrebare pe site până la comanda livrată. Închiriați doar agenții de care aveți nevoie, cu abonament lunar.",
+    "eyebrow": "Agenții",
+    "title": "Șase agenți, un singur drum al clientului",
+    "lead": "Nu vindem șase abonamente. Fiecare agent stă într-un loc anume pe drumul pe care îl face clientul — de la prima întrebare până la comanda livrată. Aveți nevoie de cei care stau exact acolo unde pierdeți.",
+    "pathEyebrow": "Drumul clientului",
+    "pathTitle": "Unde stă fiecare",
+    "pathLead": "Ordinea nu este a noastră, este a clientului: întreabă, se hotărăște, tace, cumpără, așteaptă. Ultimul agent închide cercul și aduce următorul om la prima întrebare.",
+    "withoutLabel": "Fără el",
+    "open": "Vezi agentul",
+    "steps": {
+      "chatbot": {
+        "stage": "Prima întrebare",
+        "without": "Întrebarea pusă sâmbătă seara primește răspuns luni dimineață. Până luni, omul a întrebat în altă parte."
+      },
+      "configurator": {
+        "stage": "Din discuție în cerere",
+        "without": "Discuția s-a purtat, dar din ea nu a rămas nimic de calculat. Vânzătorul sună a doua oară ca să întrebe ce s-a spus deja."
+      },
+      "crm-assistant": {
+        "stage": "Evidența",
+        "without": "Ce s-a vorbit rămâne în capul vânzătorului și în corespondența lui. Când pleacă în concediu, pleacă și lead-ul cu el."
+      },
+      "follow-up": {
+        "stage": "Revenirea",
+        "without": "«Mă mai gândesc» nu înseamnă «nu». Dar dacă nu revine nimeni, ajunge să însemne."
+      },
+      "order-status": {
+        "stage": "După vânzare",
+        "without": "Clientul sună să întrebe unde e comanda. De trei ori. Și tot nu știe."
+      },
+      "content-engine": {
+        "stage": "Înapoi la început",
+        "without": "Lucrările se fac și nu le vede nimeni. Iar la prima întrebare, sus, nu mai ajunge nimeni."
+      }
+    },
+    "plansEyebrow": "Cum se închiriază",
+    "plansTitle": "Doi pași, nu șase abonamente",
+    "plansLead": "Agenții nu se cumpără la bucată: intră în pachete. Start pornește chatbotul, Growth adaugă restul pe măsură ce ies — la prețul de la conectare.",
+    "startLabel": "Pornește cu",
+    "growthLabel": "Adaugă",
+    "plansLink": "Vedeți prețurile",
+    "closingTitle": "Nu știți de unde să începeți?",
+    "closingLead": "La demonstrație ne uităm la drumul clientului dumneavoastră și vă spunem unde pierdeți cel mai mult. De obicei sunt unul sau două locuri, nu șase.",
+    "plansNote": "Pachetele conțin și ce nu este agent: portalul, calificarea, limbile, numărul de conversații incluse. Lista completă stă la prețuri."
+  },
+  "industriesHub": {
+    "metaTitle": "Agenți AI pe industrii — scenariu configurat pentru nișa dumneavoastră",
+    "metaDescription": "Chatbot și agenți AI configurați pentru mobilă, renovări, imobiliare, auto, energie și clinici. Alte întrebări, alt mod de a ajunge la preț, același agent.",
+    "eyebrow": "Industrii",
+    "title": "Același agent, alt scenariu",
+    "lead": "Diferența dintre nișe nu stă în cuvinte, ci în întrebări: la mobilă se începe de la perete, la panouri solare de la consum, la clinică de la teama de durere. Scenariul se scrie sub întrebările dumneavoastră.",
+    "listEyebrow": "Nișele",
+    "listTitle": "Șase nișe, scrise până la capăt",
+    "listLead": "Pentru fiecare știm de la ce depinde prețul și în ce ordine se află lucrurile. Deschideți nișa dumneavoastră: veți vedea conversația și agenții care lucrează acolo.",
+    "otherEyebrow": "Altă nișă",
+    "otherTitle": "Dacă nu vă găsiți în listă",
+    "otherLead": "Lista nu este o limită, este ordinea în care am scris scenariile. Un agent se poate configura oriunde sunt îndeplinite trei lucruri:",
+    "signs": [
+      "Prețul se calculează, nu se citește de pe etichetă. Dacă aveți un preț fix pe produs, aveți nevoie de un magazin, nu de un agent.",
+      "Clientul pune de fiecare dată cam aceleași cinci întrebări înainte să se hotărască.",
+      "Ca să dați un preț aveți nevoie de date pe care le are doar clientul: dimensiuni, consum, starea de acum, termenul."
+    ],
+    "otherCta": "Spuneți-ne ce faceți",
+    "closingTitle": "Vedeți scenariul pentru nișa dumneavoastră",
+    "closingLead": "La demonstrație scriem conversația pe cazul dumneavoastră real, cu întrebările pe care le puneți și dumneavoastră — nu cu un exemplu general."
   }
 }

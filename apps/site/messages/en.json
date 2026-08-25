@@ -1430,5 +1430,73 @@
     "faqTitle": "What people ask before choosing",
     "closingTitle": "Not sure which package you need?",
     "closingLead": "In the demo we look at what you sell and how many enquiries you get, and tell you which package you need — including when that is Start."
+  },
+  "agentsHub": {
+    "metaTitle": "AI agents for business — six agents, rented separately",
+    "metaDescription": "Six AI agents covering the customer's path: from the first question on your site to the delivered order. Rent only the agents you need, on a monthly subscription.",
+    "eyebrow": "The agents",
+    "title": "Six agents, one customer's path",
+    "lead": "We are not selling six subscriptions. Each agent sits at a particular place on the path your customer walks — from the first question to the delivered order. You need the ones standing exactly where you are losing people.",
+    "pathEyebrow": "The customer's path",
+    "pathTitle": "Where each one stands",
+    "pathLead": "The order is not ours, it is the customer's: they ask, they decide, they go quiet, they buy, they wait. The last agent closes the circle and brings the next person to the first question.",
+    "withoutLabel": "Without it",
+    "open": "See the agent",
+    "steps": {
+      "chatbot": {
+        "stage": "The first question",
+        "without": "A question asked on Saturday evening gets an answer on Monday morning. By Monday they have asked somebody else."
+      },
+      "configurator": {
+        "stage": "From conversation to request",
+        "without": "The conversation happened, but nothing came out of it that anyone can price. The salesperson calls back to ask what was already said."
+      },
+      "crm-assistant": {
+        "stage": "The record",
+        "without": "What was said stays in the salesperson's head and in their inbox. When they go on holiday, the lead goes with them."
+      },
+      "follow-up": {
+        "stage": "The return",
+        "without": "«I'll think about it» does not mean no. But if nobody comes back, it ends up meaning it."
+      },
+      "order-status": {
+        "stage": "After the sale",
+        "without": "The customer calls to ask where the order is. Three times. And still does not know."
+      },
+      "content-engine": {
+        "stage": "Back to the start",
+        "without": "The work gets done and nobody sees it. And nobody arrives at the first question up there any more."
+      }
+    },
+    "plansEyebrow": "How you rent them",
+    "plansTitle": "Two steps, not six subscriptions",
+    "plansLead": "Agents are not bought one at a time: they come in packages. Start switches on the chatbot, Growth adds the rest as they ship — at the price you connected at.",
+    "startLabel": "Starts with",
+    "growthLabel": "Adds",
+    "plansLink": "See the prices",
+    "closingTitle": "Not sure where to start?",
+    "closingLead": "At the demo we look at your customer's path and tell you where you are losing the most. It is usually one or two places, not six.",
+    "plansNote": "The packages also contain what is not an agent: the portal, qualification, languages, the number of conversations included. The full list is on the pricing page."
+  },
+  "industriesHub": {
+    "metaTitle": "AI agents by industry — a scenario written for your niche",
+    "metaDescription": "Chatbots and AI agents configured for furniture, renovation, real estate, car dealers, energy and clinics. Different questions, a different route to the price, the same agent.",
+    "eyebrow": "Industries",
+    "title": "The same agent, a different scenario",
+    "lead": "The difference between niches is not in the wording, it is in the questions: furniture starts from the wall, solar starts from the consumption, a clinic starts from the fear of pain. The scenario is written under your questions.",
+    "listEyebrow": "The niches",
+    "listTitle": "Six niches, written all the way through",
+    "listLead": "For each of them we know what the price depends on and in what order things get established. Open your niche: you will see the conversation and the agents that work there.",
+    "otherEyebrow": "Another niche",
+    "otherTitle": "If you are not on the list",
+    "otherLead": "The list is not a limit, it is the order in which we wrote the scenarios. An agent can be configured anywhere three things are true:",
+    "signs": [
+      "The price is calculated, not read off a label. If you have a fixed price per product, you need a shop, not an agent.",
+      "Customers ask roughly the same five questions every time before they decide.",
+      "To give a price you need data only the customer has: dimensions, consumption, the current state of things, the deadline."
+    ],
+    "otherCta": "Tell us what you do",
+    "closingTitle": "See the scenario for your own niche",
+    "closingLead": "At the demo we write the conversation on your real case, with the questions you ask yourself — not with a generic example."
   }
 }
