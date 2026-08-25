@@ -70,11 +70,36 @@ export const INDUSTRIES: Industry[] = [
     slug: 'mobilier',
     agents: ['chatbot', 'configurator', 'follow-up', 'order-status', 'crm-assistant', 'content-engine'],
   },
-  { slug: 'constructii', agents: ['chatbot', 'configurator', 'crm-assistant'] },
-  { slug: 'imobiliare', agents: ['chatbot', 'crm-assistant', 'follow-up'] },
-  { slug: 'auto', agents: ['chatbot', 'crm-assistant', 'follow-up'] },
-  { slug: 'energie', agents: ['chatbot', 'configurator', 'order-status'] },
-  { slug: 'clinici', agents: ['chatbot', 'follow-up', 'content-engine'] },
+  {
+    slug: 'constructii',
+    // Ремонт идёт месяцами, и «где моя квартира» здесь спрашивают чаще,
+    // чем что-либо ещё после цены. «До и после» — второй по силе повод.
+    agents: ['chatbot', 'configurator', 'order-status', 'content-engine', 'crm-assistant'],
+  },
+  {
+    slug: 'imobiliare',
+    // Продаёт показ, а показ приводит контент: объекты, планировки, ход
+    // стройки. Статус — про стадию сделки и про дом, который ещё строится.
+    agents: ['chatbot', 'crm-assistant', 'follow-up', 'content-engine', 'order-status'],
+  },
+  {
+    slug: 'auto',
+    // Машину из заказа ждут месяцами: статус закрывает самый частый
+    // звонок. Контент — склад, поставки, выдачи.
+    agents: ['chatbot', 'crm-assistant', 'follow-up', 'order-status', 'content-engine'],
+  },
+  {
+    slug: 'energie',
+    // Монтаж фотографируется сам собой, и это лучший материал в нише:
+    // объект, цифры экономии, срок.
+    agents: ['chatbot', 'configurator', 'order-status', 'content-engine'],
+  },
+  {
+    slug: 'clinici',
+    // Статус здесь про работу лаборатории — коронка, элайнеры, протез.
+    // Ждут неделями и звонят узнать, пришло ли.
+    agents: ['chatbot', 'follow-up', 'content-engine', 'order-status'],
+  },
 ];
 
 /**
