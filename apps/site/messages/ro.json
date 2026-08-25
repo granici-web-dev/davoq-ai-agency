@@ -1696,5 +1696,65 @@
         "outro": "— de completat: legea aplicabilă și instanța competentă, după stabilirea formei juridice."
       }
     ]
+  },
+  "aboutPage": {
+    "metaTitle": "Despre noi — cum lucrăm și de ce nu vedeți recenzii pe acest site",
+    "metaDescription": "Închiriem agenți AI cu abonament lunar, configurați pentru nișa fiecărui client. Un agent lucrează, cinci se scriu. Fără recenzii inventate și fără cifre pe care nu le putem dovedi.",
+    "eyebrow": "Despre",
+    "title": "Suntem la început și o scriem aici",
+    "lead": "Închiriem agenți AI cu abonament lunar, configurați pentru nișa și brandul fiecărui client. Un agent lucrează azi, cinci se scriu. Mai jos e cum lucrăm și ce înseamnă asta pentru dumneavoastră — inclusiv partea incomodă.",
+    "absenceEyebrow": "Ce lipsește de pe site",
+    "absenceTitle": "De ce nu vedeți recenzii, logo-uri și cifre",
+    "absenceLead": "Probabil ați observat deja: pe acest site nu există nicio recenzie, niciun logo de client și nicio propoziție de tipul «300 de echipe ne folosesc deja».",
+    "absenceBody": "Nu din modestie. Pentru că nu le avem — iar ce nu ai se poate doar inventa. O recomandare scrisă de noi în numele altcuiva ar fi primul lucru pe care l-am face în relația cu dumneavoastră, și ar fi o minciună.",
+    "absenceOutro": "Când vor exista clienți care acceptă să fie numiți, vor apărea aici cu numele lor. Până atunci pagina rămâne fără ele, iar dumneavoastră vă rămâne de judecat ce se vede: produsul, prețul și felul în care scriem despre amândouă.",
+    "workEyebrow": "Cum lucrăm",
+    "workTitle": "Cinci reguli, toate verificabile pe acest site",
+    "workLead": "Nu sunt valori de pe o pagină «despre noi». Fiecare se vede undeva pe site, iar linkul din dreapta duce exact acolo unde se vede.",
+    "checkLabel": "Verificați",
+    "principles": [
+      {
+        "title": "Scenariul se scrie sub nișa dumneavoastră",
+        "text": "La mobilă se începe de la perete, la panouri solare de la consum, la clinică de la teama de durere. Nu punem același bot cu alt logo.",
+        "href": "/industries"
+      },
+      {
+        "title": "Scriem și ce nu face agentul",
+        "text": "Fiecare pagină de agent are o coloană cu ce nu face. Este mai utilă decât lista de funcții: acolo se văd limitele cu care veți trăi zilnic.",
+        "href": "/agents/chatbot"
+      },
+      {
+        "title": "Nu vindem ca gata ce încă se scrie",
+        "text": "Agenții nelansați sunt marcați «în curând» peste tot unde apar, iar paginile lor spun la timpul viitor ce vor face.",
+        "href": "/agents"
+      },
+      {
+        "title": "Prețul stă scris pe site",
+        "text": "Abonamentul lunar și taxa de configurare sunt publice. «Preț la cerere» avem doar acolo unde munca este de fiecare dată alta.",
+        "href": "/pricing"
+      },
+      {
+        "title": "Datele fiecărui client rămân separate",
+        "text": "Nu amestecăm conturile și nu antrenăm nimic pe datele unui client pentru altul. Scrie și în politica de confidențialitate, nu doar aici.",
+        "href": "/privacy"
+      }
+    ],
+    "nowEyebrow": "Unde suntem acum",
+    "nowTitle": "Un agent lucrează, cinci se scriu",
+    "nowLead": "Chatbotul se vinde și funcționează azi. Ceilalți cinci intră în pachetul Growth pe măsură ce ies. Asta are două fețe și le scriem pe amândouă.",
+    "gainTitle": "Ce câștigați dacă intrați acum",
+    "gain": [
+      "Prețul de azi rămâne al dumneavoastră pentru pachetul pe care îl luați.",
+      "Scenariul îl scriem împreună cu dumneavoastră, nu îl adaptăm dintr-un șablon. La câțiva clienți se poate; la o sută nu s-ar mai putea.",
+      "Ce ne cereți acum are șanse reale să ajungă în produs, tocmai pentru că produsul încă se scrie."
+    ],
+    "riskTitle": "Ce riscați",
+    "risk": [
+      "Cinci agenți din șase încă nu funcționează, și nu vă dăm o dată la care vor funcționa.",
+      "Nu avem în spate ani de exploatare la sute de clienți. Avem ce se vede pe acest site.",
+      "Dacă un agent nu apare într-un timp rezonabil, plecați — și este drept că puteți."
+    ],
+    "closingTitle": "Cel mai simplu este să ne puneți o întrebare grea",
+    "closingLead": "La demonstrație vă arătăm conversația scrisă pe cazul dumneavoastră real. Dacă ceva nu se potrivește, v-o spunem atunci — nu peste trei discuții."
   }
 }

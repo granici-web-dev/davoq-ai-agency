@@ -1696,5 +1696,65 @@
         "outro": "— to be filled in: governing law and competent court, once the legal form is settled."
       }
     ]
+  },
+  "aboutPage": {
+    "metaTitle": "About us — how we work and why there are no testimonials on this site",
+    "metaDescription": "We rent AI agents on a monthly subscription, configured for each client's niche. One agent works, five are being written. No invented testimonials and no figures we cannot prove.",
+    "eyebrow": "About",
+    "title": "We are at the beginning, and we write that here",
+    "lead": "We rent AI agents on a monthly subscription, configured for each client's niche and brand. One agent works today, five are being written. Below is how we work and what that means for you — including the uncomfortable part.",
+    "absenceEyebrow": "What is missing from this site",
+    "absenceTitle": "Why there are no testimonials, logos or figures",
+    "absenceLead": "You have probably noticed already: this site has not a single testimonial, not one client logo and no sentence along the lines of «300 teams already use us».",
+    "absenceBody": "Not out of modesty. Because we do not have them — and what you do not have can only be invented. A recommendation written by us in somebody else's name would be the first thing we did in our relationship with you, and it would be a lie.",
+    "absenceOutro": "When there are clients willing to be named, they will appear here under their own names. Until then the page stays without them, and what is left for you to judge is what you can see: the product, the price, and the way we write about both.",
+    "workEyebrow": "How we work",
+    "workTitle": "Five rules, every one of them checkable on this site",
+    "workLead": "These are not values off an about page. Each one shows somewhere on the site, and the link on the right goes exactly where it shows.",
+    "checkLabel": "Check it",
+    "principles": [
+      {
+        "title": "The scenario is written for your niche",
+        "text": "Furniture starts from the wall, solar starts from the consumption, a clinic starts from the fear of pain. We do not put up the same bot with a different logo.",
+        "href": "/industries"
+      },
+      {
+        "title": "We also write what the agent does not do",
+        "text": "Every agent page has a column of what it does not do. It is more useful than the feature list: that is where you see the limits you will live with daily.",
+        "href": "/agents/chatbot"
+      },
+      {
+        "title": "We do not sell as finished what is still being written",
+        "text": "Unreleased agents are marked «coming soon» everywhere they appear, and their pages say in the future tense what they will do.",
+        "href": "/agents"
+      },
+      {
+        "title": "The price is written on the site",
+        "text": "The monthly subscription and the setup fee are public. «Price on request» exists only where the work is different every time.",
+        "href": "/pricing"
+      },
+      {
+        "title": "Each client's data stays separate",
+        "text": "We do not mix accounts and we do not train anything on one client's data for another. It is written in the privacy policy too, not only here.",
+        "href": "/privacy"
+      }
+    ],
+    "nowEyebrow": "Where we are now",
+    "nowTitle": "One agent works, five are being written",
+    "nowLead": "The chatbot sells and works today. The other five join the Growth package as they ship. That has two sides and we write both of them.",
+    "gainTitle": "What you gain by coming in now",
+    "gain": [
+      "Today's price stays yours for the package you take.",
+      "We write the scenario together with you rather than adapting it from a template. With a handful of clients that is possible; with a hundred it would not be.",
+      "What you ask for now has a real chance of reaching the product, precisely because the product is still being written."
+    ],
+    "riskTitle": "What you risk",
+    "risk": [
+      "Five agents out of six do not work yet, and we will not give you a date on which they will.",
+      "We do not have years of running this for hundreds of clients behind us. We have what you can see on this site.",
+      "If an agent does not appear within a reasonable time, you leave — and it is right that you can."
+    ],
+    "closingTitle": "The simplest thing is to ask us a hard question",
+    "closingLead": "At the demo we show you the conversation written on your own real case. If something does not fit, we say so then — not three conversations later."
   }
 }
