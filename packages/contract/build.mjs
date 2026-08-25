@@ -32,6 +32,7 @@ const PRODUCTS_DIR = join(ROOT, 'apps/engine/src/products');
 const VERTICALS_DIR = join(ROOT, 'apps/engine/src/verticals');
 const PLANS_TS = join(ROOT, 'apps/engine/src/engine/plans.ts');
 const OUT = join(HERE, 'src/generated.ts');
+const COMMERCE = join(HERE, 'commerce.yaml');
 const MESSAGES = ['ro', 'en'].map((l) => ({ locale: l, path: join(ROOT, `apps/site/messages/${l}.json`) }));
 
 const STATUSES = ['planned', 'beta', 'shipped'];
@@ -63,7 +64,7 @@ function manifests(dir, file) {
 }
 
 
-const TIERS = ['starter', 'pro'];
+const TIERS = ['basic', 'pro'];
 
 /**
  * Вилки агента.
@@ -86,8 +87,8 @@ function readTiers(m, where, status) {
   for (const name of TIERS) {
     const t = m.tiers[name];
     if (!t) fail(`${where}: в tiers нет вилки «${name}» — их должно быть две: ${TIERS.join(', ')}`);
-    for (const k of ['price', 'setup']) {
-      if (!Number.isFinite(t[k]) || t[k] < 0) fail(`${where}: tiers.${name}.${k} должен быть числом от нуля`);
+    if (!Number.isFinite(t.price) || t.price <= 0) {
+      fail(`${where}: tiers.${name}.price должен быть числом больше нуля`);
     }
     const limits = t.limits ?? {};
     for (const [k, v] of Object.entries(limits)) {
@@ -95,7 +96,6 @@ function readTiers(m, where, status) {
     }
     out[name] = {
       price: t.price,
-      setup: t.setup,
       limits,
       features: Array.isArray(t.features) ? t.features : [],
     };
@@ -103,12 +103,12 @@ function readTiers(m, where, status) {
   /* Pro, который не больше Starter, — это не вилка, а две одинаковые
      карточки рядом. Ловится здесь, потому что заметить это глазами
      на витрине уже поздно. */
-  if (out.pro.price <= out.starter.price) {
-    fail(`${where}: Pro (${out.pro.price}) не дороже Starter (${out.starter.price}) — вилки нет`);
+  if (out.pro.price <= out.basic.price) {
+    fail(`${where}: Pro (${out.pro.price}) не дороже Basic (${out.basic.price}) — вилки нет`);
   }
-  for (const [k, v] of Object.entries(out.starter.limits)) {
+  for (const [k, v] of Object.entries(out.basic.limits)) {
     const hi = out.pro.limits[k];
-    if (hi !== undefined && hi < v) fail(`${where}: limits.${k} у Pro (${hi}) меньше, чем у Starter (${v})`);
+    if (hi !== undefined && hi < v) fail(`${where}: limits.${k} у Pro (${hi}) меньше, чем у Basic (${v})`);
   }
   return out;
 }
@@ -205,20 +205,34 @@ function checkTierCopy(products) {
       const own = data?.agentPricing?.[p.id] ?? {};
       const shared = data?.agentPricing?.shared ?? {};
 
-      /* Сначала текст самого агента, потом общий. «Свой сценарий вместо
-         отраслевого» звучит одинаково у чатбота и у конфигуратора, и шесть
-         копий этой строки разошлись бы ровно так же, как разошлось всё
-         остальное. Переопределение остаётся: у агента, которому общая
-         формулировка не подходит, своя перебивает. */
+      /* Три места, в таком порядке.
+       
+         1. Текст самого агента в `agentPricing` — если формулировка на
+            карточке должна отличаться от той, что в теле страницы.
+         2. Общий: «свой сценарий вместо отраслевого» звучит одинаково
+            у чатбота и у конфигуратора, и шесть копий этой строки
+            разошлись бы так же, как разошлось всё остальное.
+         3. Блок возможностей на странице агента. Пункты Basic — это и есть
+            возможности агента, уже описанные и принятые. Требовать для
+            карточки второй текст про то же самое значило бы плодить копии
+            ровно там, где мы их выводим. */
+      const page = data?.agentPage?.[p.id]?.features ?? {};
       const has = (kind, k) => {
-        const v = own[kind]?.[k] ?? shared[kind]?.[k];
-        return typeof v === 'string' && v.trim();
+        const own_ = own[kind]?.[k];
+        if (typeof own_ === 'string' && own_.trim()) return true;
+        const sh = shared[kind]?.[k];
+        if (typeof sh === 'string' && sh.trim()) return true;
+        if (kind !== 'features') return false;
+        const title = page[k]?.title;
+        return typeof title === 'string' && title.trim();
       };
       for (const k of limitKeys) {
         if (!has('limits', k)) missing.push(`${locale}: agentPricing.{${p.id}|shared}.limits.${k}`);
       }
       for (const k of featureKeys) {
-        if (!has('features', k)) missing.push(`${locale}: agentPricing.{${p.id}|shared}.features.${k}`);
+        if (!has('features', k)) {
+          missing.push(`${locale}: нет текста для «${k}» — ни в agentPricing.${p.id}.features, ни в agentPricing.shared.features, ни в agentPage.${p.id}.features.<ключ>.title`);
+        }
       }
     }
   }
@@ -227,7 +241,52 @@ function checkTierCopy(products) {
   }
 }
 
-function render(products, verticals) {
+/**
+ * Общие коммерческие условия.
+ *
+ * Проверяются так же строго, как манифесты: доля скидки вне (0, 1) или
+ * заведение следующего агента дороже первого — это опечатка, которая
+ * иначе доедет до счёта клиента.
+ */
+function readCommerce() {
+  const m = parse(readFileSync(COMMERCE, 'utf8'));
+  const where = 'packages/contract/commerce.yaml';
+  if (m.schema !== 1) fail(`${where}: schema ${m.schema}, а поддерживается 1`);
+
+  const frac = (v, name) => {
+    if (!Number.isFinite(v) || v <= 0 || v >= 1) fail(`${where}: ${name} должен быть долей от нуля до единицы`);
+    return v;
+  };
+  const money = (v, name) => {
+    if (!Number.isFinite(v) || v < 0) fail(`${where}: ${name} должен быть числом от нуля`);
+    return v;
+  };
+
+  const setup = {
+    first: money(m.setup?.first, 'setup.first'),
+    next: money(m.setup?.next, 'setup.next'),
+    pilot: money(m.setup?.pilot, 'setup.pilot'),
+  };
+  if (setup.next > setup.first) {
+    fail(`${where}: заведение следующего агента (${setup.next}) дороже первого (${setup.first})`);
+  }
+
+  const volume = (m.volume ?? []).map((v, i) => ({
+    agents: v.agents,
+    discount: frac(v.discount, `volume[${i}].discount`),
+  }));
+  for (let i = 1; i < volume.length; i += 1) {
+    const prev = volume[i - 1];
+    const cur = volume[i];
+    if (cur.agents <= prev.agents || cur.discount <= prev.discount) {
+      fail(`${where}: volume должен расти и по числу агентов, и по скидке`);
+    }
+  }
+
+  return { annualDiscount: frac(m.annual?.discount, 'annual.discount'), setup, volume };
+}
+
+function render(products, verticals, commerce) {
   const j = (x) => JSON.stringify(x, null, 2).replace(/\n/g, '\n  ');
   return `/**
  * ПОРОЖДЁННЫЙ ФАЙЛ. Руками не править.
@@ -237,20 +296,23 @@ function render(products, verticals) {
  * Проверить:  npm run contract:check
  */
 
-import type { Product, Vertical } from './index.js';
+import type { Commerce, Product, Vertical } from './index.js';
 
 export const PRODUCTS: readonly Product[] = ${j(products)};
 
 export const VERTICALS: readonly Vertical[] = ${j(verticals)};
+
+export const COMMERCE: Commerce = ${j(commerce)};
 `;
 }
 
 const features = planFeatureKeys();
 const products = readProducts(features);
 const verticals = readVerticals();
+const commerce = readCommerce();
 checkVerticalRefs(products, verticals);
 checkTierCopy(products);
-const out = render(products, verticals);
+const out = render(products, verticals, commerce);
 
 if (process.argv.includes('--check')) {
   const have = existsSync(OUT) ? readFileSync(OUT, 'utf8') : '';

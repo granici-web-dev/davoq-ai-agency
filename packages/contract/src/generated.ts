@@ -6,7 +6,7 @@
  * Проверить:  npm run contract:check
  */
 
-import type { Product, Vertical } from './index.js';
+import type { Commerce, Product, Vertical } from './index.js';
 
 export const PRODUCTS: readonly Product[] = [
     {
@@ -19,20 +19,20 @@ export const PRODUCTS: readonly Product[] = [
         "furniture"
       ],
       "tiers": {
-        "starter": {
-          "price": 79,
-          "setup": 490,
+        "basic": {
+          "price": 149,
           "limits": {
             "conversations": 500
           },
           "features": [
-            "scenarioIndustry",
-            "oneLanguage"
+            "always",
+            "sources",
+            "qualify",
+            "portal"
           ]
         },
         "pro": {
-          "price": 149,
-          "setup": 490,
+          "price": 249,
           "limits": {
             "conversations": 2000
           },
@@ -53,20 +53,20 @@ export const PRODUCTS: readonly Product[] = [
         "furniture"
       ],
       "tiers": {
-        "starter": {
-          "price": 119,
-          "setup": 490,
+        "basic": {
+          "price": 129,
           "limits": {
             "offers": 200
           },
           "features": [
-            "scenarioIndustry",
-            "oneLanguage"
+            "questions",
+            "spec",
+            "gaps",
+            "portal"
           ]
         },
         "pro": {
-          "price": 249,
-          "setup": 490,
+          "price": 199,
           "limits": {
             "offers": 600
           },
@@ -83,28 +83,108 @@ export const PRODUCTS: readonly Product[] = [
       "version": 1,
       "status": "planned",
       "feature": "social",
-      "verticals": []
+      "verticals": [],
+      "tiers": {
+        "basic": {
+          "price": 149,
+          "limits": {},
+          "features": [
+            "many",
+            "formats",
+            "sources",
+            "approve"
+          ]
+        },
+        "pro": {
+          "price": 249,
+          "limits": {},
+          "features": [
+            "scenarioCustom",
+            "secondLanguage"
+          ]
+        }
+      }
     },
     {
       "id": "follow-up",
       "version": 1,
       "status": "planned",
       "feature": "followup",
-      "verticals": []
+      "verticals": [],
+      "tiers": {
+        "basic": {
+          "price": 99,
+          "limits": {},
+          "features": [
+            "stop",
+            "task",
+            "sources",
+            "portal"
+          ]
+        },
+        "pro": {
+          "price": 179,
+          "limits": {},
+          "features": [
+            "scenarioCustom",
+            "secondLanguage"
+          ]
+        }
+      }
     },
     {
       "id": "order-status",
       "version": 1,
       "status": "planned",
       "feature": "productionUpdates",
-      "verticals": []
+      "verticals": [],
+      "tiers": {
+        "basic": {
+          "price": 79,
+          "limits": {},
+          "features": [
+            "stage",
+            "task",
+            "read",
+            "portal"
+          ]
+        },
+        "pro": {
+          "price": 149,
+          "limits": {},
+          "features": [
+            "scenarioCustom",
+            "secondLanguage"
+          ]
+        }
+      }
     },
     {
       "id": "voice-assistant",
       "version": 1,
       "status": "planned",
       "feature": "voice",
-      "verticals": []
+      "verticals": [],
+      "tiers": {
+        "basic": {
+          "price": 249,
+          "limits": {},
+          "features": [
+            "phone",
+            "task",
+            "sources",
+            "disclose"
+          ]
+        },
+        "pro": {
+          "price": 449,
+          "limits": {},
+          "features": [
+            "scenarioCustom",
+            "secondLanguage"
+          ]
+        }
+      }
     }
   ];
 
@@ -114,3 +194,22 @@ export const VERTICALS: readonly Vertical[] = [
       "version": 1
     }
   ];
+
+export const COMMERCE: Commerce = {
+    "annualDiscount": 0.2,
+    "setup": {
+      "first": 290,
+      "next": 190,
+      "pilot": 0
+    },
+    "volume": [
+      {
+        "agents": 2,
+        "discount": 0.1
+      },
+      {
+        "agents": 3,
+        "discount": 0.2
+      }
+    ]
+  };

@@ -4,7 +4,7 @@ import { Link } from '@/i18n/routing';
 import { Cta } from '@/components/ui/Cta';
 import { DemoButton } from '@/components/ui/DemoButton';
 import { productById } from '@assistwidget/contract';
-import { AgentPricing } from './AgentPricing';
+import { AgentPricing } from '@/components/pricing/AgentPricing';
 import { FaqList } from '@/components/ui/FaqList';
 import { Reveal } from '@/components/ui/Reveal';
 import { SectionHead } from './SectionHead';
