@@ -16,8 +16,8 @@
  * разошлась бы с витриной ровно так, как уже расходились тариф «Start»
  * за 79 € в движке и за 199 € на сайте.
  */
+import type pg from 'pg';
 import { PRODUCTS, type Product, type TierName } from '@assistwidget/contract';
-import { withPlatform } from '../db/pool.js';
 
 /** Строка таблицы `tenant_agents` как она есть в базе. */
 export interface AgentGrant {
@@ -97,28 +97,37 @@ export function accessOf(
   };
 }
 
-export async function loadGrants(tenantId: string): Promise<AgentGrant[]> {
-  return withPlatform(async (client) => {
-    const { rows } = await client.query<{
-      agent_id: string;
-      tier: TierName | null;
-      source: 'plan' | 'subscription';
-      status: AgentGrant['status'];
-      expires_at: Date | null;
-    }>(
-      `SELECT agent_id, tier, source, status, expires_at
-         FROM tenant_agents
-        WHERE tenant_id = $1`,
-      [tenantId],
-    );
-    return rows.map((r) => ({
-      agentId: r.agent_id,
-      tier: r.tier,
-      source: r.source,
-      status: r.status,
-      expiresAt: r.expires_at,
-    }));
-  });
+/**
+ * Клиент передаётся снаружи, а не берётся из общего пула: маршруты портала
+ * уже работают внутри `withTenant`, и открывать здесь второе соединение
+ * значило бы выйти из области арендатора ровно там, где она и нужна.
+ *
+ * Фильтр по `tenant_id` остаётся явным, хотя область уже задана: то же
+ * правило, что во всех Core-запросах этого проекта.
+ */
+export async function loadGrants(
+  client: pg.PoolClient,
+  tenantId: string,
+): Promise<AgentGrant[]> {
+  const { rows } = await client.query<{
+    agent_id: string;
+    tier: TierName | null;
+    source: 'plan' | 'subscription';
+    status: AgentGrant['status'];
+    expires_at: Date | null;
+  }>(
+    `SELECT agent_id, tier, source, status, expires_at
+       FROM tenant_agents
+      WHERE tenant_id = $1`,
+    [tenantId],
+  );
+  return rows.map((r) => ({
+    agentId: r.agent_id,
+    tier: r.tier,
+    source: r.source,
+    status: r.status,
+    expiresAt: r.expires_at,
+  }));
 }
 
 /**
@@ -128,8 +137,12 @@ export async function loadGrants(tenantId: string): Promise<AgentGrant[]> {
  * он не узнает, что это можно купить. Порядок берётся из контракта, чтобы
  * навигация в портале и список на витрине шли одинаково.
  */
-export async function portalAgents(tenantId: string, now = Date.now()): Promise<PortalAgent[]> {
-  const grants = await loadGrants(tenantId);
+export async function portalAgents(
+  client: pg.PoolClient,
+  tenantId: string,
+  now = Date.now(),
+): Promise<PortalAgent[]> {
+  const grants = await loadGrants(client, tenantId);
   const byId = new Map(grants.map((g) => [g.agentId, g]));
   return PRODUCTS.map((product) => accessOf(product, byId.get(product.id), now));
 }

@@ -3,6 +3,7 @@ import { readFile } from 'node:fs/promises';
 import type { FastifyInstance, FastifyRequest } from 'fastify';
 import type pg from 'pg';
 import { withPlatform, withTenant } from '../db/pool.js';
+import { portalAgents } from '../billing/agents.js';
 import { createDocument } from '../ingest/index.js';
 import { get as storageGet } from '../ingest/storage.js';
 import { DRIVE_SYNC_MINUTES, enqueueDriveSyncNow, enqueueIngest, enqueueRecheck } from '../ingest/queue.js';
@@ -243,6 +244,22 @@ export function registerAdmin(app: FastifyInstance): void {
    * Расход показывается вместе с потолком, а не отдельно. «1 240 сообщений» —
    * это не информация; «1 240 из 5 000» — это информация.
    */
+  /**
+   * Что показывать на каждом разделе портала.
+   *
+   * Портал один на всех агентов, поэтому отвечаем по ВСЕМ семи, а не по
+   * купленным: иначе человек не узнает, что остальные можно купить.
+   * Порядок берётся из контракта — тот же, что на витрине, чтобы навигация
+   * в кабинете и список в прайсе не расходились.
+   *
+   * Цен здесь не считается: `priceFrom` приходит из манифеста продукта.
+   * Скидки за объём и годовую оплату — предмет оформления покупки, а не
+   * этого ответа; показывать их на замке значило бы обещать цену до того,
+   * как известно, сколько агентов человек берёт.
+   */
+  app.get('/admin/api/agents', guarded(async ({ session, client }) =>
+    ({ agents: await portalAgents(client, session.tenantId) })));
+
   app.get('/admin/api/subscription', guarded(async ({ session, client }) => {
     const { rows } = await client.query<{
       plan: string; subscription_status: string;
