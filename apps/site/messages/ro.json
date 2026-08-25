@@ -2355,6 +2355,14 @@
     "closingLead": "La demonstrație vă arătăm conversația scrisă pe cazul dumneavoastră real. Dacă ceva nu se potrivește, v-o spunem atunci — nu peste trei discuții."
   },
   "agentPricing": {
+    "title": "Prețuri",
+    "lead": "Agentul se ia separat. Plătiți doar pentru ce folosiți.",
+    "perMonth": "/ lună",
+    "setup": "Taxă unică de configurare {fee} €",
+    "recommended": "Recomandat",
+    "cta": "Cereți acces",
+    "starterName": "Starter",
+    "proName": "Pro",
     "individual": {
       "name": "Individual",
       "price": "La cerere",
@@ -2367,8 +2375,11 @@
       ],
       "cta": "Discutăm proiectul"
     },
-    "setupLabel": "Configurare inițială",
-    "setupNote": "o singură dată, pentru acest agent",
-    "monthly": "pe lună"
+    "configurator": {
+      "limits": {
+        "offers": "oferte pe lună"
+      },
+      "features": {}
+    }
   }
 }

@@ -2355,6 +2355,14 @@
     "closingLead": "At the demo we show you the conversation written on your own real case. If something does not fit, we say so then — not three conversations later."
   },
   "agentPricing": {
+    "title": "Pricing",
+    "lead": "Each agent is bought on its own. You pay only for what you use.",
+    "perMonth": "/ month",
+    "setup": "One-off setup fee {fee} €",
+    "recommended": "Recommended",
+    "cta": "Request access",
+    "starterName": "Starter",
+    "proName": "Pro",
     "individual": {
       "name": "Individual",
       "price": "On request",
@@ -2367,8 +2375,11 @@
       ],
       "cta": "Let's discuss the project"
     },
-    "setupLabel": "Initial setup",
-    "setupNote": "one-off, for this agent",
-    "monthly": "per month"
+    "configurator": {
+      "limits": {
+        "offers": "quotes per month"
+      },
+      "features": {}
+    }
   }
 }

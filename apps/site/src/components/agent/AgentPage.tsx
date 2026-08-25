@@ -3,6 +3,7 @@ import { useTranslations } from 'next-intl';
 import { Link } from '@/i18n/routing';
 import { Cta } from '@/components/ui/Cta';
 import { DemoButton } from '@/components/ui/DemoButton';
+import { AgentPricing } from './AgentPricing';
 import { FaqList } from '@/components/ui/FaqList';
 import { Reveal } from '@/components/ui/Reveal';
 import { SectionHead } from './SectionHead';
@@ -293,6 +294,15 @@ export function AgentPage({ agent }: { agent: Agent }) {
                 </ul>
               </div>
             </section>
+          </Reveal>
+
+          {/* Цена стоит перед вопросами-ответами, а не после них.
+              К этому месту страницы человек уже знает, что агент делает,
+              и следующий его вопрос — «сколько». Вопросы-ответы после
+              цены снимают возражения, которые она же и подняла; до неё
+              им отвечать нечего. */}
+          <Reveal>
+            <AgentPricing slug={agent.slug} />
           </Reveal>
 
           <Reveal>

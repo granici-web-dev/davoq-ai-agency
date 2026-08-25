@@ -182,16 +182,26 @@ function checkTierCopy(products) {
   const missing = [];
   for (const p of products) {
     if (!p.tiers) continue;
-    for (const [tier, t] of Object.entries(p.tiers)) {
-      const keys = [...t.features, ...Object.keys(t.limits).map((k) => `limit.${k}`)];
-      for (const key of keys) {
-        for (const { locale, data } of files) {
-          const at = data?.agentPricing?.[p.id]?.[tier]?.[key.replace('limit.', 'limits.')]
-            ?? data?.agentPricing?.shared?.[key.replace('limit.', 'limits.')];
-          if (typeof at !== 'string' || !at.trim()) {
-            missing.push(`${locale}: agentPricing.${p.id}.${tier}.${key}`);
-          }
-        }
+
+    /* Подпись к лимиту — одна на продукт, а не на вилку: у Starter и Pro
+       меняется число, а единица («оферты в месяц») та же. Держать её дважды
+       значило бы дать им разойтись. Возможности, наоборот, у вилок разные,
+       но ключ уникален внутри продукта, и нести его через вилку незачем. */
+    const limitKeys = new Set();
+    const featureKeys = new Set();
+    for (const t of Object.values(p.tiers)) {
+      Object.keys(t.limits).forEach((k) => limitKeys.add(k));
+      t.features.forEach((k) => featureKeys.add(k));
+    }
+
+    for (const { locale, data } of files) {
+      const at = data?.agentPricing?.[p.id] ?? {};
+      const text = (o, k) => (typeof o?.[k] === 'string' && o[k].trim() ? null : k);
+      for (const k of limitKeys) {
+        if (text(at.limits, k)) missing.push(`${locale}: agentPricing.${p.id}.limits.${k}`);
+      }
+      for (const k of featureKeys) {
+        if (text(at.features, k)) missing.push(`${locale}: agentPricing.${p.id}.features.${k}`);
       }
     }
   }

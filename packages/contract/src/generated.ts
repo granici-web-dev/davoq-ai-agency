@@ -12,12 +12,30 @@ export const PRODUCTS: readonly Product[] = [
     {
       "id": "configurator",
       "version": 1,
-      "status": "beta",
+      "status": "shipped",
       "feature": "configurator",
       "plan": "pro",
       "verticals": [
         "furniture"
-      ]
+      ],
+      "tiers": {
+        "starter": {
+          "price": 119,
+          "setup": 490,
+          "limits": {
+            "offers": 200
+          },
+          "features": []
+        },
+        "pro": {
+          "price": 249,
+          "setup": 490,
+          "limits": {
+            "offers": 600
+          },
+          "features": []
+        }
+      }
     }
   ];
 
