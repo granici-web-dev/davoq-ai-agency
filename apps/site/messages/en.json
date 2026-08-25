@@ -1534,5 +1534,167 @@
     ],
     "faqText": "If your question is about prices, packages or timelines, it may already have a written answer.",
     "faqLink": "Frequently asked questions"
+  },
+  "legal": {
+    "eyebrow": "Legal",
+    "updated": "Last updated",
+    "updatedDate": "25 August 2026",
+    "tocLabel": "Contents",
+    "entity": [
+      {
+        "label": "Controller",
+        "value": "— to be filled in: legal name"
+      },
+      {
+        "label": "Registration",
+        "value": "— to be filled in: company number"
+      },
+      {
+        "label": "Address",
+        "value": "— to be filled in: registered office"
+      },
+      {
+        "label": "Email",
+        "value": "— to be filled in: address for requests"
+      }
+    ]
+  },
+  "privacyPage": {
+    "metaTitle": "Privacy policy",
+    "metaDescription": "What data the form on this site collects, why, who else sees it and how long we keep it. One technical cookie. No analytics, no pixels, no selling of data.",
+    "title": "Privacy policy",
+    "lead": "Written for what this site actually does, not copied from somewhere. If you find something in it that does not match what you see, write to us — the mistake is ours.",
+    "sections": [
+      {
+        "title": "Who is responsible for the data",
+        "intro": "Data sent through this site is received by the controller below. Requests about your rights go to the same place.",
+        "entity": true
+      },
+      {
+        "title": "What data we receive",
+        "intro": "The site has a single form. From it we receive only what you write:",
+        "list": [
+          "Your name — so we know how to address you.",
+          "Your email or phone — so we can answer.",
+          "Your company's website, if you fill it in. It is optional.",
+          "Your message, if you write one. It is optional."
+        ],
+        "outro": "In addition, like any site, the server logs requests: IP address, time, the page requested and the browser type. These logs are technical and are not linked to the form."
+      },
+      {
+        "title": "Why we receive it",
+        "intro": "We use the form data to answer you and to prepare the demo or the quote you asked for — that is, for the steps before a possible contract, at your own request. Server logs exist so the site can run and be defended against abuse; the basis is our legitimate interest in keeping a service working.",
+        "outro": "We do not use it for anything else. If you write to us about furniture, we will not write to you a month later about something unrelated."
+      },
+      {
+        "title": "Who else sees it",
+        "intro": "Besides us, the data passes through two services, each with a strict role:",
+        "list": [
+          "Vercel — hosts the site. Requests to pages go through it, and it keeps the technical logs.",
+          "Resend — delivers the email with your request to us. The contents of the form pass through this service on the way to our mailbox."
+        ],
+        "outro": "We give it to nobody else. We do not sell it, trade it, or send it to advertising networks."
+      },
+      {
+        "title": "Where it goes and how long we keep it",
+        "intro": "A form submission is not saved into a database: it leaves by email and stays in our correspondence. A database for a single form would mean backups, migrations and personal data somebody has to answer for — with no gain for you.",
+        "outro": "We keep the correspondence for as long as the discussion is live and for twelve months after the last message, so we can pick the conversation back up if you return. After that we delete it. Technical logs are kept by the hosting provider, for a short period, under its own rules."
+      },
+      {
+        "title": "Cookies",
+        "intro": "The site sets a single cookie, called NEXT_LOCALE. It remembers which language you are reading in, so the next page does not send you to the wrong version. It identifies nobody and tracks nothing.",
+        "list": [
+          "We have no analytics: no Google Analytics, nothing of that kind.",
+          "We have no advertising pixels and no social buttons that load somebody else's code.",
+          "Fonts are served from our own domain, not from a third-party CDN — your browser asks nothing of another server."
+        ],
+        "outro": "That is why the site does not greet you with a consent banner: there is nothing to consent to."
+      },
+      {
+        "title": "Your rights",
+        "intro": "Over the data we hold about you, you have the right:",
+        "list": [
+          "To find out what data we hold and to receive a copy.",
+          "To ask us to correct what is wrong.",
+          "To ask us to delete it.",
+          "To ask us to restrict its use, or to object to use based on our legitimate interest.",
+          "To receive the data in a format that can be moved elsewhere."
+        ],
+        "outro": "Write to the address above and we will answer within a month at the latest. If the answer does not satisfy you, you have the right to complain to the data protection supervisory authority of the country you live in."
+      },
+      {
+        "title": "What we do not do",
+        "list": [
+          "We do not sell or rent the data to anyone.",
+          "We do not build profiles and do not make automated decisions about you.",
+          "We do not add you to any mailing list because you filled in the form.",
+          "We do not track which pages you read before writing."
+        ]
+      },
+      {
+        "title": "Your own customers' data",
+        "intro": "This policy is about the site. If you become a client and an agent ends up processing your customers' data, that is governed separately, by contract and by a data processing agreement, in which you are the controller and we are the processor.",
+        "outro": "Each client's data stays isolated: we do not mix it between accounts and we do not train anything on it for other clients."
+      },
+      {
+        "title": "Changes",
+        "intro": "If we change how we work with data, we change this text too, and the date at the top is updated. If the change is significant, we say so visibly rather than quietly replacing a paragraph."
+      }
+    ]
+  },
+  "termsPage": {
+    "metaTitle": "Terms and conditions",
+    "metaDescription": "What this site is, what the displayed prices mean, what «coming soon» means and what we do not promise. Written short, without paragraphs that say nothing.",
+    "title": "Terms and conditions",
+    "lead": "The site is a presentation, not a shop: nothing is bought from it and no account is created. The text below says what it does mean, then.",
+    "sections": [
+      {
+        "title": "Who publishes this site",
+        "entity": true
+      },
+      {
+        "title": "What the site is",
+        "intro": "A presentation of AI agents rented on a monthly subscription. It has no cart, no online payment and no user accounts. The only possible action is the form through which you write to us.",
+        "outro": "Sending the form does not conclude any contract and does not oblige us to accept the work, just as it obliges you to nothing."
+      },
+      {
+        "title": "The prices shown",
+        "intro": "The prices on the pricing page are the monthly subscription and the one-off setup fee for the standard packages. They are informational: they do not constitute a binding offer in the legal sense, and the contract is concluded separately, in writing.",
+        "list": [
+          "For the Platform package the price is set individually, because the work is different every time.",
+          "Prices may change for the future. A client already connected does not have the price changed for the package they hold, under the terms of their contract.",
+          "VAT treatment and the invoicing currency are stated in the contract and on the invoice."
+        ]
+      },
+      {
+        "title": "Agents marked «coming soon»",
+        "intro": "Some of the agents are still being built and do not work yet. Their pages describe what they will do, not what they do today, and are written as such.",
+        "outro": "«Included in the package» means the package can be connected now, at today's price, and the agent switches on for your account when it is ready. It does not mean a particular date: we do not promise deadlines we cannot keep. If an agent does not appear within a reasonable time, you have the right to leave the package under the terms of your contract."
+      },
+      {
+        "title": "The images on the pages",
+        "intro": "The screens drawn on the pages — the widget conversation, the request sheet, the customer record, the follow-up plan, the order status, the content drafts — are illustrations we built, not captures from a running product. The data in them is invented as an example.",
+        "outro": "They contain no real customers, real orders or anyone's real prices. We display no client logos, testimonials or performance figures that we cannot prove."
+      },
+      {
+        "title": "The site's content",
+        "intro": "The texts, structure, code, illustrations and visual identity are ours. You may read them and share links, but you may not copy the content in order to publish it as your own.",
+        "outro": "The names of other companies or platforms, where they appear, belong to their owners and are used only to say where content goes or where data comes from."
+      },
+      {
+        "title": "Links to other sites",
+        "intro": "If we link to a site that is not ours, we are not responsible for what is there, nor for how that site treats your data."
+      },
+      {
+        "title": "Liability",
+        "intro": "We do everything we can to keep the information here accurate and the site working. We cannot, however, guarantee that there are no typing errors, that the site will never be unavailable, or that a result somebody else obtained will repeat for you.",
+        "outro": "Business decisions taken solely on the basis of information on this site remain yours. What we actually guarantee is written in the contract, not here."
+      },
+      {
+        "title": "Changes and governing law",
+        "intro": "We may amend this text; the date at the top shows the latest version. Relations arising from use of the site are governed by the law of the operator's registered seat, and disputes are settled by the competent courts there.",
+        "outro": "— to be filled in: governing law and competent court, once the legal form is settled."
+      }
+    ]
   }
 }

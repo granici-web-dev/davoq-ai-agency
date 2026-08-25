@@ -1534,5 +1534,167 @@
     ],
     "faqText": "Dacă întrebarea este despre prețuri, pachete sau termene, s-ar putea să aibă deja un răspuns scris.",
     "faqLink": "Întrebări frecvente"
+  },
+  "legal": {
+    "eyebrow": "Legal",
+    "updated": "Ultima actualizare",
+    "updatedDate": "25 august 2026",
+    "tocLabel": "Cuprins",
+    "entity": [
+      {
+        "label": "Operator",
+        "value": "— de completat: denumirea juridică"
+      },
+      {
+        "label": "Înregistrare",
+        "value": "— de completat: cod fiscal / IDNO"
+      },
+      {
+        "label": "Adresă",
+        "value": "— de completat: sediul social"
+      },
+      {
+        "label": "E-mail",
+        "value": "— de completat: adresa pentru cereri"
+      }
+    ]
+  },
+  "privacyPage": {
+    "metaTitle": "Politica de confidențialitate",
+    "metaDescription": "Ce date primim prin formularul de pe site, de ce, cui ajung și cât le păstrăm. Un singur cookie, tehnic. Fără analitică, fără pixeli, fără vânzarea datelor.",
+    "title": "Politica de confidențialitate",
+    "lead": "Scrisă pe ce face site-ul acesta, nu copiată de undeva. Dacă găsiți în ea ceva ce nu se potrivește cu ce vedeți, scrieți-ne — greșeala e a noastră.",
+    "sections": [
+      {
+        "title": "Cine răspunde de date",
+        "intro": "Datele trimise prin acest site le primește operatorul de mai jos. Tot acolo se trimit și cererile privind drepturile dumneavoastră.",
+        "entity": true
+      },
+      {
+        "title": "Ce date primim",
+        "intro": "Site-ul are un singur formular. Din el primim doar ce scrieți dumneavoastră:",
+        "list": [
+          "Numele — ca să știm cum să vă spunem.",
+          "E-mailul sau telefonul — ca să vă putem răspunde.",
+          "Site-ul companiei, dacă îl completați. Este opțional.",
+          "Mesajul, dacă îl scrieți. Este opțional."
+        ],
+        "outro": "În plus, ca orice site, serverul înregistrează cererile: adresa IP, ora, pagina cerută și tipul browserului. Aceste jurnale sunt tehnice și nu sunt legate de formular."
+      },
+      {
+        "title": "De ce le primim",
+        "intro": "Datele din formular le folosim ca să vă răspundem și ca să pregătim demonstrația sau oferta pe care le-ați cerut — adică pentru pașii dinaintea unui eventual contract, la cererea dumneavoastră. Jurnalele serverului există ca site-ul să funcționeze și să poată fi apărat de abuzuri; temeiul este interesul nostru legitim de a ține un serviciu în stare de funcționare.",
+        "outro": "Nu le folosim pentru altceva. Dacă ne scrieți despre mobilă, nu vă vom scrie peste o lună despre altă temă."
+      },
+      {
+        "title": "Cine le mai vede",
+        "intro": "În afară de noi, datele trec prin două servicii, fiecare cu un rol strict:",
+        "list": [
+          "Vercel — găzduiește site-ul. Prin el trec cererile către pagini și tot el ține jurnalele tehnice.",
+          "Resend — livrează e-mailul cu cererea dumneavoastră către noi. Conținutul formularului trece prin acest serviciu ca să ajungă în cutia noastră poștală."
+        ],
+        "outro": "Altcuiva nu le dăm. Nu le vindem, nu le schimbăm și nu le trimitem către rețele de publicitate."
+      },
+      {
+        "title": "Unde ajung și cât le păstrăm",
+        "intro": "Cererea din formular nu se salvează într-o bază de date: pleacă prin e-mail și rămâne în corespondența noastră. O bază de date pentru un singur formular ar însemna copii de siguranță, migrări și date personale de care ar trebui să răspundă cineva — fără niciun câștig pentru dumneavoastră.",
+        "outro": "Corespondența o păstrăm atât timp cât discuția este în curs și douăsprezece luni după ultimul mesaj, ca să putem relua conversația dacă reveniți. După aceea o ștergem. Jurnalele tehnice le păstrează furnizorul de găzduire, pentru o perioadă scurtă, potrivit propriilor reguli."
+      },
+      {
+        "title": "Cookie-uri",
+        "intro": "Site-ul pune un singur cookie, numit NEXT_LOCALE. El ține minte în ce limbă citiți, ca să nu vă trimită la versiunea greșită la următoarea pagină. Nu identifică pe nimeni și nu urmărește nimic.",
+        "list": [
+          "Nu avem analitică: nici Google Analytics, nici altceva de acest fel.",
+          "Nu avem pixeli de publicitate și nici butoane de rețele sociale care încarcă cod străin.",
+          "Fonturile sunt servite de pe domeniul nostru, nu de pe un CDN străin — browserul dumneavoastră nu cere nimic de la alt server."
+        ],
+        "outro": "De aceea site-ul nu vă întâmpină cu o fereastră de consimțământ: nu este nimic la care să consimțiți."
+      },
+      {
+        "title": "Drepturile dumneavoastră",
+        "intro": "Asupra datelor pe care le avem despre dumneavoastră aveți dreptul:",
+        "list": [
+          "Să aflați ce date avem și să primiți o copie.",
+          "Să cereți corectarea a ceea ce este greșit.",
+          "Să cereți ștergerea lor.",
+          "Să cereți limitarea folosirii lor sau să vă opuneți folosirii întemeiate pe interesul nostru legitim.",
+          "Să primiți datele într-un format care se poate muta în altă parte."
+        ],
+        "outro": "Scrieți-ne la adresa de mai sus și vă răspundem în cel mult o lună. Dacă răspunsul nu vă mulțumește, aveți dreptul să vă adresați autorității de supraveghere a protecției datelor din țara în care locuiți."
+      },
+      {
+        "title": "Ce nu facem",
+        "list": [
+          "Nu vindem și nu închiriem datele nimănui.",
+          "Nu construim profiluri și nu luăm decizii automate despre dumneavoastră.",
+          "Nu vă adăugăm la nicio listă de e-mailuri pentru că ați completat formularul.",
+          "Nu urmărim ce pagini ați citit înainte să scrieți."
+        ]
+      },
+      {
+        "title": "Datele clienților dumneavoastră",
+        "intro": "Această politică este despre site. Dacă deveniți client și un agent ajunge să prelucreze datele clienților dumneavoastră, acel lucru se reglementează separat, prin contract și printr-un acord de prelucrare a datelor, în care dumneavoastră sunteți operatorul, iar noi persoana împuternicită.",
+        "outro": "Datele fiecărui client rămân izolate: nu le amestecăm între conturi și nu antrenăm nimic pe ele pentru alți clienți."
+      },
+      {
+        "title": "Modificări",
+        "intro": "Dacă schimbăm ceva în felul în care lucrăm cu datele, schimbăm și acest text, iar data de sus se actualizează. Dacă schimbarea este importantă, o spunem în mod vizibil, nu doar prin înlocuirea tăcută a unui paragraf."
+      }
+    ]
+  },
+  "termsPage": {
+    "metaTitle": "Termeni și condiții",
+    "metaDescription": "Ce este acest site, ce înseamnă prețurile afișate, ce înseamnă «în curând» și ce nu promitem. Scris pe scurt, fără paragrafe care nu spun nimic.",
+    "title": "Termeni și condiții",
+    "lead": "Site-ul este o prezentare, nu un magazin: nu se cumpără nimic din el și nu se creează niciun cont. Textul de mai jos spune ce înseamnă totuși ce citiți pe el.",
+    "sections": [
+      {
+        "title": "Cine publică acest site",
+        "entity": true
+      },
+      {
+        "title": "Ce este site-ul",
+        "intro": "O prezentare a unor agenți AI care se închiriază cu abonament lunar. Nu are coș de cumpărături, nu are plată online și nu are conturi de utilizator. Singura acțiune posibilă este formularul prin care ne scrieți.",
+        "outro": "Trimiterea formularului nu încheie niciun contract și nu ne obligă să acceptăm colaborarea, la fel cum nu vă obligă pe dumneavoastră la nimic."
+      },
+      {
+        "title": "Prețurile afișate",
+        "intro": "Prețurile de pe pagina de prețuri sunt abonamentul lunar și taxa unică de configurare pentru pachetele standard. Ele au caracter informativ: nu constituie o ofertă fermă în sens juridic, iar contractul se încheie separat, în scris.",
+        "list": [
+          "Pentru pachetul Platformă prețul se stabilește individual, pentru că munca este de fiecare dată alta.",
+          "Prețurile pot fi schimbate pentru viitor. Clientului deja conectat nu i se schimbă prețul pentru pachetul pe care îl are, în condițiile din contract.",
+          "Regimul de TVA și moneda de facturare se precizează în contract și pe factură."
+        ]
+      },
+      {
+        "title": "Agenții marcați «în curând»",
+        "intro": "O parte dintre agenți sunt în lucru și nu funcționează încă. Paginile lor descriu ce vor face, nu ce fac azi, și sunt scrise ca atare.",
+        "outro": "«Inclus în pachet» înseamnă că pachetul se poate conecta acum, la prețul de acum, iar agentul se activează pe contul dumneavoastră când este gata. Nu înseamnă o dată anume: nu promitem termene pe care nu le putem ține. Dacă un agent nu apare într-un timp rezonabil, aveți dreptul să renunțați la pachet în condițiile din contract."
+      },
+      {
+        "title": "Imaginile din pagini",
+        "intro": "Ecranele desenate în pagini — conversația din widget, fișa cererii, cartela clientului, planul de revenire, statusul comenzii, propunerile de conținut — sunt ilustrații construite de noi, nu capturi dintr-un produs care rulează. Datele din ele sunt inventate ca exemplu.",
+        "outro": "Nu conțin clienți reali, comenzi reale sau prețuri reale ale cuiva. Nu afișăm logo-uri de clienți, recomandări sau cifre de rezultat pe care nu le putem dovedi."
+      },
+      {
+        "title": "Conținutul site-ului",
+        "intro": "Textele, structura, codul, ilustrațiile și identitatea vizuală ne aparțin. Puteți citi și distribui linkuri, dar nu puteți copia conținutul ca să îl publicați ca al dumneavoastră.",
+        "outro": "Numele altor companii sau platforme, dacă apar, aparțin deținătorilor lor și sunt folosite doar ca să spunem unde ajunge conținutul sau de unde vin datele."
+      },
+      {
+        "title": "Linkurile către alte site-uri",
+        "intro": "Dacă trimitem către un site care nu este al nostru, nu răspundem de ce se află acolo și nici de felul în care acel site tratează datele dumneavoastră."
+      },
+      {
+        "title": "Răspundere",
+        "intro": "Facem tot ce putem ca informația de aici să fie exactă și site-ul să funcționeze. Nu putem însă garanta că nu există greșeli de scriere, că site-ul nu va fi niciodată indisponibil sau că un rezultat obținut de altcineva se va repeta la dumneavoastră.",
+        "outro": "Deciziile de afaceri luate exclusiv pe baza informațiilor de pe acest site rămân ale dumneavoastră. Ce garantăm efectiv se scrie în contract, nu aici."
+      },
+      {
+        "title": "Modificări și lege aplicabilă",
+        "intro": "Putem modifica acest text; data de sus arată ultima versiune. Raporturile născute din folosirea site-ului sunt guvernate de legea de la sediul operatorului, iar litigiile se soluționează de instanțele competente de acolo.",
+        "outro": "— de completat: legea aplicabilă și instanța competentă, după stabilirea formei juridice."
+      }
+    ]
   }
 }
