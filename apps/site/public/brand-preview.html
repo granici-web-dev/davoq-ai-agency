@@ -3,150 +3,160 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>Davoq — проверка знака</title>
-<link rel="preconnect" href="https://fonts.googleapis.com">
-<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Instrument+Sans:wght@400;500;600&display=swap" rel="stylesheet">
+<title>Davoq — логотипия</title>
 <style>
   :root { --ink:#0a0a0b; --chalk:#f2f0ed; --dim:#9b9894; --warm:#e8a56b; }
   * { box-sizing:border-box; }
   body {
-    margin:0; padding:56px 40px 96px;
+    margin:0; padding:48px 40px 96px;
     background:var(--ink); color:var(--chalk);
-    font-family:'Instrument Sans',system-ui,sans-serif;
-    -webkit-font-smoothing:antialiased;
+    font-family:system-ui,sans-serif; -webkit-font-smoothing:antialiased;
   }
-  h1 { font-size:28px; font-weight:600; margin:0 0 4px; letter-spacing:-0.01em; }
-  .sub { color:var(--dim); font-size:14px; margin:0 0 48px; max-width:60ch; line-height:1.6; }
+  h1 { font-size:26px; font-weight:600; margin:0 0 4px; }
+  .sub { color:var(--dim); font-size:14px; margin:0 0 44px; max-width:64ch; line-height:1.6; }
   h2 {
     font-size:11px; font-weight:500; letter-spacing:0.12em; text-transform:uppercase;
-    color:var(--dim); margin:0 0 20px; padding-bottom:10px; border-bottom:1px solid #ffffff14;
+    color:var(--dim); margin:0 0 18px; padding-bottom:10px; border-bottom:1px solid #ffffff14;
   }
-  section { margin-bottom:56px; max-width:1100px; }
-  .row { display:flex; align-items:flex-end; gap:40px; flex-wrap:wrap; }
-  .item { display:flex; flex-direction:column; align-items:center; gap:10px; }
+  section { margin-bottom:52px; max-width:1180px; }
+  .note { font-size:13px; color:var(--dim); line-height:1.7; max-width:72ch; margin-top:16px; }
+  .row { display:flex; align-items:flex-end; gap:36px; flex-wrap:wrap; }
+  .item { display:flex; flex-direction:column; align-items:center; gap:9px; }
   .cap { font-size:11px; color:var(--dim); font-variant-numeric:tabular-nums; }
-  .light { background:var(--chalk); color:var(--ink); padding:28px 32px; border-radius:14px; }
-  .swatches { display:flex; gap:0; border-radius:12px; overflow:hidden; max-width:760px; }
-  .sw { flex:1; padding:24px 0; display:flex; justify-content:center; }
-  .note { font-size:13px; color:var(--dim); line-height:1.7; max-width:70ch; margin-top:18px; }
-  .lockup { display:flex; align-items:center; }
-  .word { font-weight:600; letter-spacing:0.02em; line-height:1; }
+  .light { background:var(--chalk); color:var(--ink); padding:26px 30px; border-radius:14px; }
+
+  /* Кроп референса — ТОЧНО по чернилам слова. Границы не прикинуты,
+     а измерены по пикселям: 331,548 — 1716,994.
+  
+     Это важно для наложения: чтобы сравнивать формы, обе картинки должны
+     быть выставлены по одной рамке. Прикинутый кроп сдвигает референс,
+     и расхождение показывает не форму, а мою ошибку в границах. */
+  .ref {
+    --w: 660px; --crop-x: 331; --crop-y: 548; --crop-w: 1385; --crop-h: 446;
+    width: var(--w);
+    aspect-ratio: var(--crop-w) / var(--crop-h);
+    background-image: url('/brand/concept-reference.png');
+    background-repeat: no-repeat;
+    background-size: calc(var(--w) / var(--crop-w) * 2048) auto;
+    background-position:
+      calc(var(--crop-x) * -1 * var(--w) / var(--crop-w))
+      calc(var(--crop-y) * -1 * var(--w) / var(--crop-w));
+  }
+  /* Высота задана пропорцией кропа, а не на глаз: 660 × 446 / 1385.
+     Растягивание по inset ломало пропорцию референса на пол-пикселя,
+     и наложение показывало сдвиг, которого в геометрии нет. */
+  .stack { position:relative; width:660px; height:calc(660px * 446 / 1385); }
+  .stack .ref { position:absolute; top:0; left:0; }
+  .stack svg { position:absolute; top:0; left:0; width:660px; height:calc(660px * 446 / 1385); }
+  .stack svg { color:#ff4d4d; mix-blend-mode:screen; }
   code { font-family:ui-monospace,monospace; font-size:12px; color:var(--warm); }
 </style>
 </head>
 <body>
 
-<h1>Davoq — знак</h1>
+<h1>davoq — логотипия</h1>
 <p class="sub">
-  Монограмма: D образует контур скруглённого окна, внутри Q — окружность с хвостом под 45°,
-  выходящим за контур. Сетка 24×24, штрих 2, все координаты на целых или половинных значениях.
-  Геометрия построена с нуля, не обводка.
+  Геометрия построена заново по сетке, но пропорции сняты с референса измерением:
+  рост строчной, толщина штриха, длина выносного у&nbsp;<code>d</code>, вылет хвоста
+  у&nbsp;<code>q</code>, просветы между буквами. Внизу наложение на саму картинку —
+  «один в один» иначе проверить нечем.
 </p>
 
 <!--
-  Знак. Единственное определение на этой странице — остальное ссылается сюда
-  через <use>. Пять копий пути, отличающихся размером, разошлись бы при первой
-  же правке кривой, и заметить это можно было бы только сличив их глазами.
+  Одно определение слова на всю страницу.
+
+  Все размеры СНЯТЫ С РЕФЕРЕНСА по пикселям, а не на глаз. Масштаб: рост
+  строчной в исходнике 254 px принят за 12 единиц, отсюда коэффициент
+  0.047244. Что намерено:
+
+    рост строчной («о» по внешнему краю)  254 px → 12
+    штрих (кольцо «о», стойка «d»)         54 px → 2.55
+    выносной «d» над чашей                 92 px → 4.35   (верх на 1.65)
+    вылет хвоста «q» под базовую          100 px → 4.72   (низ на 22.72)
+    просвет d→a                            34 px → 1.61
+    просвет a→v                            22 px → 1.04
+    v и o                                   1 px → почти касаются
+    просвет o→q                            27 px → 1.28
+
+  Два числа разошлись со спецификацией, и взяты они из картинки:
+
+  Хвост q идёт под 56.8°, а не под 45°. Угол снят методом наименьших
+  квадратов по центрам масс строк ниже базовой линии, где кроме хвоста
+  ничего нет. Хвост радиален: его ось, продлённая назад, проходит через
+  центр чаши.
+
+  Хвост толще остальных штрихов: 64 px против 54, то есть 3.0 против 2.55.
+
+  Чаша у d, a, o и q одна: центр на 12, осевой радиус (12 − 2.55) / 2 = 4.725.
+  Стойка касается чаши справа. Концы срезаны — у геометрического гротеска
+  терминалы прямые.
 -->
 <svg width="0" height="0" style="position:absolute" aria-hidden="true">
-  <symbol id="mark" viewBox="0 0 24 24">
-    <g fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
-      <!-- Пропорции посчитаны от 16px, а не от красоты на 128.
-      
-           Поперёк знака через центр идут девять полос: поле, штрих D, просвет,
-           штрих Q, дырка Q, и обратно. При 16px каждая линия и каждый просвет
-           должны получить не меньше полутора пикселей, иначе антиалиасинг
-           сливает их в пятно — что и вышло на первой версии, где просвет между
-           D и Q был всего 1.3 px.
-      
-           Отсюда: штрих 2.5 (1.67 px), просвет 2.5, дырка Q 7 (4.7 px).
-           Q сидит плотно в D — заодно это убивает сходство с лупой:
-           у лупы линза никогда не заполняет оправу. -->
-      <path d="M4.5 3H12A9 9 0 0 1 12 21H4.5A1.5 1.5 0 0 1 3 19.5V4.5A1.5 1.5 0 0 1 4.5 3Z"/>
-      <circle cx="12" cy="11.5" r="3.5"/>
-      <!-- Хвост начинается ВНУТРИ чаши и пересекает её: этим Q и отличается
-           от лупы, у которой ручка в линзу не заходит. -->
-      <path d="M13.5 13L20.5 20"/>
+  <symbol id="logo" viewBox="0 0 69 25">
+    <g fill="none" stroke="currentColor" stroke-linecap="butt" stroke-linejoin="miter">
+      <g stroke-width="2.55">
+        <circle cx="7.48" cy="12" r="4.725"/><path d="M12.2 1.65V18"/>
+        <circle cx="21.08" cy="12" r="4.725"/><path d="M25.81 6V18"/>
+        <!-- v шире и левее, чем выходило по прикидке: измерение своей же
+             отрисовки показало просвет a→v в 28 px против 23 в референсе
+             и щель 8 px между v и o, которой там нет — буквы касаются. -->
+        <path d="M29.34 6L34.17 14.9L39 6"/>
+        <circle cx="46.05" cy="12" r="4.725"/>
+        <circle cx="59.3" cy="12" r="4.725"/>
+      </g>
+      <!-- Хвост: радиус чаши, продлённый наружу под 56.8°. -->
+      <path d="M61.87 15.96L65.71 21.87" stroke-width="3"/>
     </g>
   </symbol>
 
-  <!--
-    Врезка для малых размеров: 16 px и фавикон.
-
-    Не другой логотип, а тот же силуэт, пересказанный заливкой. Штриховой
-    знак на 16 px рассыпается не от тонкости линии, а от нехватки места:
-    поперёк идут четыре штриха, два просвета и дырка Q — семь полос на
-    шестнадцать пикселей. Утолщение только съедает просветы.
-
-    Заливка убирает четыре полосы из семи: остаётся тело D, дырка Q и хвост.
-    Дырка сделана вырезом (evenodd), а не белым кружком сверху, — иначе знак
-    перестал бы работать на любом фоне, кроме одного.
-  -->
-  <symbol id="mark-16" viewBox="0 0 24 24">
-    <path fill="currentColor" fill-rule="evenodd"
-          d="M6 2.5H12A9.5 9.5 0 0 1 12 21.5H6A3.5 3.5 0 0 1 2.5 18V6A3.5 3.5 0 0 1 6 2.5ZM12 7.5A4.5 4.5 0 1 0 12 16.5A4.5 4.5 0 1 0 12 7.5Z"/>
-    <path fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round"
-          d="M17.5 17.5L21 21"/>
-  </symbol>
-  <symbol id="logotype-sym" viewBox="0 0 74 26">
-    <g fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="butt" stroke-linejoin="miter">
-      <circle cx="8" cy="12" r="4.8"/><path d="M12.8 2V18"/>
-      <circle cx="21.6" cy="12" r="4.8"/><path d="M26.4 6V18"/>
-      <path d="M30.4 6L34.7 18L39 6"/>
-      <circle cx="47.8" cy="12" r="4.8"/>
-      <circle cx="61" cy="12" r="4.8"/><path d="M64.4 15.4L71 22"/>
-    </g>
-  </symbol>
-
+  <!-- Знак: та же q, вынутая из слова. -->
   <symbol id="q-mark" viewBox="0 0 24 24">
-    <g fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="butt">
-      <circle cx="10.5" cy="10.5" r="5.5"/>
-      <path d="M14.4 14.4L20.5 20.5"/>
+    <g fill="none" stroke="currentColor" stroke-linecap="butt">
+      <circle cx="10.6" cy="10.6" r="5.4" stroke-width="2.9"/>
+      <path d="M13.54 15.13L17.93 21.9" stroke-width="3.4"/>
     </g>
   </symbol>
 </svg>
 
 <section>
-  <h2>По референсу: логотипия</h2>
-
-  <!--
-    Слово целиком построено из окружностей и прямых — так устроен любой
-    геометрический гротеск, и так же устроен референс.
-
-    Сетка: рост строчной 12 (это же диаметр «о» по внешнему краю), штрих 2.4,
-    базовая линия 18, верх выносных 2, низ хвоста 23. Окружность у d, a, o и q
-    одна и та же: центр на 12, радиус по осевой 4.8. Стойка касается чаши
-    справа — её осевая стоит ровно на 4.8 от центра, и внешний край стойки
-    совпадает с внешним краем чаши.
-
-    Концы прямые, не скруглённые: у геометрического гротеска терминалы
-    срезаны, и круглые концы сделали бы из шрифта иконочный набор.
-
-    Хвост q — единственное отступление от нормальной буквы: вместо
-    вертикального выносного идёт прямая под 45° из нижне-правой точки чаши.
-    Это и есть весь знак.
-  -->
-  <svg viewBox="0 0 74 26" width="420" aria-label="davoq"><use href="#logotype-sym"/></svg>
-
-  <div class="row" style="margin-top:32px">
-    <div class="item"><svg viewBox="0 0 74 26" width="74"><use href="#logotype-sym"/></svg><span class="cap">74</span></div>
-    <div class="item"><svg viewBox="0 0 74 26" width="110"><use href="#logotype-sym"/></svg><span class="cap">110</span></div>
-    <div class="item"><svg viewBox="0 0 74 26" width="160"><use href="#logotype-sym"/></svg><span class="cap">160</span></div>
-  </div>
-  <p class="note">
-    Внизу — то же слово в трёх кеглях. Проверяем, на каком просветы между
-    буквами и дырка внутри «о» начинают затягиваться.
-  </p>
+  <h2>Референс — как есть</h2>
+  <div class="ref"></div>
 </section>
 
 <section>
-  <h2>Знак, выведенный из логотипии</h2>
-  <!--
-    Логотипия сама по себе не даёт фавикона: слово в 16 px нечитаемо при
-    любой отрисовке. Знаком становится та самая q — единственная буква,
-    которая в этом слове не как у всех.
-  -->
+  <h2>Построено</h2>
+  <svg viewBox="0 0 69 25" width="660" aria-label="davoq"><use href="#logo"/></svg>
+</section>
+
+<section>
+  <h2>Наложение: построенное красным поверх референса</h2>
+  <canvas id="overlay" style="width:100%;max-width:900px;display:block"></canvas>
+  <p class="note">
+    Совмещено на холсте, в координатах исходной картинки: референс вырезан по
+    измеренной рамке чернил (331,548 — 1716,994), построенное вписано ровно
+    в неё же. Через CSS это делать нельзя — первая версия наложения шла
+    через кроп фона и показывала сдвиг, которого в геометрии нет.
+  </p>
+  <p class="note" id="overlay-numbers"></p>
+</section>
+
+<section>
+  <h2>Кегли</h2>
+  <div class="row">
+    <div class="item"><svg viewBox="0 0 69 25" width="72"><use href="#logo"/></svg><span class="cap">72</span></div>
+    <div class="item"><svg viewBox="0 0 69 25" width="110"><use href="#logo"/></svg><span class="cap">110</span></div>
+    <div class="item"><svg viewBox="0 0 69 25" width="160"><use href="#logo"/></svg><span class="cap">160</span></div>
+    <div class="item"><svg viewBox="0 0 69 25" width="240"><use href="#logo"/></svg><span class="cap">240</span></div>
+  </div>
+</section>
+
+<section>
+  <h2>На светлом</h2>
+  <div class="light"><svg viewBox="0 0 69 25" width="380"><use href="#logo"/></svg></div>
+</section>
+
+<section>
+  <h2>Знак из q — для фавикона</h2>
   <div class="row">
     <div class="item"><svg width="16" height="16"><use href="#q-mark"/></svg><span class="cap">16</span></div>
     <div class="item"><svg width="24" height="24"><use href="#q-mark"/></svg><span class="cap">24</span></div>
@@ -155,129 +165,67 @@
     <div class="item"><svg width="128" height="128"><use href="#q-mark"/></svg><span class="cap">128</span></div>
   </div>
   <p class="note">
-    Штрих здесь толще, чем в слове: знак стоит один, и пропорции буквы,
-    выдернутой из строки, на мелочи не держатся.
+    Слово в 16&nbsp;px нечитаемо при любой отрисовке, поэтому фавикону нужен знак.
+    Оговорка прежняя: <code>q</code> с хвостом, вынутая из слова, в квадрате
+    читается лупой. Внутри слова это работает, отдельно — нет.
   </p>
 </section>
 
 <section>
-  <h2>Прежний концепт: монограмма D + Q</h2>
-  <p class="note" style="margin:0 0 20px">Построен по письменной спецификации, до того как появился референс. Оставлен для сравнения.</p>
-  <div class="row">
-  <div class="row">
-    <div class="item"><svg width="16" height="16"><use href="#mark"/></svg><span class="cap">16</span></div>
-    <div class="item"><svg width="24" height="24"><use href="#mark"/></svg><span class="cap">24</span></div>
-    <div class="item"><svg width="32" height="32"><use href="#mark"/></svg><span class="cap">32</span></div>
-    <div class="item"><svg width="48" height="48"><use href="#mark"/></svg><span class="cap">48</span></div>
-    <div class="item"><svg width="128" height="128"><use href="#mark"/></svg><span class="cap">128</span></div>
-  </div>
-  <p class="note">
-    Смотреть надо на 16: там хвост либо читается отдельной деталью, либо слипается
-    с дугой D в пятно. Если слипается — хвост укорачивается или штрих утолщается.
-  </p>
-</section>
-
-<section>
-  <h2>Врезка для малых размеров</h2>
-  <div class="row">
-    <div class="item"><svg width="16" height="16"><use href="#mark"/></svg><span class="cap">16 штрих</span></div>
-    <div class="item"><svg width="16" height="16"><use href="#mark-16"/></svg><span class="cap">16 заливка</span></div>
-    <div class="item"><svg width="24" height="24"><use href="#mark-16"/></svg><span class="cap">24</span></div>
-    <div class="item"><svg width="32" height="32"><use href="#mark-16"/></svg><span class="cap">32</span></div>
-    <div class="item"><svg width="128" height="128"><use href="#mark-16"/></svg><span class="cap">128</span></div>
-  </div>
-  <p class="note">
-    Слева штриховой знак на 16, рядом врезка. Врезка идёт только в фавикон
-    и туда, где знак меньше 20&nbsp;px; везде выше работает основной.
-  </p>
-</section>
-
-<section>
-  <h2>Масштабы на светлом</h2>
-  <div class="light">
-    <div class="row">
-      <div class="item"><svg width="16" height="16"><use href="#mark"/></svg><span class="cap">16</span></div>
-      <div class="item"><svg width="24" height="24"><use href="#mark"/></svg><span class="cap">24</span></div>
-      <div class="item"><svg width="32" height="32"><use href="#mark"/></svg><span class="cap">32</span></div>
-      <div class="item"><svg width="48" height="48"><use href="#mark"/></svg><span class="cap">48</span></div>
-      <div class="item"><svg width="128" height="128"><use href="#mark"/></svg><span class="cap">128</span></div>
-    </div>
-  </div>
-</section>
-
-<section>
-  <h2>Лочап: знак и слово</h2>
-  <!-- Отступ = ширине штриха × 3. При знаке 24 штрих равен 2, отступ 6. -->
-  <div class="row" style="gap:56px">
-    <div class="lockup" style="gap:6px">
-      <svg width="24" height="24"><use href="#mark"/></svg>
-      <span class="word" style="font-size:19px">davoq</span>
-    </div>
-    <div class="lockup" style="gap:10px">
-      <svg width="40" height="40"><use href="#mark"/></svg>
-      <span class="word" style="font-size:32px">davoq</span>
-    </div>
-    <div class="lockup" style="gap:16px">
-      <svg width="64" height="64"><use href="#mark"/></svg>
-      <span class="word" style="font-size:51px">davoq</span>
-    </div>
-  </div>
-  <p class="note">
-    Слово строчными, Instrument&nbsp;Sans 600, трекинг +2%. Кегль слова — 80% высоты знака:
-    так высота строчной <code>a</code> совпадает с внутренней окружностью Q, и лочап
-    садится на одну оптическую линию.
-  </p>
-</section>
-
-<section>
-  <h2>Контраст на фонах сайта</h2>
-  <div class="swatches">
-    <div class="sw" style="background:#0a0a0b"><svg width="32" height="32"><use href="#mark"/></svg></div>
-    <div class="sw" style="background:#141416"><svg width="32" height="32"><use href="#mark"/></svg></div>
-    <div class="sw" style="background:#1e1e21"><svg width="32" height="32"><use href="#mark"/></svg></div>
-    <div class="sw" style="background:#f2f0ed;color:#0a0a0b"><svg width="32" height="32"><use href="#mark"/></svg></div>
-    <div class="sw" style="background:#e8a56b;color:#0a0a0b"><svg width="32" height="32"><use href="#mark"/></svg></div>
-  </div>
-  <p class="note">
-    Знак нарисован <code>currentColor</code> — цвет наследуется от места, куда он поставлен,
-    и отдельных версий под каждый фон не требует.
-  </p>
-</section>
-
-<section>
-  <h2>Что происходит на самом деле: настоящий растр</h2>
+  <h2>Настоящий растр</h2>
   <div class="row" id="rasters"></div>
   <p class="note">
-    Знак отрисован в настоящие 16 и 32&nbsp;пикселя, потом растр увеличен без
-    сглаживания. Это то, что увидит человек во вкладке браузера, — в отличие
-    от вектора выше, который на экране всегда выглядит лучше, чем в жизни.
+    Отрисовано в настоящие пиксели и увеличено без сглаживания — вектор на экране
+    всегда выглядит лучше, чем в жизни.
   </p>
 </section>
 
 <script>
-/* Векторный знак, отрисованный в N пикселей и увеличенный без сглаживания.
-   Единственный честный способ оценить мелкий размер: вектор на экране
-   всегда выглядит лучше, чем его же растр в 16 px. */
+/* Наложение на холсте. Референс вырезается по измеренной рамке чернил,
+   построенное вписывается в неё же — обе картинки в одной системе координат,
+   и расхождение показывает форму, а не ошибку вёрстки. */
+(function () {
+  const REF = { x: 331, y: 548, w: 1385, h: 446 };
+  const sym = document.getElementById('logo');
+  const cv = document.getElementById('overlay');
+  cv.width = REF.w + 100; cv.height = REF.h + 100;
+  const c = cv.getContext('2d');
+  const ref = new Image();
+  ref.onload = function () {
+    const mine = new Image();
+    const svg = '<svg xmlns="http://www.w3.org/2000/svg" viewBox="1.48 1.65 65.49 21.04" width="' +
+      REF.w + '" height="' + REF.h + '">' + sym.innerHTML.replace(/currentColor/g, '#ff3b3b') + '</svg>';
+    mine.onload = function () {
+      c.fillStyle = '#0a0a0b'; c.fillRect(0, 0, cv.width, cv.height);
+      c.drawImage(ref, REF.x, REF.y, REF.w, REF.h, 50, 50, REF.w, REF.h);
+      c.globalCompositeOperation = 'screen';
+      c.drawImage(mine, 50, 50, REF.w, REF.h);
+    };
+    mine.src = 'data:image/svg+xml;base64,' + btoa(unescape(encodeURIComponent(svg)));
+  };
+  ref.src = '/brand/concept-reference.png';
+})();
+
 (function () {
   const shots = [
-    ['mark', 16, 'штриховой, 16'],
-    ['mark-16', 16, 'врезка, 16'],
-    ['mark', 32, 'штриховой, 32'],
-    ['mark-16', 32, 'врезка, 32'],
+    ['logo', 69, 25, 5, 'слово, 69 px'],
+    ['logo', 110, 40, 3, 'слово, 110 px'],
+    ['q-mark', 16, 16, 10, 'знак, 16 px'],
+    ['q-mark', 32, 32, 5, 'знак, 32 px'],
   ];
   const host = document.getElementById('rasters');
-  for (const [id, px, caption] of shots) {
+  for (const [id, w, h, scale, caption] of shots) {
     const sym = document.getElementById(id);
-    const svg = '<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="' + px +
-      '" height="' + px + '">' + sym.innerHTML.replace(/currentColor/g, '#f2f0ed') + '</svg>';
+    const svg = '<svg xmlns="http://www.w3.org/2000/svg" viewBox="' + sym.getAttribute('viewBox') +
+      '" width="' + w + '" height="' + h + '">' +
+      sym.innerHTML.replace(/currentColor/g, '#f2f0ed') + '</svg>';
     const img = new Image();
     img.onload = function () {
-      const scale = px === 16 ? 10 : 5;
       const small = document.createElement('canvas');
-      small.width = small.height = px;
-      small.getContext('2d').drawImage(img, 0, 0, px, px);
+      small.width = w; small.height = h;
+      small.getContext('2d').drawImage(img, 0, 0, w, h);
       const big = document.createElement('canvas');
-      big.width = big.height = px * scale;
+      big.width = w * scale; big.height = h * scale;
       const c = big.getContext('2d');
       c.imageSmoothingEnabled = false;
       c.drawImage(small, 0, 0, big.width, big.height);
