@@ -25,7 +25,10 @@ export const PRODUCTS: readonly Product[] = [
           "limits": {
             "offers": 200
           },
-          "features": []
+          "features": [
+            "scenarioIndustry",
+            "oneLanguage"
+          ]
         },
         "pro": {
           "price": 249,
@@ -33,7 +36,11 @@ export const PRODUCTS: readonly Product[] = [
           "limits": {
             "offers": 600
           },
-          "features": []
+          "features": [
+            "scenarioCustom",
+            "secondLanguage",
+            "promo"
+          ]
         }
       }
     }

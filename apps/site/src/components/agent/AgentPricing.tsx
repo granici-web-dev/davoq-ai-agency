@@ -97,8 +97,13 @@ function PaidColumn({ slug, name, tier }: { slug: string; name: 'starter' | 'pro
         ))}
       </ul>
 
-      <div className="mt-8 pt-2">
-        <DemoButton>{t('cta')}</DemoButton>
+      {/* mt-auto держит кнопки на одной линии: у вилок разное число строк,
+          и без этого три кнопки встали бы лесенкой. Ровно как в блоке
+          пакетов на странице цен. */}
+      <div className="mt-auto pt-8">
+        <DemoButton variant={featured ? 'primary' : 'ghost'} className="w-full">
+          {t('cta')}
+        </DemoButton>
       </div>
     </div>
   );
@@ -143,8 +148,10 @@ function IndividualColumn() {
         ))}
       </ul>
 
-      <div className="mt-8 pt-2">
-        <DemoButton>{t('cta')}</DemoButton>
+      <div className="mt-auto pt-8">
+        <DemoButton variant="ghost" className="w-full">
+          {t('cta')}
+        </DemoButton>
       </div>
     </div>
   );

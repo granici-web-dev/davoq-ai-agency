@@ -2379,7 +2379,13 @@
       "limits": {
         "offers": "quotes per month"
       },
-      "features": {}
+      "features": {
+        "scenarioIndustry": "The standard scenario for your niche",
+        "oneLanguage": "One language",
+        "scenarioCustom": "A scenario adapted to your business, not just the niche standard",
+        "secondLanguage": "A second language",
+        "promo": "Promotions from your own site, applied to the quote once you approve them"
+      }
     }
   }
 }
