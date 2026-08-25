@@ -1,6 +1,7 @@
 import { useTranslations } from 'next-intl';
 import { Link } from '@/i18n/routing';
 import { AGENTS, INDUSTRIES } from '@/lib/catalog';
+import { Logo } from './Logo';
 
 /**
  * Подвал.
@@ -24,7 +25,7 @@ export function Footer() {
       <div className="mx-auto max-w-7xl px-6 py-16 sm:px-8">
         <div className="grid gap-12 lg:grid-cols-[1.4fr_repeat(3,1fr)]">
           <div className="max-w-sm">
-            <p className="font-mono text-sm tracking-[0.2em] uppercase">{tBrand('name')}</p>
+            <Logo height={20} className="text-chalk" />
             <p className="mt-4 text-sm leading-relaxed text-chalk-faint">{t('note')}</p>
           </div>
 

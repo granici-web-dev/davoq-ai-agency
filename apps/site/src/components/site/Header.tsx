@@ -2,6 +2,7 @@
 
 import { useEffect, useState } from 'react';
 import { useLocale, useTranslations } from 'next-intl';
+import { Logo } from './Logo';
 import { Link, usePathname } from '@/i18n/routing';
 import { AGENTS, INDUSTRIES } from '@/lib/catalog';
 import { DemoButton } from '@/components/ui/DemoButton';
@@ -96,9 +97,10 @@ export function Header() {
       <div className="mx-auto flex max-w-7xl items-center justify-between gap-4">
         <Link
           href="/"
-          className="font-mono text-sm tracking-[0.2em] uppercase text-chalk transition-opacity hover:opacity-70"
+          aria-label="davoq"
+          className="text-chalk transition-opacity hover:opacity-70"
         >
-          AssistWidget
+          <Logo height={22} />
         </Link>
 
         {/* Капсула с пунктами. Фон уплотняется при прокрутке — до прокрутки
