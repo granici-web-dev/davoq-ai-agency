@@ -12,7 +12,7 @@ export const PRODUCTS: readonly Product[] = [
     {
       "id": "configurator",
       "version": 1,
-      "status": "shipped",
+      "status": "beta",
       "feature": "configurator",
       "plan": "pro",
       "verticals": [

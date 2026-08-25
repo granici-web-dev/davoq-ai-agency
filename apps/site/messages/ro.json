@@ -2353,5 +2353,22 @@
     ],
     "closingTitle": "Cel mai simplu este să ne puneți o întrebare grea",
     "closingLead": "La demonstrație vă arătăm conversația scrisă pe cazul dumneavoastră real. Dacă ceva nu se potrivește, v-o spunem atunci — nu peste trei discuții."
+  },
+  "agentPricing": {
+    "individual": {
+      "name": "Individual",
+      "price": "La cerere",
+      "lead": "Orice agent, construit pe comanda dumneavoastră",
+      "items": [
+        "Automatizări la comandă și integrări cu sistemele pe care le folosiți",
+        "Site nou sau refacerea celui existent",
+        "SEO: structură, texte, viteză, poziții",
+        "Marketing digital: campanii, conținut, analitică"
+      ],
+      "cta": "Discutăm proiectul"
+    },
+    "setupLabel": "Configurare inițială",
+    "setupNote": "o singură dată, pentru acest agent",
+    "monthly": "pe lună"
   }
 }

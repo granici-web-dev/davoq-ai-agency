@@ -2353,5 +2353,22 @@
     ],
     "closingTitle": "The simplest thing is to ask us a hard question",
     "closingLead": "At the demo we show you the conversation written on your own real case. If something does not fit, we say so then — not three conversations later."
+  },
+  "agentPricing": {
+    "individual": {
+      "name": "Individual",
+      "price": "On request",
+      "lead": "Any agent, built to your specification",
+      "items": [
+        "Custom automations and integrations with the systems you already use",
+        "A new website, or a rebuild of the one you have",
+        "SEO: structure, copy, speed, rankings",
+        "Digital marketing: campaigns, content, analytics"
+      ],
+      "cta": "Let's discuss the project"
+    },
+    "setupLabel": "Initial setup",
+    "setupNote": "one-off, for this agent",
+    "monthly": "per month"
   }
 }

@@ -14,6 +14,32 @@
 
 export type ProductStatus = 'planned' | 'beta' | 'shipped';
 
+/**
+ * Вилки. Две платные у каждого агента и одна общая.
+ *
+ * `individual` не хранится в манифестах и не имеет цены: это не подписка,
+ * а разговор. Содержание у неё одно на всех агентов — заказная разработка,
+ * интеграции, сайт, SEO, маркетинг, — и повторять его в шести манифестах
+ * значило бы завести шесть копий одного текста. Ровно та беда, из-за
+ * которой этот пакет и появился.
+ *
+ * По той же причине её нет и в `PlanFeatures` движка: сайт и SEO не
+ * выставляются подпиской и не имеют лимитов, которые кто-то считает.
+ */
+export type TierName = 'starter' | 'pro';
+export const PAID_TIERS: readonly TierName[] = ['starter', 'pro'];
+
+export interface Tier {
+  /** Евро в месяц. */
+  price: number;
+  /** Разовая плата за заведение этого агента. */
+  setup: number;
+  /** Потолки: ключ → число. Проверяются сборкой, текст к ним лежит на сайте. */
+  limits: Readonly<Record<string, number>>;
+  /** Ключи возможностей. Текст к каждому обязан быть на сайте на обоих языках. */
+  features: readonly string[];
+}
+
 export interface Product {
   /** Одно имя на весь проект: и в движке, и в каталоге сайта. */
   id: string;
@@ -26,6 +52,13 @@ export interface Product {
   plan: string;
   /** Ниши, где продукт обкатан на живых клиентах. */
   verticals: readonly string[];
+  /**
+   * Вилки. Нет — значит цену ещё не посчитали.
+   *
+   * Законно только пока продукт не продаётся: у `shipped` блок обязателен,
+   * иначе витрина обещала бы то, чего нельзя купить. Проверяет генератор.
+   */
+  tiers?: Readonly<Record<TierName, Tier>>;
 }
 
 export interface Vertical {
@@ -49,3 +82,6 @@ export const productById = (id: string): Product | undefined =>
  * не было, сайт держал работающий конфигуратор в «в curând».
  */
 export const isSellable = (p: Product): boolean => p.status === 'shipped';
+
+/** Цена, с которой начинается агент. Нет вилок — нечего показывать. */
+export const priceFrom = (p: Product): number | undefined => p.tiers?.starter.price;

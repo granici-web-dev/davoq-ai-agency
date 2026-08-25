@@ -32,6 +32,7 @@ const PRODUCTS_DIR = join(ROOT, 'apps/engine/src/products');
 const VERTICALS_DIR = join(ROOT, 'apps/engine/src/verticals');
 const PLANS_TS = join(ROOT, 'apps/engine/src/engine/plans.ts');
 const OUT = join(HERE, 'src/generated.ts');
+const MESSAGES = ['ro', 'en'].map((l) => ({ locale: l, path: join(ROOT, `apps/site/messages/${l}.json`) }));
 
 const STATUSES = ['planned', 'beta', 'shipped'];
 
@@ -61,6 +62,57 @@ function manifests(dir, file) {
     .map((e) => ({ dirName: e.name, path: join(dir, e.name, file) }));
 }
 
+
+const TIERS = ['starter', 'pro'];
+
+/**
+ * Вилки агента.
+ *
+ * Блока может не быть: продукт заведён, а цену ещё не посчитали. Это законное
+ * состояние — сайт покажет агента без цены, — но только пока он не продаётся.
+ * У `shipped` цена обязана быть, иначе витрина обещает то, чего нельзя купить.
+ *
+ * Числа проверяются здесь, а тексты к ключам `features` — ниже, по messages
+ * сайта. Разделение намеренное: число одинаково на всех языках, текст нет.
+ */
+function readTiers(m, where, status) {
+  if (m.tiers === undefined) {
+    if (status === 'shipped') {
+      fail(`${where}: продукт продаётся (status: shipped), но блока tiers нет — витрине нечего показать`);
+    }
+    return undefined;
+  }
+  const out = {};
+  for (const name of TIERS) {
+    const t = m.tiers[name];
+    if (!t) fail(`${where}: в tiers нет вилки «${name}» — их должно быть две: ${TIERS.join(', ')}`);
+    for (const k of ['price', 'setup']) {
+      if (!Number.isFinite(t[k]) || t[k] < 0) fail(`${where}: tiers.${name}.${k} должен быть числом от нуля`);
+    }
+    const limits = t.limits ?? {};
+    for (const [k, v] of Object.entries(limits)) {
+      if (!Number.isFinite(v) || v < 0) fail(`${where}: tiers.${name}.limits.${k} должен быть числом от нуля`);
+    }
+    out[name] = {
+      price: t.price,
+      setup: t.setup,
+      limits,
+      features: Array.isArray(t.features) ? t.features : [],
+    };
+  }
+  /* Pro, который не больше Starter, — это не вилка, а две одинаковые
+     карточки рядом. Ловится здесь, потому что заметить это глазами
+     на витрине уже поздно. */
+  if (out.pro.price <= out.starter.price) {
+    fail(`${where}: Pro (${out.pro.price}) не дороже Starter (${out.starter.price}) — вилки нет`);
+  }
+  for (const [k, v] of Object.entries(out.starter.limits)) {
+    const hi = out.pro.limits[k];
+    if (hi !== undefined && hi < v) fail(`${where}: limits.${k} у Pro (${hi}) меньше, чем у Starter (${v})`);
+  }
+  return out;
+}
+
 function readProducts(features) {
   return manifests(PRODUCTS_DIR, 'product.yaml').map(({ dirName, path }) => {
     const where = `apps/engine/src/products/${dirName}/product.yaml`;
@@ -75,6 +127,8 @@ function readProducts(features) {
     }
     if (typeof m.plan !== 'string' || !m.plan) fail(`${where}: plan обязателен`);
 
+    const tiers = readTiers(m, where, m.status);
+
     return {
       id: m.id,
       version: m.version,
@@ -82,6 +136,7 @@ function readProducts(features) {
       feature: m.feature,
       plan: m.plan,
       verticals: Array.isArray(m.verticals) ? m.verticals : [],
+      ...(tiers ? { tiers } : {}),
     };
   }).sort((a, b) => a.id.localeCompare(b.id));
 }
@@ -103,6 +158,45 @@ function checkVerticalRefs(products, verticals) {
     for (const v of p.verticals) {
       if (!known.has(v)) fail(`продукт «${p.id}» ссылается на нишу «${v}», которой нет в apps/engine/src/verticals`);
     }
+  }
+}
+
+
+/**
+ * У каждого ключа вилки должен быть текст на сайте — на обоих языках.
+ *
+ * Это вторая половина договорённости. Первая — сайт не может обещать то,
+ * чего нет в манифесте. Эта — манифест не может объявить то, что сайту
+ * нечем показать: ключ без текста вылезет на витрину пустой строкой либо
+ * сырым `tiers.pro.features.twoLanguages`, и увидит это клиент, а не мы.
+ *
+ * Ровно тот же вопрос задаётся в обе стороны, поэтому и живёт в контракте,
+ * а не в сборке одной из сторон.
+ */
+function checkTierCopy(products) {
+  const files = [];
+  for (const { locale, path } of MESSAGES) {
+    if (!existsSync(path)) fail(`не нашёл ${path} — сверять тексты вилок не с чем`);
+    files.push({ locale, data: JSON.parse(readFileSync(path, 'utf8')) });
+  }
+  const missing = [];
+  for (const p of products) {
+    if (!p.tiers) continue;
+    for (const [tier, t] of Object.entries(p.tiers)) {
+      const keys = [...t.features, ...Object.keys(t.limits).map((k) => `limit.${k}`)];
+      for (const key of keys) {
+        for (const { locale, data } of files) {
+          const at = data?.agentPricing?.[p.id]?.[tier]?.[key.replace('limit.', 'limits.')]
+            ?? data?.agentPricing?.shared?.[key.replace('limit.', 'limits.')];
+          if (typeof at !== 'string' || !at.trim()) {
+            missing.push(`${locale}: agentPricing.${p.id}.${tier}.${key}`);
+          }
+        }
+      }
+    }
+  }
+  if (missing.length) {
+    fail(`нет текстов для ключей вилок (${missing.length}):\n  ` + missing.slice(0, 12).join('\n  '));
   }
 }
 
@@ -128,6 +222,7 @@ const features = planFeatureKeys();
 const products = readProducts(features);
 const verticals = readVerticals();
 checkVerticalRefs(products, verticals);
+checkTierCopy(products);
 const out = render(products, verticals);
 
 if (process.argv.includes('--check')) {
