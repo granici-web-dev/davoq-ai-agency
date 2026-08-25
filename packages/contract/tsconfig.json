@@ -1,0 +1,21 @@
+{
+  "compilerOptions": {
+    "target": "ES2023",
+    "module": "NodeNext",
+    "moduleResolution": "NodeNext",
+    "lib": ["ES2023"],
+    "outDir": "dist",
+    "rootDir": "src",
+    "strict": true,
+    "declaration": true,
+    "noUncheckedIndexedAccess": true,
+    "exactOptionalPropertyTypes": true,
+
+    // Никаких неявных @types. В общем node_modules монорепозитория их много
+    // — react-dom, node, jest, — и tsc по умолчанию подключает все. Контракту
+    // не нужен ни один: он про данные, а не про среду. Без этой строки сборка
+    // падала на типах react-dom, которых пакет в глаза не видел.
+    "types": []
+  },
+  "include": ["src/**/*.ts"]
+}

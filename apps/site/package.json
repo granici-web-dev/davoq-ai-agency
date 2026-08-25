@@ -1,5 +1,5 @@
 {
-  "name": "agenti-ai-site",
+  "name": "@assistwidget/site",
   "version": "0.1.0",
   "private": true,
   "scripts": {
@@ -12,7 +12,8 @@
     "next": "16.3.2",
     "next-intl": "^4.13.7",
     "react": "19.2.8",
-    "react-dom": "19.2.8"
+    "react-dom": "19.2.8",
+    "@assistwidget/contract": "*"
   },
   "devDependencies": {
     "@tailwindcss/postcss": "^4",

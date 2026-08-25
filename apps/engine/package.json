@@ -1,5 +1,5 @@
 {
-  "name": "assistwidget",
+  "name": "@assistwidget/engine",
   "version": "0.1.0",
   "private": true,
   "type": "module",
@@ -64,7 +64,8 @@
     "react-dom": "^19.2.8",
     "undici": "^7.29.0",
     "unpdf": "^1.8.1",
-    "yaml": "^2.9.0"
+    "yaml": "^2.9.0",
+    "@assistwidget/contract": "*"
   },
   "devDependencies": {
     "@types/node": "^22.0.0",
