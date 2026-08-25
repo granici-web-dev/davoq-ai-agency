@@ -43,6 +43,13 @@ export const PRODUCTS: readonly Product[] = [
           ]
         }
       }
+    },
+    {
+      "id": "voice-assistant",
+      "version": 1,
+      "status": "planned",
+      "feature": "voice",
+      "verticals": []
     }
   ];
 

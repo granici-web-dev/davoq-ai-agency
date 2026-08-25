@@ -125,7 +125,14 @@ function readProducts(features) {
     if (!features.includes(m.feature)) {
       fail(`${where}: feature «${m.feature}» — такого ключа нет в PlanFeatures (${features.join(', ')})`);
     }
-    if (typeof m.plan !== 'string' || !m.plan) fail(`${where}: plan обязателен`);
+    /* `plan` необязателен, и это не послабление. Он описывает СТАРУЮ модель
+       — платформенный тариф, внутри которого продукт был доступен. Продукт,
+       заведённый уже под поагентную продажу, в той лестнице не стоял никогда,
+       и выдуманное значение здесь было бы хуже пустоты. Когда биллинг
+       переведут, поле уйдёт у всех. */
+    if (m.plan !== undefined && (typeof m.plan !== 'string' || !m.plan)) {
+      fail(`${where}: plan задан, но пуст — уберите поле или впишите тариф`);
+    }
 
     const tiers = readTiers(m, where, m.status);
 
@@ -134,7 +141,7 @@ function readProducts(features) {
       version: m.version,
       status: m.status,
       feature: m.feature,
-      plan: m.plan,
+      ...(m.plan === undefined ? {} : { plan: m.plan }),
       verticals: Array.isArray(m.verticals) ? m.verticals : [],
       ...(tiers ? { tiers } : {}),
     };

@@ -1,3 +1,5 @@
+import { productById } from '@assistwidget/contract';
+
 /**
  * Каталог агентов и индустрий.
  *
@@ -39,14 +41,45 @@ export interface Agent {
   full?: boolean;
 }
 
-export const AGENTS: Agent[] = [
-  { slug: 'chatbot', status: 'available', full: true },
-  { slug: 'voice-assistant', status: 'soon', full: true },
-  { slug: 'configurator', status: 'soon', full: true },
-  { slug: 'follow-up', status: 'soon', full: true },
-  { slug: 'order-status', status: 'soon', full: true },
-  { slug: 'content-engine', status: 'soon', full: true },
+/**
+ * Статус берётся из контракта, а не отсюда.
+ *
+ * В контракте он выведен из манифеста рядом с кодом агента, то есть из того,
+ * что правда есть в движке. Значение в списке ниже — запасное, для агентов,
+ * которым манифест ещё не завели.
+ *
+ * Почему не наоборот. Конфигуратор стоял здесь в `soon`, пока движок его
+ * уже считал и выставлял в счёт: двадцать семь файлов кода, потолок оферт
+ * в каждом тарифе — и «в curând» на витрине. Заметить это можно было,
+ * только открыв оба проекта разом, чего никто не делает.
+ *
+ * Запасной путь временный. Когда манифесты будут у всех шести, `fallback`
+ * отсюда уйдёт: пока он есть, статус всё ещё можно разойтись с движком,
+ * просто не заметив, что манифеста нет.
+ */
+const statusFromContract = (slug: AgentSlug): AgentStatus | undefined => {
+  const product = productById(slug);
+  if (!product) return undefined;
+  return product.status === 'shipped' ? 'available' : 'soon';
+};
+
+const AGENT_BASE: Array<{ slug: AgentSlug; fallback: AgentStatus; full?: boolean }> = [
+  { slug: 'chatbot', fallback: 'available', full: true },
+  { slug: 'voice-assistant', fallback: 'soon', full: true },
+  { slug: 'configurator', fallback: 'soon', full: true },
+  { slug: 'follow-up', fallback: 'soon', full: true },
+  { slug: 'order-status', fallback: 'soon', full: true },
+  { slug: 'content-engine', fallback: 'soon', full: true },
 ];
+
+/* Выводится один раз здесь, а не у каждого читателя: статус спрашивают
+   шесть мест — шапка, главная, хаб агентов, страница агента, страница
+   ниши, — и шесть одинаковых веток разошлись бы на первой же правке. */
+export const AGENTS: Agent[] = AGENT_BASE.map(({ slug, fallback, full }) => ({
+  slug,
+  full,
+  status: statusFromContract(slug) ?? fallback,
+}));
 
 export const INDUSTRY_SLUGS = [
   'mobilier',

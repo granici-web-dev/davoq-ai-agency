@@ -146,6 +146,16 @@ export interface PlanFeatures {
   productionUpdates: boolean;
   /** Кросспостинг в соцсети. НЕ РЕАЛИЗОВАНО. */
   social: boolean;
+  /**
+   * Телефонный агент: принимает звонок и записывает на приём. НЕ РЕАЛИЗОВАНО.
+   *
+   * Заведён раньше кода намеренно: витрина продаёт агентов поштучно, а
+   * манифест продукта обязан сослаться на существующий ключ — иначе сборка
+   * контракта не пройдёт. Так голосовой попадает в каталог со статусом
+   * `planned` и честной пометкой, вместо того чтобы жить обещанием
+   * на сайте и ничем в коде.
+   */
+  voice: boolean;
 }
 
 export type Feature = keyof PlanFeatures;
@@ -153,7 +163,7 @@ export type Feature = keyof PlanFeatures;
 /** Ничего, кроме чат-бота. Отправная точка для каждого тарифа. */
 const BASE_FEATURES: PlanFeatures = {
   chatbot: true, configurator: false, drive: false, connectors: false,
-  followup: false, productionUpdates: false, social: false,
+  followup: false, productionUpdates: false, social: false, voice: false,
 };
 
 export const PLANS: Record<PlanId, Plan> = {
@@ -259,7 +269,7 @@ export const PLANS: Record<PlanId, Plan> = {
     purchasable: false,
     features: {
       chatbot: true, configurator: true, drive: true, connectors: true,
-      followup: true, productionUpdates: true, social: true,
+      followup: true, productionUpdates: true, social: true, voice: true,
     },
     highlights: [
       'Tot ce include Business',
