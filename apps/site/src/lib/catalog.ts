@@ -45,7 +45,7 @@ export const AGENTS: Agent[] = [
   { slug: 'crm-assistant', status: 'soon', full: true },
   { slug: 'follow-up', status: 'soon', full: true },
   { slug: 'order-status', status: 'soon', full: true },
-  { slug: 'content-engine', status: 'soon' },
+  { slug: 'content-engine', status: 'soon', full: true },
 ];
 
 export const INDUSTRY_SLUGS = [

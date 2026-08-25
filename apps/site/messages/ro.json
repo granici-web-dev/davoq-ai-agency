@@ -1013,6 +1013,121 @@
       ],
       "closingTitle": "Vedeți cum arată comanda dumneavoastră pentru client",
       "closingLead": "La demonstrație luăm etapele reale din procesul dumneavoastră și vă arătăm ce mesaje ar primi clientul și ce ar vedea în pagina comenzii."
+    },
+    "content-engine": {
+      "metaTitle": "Agent AI pentru conținut pe rețele — din lucrările dumneavoastră reale",
+      "metaDescription": "Agent AI care face postări pentru Instagram, TikTok și Pinterest din fotografiile lucrărilor dumneavoastră. Nimic nu se publică fără aprobarea dumneavoastră. Inclus în pachetul Growth.",
+      "title": "Conținut din lucrările pe care le faceți oricum",
+      "lead": "Un montaj fotografiat pe telefon devine trei postări, fiecare în formatul platformei ei. Le citiți, le corectați dacă e cazul, și abia atunci pleacă. Fără apăsarea dumneavoastră nu se publică nimic.",
+      "draft": {
+        "title": "Propuneri",
+        "count": "3 variante",
+        "sourceLabel": "Sursă",
+        "source": "Bucătărie stejar natural, montaj finalizat",
+        "sourceMeta": "6 fotografii de pe șantier · materiale · termen de execuție",
+        "variants": [
+          {
+            "on": "Instagram",
+            "format": "4:5",
+            "text": "Stejar natural, fronturi fără mânere. De la comandă la montaj — șase săptămâni."
+          },
+          {
+            "on": "TikTok",
+            "format": "9:16",
+            "text": "Montajul, din corpuri goale până la bucătărie gata. Paisprezece secunde."
+          },
+          {
+            "on": "Pinterest",
+            "format": "2:3",
+            "text": "Bucătărie la comandă din stejar natural, fronturi fără mânere, iluminare sub corpuri."
+          }
+        ],
+        "holdLabel": "Așteaptă aprobarea",
+        "hold": "Nimic nu se publică până nu apăsați. Textele se pot schimba înainte.",
+        "note": "Trei variante dintr-un singur material al dumneavoastră. Le aprobați, le rescrieți sau le respingeți — publicarea începe după apăsarea dumneavoastră, nu înainte."
+      },
+      "featuresTitle": "Ce face, concret",
+      "features": {
+        "many": {
+          "title": "Dintr-o lucrare, mai multe postări",
+          "text": "Un montaj fotografiat pe telefon ajunge material pentru o săptămână. Nu pentru că se scriu o sută de texte, ci pentru că același proiect are mai multe unghiuri: rezultatul, detaliul, procesul."
+        },
+        "formats": {
+          "title": "Fiecare platformă, în formatul ei",
+          "text": "Aceeași lucrare, alt cadru și alt text: vertical acolo unde se derulează cu degetul, pătrat acolo unde se privește, descriere lungă acolo unde se caută. Nu același text copiat de trei ori."
+        },
+        "sources": {
+          "title": "Scrie din ce i-ați dat",
+          "text": "Fotografiile, materialele, dimensiunile și termenele lucrărilor dumneavoastră. Nu inventează proiecte care nu s-au făcut și nu pune prețuri pe care nu le-ați dat."
+        },
+        "approve": {
+          "title": "Publică doar ce ați aprobat",
+          "text": "Propunerile stau într-un singur ecran: aprobați, corectați textul sau respingeți. Un agent care publică singur pe numele firmei este o problemă, nu un serviciu."
+        },
+        "task": {
+          "title": "Un ritm, nu un val",
+          "text": "Un calendar cu ce iese și când, pe fiecare platformă. Zece postări într-o zi și apoi liniște o lună arată exact ca ceea ce sunt."
+        },
+        "portal": {
+          "title": "Tot ce a ieșit, într-un singur loc",
+          "text": "Ce s-a publicat, unde și când, împreună cu materialul din care a plecat. Când cineva întreabă din ce proiect e fotografia aceea, răspunsul se găsește, nu se caută."
+        }
+      },
+      "sourcesEyebrow": "Din ce scrie",
+      "sourcesTitle": "Din ce scrie — și ce nu face",
+      "sourcesYes": {
+        "title": "Scrie din",
+        "items": [
+          "Fotografiile și filmările lucrărilor dumneavoastră, așa cum le faceți: de pe telefon, de pe șantier, la montaj.",
+          "Datele proiectului: materiale, dimensiuni, termen de execuție, orașul în care s-a lucrat.",
+          "Felul în care vorbiți deja despre lucrări — din textele, ofertele și postările pe care le aveți.",
+          "Ce a mers și ce nu: postările vechi cu rezultat rămân exemplu, cele fără rezultat rămân la fel de utile."
+        ]
+      },
+      "sourcesNo": {
+        "title": "Nu face",
+        "items": [
+          "Nu inventează lucrări. Fără fotografie și fără proiect nu există postare — nu se generează un interior care nu e al dumneavoastră.",
+          "Nu publică singur. Fiecare text și fiecare cadru trec prin aprobarea dumneavoastră, iar pe un cont la care nu i-ați dat acces nu ajunge nimic.",
+          "Nu scrie prețuri, reduceri și termene pe care nu le-ați dat. O cifră apărută într-o postare devine promisiune.",
+          "Nu poartă conversația din comentarii și mesaje în locul dumneavoastră. Întrebările despre preț merg la om — sau la agentul de chat, dacă îl aveți."
+        ]
+      },
+      "platformsTitle": "Unde ajunge conținutul",
+      "platformsLead": "Textul și cadrul se pregătesc separat pentru fiecare platformă. Publicarea se face pe conturile la care ne dați acces; unde nu dați acces, primiți materialul gata de postat.",
+      "platforms": [
+        "Instagram",
+        "TikTok",
+        "Pinterest",
+        "Facebook",
+        "Blogul de pe site",
+        "Materialul gata, dacă publicați singuri"
+      ],
+      "faqTitle": "Ce se întreabă despre conținut",
+      "faq": [
+        {
+          "q": "Cine hotărăște ce se publică?",
+          "a": "Dumneavoastră. Agentul pregătește propunerile, dar între text și publicare stă o apăsare a dumneavoastră. Se poate porni și publicarea automată pentru un anumit tip de postări, dacă la un moment dat vreți asta — dar nu așa se începe și nu asta recomandăm."
+        },
+        {
+          "q": "De unde ia fotografiile?",
+          "a": "De la dumneavoastră. Un montaj fotografiat pe telefon este suficient, nu e nevoie de ședință foto. Ce nu ne dați nu apare: agentul nu caută imagini pe internet și nu generează interioare care nu sunt ale dumneavoastră."
+        },
+        {
+          "q": "Nu se va vedea că textele sunt scrise de o mașină?",
+          "a": "Se vede atunci când textul e scris din nimic. Aici pleacă de la o lucrare reală, cu materialul, dimensiunile și termenul ei, iar felul de a scrie se ia din ce ați scris deja. Și oricum îl citiți înainte să plece."
+        },
+        {
+          "q": "Câte postări ies pe lună?",
+          "a": "Depinde de câte lucrări faceți și de câte apucați să fotografiați. Nu vindem un număr: o sută de postări dintr-un singur proiect ar fi o sută de variante ale aceluiași lucru. Ritmul îl stabilim împreună, pe calendar."
+        },
+        {
+          "q": "Când este gata?",
+          "a": "Nu dăm o dată pe care nu o putem ține. Este inclus în pachetul Growth: dacă îl conectați acum, motorul de conținut se activează pe contul dumneavoastră la lansare, la prețul de la conectare."
+        }
+      ],
+      "closingTitle": "Vedeți ce ar ieși dintr-o lucrare de-a dumneavoastră",
+      "closingLead": "La demonstrație luăm fotografiile unui proiect real făcut de dumneavoastră și vă arătăm ce postări ar ieși din el, în formatul fiecărei platforme."
     }
   },
   "industryPage": {

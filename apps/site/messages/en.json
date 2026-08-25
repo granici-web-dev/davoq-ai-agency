@@ -1013,6 +1013,121 @@
       ],
       "closingTitle": "See what your order looks like to your customer",
       "closingLead": "At the demo we take the real stages from your process and show you what messages the customer would get and what they would see on the order page."
+    },
+    "content-engine": {
+      "metaTitle": "AI content agent for social media — from your own finished work",
+      "metaDescription": "An AI agent that turns photos of your finished projects into posts for Instagram, TikTok and Pinterest. Nothing is published without your approval. Included in the Growth package.",
+      "title": "Content from the work you are doing anyway",
+      "lead": "An installation photographed on a phone becomes three posts, each in its own platform's format. You read them, correct them if needed, and only then do they go out. Nothing is published without you pressing approve.",
+      "draft": {
+        "title": "Drafts",
+        "count": "3 variants",
+        "sourceLabel": "Source",
+        "source": "Natural oak kitchen, installation finished",
+        "sourceMeta": "6 photos from site · materials · lead time",
+        "variants": [
+          {
+            "on": "Instagram",
+            "format": "4:5",
+            "text": "Natural oak, handleless fronts. From order to installation — six weeks."
+          },
+          {
+            "on": "TikTok",
+            "format": "9:16",
+            "text": "The installation, from empty carcasses to a finished kitchen. Fourteen seconds."
+          },
+          {
+            "on": "Pinterest",
+            "format": "2:3",
+            "text": "Bespoke natural oak kitchen, handleless fronts, lighting under the cabinets."
+          }
+        ],
+        "holdLabel": "Waiting for approval",
+        "hold": "Nothing is published until you press. The texts can still be changed.",
+        "note": "Three variants from one piece of your own material. You approve them, rewrite them or reject them — publishing starts after you press, not before."
+      },
+      "featuresTitle": "What it does, concretely",
+      "features": {
+        "many": {
+          "title": "One job, several posts",
+          "text": "An installation photographed on a phone becomes a week of material. Not because a hundred texts get written, but because the same project has several angles: the result, the detail, the process."
+        },
+        "formats": {
+          "title": "Each platform in its own format",
+          "text": "The same job, a different frame and a different text: vertical where people scroll with a thumb, square where they look, a long description where they search. Not one text copied three times."
+        },
+        "sources": {
+          "title": "It writes from what you gave it",
+          "text": "The photos, materials, dimensions and lead times of your own jobs. It does not invent projects that were never built and does not put prices on them that you never gave."
+        },
+        "approve": {
+          "title": "It publishes only what you approved",
+          "text": "The drafts sit on one screen: approve, correct the text, or reject. An agent that publishes on the company's name by itself is a problem, not a service."
+        },
+        "task": {
+          "title": "A rhythm, not a wave",
+          "text": "A calendar of what goes out and when, per platform. Ten posts in one day and then a month of silence looks exactly like what it is."
+        },
+        "portal": {
+          "title": "Everything published, in one place",
+          "text": "What went out, where and when, together with the material it came from. When someone asks which project that photo is from, the answer is found rather than hunted for."
+        }
+      },
+      "sourcesEyebrow": "What it writes from",
+      "sourcesTitle": "What it writes from — and what it does not do",
+      "sourcesYes": {
+        "title": "It writes from",
+        "items": [
+          "Photos and clips of your own jobs, taken the way you already take them: on a phone, on site, at the installation.",
+          "The project's own data: materials, dimensions, lead time, the town the job was done in.",
+          "The way you already talk about your work — from the texts, quotes and posts you have.",
+          "What worked and what did not: old posts that got a response stay as examples, and so do the ones that got none."
+        ]
+      },
+      "sourcesNo": {
+        "title": "It does not",
+        "items": [
+          "It does not invent jobs. No photo and no project means no post — it will not generate an interior that is not yours.",
+          "It does not publish on its own. Every text and every frame goes through your approval, and nothing reaches an account you have not given it access to.",
+          "It does not write prices, discounts or lead times you never gave. A number that appears in a post becomes a promise.",
+          "It does not hold the conversation in comments and messages for you. Questions about price go to a person — or to the chat agent, if you have one."
+        ]
+      },
+      "platformsTitle": "Where the content goes",
+      "platformsLead": "Text and frame are prepared separately for each platform. Publishing happens on the accounts you give us access to; where you give none, you get the material ready to post yourself.",
+      "platforms": [
+        "Instagram",
+        "TikTok",
+        "Pinterest",
+        "Facebook",
+        "The blog on your site",
+        "Ready-made material, if you publish yourself"
+      ],
+      "faqTitle": "What people ask about content",
+      "faq": [
+        {
+          "q": "Who decides what gets published?",
+          "a": "You do. The agent prepares the drafts, but between the text and the publishing there is a press of your button. Automatic publishing can be switched on for a certain kind of post, if at some point you want that — but it is not how you start and not what we recommend."
+        },
+        {
+          "q": "Where does it get the photos?",
+          "a": "From you. An installation photographed on a phone is enough; no photo shoot is needed. What you do not give it does not appear: the agent does not search the internet for images and does not generate interiors that are not yours."
+        },
+        {
+          "q": "Won't it show that the texts were written by a machine?",
+          "a": "It shows when a text is written out of nothing. Here it starts from a real job, with its material, its dimensions and its lead time, and the way of writing is taken from what you have already written. And you read it before it goes out anyway."
+        },
+        {
+          "q": "How many posts come out per month?",
+          "a": "It depends on how many jobs you do and how many of them you manage to photograph. We do not sell a number: a hundred posts from a single project would be a hundred variants of the same thing. We set the rhythm together, on the calendar."
+        },
+        {
+          "q": "When will it be ready?",
+          "a": "We do not give a date we cannot keep. It is included in the Growth package: if you connect it now, the content engine switches on for your account at launch, at the price you connected at."
+        }
+      ],
+      "closingTitle": "See what would come out of one of your own jobs",
+      "closingLead": "At the demo we take the photos of a real project you have built and show you what posts would come out of it, in each platform's format."
     }
   },
   "industryPage": {

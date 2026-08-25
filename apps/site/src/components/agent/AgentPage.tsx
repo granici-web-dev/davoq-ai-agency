@@ -11,6 +11,7 @@ import { SpecSheet } from './SpecSheet';
 import { CrmRecord } from './CrmRecord';
 import { FollowUpPlan } from './FollowUpPlan';
 import { OrderStatus } from './OrderStatus';
+import { ContentDraft } from './ContentDraft';
 import { FeatureIcon } from './FeatureIcon';
 import { INDUSTRIES, industriesForAgent, type Agent } from '@/lib/catalog';
 import { PLAN_FOR_AGENT } from '@/lib/pricing';
@@ -34,6 +35,7 @@ const HERO_VISUAL: Partial<Record<string, (p: { namespace: string }) => React.Re
   'crm-assistant': CrmRecord,
   'follow-up': FollowUpPlan,
   'order-status': OrderStatus,
+  'content-engine': ContentDraft,
 };
 
 /**
@@ -161,9 +163,14 @@ export function AgentPage({ agent }: { agent: Agent }) {
           {/* Разговор стоит в первом экране, а не отдельной секцией ниже.
               Это самое убедительное, что есть на странице: человек видит,
               что агент называет цену из прайса и спрашивает про размеры,
-              раньше, чем читает про это словами. */}
+              раньше, чем читает про это словами.
+
+              `min-w-0` обязателен: колонка грида по умолчанию не ужимается
+              уже своего содержимого, а у макета задана ширина в 24rem —
+              без этого на телефоне он вылезал за экран и обрезался
+              секцией, у которой стоит overflow-hidden. */}
           {full && Hero && (
-            <div className="enter lg:pl-4" style={{ animationDelay: '260ms' }}>
+            <div className="enter min-w-0 lg:pl-4" style={{ animationDelay: '260ms' }}>
               <Hero namespace={`agentPage.${agent.slug}`} />
             </div>
           )}
