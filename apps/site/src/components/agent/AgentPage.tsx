@@ -13,6 +13,7 @@ import { VoiceCall } from './VoiceCall';
 import { FollowUpPlan } from './FollowUpPlan';
 import { OrderStatus } from './OrderStatus';
 import { ContentDraft } from './ContentDraft';
+import { InsightReport } from './InsightReport';
 import { FeatureIcon } from './FeatureIcon';
 import { INDUSTRIES, industriesForAgent, type Agent } from '@/lib/catalog';
 import agentChatbot from '@/../public/images/agent-chatbot.webp';
@@ -36,12 +37,13 @@ const HERO_VISUAL: Partial<Record<string, (p: { namespace: string }) => React.Re
   'follow-up': FollowUpPlan,
   'order-status': OrderStatus,
   'content-engine': ContentDraft,
+  'data-analyst': InsightReport,
 };
 
 /**
  * Страница агента.
  *
- * Один шаблон на всех шестерых. Содержание приходит из `messages` по слагу,
+ * Один шаблон на всех семерых. Содержание приходит из `messages` по слагу,
  * и когда следующий агент выйдет из разработки, у него появится страница
  * без единой строки нового кода — достаточно дописать тексты.
  *

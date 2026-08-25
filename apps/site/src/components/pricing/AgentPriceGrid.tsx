@@ -4,11 +4,18 @@ import { useState } from 'react';
 import { useTranslations } from 'next-intl';
 import { PAID_TIERS, PRODUCTS, productById } from '@assistwidget/contract';
 import { AGENTS } from '@/lib/catalog';
+import { Link } from '@/i18n/routing';
+import { ctaClasses } from '@/components/ui/Cta';
 import { PricingCard, type Billing } from './PricingCard';
 import { BillingToggle } from './BillingToggle';
 
 /**
- * Сетка цен: шесть агентов, у каждого две вилки.
+ * Сетка цен: агенты, у каждого две вилки.
+
+ * Агент без вилок сюда тоже попадает — отдельным блоком в конце. Раньше
+ * он просто отфильтровывался, и получался тупик: со своей страницы он
+ * звал «посмотрите цены», а на странице цен его не было. Человек делал
+ * из этого единственный доступный вывод — что цену от него прячут.
  *
  * Порядок агентов берётся из каталога сайта, а не из контракта. В контракте
  * они отсортированы по имени — это порядок машины; здесь нужен порядок,
@@ -23,9 +30,13 @@ export function AgentPriceGrid() {
   const tAgents = useTranslations('agents');
   const [billing, setBilling] = useState<Billing>('monthly');
 
-  const agents = AGENTS.map((a) => productById(a.slug)).filter(
-    (p): p is NonNullable<typeof p> => Boolean(p?.tiers),
+  const all = AGENTS.map((a) => productById(a.slug)).filter(
+    (p): p is NonNullable<typeof p> => Boolean(p),
   );
+  const agents = all.filter((p) => p.tiers);
+  /* Цены ещё нет — не потому, что она секретная, а потому, что продукт
+     не запущен. Так и написано в карточке. */
+  const unpriced = all.filter((p) => !p.tiers);
 
   return (
     <>
@@ -35,7 +46,7 @@ export function AgentPriceGrid() {
       <div className="sticky top-20 z-20 -mx-6 mb-16 border-y border-white/8 bg-ink/85 px-6 py-4 backdrop-blur sm:-mx-8 sm:px-8">
         <div className="mx-auto flex max-w-7xl flex-wrap items-center justify-between gap-x-8 gap-y-4">
           <nav aria-label={t('navLabel')} className="flex flex-wrap gap-x-5 gap-y-2">
-            {agents.map((p) => (
+            {all.map((p) => (
               <a
                 key={p.id}
                 href={`#${p.id}`}
@@ -74,6 +85,38 @@ export function AgentPriceGrid() {
                   billing={billing}
                 />
               ))}
+            </div>
+          </section>
+        ))}
+
+        {unpriced.map((product) => (
+          <section key={product.id} id={product.id} className="scroll-mt-44">
+            <div className="flex flex-wrap items-baseline justify-between gap-x-6 gap-y-2">
+              <h2 className="text-h3 font-medium">{tAgents(`${product.id}.name`)}</h2>
+              <span className="rounded-pill border border-white/10 px-3 py-1 font-mono text-[10px] tracking-wider text-chalk-faint uppercase">
+                {t('soon')}
+              </span>
+            </div>
+            <p className="mt-3 max-w-2xl text-body text-chalk-dim">
+              {tAgents(`${product.id}.short`)}
+            </p>
+
+            {/* Одна карточка во всю ширину, а не две пустые: две колонки
+                здесь читались бы как вилки, у которых почему-то стёрли
+                цифры. */}
+            <div className="mt-8 overflow-hidden rounded-card border border-white/8 p-7 sm:p-9">
+              <p className="text-h3 font-medium">{t('priceAtLaunch')}</p>
+              <p className="mt-4 max-w-2xl leading-relaxed text-chalk-dim">
+                {t('priceAtLaunchNote')}
+              </p>
+              <div className="mt-8 sm:max-w-xs">
+                <Link
+                  href={{ pathname: '/contact', query: { agent: product.id } }}
+                  className={`${ctaClasses('ghost')} w-full`}
+                >
+                  {t('reserveLaunchPrice')}
+                </Link>
+              </div>
             </div>
           </section>
         ))}

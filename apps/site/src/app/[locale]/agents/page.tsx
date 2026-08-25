@@ -134,11 +134,21 @@ export default async function Page({ params }: { params: Promise<{ locale: strin
                           </span>
                           {/* Цена вместо пакета: агент продаётся сам по себе,
                               и «входит в Growth» перестало быть ответом
-                              на вопрос «сколько». */}
+                              на вопрос «сколько».
+                              
+                              Вилок может и не быть. Раньше здесь стояло
+                              `.tiers!.basic.price` с двумя утверждениями,
+                              что они точно есть, — и седьмой агент, у
+                              которого цены ещё нет, уронил сборку хаба.
+                              Уронил справедливо: молча показать пустое
+                              место там, где человек ищет сумму, хуже. */}
                           <span className="rounded-pill border border-white/12 px-3 py-1 font-mono text-[10px] tracking-wider text-chalk-faint uppercase">
-                            {tPricing('priceFrom', {
-                              price: productById(agent.slug)!.tiers!.basic.price,
-                            })}
+                            {(() => {
+                              const tiers = productById(agent.slug)?.tiers;
+                              return tiers
+                                ? tPricing('priceFrom', { price: tiers.basic.price })
+                                : tPricing('priceOnRequest');
+                            })()}
                           </span>
                         </div>
 

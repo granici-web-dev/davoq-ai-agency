@@ -46,6 +46,10 @@
     "content-engine": {
       "name": "Content engine",
       "short": "One source, adapted for Instagram, TikTok and Pinterest."
+    },
+    "data-analyst": {
+      "name": "Sales analyst",
+      "short": "Reads your CRM and says every morning where money is leaking — with amounts and a plan for the day."
     }
   },
   "industries": {
@@ -1132,6 +1136,119 @@
       ],
       "closingTitle": "See what would come out of one of your own jobs",
       "closingLead": "At the demo we take the photos of a real project you have built and show you what posts would come out of it, in each platform's format."
+    },
+    "data-analyst": {
+      "metaTitle": "AI sales analyst — a daily report from your CRM data",
+      "metaDescription": "An AI agent that reads your CRM, works out the funnel and writes every morning where money is being lost: the problem, the amount and who takes it on. Plus questions about your own data, in plain language.",
+      "title": "The data is in your CRM. The answer is on your desk each morning",
+      "lead": "You pay for the CRM, for advertising, for people — and there are numbers everywhere. The agent reads them overnight and in the morning says three things: what is going wrong, what it costs, and who deals with it today.",
+      "report": {
+        "title": "Daily report",
+        "date": "27 MAY",
+        "summary": "Active funnel — 17 new leads, 5 visits, 4 quotes. No contracts signed today. Three things are holding conversions back.",
+        "findings": [
+          {
+            "severity": "high",
+            "title": "First contact takes 32 hours",
+            "text": "The threshold you set is 5 hours. Of 17 new leads, 11 waited more than a day.",
+            "loss": "85,000 lei",
+            "owner": "Sales manager",
+            "due": "Today"
+          },
+          {
+            "severity": "medium",
+            "title": "82 quotes with no follow-up",
+            "text": "Sent more than three weeks ago, none touched since.",
+            "loss": "Needs checking",
+            "owner": "Sales team",
+            "due": "This week"
+          }
+        ],
+        "lossLabel": "Estimated loss",
+        "nextLabel": "Tomorrow",
+        "next": "Check whether response time has dropped below the threshold.",
+        "note": "This is what the report looks like. The figures here are illustrative, to show the shape — yours will be your own, worked out from your CRM data."
+      },
+      "featuresTitle": "What it actually does",
+      "features": {
+        "morning": {
+          "title": "A report in the morning, not a dashboard",
+          "text": "Dashboards show you numbers and leave you with them. The report says what broke, what it costs and what happens today — on one page, not across twenty charts."
+        },
+        "funnel": {
+          "title": "The whole funnel, not just the total",
+          "text": "Lead → visit → quote → contract, with the conversion at every step. You see exactly where people drop out, not merely that sales were down."
+        },
+        "people": {
+          "title": "Each salesperson separately",
+          "text": "How fast they answer a new lead, how many visits they get from how many leads, how many quotes become contracts. The same figures for everyone, not impressions."
+        },
+        "rules": {
+          "title": "Problems are found by rules, not by inspiration",
+          "text": "A source falling off, a late first reply, stalled quotes — all detected against fixed thresholds before any model is involved. The model receives the list that was found and writes it up; it does not go looking for problems itself."
+        },
+        "chat": {
+          "title": "Ask questions about your own data",
+          "text": "“Why were sales down this month?”, “who is worst at following up?” — answered from the database, not from memory, and it shows where each figure came from."
+        },
+        "honest": {
+          "title": "It does not invent figures",
+          "text": "Every number in the report is checked against the database before it reaches you. And where data is missing it says so — it does not put zero, because a zero reads as a collapse."
+        }
+      },
+      "sourcesEyebrow": "What it reads",
+      "sourcesTitle": "What it reads — and what it does not do",
+      "sourcesYes": {
+        "title": "It reads",
+        "items": [
+          "Leads in the CRM: source, status, the salesperson responsible, the date of every transition",
+          "The status-change history — conversions and time spent at each step come from here",
+          "Salespeople and how leads are shared between them",
+          "Figures that do not live in the CRM — ad budget, revenue — uploaded from a file"
+        ]
+      },
+      "sourcesNo": {
+        "title": "It does not",
+        "items": [
+          "It does not listen to or transcribe phone calls",
+          "It does not see what was never entered in the CRM — a field left blank stays blank for it too",
+          "It does not decide for you: it stops no campaigns, changes no prices, writes to no customers",
+          "It does not replace your accounts — the amounts are the ones in your systems, not a parallel ledger"
+        ]
+      },
+      "platformsTitle": "Where the data comes from",
+      "platformsLead": "We tell you before the contract what the agent can and cannot get out of your system. A CRM that will not give up a figure through its API is a CRM that will not give it up — better you hear that from us than find out three months in.",
+      "platforms": [
+        "MEFI CRM — integration written and run against real data",
+        "CSV or Excel import — for the figures kept in a spreadsheet rather than the CRM",
+        "Another CRM — we look at what its programming interface offers and say honestly how much it covers",
+        "Ad accounts and web analytics — in progress; we are not promising them as ready"
+      ],
+      "faqTitle": "Common questions",
+      "faq": [
+        {
+          "q": "Which CRM do we need?",
+          "a": "The MEFI integration is the one written today. For anything else we look at what its programming interface offers before promising anything — and if it does not give enough, you hear that at the first conversation, not after you have paid."
+        },
+        {
+          "q": "Our salespeople do not fill everything into the CRM. What then?",
+          "a": "Then the agent cannot see those figures — and it says exactly that, rather than putting zero. A report showing “0 lei revenue” because nobody filled the field in is worse than no report. What gets entered gets measured; the rest is a conversation about CRM discipline."
+        },
+        {
+          "q": "How is this different from the reports in our CRM?",
+          "a": "The CRM shows the figures. Here the figures are read for you: what changed against last week, what that means in money, and what happens today. We are not building another dashboard on top of the one you already have."
+        },
+        {
+          "q": "Who sees the report?",
+          "a": "Whoever you decide. Each person has their own account, and the questions they ask in the chat stay theirs — one salesperson does not read another's conversations."
+        },
+        {
+          "q": "How long until the first report?",
+          "a": "Once the data is connected and the funnel is mapped onto your own statuses — which status means a visit, which a quote, which a contract. We spend the first days checking that the agent's figures match yours; until they do, the report has not earned being believed."
+        }
+      ],
+      "closingTitle": "Show us a month of data",
+      "closingLead": "We connect the CRM, map the funnel onto your statuses and give you the report for a month that has already passed. Compare it with what you know about that month — and see for yourself whether the figures hold."
     }
   },
   "industryPage": {
@@ -1174,7 +1291,8 @@
         "configurator": "The customer picks dimensions, fronts and fabric; the price follows the workshop's rules.",
         "follow-up": "Comes back to the customer who asked for a quote and went quiet — at the moment it still makes sense.",
         "order-status": "Reports at every production stage, without anyone writing the message.",
-        "content-engine": "Turns the same finished job into posts for Instagram and Pinterest, where furniture is actually searched for."
+        "content-engine": "Turns the same finished job into posts for Instagram and Pinterest, where furniture is actually searched for.",
+        "data-analyst": "Long cycle, large ticket: a lead lost at first contact costs as much as a sofa. The agent shows where exactly they are lost — at the reply, the visit or the quote."
       },
       "leadTitle": "Your salesperson gets this, not \"someone wrote in\"",
       "leadLead": "The whole conversation collects into one record. Your salesperson opens it and can price the job, without ringing back to find out what the person wanted.",
@@ -1293,7 +1411,8 @@
         "voice-assistant": "It picks up calls from the site, where nobody can answer, and books the assessment visit.",
         "configurator": "The client picks the scope, the floor area and the finishes; the range is calculated by your own norms.",
         "order-status": "It reports at every stage — strip-out, services, finishes — without anyone on site writing the message.",
-        "content-engine": "From the same finished job it makes «before and after» posts, in each platform's format."
+        "content-engine": "From the same finished job it makes «before and after» posts, in each platform's format.",
+        "data-analyst": "Quotes sit for weeks and nobody remembers which. The agent counts them every morning and says which have passed the point where they could still be saved."
       },
       "leadTitle": "The quote starts from a record, not from a phone call",
       "leadLead": "The whole conversation collects into one record. Your estimator opens it and can price, without calling to find out how big the flat is.",
@@ -1412,7 +1531,8 @@
         "voice-assistant": "It picks up calls while you are at a viewing and books the next one straight into the calendar.",
         "follow-up": "It comes back to those who saw the flat and went quiet — once, at the moment it still makes sense.",
         "order-status": "It tells the buyer at every stage: reservation, contract, notary, keys.",
-        "content-engine": "From one photographed flat it makes the posts for social, in each platform's format."
+        "content-engine": "From one photographed flat it makes the posts for social, in each platform's format.",
+        "data-analyst": "A good agent and a weak one look identical in the monthly report. Here they show up separately: how long a client waits for an answer, how many viewings come from a lead, how many close."
       },
       "leadTitle": "Your agent gets a qualified lead",
       "leadLead": "The budget, the area and the timing are established before the first phone call, and the viewing is already proposed.",
@@ -1531,7 +1651,8 @@
         "voice-assistant": "It picks up calls when every consultant is with a client and books the test drive into the calendar.",
         "follow-up": "It comes back to the person who took a test drive and never called — once, at the right moment.",
         "order-status": "It reports at every stage of an ordered car, right up to handover day.",
-        "content-engine": "From the cars in stock and from handovers it makes the posts for social."
+        "content-engine": "From the cars in stock and from handovers it makes the posts for social.",
+        "data-analyst": "Lead sources shift from month to month while the budget stays the same. The agent says which source fell off and what that cost you in cars not sold."
       },
       "leadTitle": "The consultant gets a record, not «somebody asked about an SUV»",
       "leadLead": "The configuration, the budget and the form of payment are established before the first phone call, and the test drive is already proposed.",
@@ -1650,7 +1771,8 @@
         "voice-assistant": "It picks up calls while the crews are on a roof and books the technical survey.",
         "configurator": "The client gives the consumption and the roof data; out comes the system size, the price range and the payback.",
         "order-status": "It reports at every stage: approval, delivery, installation, commissioning.",
-        "content-engine": "From finished installations it makes posts with the site, the installed capacity and the saving."
+        "content-engine": "From finished installations it makes posts with the site, the installed capacity and the saving.",
+        "data-analyst": "The season packs everything into a few months, and a lost week is not recovered. The morning report shows deviations while they can still be corrected."
       },
       "leadTitle": "The engineer gets the data, not «somebody asked about solar»",
       "leadLead": "The consumption, the roof and the type of system are established before anyone drives out. The technical survey is already proposed.",
@@ -1769,7 +1891,8 @@
         "voice-assistant": "It picks up calls when reception is busy or the clinic is closed and books the patient into the calendar.",
         "follow-up": "It reminds the patient of the appointment and comes back to the one who asked about price and never came.",
         "order-status": "It reports when the lab work has arrived: crown, denture, aligners.",
-        "content-engine": "From the cases you are allowed to show it makes posts — only with the patient's consent and only what you approve."
+        "content-engine": "From the cases you are allowed to show it makes posts — only with the patient's consent and only what you approve.",
+        "data-analyst": "The patient nobody called back does not complain — they simply go elsewhere. The agent counts exactly how many were left waiting, and by whom."
       },
       "leadTitle": "Reception gets a record, not «somebody called»",
       "leadLead": "What the patient wants, what worried them and which slot they are booked into. Reception confirms rather than reconstructs.",
@@ -1911,6 +2034,10 @@
       "content-engine": {
         "stage": "Back to the start",
         "without": "The work gets done and nobody sees it. And nobody arrives at the first question up there any more."
+      },
+      "data-analyst": {
+        "stage": "Across the whole circle",
+        "without": "All the figures are somewhere in the CRM. They get read at the end of the month — by which time what was lost is already lost."
       }
     },
     "plansEyebrow": "How renting works",
@@ -2290,7 +2417,10 @@
       }
     ],
     "priceFrom": "from {price} €",
-    "homeNote": "Each agent is bought on its own, billed monthly. From two agents the price drops; setup is paid once."
+    "homeNote": "Each agent is bought on its own, billed monthly. From two agents the price drops; setup is paid once.",
+    "priceOnRequest": "Price on request",
+    "priceAtLaunch": "The price is set at launch",
+    "priceAtLaunchNote": "This agent is not yet running for customers, so it has no price on the site — putting one here now would mean inventing it. Write to us and we will let you know when it opens, at the launch price."
   },
   "services": {
     "site-web": {
@@ -2302,8 +2432,8 @@
       "short": "Structure, copy, speed, rankings. Without promising you first place by next month."
     },
     "marketing-digital": {
-      "name": "Digital marketing",
-      "short": "Campaigns, content, analytics. With numbers you can check, not reports about reach."
+      "name": "Media buying",
+      "short": "We buy advertising on social networks and Google Ads. The account stays yours, the budget goes to the platforms."
     },
     "automatizari": {
       "name": "Automations and integrations",
@@ -2456,74 +2586,94 @@
       "closingLead": "See what is holding you back now. If the audit says it isn't worth it, we say so — that is cheaper for both of us than a year of work with no effect."
     },
     "marketing-digital": {
-      "metaTitle": "Digital marketing — campaigns, content, analytics",
-      "metaDescription": "Paid campaigns, content and analytics. With numbers you can check: what a customer cost, not how many impressions there were.",
-      "title": "Digital marketing measured in customers, not impressions",
-      "lead": "«Reach» and «impressions» don't go in the bank. We look at what a customer cost and what they brought, and if a channel doesn't justify itself, we stop it.",
-      "includesTitle": "What we do",
+      "metaTitle": "Media buying — Instagram, Facebook, TikTok, LinkedIn and Google Ads",
+      "metaDescription": "We buy and run advertising across social networks and Google Ads. The ad budget goes to the platforms, not to us, and the account stays yours.",
+      "title": "We buy the advertising. And answer for what comes out of it",
+      "lead": "We do not run audits and we do not sell strategies as a PDF. We hold the ad accounts: choosing where the money goes, tracking what a customer costs, and stopping what does not pay for itself — every week, not at the end of the quarter.",
+      "channelsTitle": "Two directions, different work",
+      "channelsLead": "On social nobody is looking for you — they have to be stopped mid-scroll. In search they are already looking, and you pay for the place ahead of your competitor. The same budget behaves differently, and it usually makes sense to start with only one.",
+      "channels": {
+        "social": {
+          "title": "Social networks",
+          "text": "Demand that has not formed yet: the person was not looking for anything, but they stopped. Here the material decides — what is visible in the first two seconds. We test several versions on a small budget and leave only what brings enquiries in the air."
+        },
+        "google": {
+          "title": "Google Ads",
+          "text": "Demand already formed: the person is typing what they want to buy. It costs more per click but closes more often — provided the queries are cleaned up and the page answers exactly what was searched for."
+        }
+      },
+      "includesTitle": "What the work covers",
       "includes": [
         {
-          "title": "Paid campaigns",
-          "text": "Google, Meta, depending on where your customers are. We start with small budgets across several variants and scale only what works."
+          "title": "Accounts and campaigns",
+          "text": "Account structure, campaigns, audiences, bids. Work on the account happens weekly — a campaign left to run on its own gets more expensive by itself."
         },
         {
-          "title": "Content",
-          "text": "Posts and material for the networks where being present makes sense. From your own work, not from bought stock photos."
-        },
-        {
-          "title": "Analytics",
-          "text": "Measurement set up properly: where someone came from, what they did, where they stopped. Without it, any conversation about efficiency is an opinion."
-        },
-        {
-          "title": "Landing pages",
-          "text": "A good ad pointing at your home page loses half the people. The page is built for the campaign and for the question they clicked with."
-        },
-        {
-          "title": "Monthly report",
-          "text": "What was spent, how many enquiries came, what one cost, what changes next month. One page, not twenty."
-        }
-      ],
-      "stepsTitle": "How it goes",
-      "stepsLead": "The first budget is for finding out, not for selling. That is worth knowing up front.",
-      "steps": [
-        {
-          "title": "Starting numbers",
-          "text": "What a customer costs you now and what you can afford them to cost. Without those two numbers there is no saying whether a campaign is doing well."
+          "title": "Ad material",
+          "text": "Video and graphics for social, copy for search. Made from your own work, not bought stock — on social the difference shows immediately."
         },
         {
           "title": "Measurement",
-          "text": "We set up analytics before the first euro is spent. A campaign without proper measurement can neither be stopped in time nor scaled."
+          "text": "Events, conversions, the link between a click and the enquiry in your CRM. Set up before the first leu is spent: without it nobody can say which campaign brought the customer."
         },
         {
-          "title": "Test",
-          "text": "Several variants on a small budget. It shows which brings enquiries and at what price — usually not the one we expected."
+          "title": "Landing pages",
+          "text": "Good advertising pointed at a homepage loses half the people. The page is built for the campaign and for the question that was clicked on."
+        },
+        {
+          "title": "Audiences and re-engagement",
+          "text": "Who came and left no enquiry, who saw the price, who already bought. Each is spoken to differently — and you stop paying for a second click on someone who has already paid you."
+        },
+        {
+          "title": "Monthly report",
+          "text": "What was spent on each direction, how many enquiries came, what one cost, what changes next month. One page, not twenty charts."
+        }
+      ],
+      "stepsTitle": "How it runs",
+      "stepsLead": "The first budget is for finding out, not for selling. Anyone who says otherwise is selling hope.",
+      "steps": [
+        {
+          "title": "Starting figures",
+          "text": "What a customer costs you now and what you can afford them to cost. Without those two numbers no campaign can be called good or bad."
+        },
+        {
+          "title": "Measurement",
+          "text": "We put the analytics in before switching anything on. A campaign without proper measurement can neither be stopped in time nor scaled."
+        },
+        {
+          "title": "Testing",
+          "text": "Several pieces of material and several audiences on a small budget. You see which brings enquiries and at what price — usually not the one we expected."
         },
         {
           "title": "Scaling",
-          "text": "What works gets budget, what doesn't gets stopped. Monthly, with a report you can read in five minutes."
+          "text": "What works gets budget, what does not gets switched off. Weekly on the account, monthly in a report that reads in five minutes."
         }
       ],
-      "faqTitle": "What people ask",
+      "faqTitle": "Common questions",
       "faq": [
         {
           "q": "What budget is needed?",
-          "a": "It depends on the niche and the competition. A budget too small produces no data to learn from — then it is more honest not to start than to spend for nothing."
+          "a": "It depends on the niche and the competition. Too small a budget does not produce enough data to learn anything from — in that case it is more honest not to start than to spend for nothing. We will tell you at the first conversation whether the figure you have in mind is enough."
         },
         {
-          "q": "What am I paying for?",
-          "a": "Our work is separate from the ad budget. The budget goes entirely to the platform, and you see what was spent in your own account."
+          "q": "What does the payment consist of?",
+          "a": "Our work and the ad budget are two separate things. The budget goes straight to the platforms from your card — it does not pass through us and we take no percentage of it."
         },
         {
-          "q": "How soon do enquiries come?",
-          "a": "The first ones — within days, if the campaign is set up well. But the first month is for finding out what works; conclusions come from the second."
+          "q": "Whose ad account is it?",
+          "a": "Yours, from the start. We work with access to your account, not inside one of ours. If we part ways you keep the accounts, the history and the audiences built up — that accumulates over years and cannot be carried off."
         },
         {
-          "q": "Do you handle social media?",
-          "a": "Yes, if your customers are there. If they are not, we say so: being present «because you should» costs time and brings nothing."
+          "q": "Do you guarantee a number of customers?",
+          "a": "No. Anyone guaranteeing a number either does not understand how the auction works or is betting you will not check. What we do guarantee is that you will see what a customer cost and where they came from — and that we switch off what does not pay for itself instead of reporting reach."
+        },
+        {
+          "q": "How long until results show?",
+          "a": "The first weeks gather data: which material works, which audience responds, what an enquiry costs. Firm conclusions before that would be guesswork. What can be said early is whether the direction chosen is worth continuing."
         }
       ],
-      "closingTitle": "Start from the numbers",
-      "closingLead": "Tell us what a customer costs you now. If you don't know — we start with measurement, which is cheaper than finding out after six months of budget."
+      "closingTitle": "Show us what you have already tried",
+      "closingLead": "We look inside your accounts, tell you what the figures show and what it would cost to run them properly. And if what they show is that advertising is not what you are missing right now, we will say that too."
     },
     "automatizari": {
       "metaTitle": "Custom automations and integrations",
@@ -2611,6 +2761,7 @@
     "allServices": "All services",
     "closingTitle": "Tell us what you need",
     "closingLead": "If you are not sure which service solves your problem — describe the problem and we'll pick together.",
-    "closingSecondary": "See the agents"
+    "closingSecondary": "See the agents",
+    "channelsEyebrow": "Directions"
   }
 }

@@ -156,6 +156,18 @@ export interface PlanFeatures {
    * на сайте и ничем в коде.
    */
   voice: boolean;
+  /**
+   * Аналитик продаж и маркетинга: читает CRM, считает воронку и раз в сутки
+   * пишет разбор с планом действий. НЕ РЕАЛИЗОВАНО В ЭТОМ ДВИЖКЕ.
+   *
+   * Формулировка не случайная. У остальных «не реализовано» значит «кода
+   * нет». Здесь код есть — но он отдельный продукт на своём стеке
+   * (Python/FastAPI, своя база, свой кабинет), и этим движком не
+   * запускается. Ключ заведён, потому что манифест обязан сослаться на
+   * существующую возможность; сам агент живёт своей жизнью, пока его не
+   * перенесут в монорепозиторий.
+   */
+  analytics: boolean;
 }
 
 export type Feature = keyof PlanFeatures;
@@ -164,6 +176,7 @@ export type Feature = keyof PlanFeatures;
 const BASE_FEATURES: PlanFeatures = {
   chatbot: true, configurator: false, drive: false, connectors: false,
   followup: false, productionUpdates: false, social: false, voice: false,
+  analytics: false,
 };
 
 export const PLANS: Record<PlanId, Plan> = {
@@ -270,6 +283,12 @@ export const PLANS: Record<PlanId, Plan> = {
     features: {
       chatbot: true, configurator: true, drive: true, connectors: true,
       followup: true, productionUpdates: true, social: true, voice: true,
+      // Единственное `false` в тарифе, где всё остальное `true`, — и это
+      // не забывчивость. Аналитик не запускается этим движком, поэтому
+      // движок его и не может выдать: он отдельный продукт со своим
+      // кабинетом и своей подпиской. Поставить здесь `true` значило бы
+      // пообещать доступ, которого код не откроет.
+      analytics: false,
     },
     highlights: [
       'Tot ce include Business',

@@ -49,6 +49,49 @@ export function ServicePage({ service }: { service: Service }) {
         </div>
       </section>
 
+      {/* Направления. Есть пока только у маркетинга: там «что вы делаете»
+          распадается надвое — закупка в соцсетях и поиск. Раздел стоит
+          ПЕРЕД списком услуг, потому что человек сначала выбирает, за
+          каким из двух он пришёл, и только потом читает, что в это
+          входит. */}
+      {service.channels && (
+        <Reveal>
+          <section className="px-6 py-section sm:px-8">
+            <div className="mx-auto max-w-7xl">
+              <SectionHead
+                eyebrow={tPage('channelsEyebrow')}
+                title={t('channelsTitle')}
+                lead={t('channelsLead')}
+              />
+              <div className="mt-14 grid gap-px overflow-hidden rounded-card border border-white/8 bg-white/8 lg:grid-cols-2">
+                {service.channels.map((channel) => (
+                  <div key={channel.key} className="flex flex-col bg-ink p-7 sm:p-9">
+                    <h3 className="text-h3 font-medium">
+                      {t(`channels.${channel.key}.title`)}
+                    </h3>
+                    <p className="mt-4 leading-relaxed text-chalk-dim">
+                      {t(`channels.${channel.key}.text`)}
+                    </p>
+                    {/* Площадки моноширинным и в рамках: это перечень имён,
+                        а не проза, и читается он взглядом по списку. */}
+                    <ul className="mt-auto flex flex-wrap gap-2 pt-8">
+                      {channel.platforms.map((platform) => (
+                        <li
+                          key={platform}
+                          className="rounded-pill border border-white/12 px-3 py-1 font-mono text-[10px] tracking-wider text-chalk-dim uppercase"
+                        >
+                          {platform}
+                        </li>
+                      ))}
+                    </ul>
+                  </div>
+                ))}
+              </div>
+            </div>
+          </section>
+        </Reveal>
+      )}
+
       <Reveal>
         <section className="px-6 py-section sm:px-8">
           <div className="mx-auto max-w-7xl">

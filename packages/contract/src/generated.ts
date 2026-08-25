@@ -106,6 +106,13 @@ export const PRODUCTS: readonly Product[] = [
       }
     },
     {
+      "id": "data-analyst",
+      "version": 1,
+      "status": "planned",
+      "feature": "analytics",
+      "verticals": []
+    },
+    {
       "id": "follow-up",
       "version": 1,
       "status": "planned",

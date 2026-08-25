@@ -19,6 +19,26 @@ export const SERVICE_SLUGS = ['site-web', 'seo', 'marketing-digital', 'automatiz
 
 export type ServiceSlug = (typeof SERVICE_SLUGS)[number];
 
+/**
+ * Направление внутри услуги: закупка в соцсетях, Google Ads.
+ *
+ * Появилось у маркетинга, потому что «digital-маркетинг» одним списком —
+ * это не ответ на вопрос «что вы делаете». Закупка в соцсетях и поиск —
+ * разная работа, разные площадки и разный разговор с клиентом, и человек
+ * приходит за одним из двух, а не за обоими сразу.
+ *
+ * Названия площадок лежат ЗДЕСЬ, а не в переводах. Instagram и Performance
+ * Max не переводятся, а список в двух файлах разошёлся бы молча: в одном
+ * четыре площадки, в другом три, и увидеть это можно было бы только
+ * открыв обе версии страницы подряд.
+ */
+export interface ServiceChannel {
+  /** Ключ перевода: `servicePage.<slug>.channels.<key>.{title,text}`. */
+  key: string;
+  /** Площадки. Имена собственные — не переводятся. */
+  platforms: string[];
+}
+
 export interface Service {
   slug: ServiceSlug;
   /**
@@ -33,12 +53,32 @@ export interface Service {
   includes: number;
   steps: number;
   faq: number;
+  /** Направления. Нет — раздел не выводится вовсе. */
+  channels?: ServiceChannel[];
 }
 
 export const SERVICES: Service[] = [
   { slug: 'site-web', includes: 6, steps: 4, faq: 4 },
   { slug: 'seo', includes: 5, steps: 4, faq: 4 },
-  { slug: 'marketing-digital', includes: 5, steps: 4, faq: 4 },
+  {
+    slug: 'marketing-digital',
+    includes: 6,
+    steps: 4,
+    faq: 5,
+    channels: [
+      {
+        key: 'social',
+        platforms: ['Instagram', 'Facebook', 'TikTok', 'LinkedIn'],
+      },
+      {
+        key: 'google',
+        /* Типы кампаний, а не «Google Ads» одним словом: за этими
+           названиями стоит разная работа и разные деньги, и клиент,
+           который уже покупал рекламу, читает именно их. */
+        platforms: ['Search', 'Performance Max', 'YouTube', 'Display'],
+      },
+    ],
+  },
   { slug: 'automatizari', includes: 5, steps: 4, faq: 4 },
 ];
 

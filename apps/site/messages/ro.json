@@ -46,6 +46,10 @@
     "content-engine": {
       "name": "Motor de conținut",
       "short": "O sursă, adaptată pentru Instagram, TikTok și Pinterest."
+    },
+    "data-analyst": {
+      "name": "Analist de vânzări",
+      "short": "Citește datele din CRM și spune în fiecare dimineață unde se pierd bani — cu sume și cu un plan pe zi."
     }
   },
   "industries": {
@@ -1132,6 +1136,119 @@
       ],
       "closingTitle": "Vedeți ce ar ieși dintr-o lucrare de-a dumneavoastră",
       "closingLead": "La demonstrație luăm fotografiile unui proiect real făcut de dumneavoastră și vă arătăm ce postări ar ieși din el, în formatul fiecărei platforme."
+    },
+    "data-analyst": {
+      "metaTitle": "Analist AI de vânzări — raport zilnic din datele din CRM",
+      "metaDescription": "Agent AI care citește CRM-ul, calculează pâlnia și scrie în fiecare dimineață unde se pierd bani: problema, suma și cine se ocupă. Plus întrebări în română despre propriile date.",
+      "title": "Datele sunt în CRM. Răspunsul — în fiecare dimineață pe masă",
+      "lead": "Plătiți pentru CRM, pentru reclamă, pentru oameni — și aveți cifre peste tot. Agentul le citește noaptea și dimineața spune trei lucruri: ce merge prost, cât costă asta în lei și cine se ocupă azi.",
+      "report": {
+        "title": "Raport zilnic",
+        "date": "27 MAI",
+        "summary": "Pâlnie activă — 17 lead-uri noi, 5 vizite, 4 oferte. Niciun contract semnat azi. Trei lucruri opresc conversiile.",
+        "findings": [
+          {
+            "severity": "high",
+            "title": "Primul contact durează 32 de ore",
+            "text": "Norma stabilită de dumneavoastră e 5 ore. Din 17 lead-uri noi, 11 au așteptat peste o zi.",
+            "loss": "85 000 lei",
+            "owner": "Manager vânzări",
+            "due": "Azi"
+          },
+          {
+            "severity": "medium",
+            "title": "82 de oferte stau fără revenire",
+            "text": "Trimise acum mai bine de trei săptămâni, niciuna atinsă de atunci.",
+            "loss": "Necesită verificare",
+            "owner": "Echipa de vânzări",
+            "due": "Săptămâna aceasta"
+          }
+        ],
+        "lossLabel": "Pierdere estimată",
+        "nextLabel": "Mâine",
+        "next": "Verifică dacă timpul de răspuns a scăzut sub normă.",
+        "note": "Așa arată raportul. Cifrele de aici sunt puse ca exemplu, ca să se vadă forma — la dumneavoastră vor fi ale dumneavoastră, calculate din datele din CRM."
+      },
+      "featuresTitle": "Ce face, concret",
+      "features": {
+        "morning": {
+          "title": "Un raport dimineața, nu un tablou de bord",
+          "text": "Tablourile de bord arată cifre și vă lasă cu ele. Raportul spune ce s-a stricat, cât costă în lei și ce se face azi — pe o pagină, nu pe douăzeci de grafice."
+        },
+        "funnel": {
+          "title": "Toată pâlnia, nu doar totalul",
+          "text": "Lead → vizită → ofertă → contract, cu conversia la fiecare trecere. Se vede exact la ce pas se pierd oamenii, nu doar că s-a vândut mai puțin."
+        },
+        "people": {
+          "title": "Pe fiecare vânzător separat",
+          "text": "În cât timp răspunde la un lead nou, câte vizite scoate din câte lead-uri, câte oferte se transformă în contracte. Aceleași cifre pentru toți, nu impresii."
+        },
+        "rules": {
+          "title": "Problemele se caută cu reguli, nu cu inspirație",
+          "text": "Scăderea unei surse, răspunsul întârziat, ofertele blocate — se detectează prin praguri fixe înainte de orice model. Modelul primește lista găsită și scrie textul, nu caută el problemele."
+        },
+        "chat": {
+          "title": "Întrebări în română, despre datele dumneavoastră",
+          "text": "«De ce au scăzut vânzările luna asta?», «Cine stă cel mai prost la reveniri?» — răspunde din baza de date, nu din memorie, și arată din ce a scos cifra."
+        },
+        "honest": {
+          "title": "Nu inventează cifre",
+          "text": "Fiecare număr din raport e verificat față de baza de date înainte să ajungă la dumneavoastră. Iar unde datele lipsesc, scrie că lipsesc — nu pune zero, pentru că zero se citește ca o prăbușire."
+        }
+      },
+      "sourcesEyebrow": "Din ce citește",
+      "sourcesTitle": "Din ce citește — și ce nu face",
+      "sourcesYes": {
+        "title": "Citește din",
+        "items": [
+          "Lead-urile din CRM: sursa, statusul, vânzătorul responsabil, datele fiecărei treceri",
+          "Istoricul schimbărilor de status — de aici ies conversiile și timpul petrecut la fiecare pas",
+          "Vânzătorii și repartizarea lead-urilor între ei",
+          "Datele care nu stau în CRM — buget de publicitate, încasări — încărcate din fișier"
+        ]
+      },
+      "sourcesNo": {
+        "title": "Nu face",
+        "items": [
+          "Nu ascultă și nu transcrie convorbiri telefonice",
+          "Nu vede ce nu a fost completat în CRM — un câmp lăsat gol rămâne gol și pentru el",
+          "Nu ia decizii în locul dumneavoastră: nu oprește campanii, nu schimbă prețuri, nu scrie clienților",
+          "Nu înlocuiește contabilitatea — sumele sunt cele din sistemele dumneavoastră, nu o evidență paralelă"
+        ]
+      },
+      "platformsTitle": "De unde ia datele",
+      "platformsLead": "Vă spunem înainte de contract ce poate scoate agentul din sistemul dumneavoastră și ce nu. Un CRM care nu dă o cifră prin API rămâne un CRM care nu o dă — preferăm să aflați asta de la noi, nu după trei luni.",
+      "platforms": [
+        "MEFI CRM — integrare scrisă și rulată pe date reale",
+        "Import din fișier CSV sau Excel — pentru cifrele ținute în tabel, nu în CRM",
+        "Alt CRM — ne uităm împreună ce dă interfața lui de programare și spunem cinstit cât se acoperă",
+        "Conturi de publicitate și analitică web — în lucru, nu le promitem ca fiind gata"
+      ],
+      "faqTitle": "Ce se întreabă",
+      "faq": [
+        {
+          "q": "Ce CRM trebuie să avem?",
+          "a": "Astăzi este scrisă integrarea cu MEFI. Pentru altul ne uităm la ce oferă interfața lui de programare înainte să promitem ceva — dacă nu dă destul, o spunem la prima discuție, nu după ce ați plătit."
+        },
+        {
+          "q": "Vânzătorii nu completează tot în CRM. Ce se întâmplă atunci?",
+          "a": "Atunci agentul nu vede acele cifre — și scrie exact asta, în loc să pună zero. Un raport care arată «0 lei încasări» pentru că nimeni nu a completat câmpul e mai rău decât niciun raport. Ce se completează, se măsoară; restul rămâne o discuție despre disciplina din CRM."
+        },
+        {
+          "q": "Cu ce e diferit de rapoartele din CRM-ul nostru?",
+          "a": "CRM-ul arată cifrele. Aici cifrele sunt citite: ce s-a schimbat față de săptămâna trecută, ce înseamnă asta în lei și ce se face azi. Nu ne apucăm să facem încă un tablou de bord peste cel pe care îl aveți deja."
+        },
+        {
+          "q": "Cine vede raportul?",
+          "a": "Cine stabiliți dumneavoastră. Fiecare om are cont propriu, iar întrebările puse în chat rămân ale lui — un vânzător nu citește discuțiile altuia."
+        },
+        {
+          "q": "Cât durează până la primul raport?",
+          "a": "După ce datele sunt legate și pâlnia este pusă pe statusurile dumneavoastră — ce status înseamnă vizită, care înseamnă ofertă, care contract. Primele zile le petrecem verificând că cifrele agentului se potrivesc cu ale dumneavoastră; până nu se potrivesc, raportul nu are de ce să fie crezut."
+        }
+      ],
+      "closingTitle": "Arătați-ne o lună de date",
+      "closingLead": "Legăm CRM-ul, punem pâlnia pe statusurile dumneavoastră și vă dăm raportul pe o lună trecută. Îl comparați cu ce știți despre luna aceea — și vedeți singur dacă cifrele se țin."
     }
   },
   "industryPage": {
@@ -1174,7 +1291,8 @@
         "configurator": "Clientul alege dimensiuni, fronturi și țesătură; prețul se calculează după regulile atelierului.",
         "follow-up": "Revine la clientul care a cerut ofertă și a tăcut — la momentul în care mai are sens.",
         "order-status": "Anunță la fiecare etapă a producției, fără ca cineva să scrie mesajul.",
-        "content-engine": "Din aceeași lucrare finisată face postări pentru Instagram și Pinterest, acolo unde se caută mobila."
+        "content-engine": "Din aceeași lucrare finisată face postări pentru Instagram și Pinterest, acolo unde se caută mobila.",
+        "data-analyst": "Ciclu lung și cec mare: un lead pierdut la primul contact costă cât o canapea. Agentul arată unde anume se pierd — la răspuns, la vizită sau la ofertă."
       },
       "leadTitle": "Vânzătorul primește asta, nu «a scris cineva»",
       "leadLead": "Toată conversația se strânge într-o fișă. Vânzătorul o deschide și poate calcula, fără să sune ca să afle ce voia omul.",
@@ -1293,7 +1411,8 @@
         "voice-assistant": "Preia apelurile de pe șantier, unde nimeni nu poate răspunde, și programează evaluarea.",
         "configurator": "Clientul alege regimul lucrării, metrajul și finisajele; intervalul se calculează după normele dumneavoastră.",
         "order-status": "Anunță la fiecare etapă — demolare, instalații, finisaje — fără ca cineva de pe șantier să scrie mesajul.",
-        "content-engine": "Din aceeași lucrare terminată face «înainte și după» pentru rețele, în formatul fiecărei platforme."
+        "content-engine": "Din aceeași lucrare terminată face «înainte și după» pentru rețele, în formatul fiecărei platforme.",
+        "data-analyst": "Ofertele stau săptămâni întregi și nimeni nu ține minte care. Agentul le numără în fiecare dimineață și spune care au trecut de termenul la care se mai puteau salva."
       },
       "leadTitle": "Devizul începe de la o fișă, nu de la un telefon",
       "leadLead": "Toată conversația se strânge într-o fișă. Devizantul o deschide și poate calcula, fără să sune ca să afle ce metraj are apartamentul.",
@@ -1412,7 +1531,8 @@
         "voice-assistant": "Preia apelurile în timp ce sunteți la o vizionare și o programează pe următoarea, direct în calendar.",
         "follow-up": "Revine la cei care au văzut apartamentul și au tăcut — o dată, la momentul în care mai are sens.",
         "order-status": "Anunță cumpărătorul la fiecare etapă: rezervare, contract, notar, predarea cheilor.",
-        "content-engine": "Dintr-un apartament fotografiat face postările pentru rețele, în formatul fiecărei platforme."
+        "content-engine": "Dintr-un apartament fotografiat face postările pentru rețele, în formatul fiecărei platforme.",
+        "data-analyst": "Un agent imobiliar bun și unul slab arată la fel în raportul lunar. Aici se văd separat: cât așteaptă un client răspunsul, câte vizionări ies dintr-un lead, câte se închid."
       },
       "leadTitle": "Agentul imobiliar primește un lead calificat",
       "leadLead": "Bugetul, zona și termenul sunt aflate înainte de primul telefon, iar vizionarea este deja propusă.",
@@ -1531,7 +1651,8 @@
         "voice-assistant": "Preia apelurile când consultanții sunt cu clienți și programează test drive-ul în calendar.",
         "follow-up": "Revine la cel care a făcut test drive și nu a mai sunat — o dată, la momentul potrivit.",
         "order-status": "Anunță la fiecare etapă a mașinii comandate, până în ziua predării.",
-        "content-engine": "Din mașinile de pe stoc și din predări face postările pentru rețele."
+        "content-engine": "Din mașinile de pe stoc și din predări face postările pentru rețele.",
+        "data-analyst": "Sursele de lead-uri se schimbă de la lună la lună, iar bugetul rămâne același. Agentul spune care sursă a scăzut și cât v-a costat asta în mașini nevândute."
       },
       "leadTitle": "Consultantul primește o fișă, nu «a întrebat cineva de un SUV»",
       "leadLead": "Configurația, bugetul și forma de plată sunt aflate înainte de primul telefon, iar test drive-ul este deja propus.",
@@ -1650,7 +1771,8 @@
         "voice-assistant": "Preia apelurile când echipele sunt pe acoperiș și programează evaluarea tehnică.",
         "configurator": "Clientul dă consumul și datele acoperișului; iese puterea sistemului, intervalul de preț și amortizarea.",
         "order-status": "Anunță la fiecare etapă: avizare, livrare, montaj, punere în funcțiune.",
-        "content-engine": "Din montajele terminate face postări cu obiectul, puterea instalată și economia."
+        "content-engine": "Din montajele terminate face postări cu obiectul, puterea instalată și economia.",
+        "data-analyst": "Sezonul strânge totul în câteva luni, și o săptămână pierdută nu se mai recuperează. Raportul de dimineață arată abaterile cât mai pot fi corectate."
       },
       "leadTitle": "Inginerul primește datele, nu «a întrebat cineva de panouri»",
       "leadLead": "Consumul, acoperișul și tipul sistemului sunt aflate înainte de deplasare. Evaluarea tehnică este deja propusă.",
@@ -1769,7 +1891,8 @@
         "voice-assistant": "Preia apelurile când recepția este ocupată sau clinica este închisă și programează pacientul în calendar.",
         "follow-up": "Îi amintește pacientului de vizită și revine la cel care a întrebat de preț și nu a mai venit.",
         "order-status": "Anunță când lucrarea de la laborator a sosit: coroană, proteză, gutiere.",
-        "content-engine": "Din cazurile pe care le puteți arăta face postări — numai cu acordul pacientului și numai ce aprobați dumneavoastră."
+        "content-engine": "Din cazurile pe care le puteți arăta face postări — numai cu acordul pacientului și numai ce aprobați dumneavoastră.",
+        "data-analyst": "Pacientul care nu a fost sunat înapoi nu se plânge — pur și simplu merge în altă parte. Agentul numără exact câți au fost lăsați să aștepte și de cine."
       },
       "leadTitle": "Recepția primește o fișă, nu «a sunat cineva»",
       "leadLead": "Ce vrea pacientul, ce l-a îngrijorat și pe ce oră este programat. Recepția confirmă, nu reconstituie.",
@@ -1911,6 +2034,10 @@
       "content-engine": {
         "stage": "Înapoi la început",
         "without": "Lucrările se fac și nu le vede nimeni. Iar la prima întrebare, sus, nu mai ajunge nimeni."
+      },
+      "data-analyst": {
+        "stage": "Peste tot cercul",
+        "without": "Toate cifrele sunt undeva în CRM. Se citesc la sfârșitul lunii — când ce s-a pierdut e pierdut deja."
       }
     },
     "plansEyebrow": "Cum se închiriază",
@@ -2290,7 +2417,10 @@
       }
     ],
     "priceFrom": "de la {price} €",
-    "homeNote": "Fiecare agent se ia separat, cu abonament lunar. De la doi agenți prețul scade; configurarea se plătește o singură dată."
+    "homeNote": "Fiecare agent se ia separat, cu abonament lunar. De la doi agenți prețul scade; configurarea se plătește o singură dată.",
+    "priceOnRequest": "Preț la cerere",
+    "priceAtLaunch": "Prețul se stabilește la lansare",
+    "priceAtLaunchNote": "Agentul nu e încă pornit la clienți, așa că nu are preț pe site — a-l pune acum ar însemna să-l inventăm. Scrieți-ne și vă anunțăm când se deschide, la prețul de lansare."
   },
   "services": {
     "site-web": {
@@ -2302,8 +2432,8 @@
       "short": "Structură, texte, viteză, poziții. Fără promisiuni de «locul întâi luna viitoare»."
     },
     "marketing-digital": {
-      "name": "Marketing digital",
-      "short": "Campanii, conținut, analitică. Cu cifre care se verifică, nu cu rapoarte despre acoperire."
+      "name": "Media buying",
+      "short": "Cumpărăm publicitate în rețele sociale și în Google Ads. Contul rămâne al dumneavoastră, bugetul merge la platforme."
     },
     "automatizari": {
       "name": "Automatizări și integrări",
@@ -2456,74 +2586,94 @@
       "closingLead": "Vedeți ce vă împiedică acum. Dacă din audit reiese că nu merită, o spunem — e mai ieftin pentru amândoi decât un an de muncă fără efect."
     },
     "marketing-digital": {
-      "metaTitle": "Marketing digital — campanii, conținut, analitică",
-      "metaDescription": "Campanii plătite, conținut și analitică. Cu cifre care se verifică: cât a costat clientul, nu câte impresii au fost.",
-      "title": "Marketing digital care se măsoară în clienți, nu în impresii",
-      "lead": "«Acoperire» și «impresii» nu se depun la bancă. Ne uităm la cât a costat un client și la ce a adus, iar dacă un canal nu se justifică, îl oprim.",
-      "includesTitle": "Ce facem",
+      "metaTitle": "Media buying — Instagram, Facebook, TikTok, LinkedIn și Google Ads",
+      "metaDescription": "Cumpărăm și conducem publicitate în rețele sociale și în Google Ads. Bugetul de reclamă merge la platforme, nu la noi, iar contul rămâne al dumneavoastră.",
+      "title": "Cumpărăm publicitate. Și răspundem de ce iese din ea",
+      "lead": "Nu facem audituri și nu vindem strategii în PDF. Ținem conturile de publicitate: alegem unde se cheltuie, urmărim cât costă un client și oprim ce nu se justifică — în fiecare săptămână, nu la finalul trimestrului.",
+      "channelsTitle": "Două direcții, muncă diferită",
+      "channelsLead": "În rețele omul nu vă caută — trebuie oprit din derulat. În căutare vă caută deja, și se plătește pentru locul dinaintea concurentului. Aceleași bugete lucrează altfel, și de obicei are rost să porniți doar cu una.",
+      "channels": {
+        "social": {
+          "title": "Rețele sociale",
+          "text": "Cerere care încă nu s-a format: omul nu căuta nimic, dar s-a oprit. Aici decide materialul — ce se vede în primele două secunde. Testăm mai multe variante pe buget mic și lăsăm în aer doar ce aduce cereri."
+        },
+        "google": {
+          "title": "Google Ads",
+          "text": "Cerere gata formată: omul scrie deja ce vrea să cumpere. Se plătește scump, dar se închide des — dacă interogările sunt curățate, iar pagina răspunde exact la ce a fost căutat."
+        }
+      },
+      "includesTitle": "Ce intră în muncă",
       "includes": [
         {
-          "title": "Campanii plătite",
-          "text": "Google, Meta, în funcție de unde sunt clienții dumneavoastră. Începem cu bugete mici pe mai multe variante și creștem doar ce funcționează."
+          "title": "Conturi și campanii",
+          "text": "Structura conturilor, campaniile, audiențele, sumele licitate. Lucrul pe cont se face săptămânal — o campanie pornită și lăsată singură se scumpește de la sine."
         },
         {
-          "title": "Conținut",
-          "text": "Postări și materiale pentru rețelele în care are rost să fiți. Din lucrările dumneavoastră, nu din poze de stoc cumpărate."
-        },
-        {
-          "title": "Analitică",
-          "text": "Măsurare pusă corect: de unde a venit omul, ce a făcut, unde s-a oprit. Fără asta orice discuție despre eficiență e o părere."
-        },
-        {
-          "title": "Pagini de aterizare",
-          "text": "Reclama bună care duce spre pagina de start pierde jumătate din oameni. Pagina se face sub campanie și sub întrebarea cu care omul a dat clic."
-        },
-        {
-          "title": "Raport lunar",
-          "text": "Cât s-a cheltuit, câte cereri au venit, cât a costat una, ce se schimbă luna viitoare. O pagină, nu douăzeci."
-        }
-      ],
-      "stepsTitle": "Cum decurge",
-      "stepsLead": "Primul buget este pentru aflat, nu pentru vândut. Asta trebuie știut de la început.",
-      "steps": [
-        {
-          "title": "Cifre de pornire",
-          "text": "Cât costă un client acum și cât vă permiteți să coste. Fără aceste două numere nu se poate spune dacă o campanie merge bine."
+          "title": "Materiale de reclamă",
+          "text": "Video și grafică pentru rețele, texte pentru căutare. Din lucrările dumneavoastră, nu din poze de stoc — în rețele se vede imediat care e care."
         },
         {
           "title": "Măsurare",
-          "text": "Punem analitica înainte de primul leu cheltuit. Campania fără măsurare corectă nu se poate nici opri la timp, nici crește."
+          "text": "Evenimente, conversii, legătura dintre clic și cererea din CRM. Se pune înainte de primul leu cheltuit: fără ea nu se poate spune care campanie a adus clientul."
+        },
+        {
+          "title": "Pagini de aterizare",
+          "text": "Reclama bună care duce spre pagina de start pierde jumătate din oameni. Pagina se face sub campanie și sub întrebarea cu care s-a dat clic."
+        },
+        {
+          "title": "Audiențe și reveniri",
+          "text": "Cine a intrat și nu a lăsat cerere, cine a văzut prețul, cine a cumpărat deja. Pe fiecare se vorbește altfel — și celui care a cumpărat nu i se mai plătește al doilea clic degeaba."
+        },
+        {
+          "title": "Raport lunar",
+          "text": "Cât s-a cheltuit pe fiecare direcție, câte cereri au venit, cât a costat una, ce se schimbă luna viitoare. O pagină, nu douăzeci de grafice."
+        }
+      ],
+      "stepsTitle": "Cum decurge",
+      "stepsLead": "Primul buget este pentru aflat, nu pentru vândut. Cine spune altceva vinde speranță.",
+      "steps": [
+        {
+          "title": "Cifre de pornire",
+          "text": "Cât costă un client acum și cât vă permiteți să coste. Fără aceste două numere nu se poate spune despre nicio campanie dacă merge bine."
+        },
+        {
+          "title": "Măsurare",
+          "text": "Punem analitica înainte să pornim ceva. Campania fără măsurare corectă nu se poate nici opri la timp, nici crește."
         },
         {
           "title": "Test",
-          "text": "Mai multe variante cu buget mic. Se vede care aduce cereri și la ce preț — de obicei nu cea la care ne așteptam."
+          "text": "Mai multe materiale și audiențe pe buget mic. Se vede care aduce cereri și la ce preț — de obicei nu cea la care ne așteptam."
         },
         {
           "title": "Creștere",
-          "text": "Ce funcționează primește buget, ce nu — se oprește. Lunar, cu raport care se citește în cinci minute."
+          "text": "Ce funcționează primește buget, ce nu — se oprește. Săptămânal pe cont, lunar cu raport care se citește în cinci minute."
         }
       ],
       "faqTitle": "Ce se întreabă",
       "faq": [
         {
           "q": "Ce buget e nevoie?",
-          "a": "Depinde de nișă și de concurență. Un buget prea mic nu dă date din care se poate învăța ceva — atunci e mai onest să nu începem decât să cheltuim degeaba."
+          "a": "Depinde de nișă și de concurență. Un buget prea mic nu dă destule date din care să se învețe ceva — atunci e mai onest să nu începem decât să cheltuim degeaba. Vă spunem la prima discuție dacă suma la care vă gândiți ajunge."
         },
         {
           "q": "Din ce se compune plata?",
-          "a": "Munca noastră este separată de bugetul de reclamă. Bugetul merge integral la platformă, iar dumneavoastră vedeți în contul propriu cât s-a cheltuit."
+          "a": "Munca noastră și bugetul de reclamă sunt două lucruri separate. Bugetul merge direct la platforme de pe cardul dumneavoastră — nu trece prin noi și nu luăm procent din el."
         },
         {
-          "q": "În cât timp vin cererile?",
-          "a": "Primele — în zile, dacă campania e pusă bine. Dar prima lună este pentru aflat ce funcționează; concluziile se trag din a doua."
+          "q": "Al cui rămâne contul de publicitate?",
+          "a": "Al dumneavoastră, de la început. Lucrăm cu acces în contul dumneavoastră, nu într-unul de-al nostru. Dacă ne despărțim, rămâneți cu conturile, cu istoricul și cu audiențele strânse — asta se adună în ani și nu se ia cu tine."
         },
         {
-          "q": "Lucrați și cu rețelele sociale?",
-          "a": "Da, dacă în nișa dumneavoastră acolo sunt clienți. Dacă nu sunt, o spunem: prezența «pentru că trebuie» costă timp și nu aduce nimic."
+          "q": "Garantați un anumit număr de clienți?",
+          "a": "Nu. Cine garantează un număr fie nu știe cum funcționează licitația, fie mizează că nu veți verifica. Ce garantăm este că veți vedea cât a costat un client și de unde a venit — și că oprim ce nu se justifică, în loc să raportăm acoperire."
+        },
+        {
+          "q": "Cât durează până se vede rezultatul?",
+          "a": "Primele săptămâni se strâng date: ce material funcționează, ce audiență răspunde, cât costă o cerere. Concluzii ferme înainte de asta ar fi ghicit. Ce se poate spune devreme e dacă direcția aleasă merită continuată."
         }
       ],
-      "closingTitle": "Începeți de la cifre",
-      "closingLead": "Spuneți cât vă costă un client acum. Dacă nu știți — începem de la măsurare, e mai ieftin decât să aflați după șase luni de buget."
+      "closingTitle": "Arătați-ne ce ați încercat deja",
+      "closingLead": "Ne uităm în conturile dumneavoastră, spunem ce se vede în cifre și cât ar costa să fie ținute cum trebuie. Dacă din ele reiese că publicitatea nu e ce vă lipsește acum, o spunem tot atunci."
     },
     "automatizari": {
       "metaTitle": "Automatizări și integrări la comandă",
@@ -2611,6 +2761,7 @@
     "allServices": "Toate serviciile",
     "closingTitle": "Spuneți ce vă trebuie",
     "closingLead": "Dacă nu sunteți sigur care serviciu vă rezolvă problema — descrieți problema, alegem împreună.",
-    "closingSecondary": "Vezi agenții"
+    "closingSecondary": "Vezi agenții",
+    "channelsEyebrow": "Direcții"
   }
 }
