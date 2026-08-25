@@ -1498,5 +1498,41 @@
     "otherCta": "Spuneți-ne ce faceți",
     "closingTitle": "Vedeți scenariul pentru nișa dumneavoastră",
     "closingLead": "La demonstrație scriem conversația pe cazul dumneavoastră real, cu întrebările pe care le puneți și dumneavoastră — nu cu un exemplu general."
+  },
+  "contactPage": {
+    "metaTitle": "Contact — scrieți-ne ce vindeți și ce v-ar trebui",
+    "metaDescription": "Patru câmpuri, două obligatorii. Vă răspunde un om în aceeași zi lucrătoare, cu pașii pentru nișa dumneavoastră. Fără liste de e-mailuri și fără broșuri.",
+    "eyebrow": "Contact",
+    "title": "Scrieți-ne ce vindeți",
+    "lead": "Patru câmpuri, dintre care două obligatorii. Vă răspunde un om în aceeași zi lucrătoare — cu pașii pentru nișa dumneavoastră, nu cu o broșură.",
+    "stepsLabel": "Ce se întâmplă după",
+    "steps": [
+      {
+        "when": "În aceeași zi lucrătoare",
+        "text": "Vă răspunde un om și, dacă e nevoie, mai întreabă câte ceva despre ce ne-ați scris."
+      },
+      {
+        "when": "Demonstrația, o jumătate de oră",
+        "text": "Ne uităm la site-ul dumneavoastră și la întrebările pe care le primiți, apoi vă arătăm conversația scrisă pe cazul dumneavoastră."
+      },
+      {
+        "when": "Oferta, dacă are sens",
+        "text": "Ce pachet, ce termen, ce taxă de configurare. Dacă nu are sens, v-o spunem atunci — nu peste trei discuții."
+      }
+    ],
+    "usefulTitle": "E util să ne scrieți",
+    "useful": [
+      "Ce vindeți și cui. Două rânduri sunt de ajuns.",
+      "Cum ajungeți azi la preț: cine calculează, din ce date și cât durează.",
+      "Unde simțiți că pierdeți: la prima întrebare, între discuție și ofertă, sau după ofertă."
+    ],
+    "neverTitle": "Ce nu se întâmplă",
+    "never": [
+      "Nu vă sunăm dacă nu ne-ați lăsat numărul.",
+      "Nu vă înscriem la nicio listă de e-mailuri.",
+      "Nu vă trimitem o broșură de douăzeci de pagini în locul unui răspuns."
+    ],
+    "faqText": "Dacă întrebarea este despre prețuri, pachete sau termene, s-ar putea să aibă deja un răspuns scris.",
+    "faqLink": "Întrebări frecvente"
   }
 }

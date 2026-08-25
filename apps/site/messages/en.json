@@ -1498,5 +1498,41 @@
     "otherCta": "Tell us what you do",
     "closingTitle": "See the scenario for your own niche",
     "closingLead": "At the demo we write the conversation on your real case, with the questions you ask yourself — not with a generic example."
+  },
+  "contactPage": {
+    "metaTitle": "Contact — tell us what you sell and what you would need",
+    "metaDescription": "Four fields, two of them required. A person answers you on the same working day, with the steps for your niche. No mailing lists and no brochures.",
+    "eyebrow": "Contact",
+    "title": "Tell us what you sell",
+    "lead": "Four fields, two of them required. A person answers you on the same working day — with the steps for your niche, not with a brochure.",
+    "stepsLabel": "What happens next",
+    "steps": [
+      {
+        "when": "The same working day",
+        "text": "A person answers you and, if needed, asks a little more about what you wrote."
+      },
+      {
+        "when": "The demo, half an hour",
+        "text": "We look at your site and at the questions you actually get, then show you the conversation written on your own case."
+      },
+      {
+        "when": "The quote, if it makes sense",
+        "text": "Which package, what timeline, what setup fee. If it does not make sense, we say so then — not three conversations later."
+      }
+    ],
+    "usefulTitle": "It helps if you write",
+    "useful": [
+      "What you sell and to whom. Two lines are enough.",
+      "How you arrive at a price today: who calculates it, from what data, and how long it takes.",
+      "Where you feel you are losing people: at the first question, between the conversation and the quote, or after the quote."
+    ],
+    "neverTitle": "What does not happen",
+    "never": [
+      "We do not call you if you did not leave a number.",
+      "We do not add you to any mailing list.",
+      "We do not send a twenty-page brochure instead of an answer."
+    ],
+    "faqText": "If your question is about prices, packages or timelines, it may already have a written answer.",
+    "faqLink": "Frequently asked questions"
   }
 }
