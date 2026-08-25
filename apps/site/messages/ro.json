@@ -25,13 +25,13 @@
       "name": "Chatbot AI",
       "short": "Răspunde 24/7 din materialele companiei și califică lead-ul după scenariul nișei."
     },
+    "voice-assistant": {
+      "name": "Asistent telefonic",
+      "short": "Răspunde la telefon când nu are cine și programează în calendarul dumneavoastră."
+    },
     "configurator": {
       "name": "Configurator de cerere",
       "short": "Pune întrebările, adună specificația, predă vânzărilor o cerere gata de calculat."
-    },
-    "crm-assistant": {
-      "name": "Asistent CRM",
-      "short": "Completează fișa lead-ului din conversație. Vânzătorul doar confirmă."
     },
     "follow-up": {
       "name": "Follow-up automat",
@@ -542,6 +542,125 @@
       "widgetPlaceholder": "Scrieți un mesaj…",
       "widgetInitial": "AI"
     },
+    "voice-assistant": {
+      "metaTitle": "Asistent telefonic AI — răspunde la apeluri și face programări",
+      "metaDescription": "Agent AI care preia apelurile la orice oră, află ce vrea omul, programează în calendarul dumneavoastră și trimite urgențele mai departe. Spune de la început că este agent. Inclus în pachetul Growth.",
+      "title": "Telefonul care sună în gol este cel mai scump lucru din firmă",
+      "lead": "Agentul preia apelul de la primul semnal, la orice oră, află ce vrea omul și îl programează direct în calendarul dumneavoastră. Ce este urgent ajunge la un om în timpul apelului. După fiecare convorbire primiți rezumatul scris.",
+      "call": {
+        "title": "Apel preluat",
+        "time": "19:42",
+        "fromLabel": "De la",
+        "from": "+373 ·· ··· 418",
+        "duration": "1:48",
+        "rows": [
+          {
+            "k": "Ce vrea",
+            "v": "Bucătărie la comandă, perete de 3,2 m"
+          },
+          {
+            "k": "Programat",
+            "v": "Vineri, 15:00, la showroom"
+          },
+          {
+            "k": "Confirmare",
+            "v": "Trimisă prin SMS, cu adresa"
+          }
+        ],
+        "afterLabel": "În afara programului",
+        "after": "Nu era nimeni la birou. Apelul a devenit o programare, nu un apel pierdut.",
+        "note": "Așa arată apelul după ce s-a încheiat: ce s-a stabilit și ce a intrat în calendar. Agentul spune de la început că este un agent, iar cine cere un om primește un om."
+      },
+      "featuresTitle": "Ce face, concret",
+      "features": {
+        "phone": {
+          "title": "Răspunde la primul apel, la orice oră",
+          "text": "Seara, sâmbăta, în timp ce vorbiți cu un client în showroom. Nu există apel al doilea client care sună — există doar apelul care nu a fost preluat."
+        },
+        "task": {
+          "title": "Programează în calendarul dumneavoastră",
+          "text": "Vede orele libere și pune întâlnirea acolo unde încape, apoi trimite confirmarea. Fără dublă rezervare și fără «vă sunăm noi să stabilim»."
+        },
+        "handoff": {
+          "title": "Ce e urgent ajunge la om în timpul apelului",
+          "text": "Regulile le scrieți dumneavoastră: ce înseamnă urgent la dumneavoastră și către ce număr se transferă. Restul așteaptă până dimineață, fără să vă sune."
+        },
+        "read": {
+          "title": "După fiecare apel primiți rezumatul",
+          "text": "Cine a sunat, ce a vrut, ce s-a stabilit și ce a rămas nelămurit. Scris, pe e-mail — nu o înregistrare de patru minute pe care nu o ascultă nimeni."
+        },
+        "sources": {
+          "title": "Vorbește din materialele dumneavoastră",
+          "text": "Prețuri, termene, condiții, adresa showroomului, ce se face și ce nu. Ce nu i-ați dat nu are de unde să spună, și atunci nu spune."
+        },
+        "disclose": {
+          "title": "Spune că este un agent",
+          "text": "De la început, nu după ce se prinde omul. Un asistent care se dă drept persoană câștigă un apel și pierde clientul care își dă seama mai târziu."
+        }
+      },
+      "sourcesEyebrow": "Din ce vorbește",
+      "sourcesTitle": "Din ce vorbește — și ce nu face",
+      "sourcesYes": {
+        "title": "Vorbește din",
+        "items": [
+          "Prețurile, termenele și condițiile pe care ni le dați, la fel ca la chatbot — aceleași materiale, alt canal.",
+          "Calendarul în care țineți programările, ca să vadă ce ore sunt libere cu adevărat.",
+          "Regulile dumneavoastră de transfer: ce este urgent, cine îl preia și în ce interval.",
+          "Întrebările pe care le primiți cel mai des la telefon, așa cum le răspundeți dumneavoastră."
+        ]
+      },
+      "sourcesNo": {
+        "title": "Nu face",
+        "items": [
+          "Nu se dă drept om. Spune că este un agent, iar dacă interlocutorul cere o persoană, transferă apelul sau notează să fie sunat.",
+          "Nu inventează prețuri, termene sau disponibilitate. Când nu știe, o spune și lasă întrebarea pentru un om — nu improvizează la telefon.",
+          "Nu ține discuții de negociere și nu ia decizii în locul dumneavoastră. Adună, programează, predă.",
+          "Nu înregistrează pe ascuns. Dacă apelul se înregistrează, interlocutorul este anunțat, așa cum cere legea."
+        ]
+      },
+      "platformsTitle": "Cum ajunge la numărul dumneavoastră",
+      "platformsLead": "Numărul rămâne al dumneavoastră. Apelurile se redirecționează către agent — toate, sau doar cele la care nu răspunde nimeni în câteva semnale.",
+      "platforms": [
+        "Numărul actual, prin redirecționare",
+        "Doar apelurile nepreluate",
+        "Doar în afara programului",
+        "Un număr nou, dacă preferați",
+        "Calendarul în care lucrați deja"
+      ],
+      "faqTitle": "Ce se întreabă despre asistentul telefonic",
+      "faq": [
+        {
+          "q": "Trebuie să-mi schimb numărul?",
+          "a": "Nu. Numărul rămâne al dumneavoastră, iar apelurile se redirecționează către agent. Puteți alege să treacă toate, sau doar cele la care nu răspunde nimeni după câteva semnale, sau doar cele din afara programului. Portarea numărului nu este necesară."
+        },
+        {
+          "q": "Se aude că e o mașină?",
+          "a": "Se aude că vorbește curat și fără pauze de gândire. Oricum nu ascundem asta: agentul spune de la început că este un agent. Ideea nu este să păcălim pe cineva, ci ca omul care sună la 21:40 să primească un răspuns în loc de nimic."
+        },
+        {
+          "q": "Ce face când nu înțelege sau nu știe?",
+          "a": "O spune și duce apelul mai departe: fie transferă către un om, dacă e cineva disponibil și regula o permite, fie notează întrebarea și cere un număr de contact. Nu improvizează un răspuns ca să încheie apelul frumos — un preț inventat la telefon devine reclamație a doua zi."
+        },
+        {
+          "q": "Cum știe ce e urgent?",
+          "a": "Din regulile pe care le scrieți dumneavoastră. La o clinică urgent înseamnă altceva decât la un service auto, iar noi nu ghicim: stabilim împreună ce cuvinte și ce situații pornesc transferul și către ce număr."
+        },
+        {
+          "q": "Cum aflu ce s-a vorbit?",
+          "a": "După fiecare apel primiți un rezumat scris: cine a sunat, ce a vrut, ce s-a stabilit, ce a rămas deschis. Tot acolo apare și ce a intrat în calendar. În portal rămâne istoricul, ca să nu căutați prin e-mailuri peste o lună."
+        },
+        {
+          "q": "Ce se întâmplă cu înregistrările apelurilor?",
+          "a": "Înregistrarea nu este pornită implicit. Dacă o porniți, interlocutorul este anunțat la începutul apelului, așa cum cere legea, iar termenul de păstrare îl stabiliți dumneavoastră. Datele fiecărui client rămân separate."
+        },
+        {
+          "q": "Când este gata?",
+          "a": "Nu dăm o dată pe care nu o putem ține. Este inclus în pachetul Growth: dacă îl conectați acum, asistentul telefonic se activează pe contul dumneavoastră la lansare, la prețul de la conectare."
+        }
+      ],
+      "closingTitle": "Sunați-ne și ascultați cum sună",
+      "closingLead": "La demonstrație configurăm agentul pe cazul dumneavoastră și îl sunați dumneavoastră înșivă. Este singurul agent care se poate asculta înainte să îl luați."
+    },
     "configurator": {
       "metaTitle": "Configurator AI de cereri — specificație gata de calculat",
       "metaDescription": "Agent AI care pune întrebările de care depinde prețul și predă vânzărilor o specificație structurată: dimensiuni, materiale, montaj, termen. Inclus în pachetul Growth.",
@@ -662,123 +781,6 @@
       ],
       "closingTitle": "Vedeți ce fișă ar strânge din cererile dumneavoastră",
       "closingLead": "La demonstrație luăm un produs din catalogul dumneavoastră, scriem întrebările pentru el și vă arătăm fișa pe care ar primi-o vânzătorul."
-    },
-    "crm-assistant": {
-      "metaTitle": "Asistent CRM — fișele se completează din corespondență",
-      "metaDescription": "Agent AI care citește corespondența cu clientul și completează fișa din CRM: etapă, buget, termen, cine decide, sarcina următoare. Inclus în pachetul Growth.",
-      "title": "Fișele din CRM se completează din corespondență, nu din memoria vânzătorului",
-      "lead": "Citește discuția cu clientul și pune în fișă ce s-a schimbat: etapa, bugetul, termenul, cine mai decide. Vânzătorul confirmă, nu tastează.",
-      "record": {
-        "title": "Fișă client",
-        "number": "C-318",
-        "source": "Actualizat din e-mailul primit la 14:02",
-        "changes": [
-          {
-            "k": "Etapă",
-            "from": "Ofertă trimisă",
-            "to": "Negociere"
-          },
-          {
-            "k": "Buget",
-            "from": "",
-            "to": "18 000 – 22 000 €"
-          },
-          {
-            "k": "Termen",
-            "from": "",
-            "to": "Decembrie"
-          },
-          {
-            "k": "Cine decide",
-            "from": "O persoană",
-            "to": "Două: achiziții și tehnic"
-          }
-        ],
-        "taskLabel": "Sarcină creată",
-        "task": "Revenire vineri, după ședința lor de buget",
-        "note": "Așa va arăta fișa după un e-mail primit. Câmpurile și etapele sunt cele din CRM-ul dumneavoastră, nu unele inventate de noi."
-      },
-      "featuresTitle": "Ce face, concret",
-      "features": {
-        "read": {
-          "title": "Citește corespondența, nu doar formularele",
-          "text": "E-mail, chatul de pe site, mesajele. De acolo vin datele care nu ajung niciodată într-un câmp, pentru că nimeni nu are timp să le mute cu mâna."
-        },
-        "spec": {
-          "title": "Completează fișa, câmp cu câmp",
-          "text": "Buget, termen, produs discutat, persoana care decide. Câmpurile sunt ale CRM-ului dumneavoastră; nu inventăm altele ca să avem ce completa."
-        },
-        "stage": {
-          "title": "Mută afacerea pe etapa reală",
-          "text": "Când clientul a cerut oferta, afacerea nu mai stă la «contact nou». Etapa se schimbă din ce s-a întâmplat, nu din ce și-a amintit cineva vineri seara."
-        },
-        "task": {
-          "title": "Pune sarcina următoare",
-          "text": "«Revenire vineri, după ședința lor de buget» — cu dată, pe omul care ține clientul. Fără sarcină, urmarea depinde de memorie."
-        },
-        "gaps": {
-          "title": "Nu suprascrie ce a scris omul",
-          "text": "Când ce spune clientul intră în contradicție cu ce e deja în fișă, agentul marchează diferența și lasă decizia la vânzător."
-        },
-        "handoff": {
-          "title": "Rămâne în CRM-ul dumneavoastră",
-          "text": "Nu vă mutăm pe alt sistem și nu vă vindem un CRM. Agentul scrie acolo unde lucrați deja."
-        }
-      },
-      "sourcesEyebrow": "Din ce completează",
-      "sourcesTitle": "Din ce completează fișa — și ce nu face",
-      "sourcesYes": {
-        "title": "Completează din",
-        "items": [
-          "Corespondența cu clientul: e-mail, chatul de pe site, mesajele din canalele pe care le conectați.",
-          "Discuția purtată de chatbot, dacă lucrează deja pe site-ul dumneavoastră.",
-          "Structura fișei dumneavoastră: aceleași câmpuri, aceleași etape, aceleași denumiri.",
-          "Regulile de la care începe o etapă nouă — scrise de dumneavoastră, o singură dată."
-        ]
-      },
-      "sourcesNo": {
-        "title": "Nu face",
-        "items": [
-          "Nu șterge și nu suprascrie ce a scris un om. Diferența se marchează, decide vânzătorul.",
-          "Nu se conectează la cutiile poștale personale ale angajaților și nu citește ce nu ține de clientul din fișă.",
-          "Nu ia decizii în locul vânzătorului: nu schimbă prețul, nu promite termene, nu închide afaceri.",
-          "Nu înlocuiește CRM-ul. Scrie în al dumneavoastră; dacă nu aveți unul, fișele stau în portal."
-        ]
-      },
-      "platformsTitle": "Scrie acolo unde țineți clienții",
-      "platformsLead": "Dacă sistemul dumneavoastră are un API sau poate primi date printr-un webhook, agentul scrie în el. La prima discuție ne spuneți ce folosiți și verificăm înainte să promitem.",
-      "platforms": [
-        "CRM prin API",
-        "Webhook către sistemul propriu",
-        "Foaie de calcul partajată",
-        "Export CSV",
-        "Portalul, dacă încă nu aveți CRM"
-      ],
-      "faqTitle": "Ce se întreabă despre asistentul CRM",
-      "faq": [
-        {
-          "q": "Cu ce CRM funcționează?",
-          "a": "Cu cel care are un API sau poate primi date printr-un webhook — asta acoperă majoritatea sistemelor folosite azi. Nu dăm o listă de nume ca să pară mai mult: ne spuneți ce folosiți și verificăm înainte să promitem. Dacă nu aveți CRM, fișele stau în portal și se exportă când vă mutați pe unul."
-        },
-        {
-          "q": "Vede agentul toată corespondența firmei?",
-          "a": "Nu. Primește doar canalele pe care i le dați: adresa de vânzări, chatul de pe site, mesajele din canalele conectate. Cutia poștală personală a unui angajat nu se conectează, iar ce nu ține de clientul din fișă nu ajunge în fișă."
-        },
-        {
-          "q": "Ce se întâmplă dacă greșește un câmp?",
-          "a": "Se corectează în fișă, ca orice câmp. Corecția rămâne în istoric: se vede ce a scris agentul și ce a schimbat omul. Dacă un tip de greșeală se repetă, se schimbă regula — nu fișele, una câte una."
-        },
-        {
-          "q": "Vânzătorii trebuie să lucreze altfel?",
-          "a": "Nu. Scriu clienților exact cum scriu acum. Diferența este că fișa e completată când o deschid, nu goală — și că sarcina următoare există fără să și-o noteze pe hârtie."
-        },
-        {
-          "q": "Când este gata?",
-          "a": "Nu dăm o dată pe care nu o putem ține. Este inclus în pachetul Growth: dacă îl conectați acum, asistentul CRM se activează pe contul dumneavoastră la lansare, la prețul de la conectare."
-        }
-      ],
-      "closingTitle": "Vedeți ce ar completa din corespondența dumneavoastră",
-      "closingLead": "La demonstrație luăm câteva discuții reale cu clienți — anonimizate, dacă preferați — și vă arătăm ce ar fi ajuns în fișă fără ca cineva să tasteze."
     },
     "follow-up": {
       "metaTitle": "Agent follow-up — reveniri automate la lead-urile care tac",
@@ -1166,10 +1168,10 @@
       ],
       "agents": {
         "chatbot": "Răspunde la întrebările de preț și materiale din lista dumneavoastră, la orice oră.",
+        "voice-assistant": "Preia apelurile când showroomul e gol sau atelierul e zgomotos, află ce perete se mobilează și programează vizita.",
         "configurator": "Clientul alege dimensiuni, fronturi și țesătură; prețul se calculează după regulile atelierului.",
         "follow-up": "Revine la clientul care a cerut ofertă și a tăcut — la momentul în care mai are sens.",
         "order-status": "Anunță la fiecare etapă a producției, fără ca cineva să scrie mesajul.",
-        "crm-assistant": "Completează fișa clientului din conversație — dimensiuni, material, buget — și vânzătorul doar confirmă.",
         "content-engine": "Din aceeași lucrare finisată face postări pentru Instagram și Pinterest, acolo unde se caută mobila."
       },
       "leadTitle": "Vânzătorul primește asta, nu «a scris cineva»",
@@ -1292,8 +1294,8 @@
         "inherits": "Tot din Start, până la 2 000 de conversații pe lună",
         "scenario": "Scenariu adaptat afacerii dumneavoastră, nu doar standardul industriei",
         "languages": "A doua limbă de comunicare",
+        "voice": "Asistent telefonic: preia apelurile și face programări",
         "configurator": "Configurator AI de cereri: specificație structurată pentru echipa de vânzări",
-        "crm": "Asistent CRM: completare automată a fișelor din corespondență",
         "followUp": "Agent follow-up: reveniri automate la lead-urile indecise",
         "orderStatus": "Statusuri comenzi pentru clienți: notificări automate pe etape",
         "content": "Motor de conținut pentru social media",
@@ -1344,6 +1346,9 @@
           "growth": "2",
           "platform": "Convenit individual"
         },
+        "voice": {
+          "label": "Asistent telefonic: apeluri preluate și programări"
+        },
         "qualify": {
           "label": "Calificarea lead-urilor după scenariul nișei"
         },
@@ -1355,9 +1360,6 @@
         },
         "configurator": {
           "label": "Configurator AI de cereri"
-        },
-        "crm": {
-          "label": "Asistent CRM"
         },
         "followUp": {
           "label": "Agent follow-up"
@@ -1447,13 +1449,13 @@
         "stage": "Prima întrebare",
         "without": "Întrebarea pusă sâmbătă seara primește răspuns luni dimineață. Până luni, omul a întrebat în altă parte."
       },
+      "voice-assistant": {
+        "stage": "Aceeași întrebare, la telefon",
+        "without": "Telefonul sună de patru ori și se închide. Nu rămâne nici măcar urma că cineva a vrut să cumpere."
+      },
       "configurator": {
         "stage": "Din discuție în cerere",
         "without": "Discuția s-a purtat, dar din ea nu a rămas nimic de calculat. Vânzătorul sună a doua oară ca să întrebe ce s-a spus deja."
-      },
-      "crm-assistant": {
-        "stage": "Evidența",
-        "without": "Ce s-a vorbit rămâne în capul vânzătorului și în corespondența lui. Când pleacă în concediu, pleacă și lead-ul cu el."
       },
       "follow-up": {
         "stage": "Revenirea",

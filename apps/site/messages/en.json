@@ -25,13 +25,13 @@
       "name": "AI chatbot",
       "short": "Answers 24/7 from your own materials and qualifies the lead the way your niche does."
     },
+    "voice-assistant": {
+      "name": "Phone assistant",
+      "short": "Answers the phone when nobody can and books straight into your calendar."
+    },
     "configurator": {
       "name": "Request configurator",
       "short": "Asks the questions, collects the specification, hands sales a request ready to price."
-    },
-    "crm-assistant": {
-      "name": "CRM assistant",
-      "short": "Fills the lead record from the conversation. The rep only confirms it."
     },
     "follow-up": {
       "name": "Automatic follow-up",
@@ -542,6 +542,125 @@
       "widgetPlaceholder": "Write a message…",
       "widgetInitial": "AI"
     },
+    "voice-assistant": {
+      "metaTitle": "AI phone assistant — answers calls and books appointments",
+      "metaDescription": "An AI agent that picks up at any hour, finds out what the caller wants, books into your calendar and passes urgent calls on. It says from the start that it is an agent. Included in the Growth package.",
+      "title": "A phone ringing out is the most expensive thing in the company",
+      "lead": "The agent picks up on the first ring, at any hour, finds out what the caller wants and books them straight into your calendar. Anything urgent reaches a person during the call. After every conversation you get the summary in writing.",
+      "call": {
+        "title": "Call answered",
+        "time": "19:42",
+        "fromLabel": "From",
+        "from": "+373 ·· ··· 418",
+        "duration": "1:48",
+        "rows": [
+          {
+            "k": "Wants",
+            "v": "Bespoke kitchen, a 3.2 m wall"
+          },
+          {
+            "k": "Booked",
+            "v": "Friday, 15:00, at the showroom"
+          },
+          {
+            "k": "Confirmation",
+            "v": "Sent by SMS, with the address"
+          }
+        ],
+        "afterLabel": "Outside working hours",
+        "after": "Nobody was in the office. The call became a booking, not a missed call.",
+        "note": "This is what the call looks like once it has ended: what was established and what went into the calendar. The agent says from the start that it is an agent, and anyone who asks for a person gets a person."
+      },
+      "featuresTitle": "What it does, concretely",
+      "features": {
+        "phone": {
+          "title": "It picks up on the first ring, at any hour",
+          "text": "In the evening, on a Saturday, while you are with a client in the showroom. There is no such thing as a second caller — there is only the call nobody took."
+        },
+        "task": {
+          "title": "It books into your own calendar",
+          "text": "It sees the free slots and puts the meeting where it fits, then sends the confirmation. No double bookings and no «we'll call you back to arrange it»."
+        },
+        "handoff": {
+          "title": "Anything urgent reaches a person during the call",
+          "text": "You write the rules: what counts as urgent in your business and which number it transfers to. The rest waits until morning without ringing you."
+        },
+        "read": {
+          "title": "After every call you get the summary",
+          "text": "Who called, what they wanted, what was agreed and what stayed open. In writing, by email — not a four-minute recording nobody listens to."
+        },
+        "sources": {
+          "title": "It speaks from your own materials",
+          "text": "Prices, lead times, conditions, the showroom address, what you do and what you do not. What you did not give it, it has no way of saying — so it does not."
+        },
+        "disclose": {
+          "title": "It says that it is an agent",
+          "text": "From the start, not once the caller works it out. An assistant that passes itself off as a person wins one call and loses the customer who realises later."
+        }
+      },
+      "sourcesEyebrow": "What it speaks from",
+      "sourcesTitle": "What it speaks from — and what it does not do",
+      "sourcesYes": {
+        "title": "It speaks from",
+        "items": [
+          "The prices, lead times and conditions you give us, the same as for the chatbot — the same materials, a different channel.",
+          "The calendar you keep bookings in, so it sees which hours are genuinely free.",
+          "Your own transfer rules: what counts as urgent, who takes it and in what hours.",
+          "The questions you get most often on the phone, answered the way you answer them."
+        ]
+      },
+      "sourcesNo": {
+        "title": "It does not",
+        "items": [
+          "It does not pass itself off as a person. It says it is an agent, and if the caller asks for a human it transfers the call or notes them down for a callback.",
+          "It does not invent prices, lead times or availability. When it does not know, it says so and leaves the question for a person — it does not improvise on the phone.",
+          "It does not negotiate and does not take decisions for you. It gathers, books, hands over.",
+          "It does not record in secret. If the call is recorded, the caller is told, as the law requires."
+        ]
+      },
+      "platformsTitle": "How it reaches your number",
+      "platformsLead": "The number stays yours. Calls are forwarded to the agent — all of them, or only the ones nobody answers within a few rings.",
+      "platforms": [
+        "Your current number, by forwarding",
+        "Only unanswered calls",
+        "Only outside working hours",
+        "A new number, if you prefer",
+        "The calendar you already work in"
+      ],
+      "faqTitle": "What people ask about the phone assistant",
+      "faq": [
+        {
+          "q": "Do I have to change my number?",
+          "a": "No. The number stays yours and calls are forwarded to the agent. You can choose to send all of them, or only those nobody answers after a few rings, or only those outside working hours. Porting the number is not necessary."
+        },
+        {
+          "q": "Can you hear that it is a machine?",
+          "a": "You can hear that it speaks cleanly and without pauses for thought. We do not hide it either: the agent says from the start that it is an agent. The point is not to fool anyone, it is that the person calling at 21:40 gets an answer instead of nothing."
+        },
+        {
+          "q": "What does it do when it does not understand or does not know?",
+          "a": "It says so and takes the call further: it either transfers to a person, if somebody is available and the rule allows it, or writes the question down and asks for a contact number. It does not improvise an answer to end the call neatly — a price invented on the phone becomes a complaint the next day."
+        },
+        {
+          "q": "How does it know what is urgent?",
+          "a": "From the rules you write. Urgent means something different at a clinic than at a car service, and we do not guess: together we set which words and which situations trigger a transfer, and to which number."
+        },
+        {
+          "q": "How do I find out what was said?",
+          "a": "After every call you get a written summary: who called, what they wanted, what was agreed, what stayed open. What went into the calendar is in there too. The history stays in the portal, so you are not searching through emails a month later."
+        },
+        {
+          "q": "What happens to call recordings?",
+          "a": "Recording is not switched on by default. If you switch it on, the caller is told at the start of the call, as the law requires, and you set how long recordings are kept. Each client's data stays separate."
+        },
+        {
+          "q": "When will it be ready?",
+          "a": "We do not give a date we cannot keep. It is included in the Growth package: if you connect it now, the phone assistant switches on for your account at launch, at the price you connected at."
+        }
+      ],
+      "closingTitle": "Call it and hear how it sounds",
+      "closingLead": "At the demo we configure the agent on your own case and you call it yourself. It is the only agent you can listen to before you take it."
+    },
     "configurator": {
       "metaTitle": "AI request configurator — a specification ready to price",
       "metaDescription": "An AI agent that asks the questions the price depends on and hands your sales team a structured specification: dimensions, materials, installation, deadline. Included in the Growth package.",
@@ -662,123 +781,6 @@
       ],
       "closingTitle": "See what sheet it would collect from your own requests",
       "closingLead": "At the demo we take one product from your catalogue, write the questions for it, and show you the sheet your salesperson would receive."
-    },
-    "crm-assistant": {
-      "metaTitle": "CRM assistant — records filled from the correspondence",
-      "metaDescription": "An AI agent that reads the correspondence with your customer and fills in the CRM record: stage, budget, deadline, who decides, the next task. Included in the Growth package.",
-      "title": "CRM records filled from the correspondence, not from the salesperson's memory",
-      "lead": "It reads the conversation with the customer and puts what changed into the record: the stage, the budget, the deadline, who else decides. Your salesperson confirms rather than types.",
-      "record": {
-        "title": "Customer record",
-        "number": "C-318",
-        "source": "Updated from the email received at 14:02",
-        "changes": [
-          {
-            "k": "Stage",
-            "from": "Quote sent",
-            "to": "Negotiation"
-          },
-          {
-            "k": "Budget",
-            "from": "",
-            "to": "€18,000 – 22,000"
-          },
-          {
-            "k": "Deadline",
-            "from": "",
-            "to": "December"
-          },
-          {
-            "k": "Who decides",
-            "from": "One person",
-            "to": "Two: procurement and technical"
-          }
-        ],
-        "taskLabel": "Task created",
-        "task": "Follow up Friday, after their budget meeting",
-        "note": "This is how the record looks after one incoming email. The fields and stages are the ones in your own CRM, not ones we invented."
-      },
-      "featuresTitle": "What it does, concretely",
-      "features": {
-        "read": {
-          "title": "It reads the correspondence, not just the forms",
-          "text": "Email, the chat on your site, the messages. That is where the data lives that never reaches a field, because nobody has time to move it by hand."
-        },
-        "spec": {
-          "title": "It fills the record, field by field",
-          "text": "Budget, deadline, the product discussed, the person who decides. The fields are your CRM's; we do not invent extra ones just to have something to fill in."
-        },
-        "stage": {
-          "title": "It moves the deal to the stage it is actually at",
-          "text": "Once the customer has asked for a quote, the deal no longer sits at \"new contact\". The stage changes from what happened, not from what somebody remembered on Friday evening."
-        },
-        "task": {
-          "title": "It sets the next task",
-          "text": "\"Follow up Friday, after their budget meeting\" — with a date, on the person who owns the customer. Without a task, the follow-up depends on memory."
-        },
-        "gaps": {
-          "title": "It does not overwrite what a person wrote",
-          "text": "When what the customer says contradicts what is already in the record, the agent flags the difference and leaves the decision to the salesperson."
-        },
-        "handoff": {
-          "title": "It stays inside your CRM",
-          "text": "We do not move you onto another system and we do not sell you a CRM. The agent writes where you already work."
-        }
-      },
-      "sourcesEyebrow": "What it fills from",
-      "sourcesTitle": "What it fills the record from — and what it does not do",
-      "sourcesYes": {
-        "title": "It fills from",
-        "items": [
-          "The correspondence with the customer: email, the chat on your site, the messages from the channels you connect.",
-          "The conversation the chatbot held, if it is already working on your site.",
-          "The structure of your own record: the same fields, the same stages, the same names.",
-          "The rules for when a new stage begins — written by you, once."
-        ]
-      },
-      "sourcesNo": {
-        "title": "It never",
-        "items": [
-          "It does not delete or overwrite what a person wrote. The difference is flagged; the salesperson decides.",
-          "It does not connect to employees' personal mailboxes, and what does not concern the customer in the record does not reach the record.",
-          "It does not decide in the salesperson's place: it does not change prices, promise deadlines or close deals.",
-          "It does not replace your CRM. It writes into yours; if you do not have one, the records live in the portal."
-        ]
-      },
-      "platformsTitle": "It writes where you keep your customers",
-      "platformsLead": "If your system has an API or can receive data through a webhook, the agent writes into it. At the first conversation you tell us what you use and we check before promising.",
-      "platforms": [
-        "CRM through its API",
-        "Webhook into your own system",
-        "A shared spreadsheet",
-        "CSV export",
-        "The portal, if you have no CRM yet"
-      ],
-      "faqTitle": "What people ask about the CRM assistant",
-      "faq": [
-        {
-          "q": "Which CRM does it work with?",
-          "a": "The one that has an API or can receive data through a webhook — which covers most systems in use today. We do not print a list of names to look bigger: you tell us what you use and we check before promising. If you have no CRM, the records live in the portal and export when you move to one."
-        },
-        {
-          "q": "Does the agent see all the company's correspondence?",
-          "a": "No. It receives only the channels you give it: the sales address, the chat on your site, the messages from connected channels. An employee's personal mailbox is not connected, and what does not concern the customer in the record does not reach the record."
-        },
-        {
-          "q": "What happens if it gets a field wrong?",
-          "a": "You correct it in the record, like any field. The correction stays in the history: you can see what the agent wrote and what the person changed. If one kind of mistake repeats, we change the rule — not the records, one by one."
-        },
-        {
-          "q": "Do salespeople have to work differently?",
-          "a": "No. They write to customers exactly as they do now. The difference is that the record is filled in when they open it rather than empty — and that the next task exists without anyone writing it on paper."
-        },
-        {
-          "q": "When will it be ready?",
-          "a": "We do not give a date we cannot keep. It is included in the Growth package: connect it now and the CRM assistant switches on in your account at launch, at the price you joined at."
-        }
-      ],
-      "closingTitle": "See what it would fill in from your own correspondence",
-      "closingLead": "At the demo we take a few real customer conversations — anonymised, if you prefer — and show you what would have reached the record without anyone typing."
     },
     "follow-up": {
       "metaTitle": "Follow-up agent — automatic returns to leads that went quiet",
@@ -1166,10 +1168,10 @@
       ],
       "agents": {
         "chatbot": "Answers questions about price and materials from your own list, at any hour.",
+        "voice-assistant": "It answers when the showroom is empty or the workshop is loud, finds out which wall is being fitted and books the visit.",
         "configurator": "The customer picks dimensions, fronts and fabric; the price follows the workshop's rules.",
         "follow-up": "Comes back to the customer who asked for a quote and went quiet — at the moment it still makes sense.",
         "order-status": "Reports at every production stage, without anyone writing the message.",
-        "crm-assistant": "Fills the customer record from the conversation — dimensions, material, budget — and the salesperson only confirms it.",
         "content-engine": "Turns the same finished job into posts for Instagram and Pinterest, where furniture is actually searched for."
       },
       "leadTitle": "Your salesperson gets this, not \"someone wrote in\"",
@@ -1292,8 +1294,8 @@
         "inherits": "Everything in Start, up to 2,000 conversations a month",
         "scenario": "A script adapted to your business, not just the industry standard",
         "languages": "A second language for conversations",
+        "voice": "Phone assistant: it answers calls and books appointments",
         "configurator": "AI request configurator: a structured specification for your sales team",
-        "crm": "CRM assistant: records filled automatically from the correspondence",
         "followUp": "Follow-up agent: automatic returns to undecided leads",
         "orderStatus": "Order status for customers: automatic notifications at each stage",
         "content": "Content engine for social media",
@@ -1344,6 +1346,9 @@
           "growth": "2",
           "platform": "Agreed individually"
         },
+        "voice": {
+          "label": "Phone assistant: calls answered and appointments booked"
+        },
         "qualify": {
           "label": "Lead qualification by niche script"
         },
@@ -1355,9 +1360,6 @@
         },
         "configurator": {
           "label": "AI request configurator"
-        },
-        "crm": {
-          "label": "CRM assistant"
         },
         "followUp": {
           "label": "Follow-up agent"
@@ -1447,13 +1449,13 @@
         "stage": "The first question",
         "without": "A question asked on Saturday evening gets an answer on Monday morning. By Monday they have asked somebody else."
       },
+      "voice-assistant": {
+        "stage": "The same question, by phone",
+        "without": "The phone rings four times and hangs up. Not even a trace is left that somebody wanted to buy."
+      },
       "configurator": {
         "stage": "From conversation to request",
         "without": "The conversation happened, but nothing came out of it that anyone can price. The salesperson calls back to ask what was already said."
-      },
-      "crm-assistant": {
-        "stage": "The record",
-        "without": "What was said stays in the salesperson's head and in their inbox. When they go on holiday, the lead goes with them."
       },
       "follow-up": {
         "stage": "The return",

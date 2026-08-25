@@ -12,8 +12,8 @@
 
 export const AGENT_SLUGS = [
   'chatbot',
+  'voice-assistant',
   'configurator',
-  'crm-assistant',
   'follow-up',
   'order-status',
   'content-engine',
@@ -41,8 +41,8 @@ export interface Agent {
 
 export const AGENTS: Agent[] = [
   { slug: 'chatbot', status: 'available', full: true },
+  { slug: 'voice-assistant', status: 'soon', full: true },
   { slug: 'configurator', status: 'soon', full: true },
-  { slug: 'crm-assistant', status: 'soon', full: true },
   { slug: 'follow-up', status: 'soon', full: true },
   { slug: 'order-status', status: 'soon', full: true },
   { slug: 'content-engine', status: 'soon', full: true },
@@ -68,37 +68,37 @@ export interface Industry {
 export const INDUSTRIES: Industry[] = [
   {
     slug: 'mobilier',
-    agents: ['chatbot', 'configurator', 'follow-up', 'order-status', 'crm-assistant', 'content-engine'],
+    agents: ['chatbot', 'voice-assistant', 'configurator', 'follow-up', 'order-status', 'content-engine'],
   },
   {
     slug: 'constructii',
     // Ремонт идёт месяцами, и «где моя квартира» здесь спрашивают чаще,
     // чем что-либо ещё после цены. «До и после» — второй по силе повод.
-    agents: ['chatbot', 'configurator', 'order-status', 'content-engine', 'crm-assistant'],
+    agents: ['chatbot', 'voice-assistant', 'configurator', 'order-status', 'content-engine'],
   },
   {
     slug: 'imobiliare',
     // Продаёт показ, а показ приводит контент: объекты, планировки, ход
     // стройки. Статус — про стадию сделки и про дом, который ещё строится.
-    agents: ['chatbot', 'crm-assistant', 'follow-up', 'content-engine', 'order-status'],
+    agents: ['chatbot', 'voice-assistant', 'follow-up', 'content-engine', 'order-status'],
   },
   {
     slug: 'auto',
     // Машину из заказа ждут месяцами: статус закрывает самый частый
     // звонок. Контент — склад, поставки, выдачи.
-    agents: ['chatbot', 'crm-assistant', 'follow-up', 'order-status', 'content-engine'],
+    agents: ['chatbot', 'voice-assistant', 'follow-up', 'order-status', 'content-engine'],
   },
   {
     slug: 'energie',
     // Монтаж фотографируется сам собой, и это лучший материал в нише:
     // объект, цифры экономии, срок.
-    agents: ['chatbot', 'configurator', 'order-status', 'content-engine'],
+    agents: ['chatbot', 'voice-assistant', 'configurator', 'order-status', 'content-engine'],
   },
   {
     slug: 'clinici',
     // Статус здесь про работу лаборатории — коронка, элайнеры, протез.
     // Ждут неделями и звонят узнать, пришло ли.
-    agents: ['chatbot', 'follow-up', 'content-engine', 'order-status'],
+    agents: ['chatbot', 'voice-assistant', 'follow-up', 'content-engine', 'order-status'],
   },
 ];
 

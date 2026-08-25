@@ -8,7 +8,7 @@ import { Reveal } from '@/components/ui/Reveal';
 import { SectionHead } from './SectionHead';
 import { WidgetChat } from './WidgetChat';
 import { SpecSheet } from './SpecSheet';
-import { CrmRecord } from './CrmRecord';
+import { VoiceCall } from './VoiceCall';
 import { FollowUpPlan } from './FollowUpPlan';
 import { OrderStatus } from './OrderStatus';
 import { ContentDraft } from './ContentDraft';
@@ -32,7 +32,7 @@ const VISUALS: Partial<Record<string, typeof agentChatbot>> = {
 const HERO_VISUAL: Partial<Record<string, (p: { namespace: string }) => React.ReactElement>> = {
   chatbot: WidgetChat,
   configurator: SpecSheet,
-  'crm-assistant': CrmRecord,
+  'voice-assistant': VoiceCall,
   'follow-up': FollowUpPlan,
   'order-status': OrderStatus,
   'content-engine': ContentDraft,
