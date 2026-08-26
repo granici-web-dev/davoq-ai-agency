@@ -475,6 +475,12 @@ export function registerAdmin(app: FastifyInstance): void {
     const t = rows[0];
     return {
       email: session.email,
+      // Идентификаторы нужны не панели — она про них ничего не спрашивает, —
+      // а порталу: он сводит учётную запись движка со своей записью клиента
+      // и своим пользователем. Без них сводить не по чему, а сводить по почте
+      // значило бы считать почту неизменной, чем она не является.
+      userId: session.userId,
+      tenantId: session.tenantId,
       tenant: t && {
         name: t.name, plan: t.plan, public_key: t.public_key,
         // Адрес с отпечатком файла. Один общий адрес с приватным кешем показывал
