@@ -164,6 +164,27 @@ export function registerAdmin(app: FastifyInstance): void {
   };
 
   /**
+   * Какие экраны этому клиенту не показывать.
+   *
+   * Одна функция на оба применения: затвор ниже закрывает по этому списку
+   * запросы, а `/admin/api/me` отдаёт его порталу, чтобы тот не рисовал
+   * вкладку, которая ответит отказом. Списка было два, и они разошлись —
+   * правило про акции стояло только в затворе, поэтому клиент без
+   * конфигуратора видел вкладку «Promoții» и получал на неё 403.
+   */
+  const hiddenScreensFor = (row: {
+    hidden_screens: string[]; plan: string; has_configurator: boolean;
+  }): string[] => [...new Set([
+    ...row.hidden_screens,
+    // Экран, которого нет в тарифе. Клиент не должен видеть то, за что не
+    // платил, — и не должен думать, что мы прячем по своей прихоти: в разделе
+    // «Abonament» видно, какой пакет его включает.
+    ...screensNotInPlan(row.plan),
+    // Акции без конфигуратора подтверждать не для чего: применять их негде.
+    ...(row.has_configurator ? [] : ['promotions']),
+  ])];
+
+  /**
    * Скрытый экран закрывается на входе, а не в каждом обработчике.
    *
    * Обработчики зарегистрированы по-разному: часть через `guarded`, часть
@@ -188,12 +209,7 @@ export function registerAdmin(app: FastifyInstance): void {
       if (!row) return [];
       // Тариф проверяется здесь же, а не только в панели: экран, закрытый
       // рисованием, остаётся доступен обычным запросом — это уже находили.
-      return [
-        ...row.hidden_screens,
-        ...screensNotInPlan(row.plan),
-        // Акции без конфигуратора подтверждать не для чего: применять их негде.
-        ...(row.has_configurator ? [] : ['promotions']),
-      ];
+      return hiddenScreensFor(row);
     });
     if (hidden.includes(screen)) {
       return reply.code(403)
@@ -641,8 +657,9 @@ export function registerAdmin(app: FastifyInstance): void {
     const { rows } = await client.query<{
       name: string; plan: string; public_key: string; logo_key: string | null;
       hidden_screens: string[]; locale_default: string; supported_locales: string[];
+      has_configurator: boolean;
     }>(`SELECT name, plan, public_key, logo_key, hidden_screens, locale_default,
-               supported_locales
+               supported_locales, configurator <> '{}'::jsonb AS has_configurator
           FROM tenants WHERE id = $1`, [session.tenantId]);
     const t = rows[0];
     return {
@@ -660,11 +677,8 @@ export function registerAdmin(app: FastifyInstance): void {
         // сутки, пока не истечёт кеш. Отпечаток меняет адрес вместе с логотипом.
         logo_url: t.logo_key ? `/admin/brand/logo?v=${logoTag(t.logo_key)}` : null,
         // Какие экраны показывать — решает запись тенанта, а не сборка панели.
-        // К скрытым руками добавляются те, которых нет в тарифе. Клиент
-        // не должен видеть экран, за который не платил, — и не должен думать,
-        // что мы его прячем по своей прихоти: в разделе «Abonament» видно,
-        // какой пакет его включает.
-        hiddenScreens: [...new Set([...t.hidden_screens, ...screensNotInPlan(t.plan)])],
+        // Тот же список, по которому затвор закрывает запросы: см. hiddenScreensFor.
+        hiddenScreens: hiddenScreensFor(t),
         // Язык панели — язык клиента. Панель писалась по-румынски, но читать
         // её будет тот, кто работает с заявками, а он не обязан знать румынский.
         locale: t.locale_default,
