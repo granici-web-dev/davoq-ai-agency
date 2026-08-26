@@ -8,6 +8,7 @@
  */
 import '../../engine/env.js';
 import { closeOwnerPool, pool, withOwner } from '../../engine/db/pool.js';
+import { syncPlanGrants } from '../../engine/billing/agents.js';
 import { listVerticals } from '../../engine/prompt/vertical.js';
 import { applyClientConfig } from '../onboarding/apply.js';
 import { listClients, loadClientConfig } from '../onboarding/config.js';
@@ -248,9 +249,14 @@ try {
       if (!isPlanId(planId)) throw new Error(`тариф «${planId}» не существует. Есть: ${PLAN_IDS.join(', ')}`);
 
       const changed = await withOwner(async (c) => {
-        const { rows } = await c.query<{ name: string; plan: string }>(
-          'UPDATE tenants SET plan = $2 WHERE client_id = $1 RETURNING name, plan', [clientId, planId]);
-        return rows[0];
+        const { rows } = await c.query<{ id: string; name: string; plan: string }>(
+          'UPDATE tenants SET plan = $2 WHERE client_id = $1 RETURNING id, name, plan', [clientId, planId]);
+        const row = rows[0];
+        // Тариф сменился — сменился и набор агентов. Права, купленные
+        // поштучно, при этом не трогаются: тариф о них не знает, и отбирать
+        // оплаченное понижением тарифа нельзя.
+        if (row) await syncPlanGrants(c, row.id, planId);
+        return row;
       });
       if (!changed) throw new Error(`клиент «${clientId}» не заведён`);
       const plan = PLANS[planId];

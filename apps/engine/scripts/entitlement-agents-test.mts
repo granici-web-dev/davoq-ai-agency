@@ -5,7 +5,8 @@
  * `tenant_agents` проверяются интеграционно, здесь проверяются правила.
  */
 import { productById } from '@assistwidget/contract';
-import { accessOf, type AgentGrant } from '../src/engine/billing/agents.js';
+import { accessOf, agentsInPlan, type AgentGrant } from '../src/engine/billing/agents.js';
+import { PLAN_IDS } from '../src/engine/plans.js';
 
 let failed = 0;
 const check = (name: string, cond: boolean, got?: unknown) => {
@@ -89,6 +90,38 @@ console.log('поагентные права:');
   // Отсрочку считает entitlement.ts на уровне клиента. Дублировать её здесь
   // значило бы завести второй набор правил, который разойдётся с первым.
   check('просрочка не закрывает агента поштучно', a.access === 'unlocked', a.access);
+}
+
+// ── Тариф → набор агентов ──────────────────────────────────────────────
+//
+// Соответствие продублировано в миграции 040 на SQL, потому что миграция
+// обязана применяться без приложения. Дубль без проверки разъезжается, и
+// разъедется он молча: обе половины по отдельности выглядят правильно.
+{
+  const set = (plan: string) => agentsInPlan(plan).sort().join(',');
+
+  check('starter даёт только чат-бота', set('starter') === 'chatbot', set('starter'));
+  check('pro добавляет конфигуратор', set('pro') === 'chatbot,configurator', set('pro'));
+  check(
+    'business добавляет дожим и статус заказа',
+    set('business') === 'chatbot,configurator,follow-up,order-status',
+    set('business'),
+  );
+  check(
+    'enterprise добавляет контент и голос',
+    set('enterprise') ===
+      'chatbot,configurator,content-engine,follow-up,order-status,voice-assistant',
+    set('enterprise'),
+  );
+
+  // Значение вне лестницы — тот же выбор, что в 039 и 040: заниженные права
+  // клиент заметит и позвонит, завышенные не заметит никто.
+  check('неизвестный тариф падает до starter', set('чего-то такого') === 'chatbot');
+
+  // Аналитик не запускается этим движком. Появись он здесь — портал открыл бы
+  // раздел, которого движок открыть не может.
+  const analystSomewhere = PLAN_IDS.filter((p) => agentsInPlan(p).includes('data-analyst'));
+  check('аналитика не даёт ни один тариф', analystSomewhere.length === 0, analystSomewhere);
 }
 
 if (failed) {

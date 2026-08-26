@@ -3,6 +3,7 @@ import { existsSync } from 'node:fs';
 import { extname, join } from 'node:path';
 import { randomBytes } from 'node:crypto';
 import { withOwner, withTenant } from '../../engine/db/pool.js';
+import { syncPlanGrants } from '../../engine/billing/agents.js';
 import { get as storageGet, put as storagePut } from '../../engine/ingest/storage.js';
 import { configuratorLayer } from '../../products/configurator/onboarding.js';
 import { syncConfigPromotions } from '../../products/configurator/promo/store.js';
@@ -161,6 +162,10 @@ export async function applyClientConfig(
         `INSERT INTO widget_configs (tenant_id, bot_name) VALUES ($1, $2)`,
         [id, cfg.channels.web.widget.botName ?? cfg.name],
       );
+      // Права по тарифу — часть заведения, а не отдельный шаг, о котором
+      // кто-то вспомнит. Заведённый бланком клиент попадал в портал с пустой
+      // таблицей прав: миграция 040 переносила их снимком, один раз.
+      await syncPlanGrants(client, id, cfg.plan);
       return id;
     });
   }

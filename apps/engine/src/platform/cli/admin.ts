@@ -16,6 +16,7 @@ import { randomBytes } from 'node:crypto';
 import { readFile } from 'node:fs/promises';
 import { basename, extname } from 'node:path';
 import { closeOwnerPool, pool, withOwner, withPlatform, withTenant } from '../../engine/db/pool.js';
+import { syncPlanGrants } from '../../engine/billing/agents.js';
 import { ingestNow, ingestUrl } from '../../engine/ingest/index.js';
 import { retrieve } from '../../engine/rag/retrieve.js';
 
@@ -47,6 +48,10 @@ switch (cmd) {
         `INSERT INTO widget_configs (tenant_id, bot_name) VALUES ($1, $2)`,
         [tenantId, name],
       );
+      // Тариф здесь не указан — база ставит `starter`, и агентов этого тарифа
+      // клиент должен получить сразу. Без этой строки он заводится с пустыми
+      // правами и видит в портале замок на чат-боте, который ему продан.
+      await syncPlanGrants(client, tenantId, 'starter');
       return tenantId;
     });
 

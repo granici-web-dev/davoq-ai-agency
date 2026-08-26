@@ -18,6 +18,7 @@
  */
 import type pg from 'pg';
 import { PRODUCTS, type Product, type TierName } from '@assistwidget/contract';
+import { hasFeature, type Feature } from '../plans.js';
 
 /** Строка таблицы `tenant_agents` как она есть в базе. */
 export interface AgentGrant {
@@ -49,6 +50,76 @@ export interface PortalAgent {
 }
 
 const DAY = 24 * 60 * 60 * 1000;
+
+/**
+ * Какому агенту какая фича тарифа соответствует.
+ *
+ * Обратная сторона таблицы из миграции 040: там соответствие записано на
+ * SQL, потому что миграция обязана применяться без приложения. Здесь то же
+ * самое для работающего кода, и разъехаться им нельзя — при следующем
+ * изменении лестницы правятся оба.
+ *
+ * `drive` и `connectors` сюда не попадают: это возможности платформы,
+ * а не агенты. `analytics` попадает и всегда даёт `false` — аналитик этим
+ * движком не запускается. Строка оставлена намеренно: молчаливое отсутствие
+ * читалось бы как забывчивость.
+ */
+const AGENT_FEATURE: Record<string, Feature> = {
+  'chatbot': 'chatbot',
+  'configurator': 'configurator',
+  'follow-up': 'followup',
+  'order-status': 'productionUpdates',
+  'content-engine': 'social',
+  'voice-assistant': 'voice',
+  'data-analyst': 'analytics',
+};
+
+/** Каких агентов даёт тариф. */
+export const agentsInPlan = (planId: string | null | undefined): string[] =>
+  Object.entries(AGENT_FEATURE)
+    .filter(([, feature]) => hasFeature(planId, feature))
+    .map(([agentId]) => agentId);
+
+/**
+ * Привести права, доставшиеся от тарифа, в соответствие с тарифом.
+ *
+ * Зачем это отдельно. Миграция 040 перенесла права ОДИН РАЗ, снимком. Тариф
+ * же пишется в трёх местах — заведение через бланк, заведение через CLI и
+ * смена тарифа, — и ни одно из них прав не трогало. Клиент, заведённый после
+ * миграции, получал ноль строк в `tenant_agents`, то есть видел в портале
+ * замок на чат-боте, за который платит. Найдено запуском, а не чтением:
+ * в коде каждое из трёх мест выглядит законченным.
+ *
+ * Права, купленные поштучно (`source = 'subscription'`), не трогаются вовсе:
+ * тариф о них ничего не знает, и снимать их сменой тарифа значило бы отбирать
+ * оплаченное.
+ */
+export async function syncPlanGrants(
+  client: pg.PoolClient,
+  tenantId: string,
+  planId: string | null | undefined,
+): Promise<void> {
+  const agents = agentsInPlan(planId);
+
+  // Лишнее снимаем первым: иначе понижение тарифа оставило бы права от
+  // прежнего рядом с правами от нового.
+  await client.query(
+    `DELETE FROM tenant_agents
+      WHERE tenant_id = $1 AND source = 'plan' AND agent_id <> ALL($2::text[])`,
+    [tenantId, agents],
+  );
+
+  if (agents.length === 0) return;
+
+  // ON CONFLICT DO NOTHING, а не UPDATE: если агент уже куплен поштучно,
+  // тариф не должен переписывать его вилку и источник.
+  await client.query(
+    `INSERT INTO tenant_agents (tenant_id, agent_id, source, status)
+     SELECT $1, agent_id, 'plan', 'active' FROM unnest($2::text[]) AS agent_id
+     ON CONFLICT (tenant_id, agent_id) DO NOTHING`,
+    [tenantId, agents],
+  );
+}
 
 /**
  * Право живо? Отменённая подписка доживает оплаченный период.
