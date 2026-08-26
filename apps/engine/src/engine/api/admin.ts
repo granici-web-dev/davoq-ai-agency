@@ -17,6 +17,7 @@ import { CANCELED_DAYS, CONVERSATION_DAYS } from '../billing/retention.js';
 import { isPlanId, messageCapFor, planFor, screensNotInPlan, PLANS, PLAN_IDS, type PlanId } from '../plans.js';
 import { safeFetch } from '../net/safe-fetch.js';
 import { auditTheme, normalizeTheme, PRESETS, type Theme } from '../shared/theme.js';
+import { STRINGS } from '../shared/i18n.js';
 import {
   buildWhere, CSV_PREAMBLE, csvRow, listConversations, type ConversationFilters,
 } from './conversations.js';
@@ -610,6 +611,42 @@ export function registerAdmin(app: FastifyInstance): void {
       warnings: auditTheme(theme),
       presets: PRESETS,
       locales,
+    };
+  }));
+
+  /**
+   * Предпросмотр виджета для портала.
+   *
+   * Собирается ЗДЕСЬ, а не в портале, и это главное в этом обработчике.
+   * Стили превью берутся из того же модуля, что и у живого виджета, — значит
+   * цвета в предпросмотре не могут разойтись с тем, что увидит посетитель.
+   * Портал живёт в другом репозитории; повторить там разметку виджета
+   * означало бы завести копию, которая разойдётся с оригиналом молча и
+   * покажет клиенту не его бота.
+   *
+   * Панель движка рисует то же самое у себя в памяти — ей запрос не нужен.
+   */
+  app.post('/admin/api/appearance/preview', guarded(async ({ body }) => {
+    const b = body as {
+      theme?: Partial<Theme>; botName?: string; locale?: string;
+      welcome?: string; disclosure?: string;
+    };
+    const locale = (b.locale && b.locale in STRINGS ? b.locale : 'en') as keyof typeof STRINGS;
+    const strings = STRINGS[locale];
+    const { previewSrcDoc } = await import('../admin/preview.js');
+
+    return {
+      html: previewSrcDoc({
+        theme: normalizeTheme(b.theme),
+        botName: b.botName?.trim() || 'Assistant',
+        welcome: b.welcome?.trim() || strings.title,
+        disclosure: b.disclosure?.trim() || strings.disclosure,
+        placeholder: strings.placeholder,
+        send: strings.send,
+      }),
+      // Предупреждения о контрасте считает тот же аудит, что и на сохранении:
+      // портал их только показывает.
+      warnings: auditTheme(normalizeTheme(b.theme)),
     };
   }));
 
