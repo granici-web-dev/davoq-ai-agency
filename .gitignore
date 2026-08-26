@@ -20,3 +20,4 @@ dist/
 # Локальные артефакты сборки и тестов.
 *.tsbuildinfo
 coverage/
+.vercel
