@@ -20,15 +20,25 @@ function key(): Buffer {
 
 export function encryptSecret(plaintext: string): Buffer {
   const iv = randomBytes(IV_BYTES);
-  const cipher = createCipheriv('aes-256-gcm', key(), iv);
+  const cipher = createCipheriv('aes-256-gcm', key(), iv, { authTagLength: TAG_BYTES });
   const body = Buffer.concat([cipher.update(plaintext, 'utf8'), cipher.final()]);
   return Buffer.concat([iv, cipher.getAuthTag(), body]);
 }
 
 export function decryptSecret(blob: Buffer): string {
+  // Длина проверяется до разбора: `subarray` за концом буфера не бросает, а молча
+  // отдаёт кусок короче — обрезанная строка в базе доехала бы до `setAuthTag`
+  // укороченной меткой вместо внятного отказа.
+  if (blob.length < IV_BYTES + TAG_BYTES) {
+    throw new Error(`encrypted secret is truncated: ${blob.length} bytes`);
+  }
   const iv = blob.subarray(0, IV_BYTES);
   const tag = blob.subarray(IV_BYTES, IV_BYTES + TAG_BYTES);
-  const decipher = createDecipheriv('aes-256-gcm', key(), iv);
+  // authTagLength задан явно: GCM в Node принимает метки в 4, 8 и 12 байт наравне
+  // с полными шестнадцатью, а короткая метка подбирается перебором на порядки
+  // дешевле. Без этого параметра проверка целостности зависит от того, сколько
+  // байт пришло, — то есть от того, что мы и проверяем.
+  const decipher = createDecipheriv('aes-256-gcm', key(), iv, { authTagLength: TAG_BYTES });
   decipher.setAuthTag(tag);
   return Buffer.concat([
     decipher.update(blob.subarray(IV_BYTES + TAG_BYTES)),

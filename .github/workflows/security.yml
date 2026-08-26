@@ -1,0 +1,86 @@
+# Сканеры безопасности: секреты, код, зависимости.
+#
+# Отдельно от ci.yml по двум причинам. Первая: расписание. Уязвимость в
+# зависимости появляется без единого нашего коммита, и проверка, которая
+# ходит только на push, узнаёт о ней в следующий раз, когда мы что-нибудь
+# напишем. Вторая: три независимые задачи вместо трёх шагов подряд — упавший
+# сканер секретов не должен прятать находки сканера зависимостей.
+#
+# Инструменты запускаются образами с закреплённой версией, а не действиями
+# из маркетплейса: у gitleaks официальное действие требует лицензии для
+# организаций, а закреплённый образ ещё и воспроизводим — в CI работает
+# ровно то, что проверено на машине.
+#
+# Что каждый находит:
+#   gitleaks — ключи и токены, по ВСЕЙ истории, а не только в текущем дереве;
+#   semgrep  — опасные конструкции в коде и незакреплённые действия;
+#   trivy    — известные уязвимости в зависимостях и в Dockerfile.
+#
+# Исключения записываются рядом с причиной: .gitleaksignore и `nosemgrep`
+# в самом коде. Подавление без причины — это отключённая проверка,
+# притворяющаяся включённой.
+name: Безопасность
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+  schedule:
+    # Еженедельно, утром понедельника: новая CVE приходит без нашего участия.
+    - cron: "17 6 * * 1"
+
+concurrency:
+  group: ${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
+
+permissions:
+  contents: read
+
+jobs:
+  secrets:
+    name: Секреты в истории
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@fbc6f3992d24b796d5a048ff273f7fcc4a7b6c09 # v5
+        with:
+          # Вся история, а не последний коммит: ключ, удалённый следующей
+          # правкой, остаётся в истории и остаётся действующим ключом.
+          fetch-depth: 0
+
+      - name: gitleaks
+        run: |
+          docker run --rm -v "$PWD:/repo" -w /repo \
+            ghcr.io/gitleaks/gitleaks:v8.30.1 \
+            git --no-banner --redact --exit-code 1
+
+  code:
+    name: Код и действия
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@fbc6f3992d24b796d5a048ff273f7fcc4a7b6c09 # v5
+
+      - name: semgrep
+        run: |
+          docker run --rm -v "$PWD:/src" -w /src \
+            semgrep/semgrep:1.174.0 \
+            semgrep scan --metrics=off --error --quiet \
+              --config=p/ci \
+              --config=p/typescript \
+              --config=p/javascript \
+              --config=p/nodejs \
+              --config=p/secrets \
+              --config=p/github-actions
+
+  deps:
+    name: Зависимости и образы
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@fbc6f3992d24b796d5a048ff273f7fcc4a7b6c09 # v5
+
+      - name: trivy
+        run: |
+          docker run --rm -v "$PWD:/src" -w /src \
+            aquasec/trivy:0.74.0 \
+            fs --scanners vuln,misconfig \
+               --severity HIGH,CRITICAL \
+               --exit-code 1 --no-progress .
