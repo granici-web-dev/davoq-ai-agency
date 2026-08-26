@@ -1,0 +1,62 @@
+# Проверки движка, сайта и контракта.
+#
+# Здесь нет шага с базой: почти все проверки движка (`test:isolation`,
+# `test:onboarding`, `test:promo` и прочие с `--env-file=.env`) требуют
+# postgres с pgvector и настоящих ключей. Они остаются ручными, и это
+# записано вслух, потому что гейт, умалчивающий о том, чего он не проверяет,
+# хуже отсутствующего.
+#
+# Что здесь есть — восемь проверок движка, которым база не нужна: язык,
+# права по агентам, защита от SSRF, оплата, вебхук, оферта, конфигуратор
+# и расчёт цены.
+name: CI
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+
+concurrency:
+  group: ${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  checks:
+    name: Контракт, типы, линтер, тесты без базы, сборка
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/checkout@v5
+
+      - uses: actions/setup-node@v5
+        with:
+          # package.json требует >=22.
+          node-version: "24"
+          cache: npm
+
+      - name: Установить зависимости
+        run: npm ci
+
+      - name: Контракт совпадает с манифестами
+        # Цены и состав пакетов выводятся из манифестов продуктов. Правка
+        # манифеста без пересборки контракта разводит сайт и движок в разные
+        # стороны — сайт покажет одну цену, счёт выставится по другой.
+        run: npm run contract:check
+
+      - name: Типы
+        run: npm run typecheck
+
+      - name: Линтер сайта
+        run: npm run lint -w @assistwidget/site
+
+      - name: Тесты движка без базы
+        working-directory: apps/engine
+        run: |
+          set -e
+          for t in language entitlements ssrf billing webhook offer configurator quote; do
+            echo "── $t ──"
+            npm run -s "test:$t"
+          done
+
+      - name: Сборка
+        run: npm run build
