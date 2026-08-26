@@ -61,7 +61,6 @@ export function AgentPage({ agent }: { agent: Agent }) {
   const tStatus = useTranslations('status');
   const tNav = useTranslations('nav');
   const tHomeIndustries = useTranslations('home.industries');
-  const tPlans = useTranslations('plans');
 
   /* `available` решает, что написано на бейдже. `full` — есть ли у агента
      страница. Это разные вопросы: конфигуратор ещё не вышел, но входит

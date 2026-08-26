@@ -1,6 +1,28 @@
 'use client';
 
-import { useEffect, useRef, useState } from 'react';
+import { useEffect, useRef, useState, useSyncExternalStore } from 'react';
+
+
+/**
+ * Просит ли человек обойтись без движения.
+ *
+ * Через `useSyncExternalStore`, а не через эффект с `setState`: медиа-запрос —
+ * это внешний источник, а не производное состояние. На сервере снимок всегда
+ * `false`, что совпадает с разметкой, поэтому расхождения при гидратации не
+ * возникает; читать `matchMedia` прямо в инициализаторе `useState` его как раз
+ * и создало бы, ведь от ответа зависит атрибут в разметке.
+ */
+function usePrefersReducedMotion(): boolean {
+  return useSyncExternalStore(
+    (onChange) => {
+      const query = window.matchMedia('(prefers-reduced-motion: reduce)');
+      query.addEventListener('change', onChange);
+      return () => query.removeEventListener('change', onChange);
+    },
+    () => window.matchMedia('(prefers-reduced-motion: reduce)').matches,
+    () => false,
+  );
+}
 
 /**
  * Проявление при прокрутке.
@@ -25,16 +47,13 @@ export function Reveal({
   delay?: number;
 }) {
   const ref = useRef<HTMLDivElement>(null);
-  const [shown, setShown] = useState(false);
+  const reduced = usePrefersReducedMotion();
+  const [seen, setSeen] = useState(false);
+  const shown = seen || reduced;
 
   useEffect(() => {
     const el = ref.current;
-    if (!el) return;
-
-    if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) {
-      setShown(true);
-      return;
-    }
+    if (!el || shown) return;
 
     /* Нижний отступ в 10%: блок считается увиденным, когда он вошёл
        в экран заметно, а не краем в один пиксель. Иначе анимация
@@ -42,7 +61,7 @@ export function Reveal({
     const observer = new IntersectionObserver(
       ([entry]) => {
         if (entry.isIntersecting) {
-          setShown(true);
+          setSeen(true);
           observer.disconnect();
         }
       },
@@ -51,7 +70,9 @@ export function Reveal({
 
     observer.observe(el);
     return () => observer.disconnect();
-  }, []);
+    // `shown` в зависимостях намеренно: когда блок показан, уборка отключает
+    // наблюдателя, а повторный проход выходит сразу. Наблюдать больше нечего.
+  }, [shown]);
 
   return (
     <div

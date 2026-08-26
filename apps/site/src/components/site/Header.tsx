@@ -42,9 +42,19 @@ export function Header() {
   const [mobile, setMobile] = useState(false);
   const [scrolled, setScrolled] = useState(false);
 
-  // Закрываем всё при переходе: меню, пережившее навигацию, висит поверх
-  // новой страницы и выглядит зависшим.
-  useEffect(() => { setOpen(null); setMobile(false); }, [pathname]);
+  /* Закрываем всё при переходе: меню, пережившее навигацию, висит поверх
+     новой страницы и выглядит зависшим.
+
+     Правится во время отрисовки, а не в эффекте. Эффект здесь сначала
+     показал бы новую страницу с открытым меню и только потом закрыл его —
+     лишний проход, который видно. Это документированный приём React для
+     состояния, зависящего от изменившегося свойства. */
+  const [lastPath, setLastPath] = useState(pathname);
+  if (pathname !== lastPath) {
+    setLastPath(pathname);
+    setOpen(null);
+    setMobile(false);
+  }
 
   useEffect(() => {
     const onScroll = () => setScrolled(window.scrollY > 12);

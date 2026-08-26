@@ -10,7 +10,7 @@
     "engine": "npm run dev -w @assistwidget/engine",
     "contract": "npm run generate -w @assistwidget/contract",
     "contract:check": "npm run check -w @assistwidget/contract",
-    "typecheck": "npm run typecheck -w @assistwidget/engine && npm run -w @assistwidget/site exec -- tsc --noEmit",
+    "typecheck": "npm run typecheck -w @assistwidget/contract && npm run typecheck -w @assistwidget/engine && npm run typecheck -w @assistwidget/site",
     "build": "npm run build -w @assistwidget/contract && npm run build -w @assistwidget/engine && npm run build -w @assistwidget/site"
   },
   "engines": {
