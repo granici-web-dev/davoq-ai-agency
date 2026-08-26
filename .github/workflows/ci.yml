@@ -51,9 +51,6 @@ jobs:
         # в чистой выкладке это и показал.
         run: npm run compile -w @assistwidget/contract
 
-      - name: Типы
-        run: npm run typecheck
-
       - name: Линтер сайта
         run: npm run lint -w @assistwidget/site
 
@@ -68,3 +65,10 @@ jobs:
 
       - name: Сборка
         run: npm run build
+
+      - name: Типы
+        # После сборки, а не до неё. `next-env.d.ts` не хранится в репозитории
+        # и вдобавок ссылается на `.next/types/`: объявления для импортов
+        # изображений и типизированных маршрутов Next создаёт сам во время
+        # сборки. До неё `tsc` не находит ни `.webp`, ни маршрутов.
+        run: npm run typecheck
