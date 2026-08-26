@@ -84,9 +84,9 @@ const DAY = 24 * 60 * 60 * 1000;
  * изменении лестницы правятся оба.
  *
  * `drive` и `connectors` сюда не попадают: это возможности платформы,
- * а не агенты. `analytics` попадает и всегда даёт `false` — аналитик этим
- * движком не запускается. Строка оставлена намеренно: молчаливое отсутствие
- * читалось бы как забывчивость.
+ * а не агенты. `analytics` и `outreach` попадают и всегда дают `false` —
+ * эти двое запускаются не этим движком. Строки оставлены намеренно:
+ * молчаливое отсутствие читалось бы как забывчивость.
  */
 const AGENT_FEATURE: Record<string, Feature> = {
   'chatbot': 'chatbot',
@@ -96,6 +96,7 @@ const AGENT_FEATURE: Record<string, Feature> = {
   'content-engine': 'social',
   'voice-assistant': 'voice',
   'data-analyst': 'analytics',
+  'outreach': 'outreach',
 };
 
 /** Каких агентов даёт тариф. */

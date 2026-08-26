@@ -122,6 +122,10 @@ console.log('поагентные права:');
   // раздел, которого движок открыть не может.
   const analystSomewhere = PLAN_IDS.filter((p) => agentsInPlan(p).includes('data-analyst'));
   check('аналитика не даёт ни один тариф', analystSomewhere.length === 0, analystSomewhere);
+
+  // Outreach — тоже отдельная система, и тарифом движка не выдаётся.
+  const outreachSomewhere = PLAN_IDS.filter((p) => agentsInPlan(p).includes('outreach'));
+  check('outreach не даёт ни один тариф', outreachSomewhere.length === 0, outreachSomewhere);
 }
 
 // ── Чем включается запертый агент ──────────────────────────────────────
@@ -142,6 +146,8 @@ console.log('поагентные права:');
         planForAgent('follow-up'));
   check('аналитика не включает ни один тариф', planForAgent('data-analyst') === null,
         planForAgent('data-analyst'));
+  check('outreach не включает ни один тариф', planForAgent('outreach') === null,
+        planForAgent('outreach'));
 
   // Запереть можно только то, что построено и продаётся, — и у всего такого
   // тариф обязан быть, иначе замок некому открыть.

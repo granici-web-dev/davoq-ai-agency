@@ -50,6 +50,10 @@
     "data-analyst": {
       "name": "Sales analyst",
       "short": "Reads your CRM and says every morning where money is leaking — with amounts and a plan for the day."
+    },
+    "outreach": {
+      "name": "Outreach",
+      "short": "Finds customers and partners through cold email: searches companies by segment, verifies addresses, writes each letter from something specific about the recipient, and stops at the first reply."
     }
   },
   "industries": {
@@ -1249,6 +1253,13 @@
       ],
       "closingTitle": "Show us a month of data",
       "closingLead": "We connect the CRM, map the funnel onto your statuses and give you the report for a month that has already passed. Compare it with what you know about that month — and see for yourself whether the figures hold."
+    },
+    "outreach": {
+      "metaTitle": "Outreach — a customer-finding agent | Davoq",
+      "metaDescription": "Cold email campaigns: search by segment, address verification, letters written from concrete facts about the recipient. In progress.",
+      "title": "Outreach",
+      "lead": "Searches companies in the segment you describe, verifies every address, and writes each letter from something concrete about the recipient rather than from a template. Any reply stops the sequence.",
+      "report": "The agent is in progress. We are building it for ourselves first: it is how we look for Davoq's own customers. We will sell it once it works for us — a promise with no experience behind it is your risk at our expense."
     }
   },
   "industryPage": {
@@ -2038,6 +2049,10 @@
       "data-analyst": {
         "stage": "Across the whole circle",
         "without": "All the figures are somewhere in the CRM. They get read at the end of the month — by which time what was lost is already lost."
+      },
+      "outreach": {
+        "stage": "Before the circle",
+        "without": "Customers arrive only while the ads run. When the budget stops, the flow stops — and searching by hand takes days, so it rarely happens."
       }
     },
     "plansEyebrow": "How renting works",

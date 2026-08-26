@@ -50,6 +50,10 @@
     "data-analyst": {
       "name": "Analist de vânzări",
       "short": "Citește datele din CRM și spune în fiecare dimineață unde se pierd bani — cu sume și cu un plan pe zi."
+    },
+    "outreach": {
+      "name": "Outreach",
+      "short": "Găsește clienți și parteneri prin campanii de email la rece: caută firme după segment, verifică adresele, scrie fiecare scrisoare pornind de la ceva concret despre destinatar și se oprește la primul răspuns."
     }
   },
   "industries": {
@@ -1249,6 +1253,13 @@
       ],
       "closingTitle": "Arătați-ne o lună de date",
       "closingLead": "Legăm CRM-ul, punem pâlnia pe statusurile dumneavoastră și vă dăm raportul pe o lună trecută. Îl comparați cu ce știți despre luna aceea — și vedeți singur dacă cifrele se țin."
+    },
+    "outreach": {
+      "metaTitle": "Outreach — agent de căutare a clienților | Davoq",
+      "metaDescription": "Campanii de email la rece: căutare după segment, verificarea adreselor, scrisori pornite de la fapte concrete despre destinatar. În lucru.",
+      "title": "Outreach",
+      "lead": "Caută firme după segmentul pe care îl descrieți, verifică fiecare adresă și scrie scrisori pornind de la ceva concret despre destinatar — nu de la un șablon. Orice răspuns oprește seria.",
+      "report": "Agentul este în lucru. Îl construim mai întâi pentru noi: cu el căutăm clienții Davoq. Îl vindem după ce lucrează la noi — o promisiune fără experiență proprie este riscul dumneavoastră pe seama noastră."
     }
   },
   "industryPage": {
@@ -2038,6 +2049,10 @@
       "data-analyst": {
         "stage": "Peste tot cercul",
         "without": "Toate cifrele sunt undeva în CRM. Se citesc la sfârșitul lunii — când ce s-a pierdut e pierdut deja."
+      },
+      "outreach": {
+        "stage": "Înainte de cerc",
+        "without": "Clienții vin doar cât aduce reclama. Când se oprește bugetul, se oprește și fluxul — iar căutarea manuală ia zile și se face rar."
       }
     },
     "plansEyebrow": "Cum se închiriază",

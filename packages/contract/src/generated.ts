@@ -167,6 +167,13 @@ export const PRODUCTS: readonly Product[] = [
       }
     },
     {
+      "id": "outreach",
+      "version": 1,
+      "status": "planned",
+      "feature": "outreach",
+      "verticals": []
+    },
+    {
       "id": "voice-assistant",
       "version": 1,
       "status": "planned",
