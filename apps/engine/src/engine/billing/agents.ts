@@ -18,7 +18,7 @@
  */
 import type pg from 'pg';
 import { PRODUCTS, type Product, type TierName } from '@assistwidget/contract';
-import { hasFeature, type Feature } from '../plans.js';
+import { hasFeature, PLANS, PLAN_IDS, type Feature, type PlanId } from '../plans.js';
 
 /** Строка таблицы `tenant_agents` как она есть в базе. */
 export interface AgentGrant {
@@ -39,6 +39,14 @@ export interface AgentGrant {
  */
 export type AgentAccess = 'unlocked' | 'expiring' | 'locked' | 'unavailable';
 
+/** Чем агент включается: самый дешёвый покупаемый тариф, куда он входит. */
+export interface UnlockPlan {
+  id: PlanId;
+  name: string;
+  priceEur: number;
+  priceEurYearly: number;
+}
+
 export interface PortalAgent {
   id: string;
   access: AgentAccess;
@@ -47,6 +55,15 @@ export interface PortalAgent {
   priceFrom: number | null;
   /** Дней до конца оплаченного периода. null — бессрочно либо не куплен. */
   daysLeft: number | null;
+  /**
+   * Чем его включить. null — ни один ПОКУПАЕМЫЙ тариф его не даёт.
+   *
+   * Портал без этого показывал кнопку, которая уводила в другое приложение:
+   * цену он знал, а чем платить — нет. Считается здесь, потому что здесь же
+   * лежит соответствие «тариф → агенты»; в портале это была бы вторая копия
+   * лестницы, расходящаяся с первой.
+   */
+  plan: UnlockPlan | null;
 }
 
 const DAY = 24 * 60 * 60 * 1000;
@@ -135,6 +152,28 @@ function grantIsLive(grant: AgentGrant, now: number): boolean {
   return true;
 }
 
+/**
+ * Каким тарифом включается агент.
+ *
+ * Берётся самый дешёвый из ПОКУПАЕМЫХ: лестница идёт по возрастанию, и
+ * первое совпадение — оно и есть. Непокупаемые пропускаются, а не выдаются
+ * с оговоркой: кнопка, ведущая к отказу «этот пакет ещё не продаётся», хуже
+ * отсутствия кнопки.
+ */
+export function planForAgent(agentId: string): UnlockPlan | null {
+  const id = PLAN_IDS.find(
+    (planId) => PLANS[planId].purchasable && agentsInPlan(planId).includes(agentId),
+  );
+  if (!id) return null;
+  const plan = PLANS[id];
+  return {
+    id,
+    name: plan.name,
+    priceEur: plan.priceEur,
+    priceEurYearly: plan.priceEurYearly,
+  };
+}
+
 export function accessOf(
   product: Product,
   grant: AgentGrant | undefined,
@@ -142,6 +181,7 @@ export function accessOf(
 ): PortalAgent {
   const priceFrom = product.tiers?.basic.price ?? null;
   const sellable = product.status === 'shipped' && priceFrom !== null;
+  const plan = planForAgent(product.id);
 
   if (!grant || !grantIsLive(grant, now)) {
     return {
@@ -150,6 +190,7 @@ export function accessOf(
       tier: null,
       priceFrom,
       daysLeft: null,
+      plan,
     };
   }
 
@@ -165,6 +206,7 @@ export function accessOf(
     tier: grant.tier,
     priceFrom,
     daysLeft,
+    plan,
   };
 }
 

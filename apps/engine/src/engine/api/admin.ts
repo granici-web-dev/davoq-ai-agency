@@ -385,7 +385,7 @@ export function registerAdmin(app: FastifyInstance): void {
    * на всякий случай: пока не решён вопрос с юрлицом, он единственный рабочий,
    * и клиент не должен упираться в мёртвую кнопку.
    */
-  app.post<{ Body: { plan?: string; period?: string } }>('/admin/api/subscription/checkout',
+  app.post<{ Body: { plan?: string; period?: string; from?: string } }>('/admin/api/subscription/checkout',
     guarded(async ({ session, client, body, request }) => {
       const { rows } = await client.query<{
         name: string; plan: string; subscription_id: string | null; subscription_status: string;
@@ -427,7 +427,16 @@ export function registerAdmin(app: FastifyInstance): void {
 
         const host = request.headers.host ?? '';
         const proto = (request.headers['x-forwarded-proto'] as string | undefined) ?? 'https';
-        const back = `${proto}://${host}/admin#subscription`;
+        // Куда вернуть человека после Stripe. Оплата, начатая в портале,
+        // обязана и заканчиваться в портале: иначе человек платит в одном
+        // приложении и приходит в себя в другом.
+        //
+        // Адрес не принимается запросом, а берётся из настройки: параметр
+        // с адресом возврата — это открытое перенаправление, и подписаться
+        // на него можно было бы чужой ссылкой.
+        const portal = process.env.PORTAL_BASE_URL?.replace(/\/+$/, '');
+        const fromPortal = (body as { from?: string })?.from === 'portal' && portal;
+        const back = fromPortal ? `${portal}/subscription` : `${proto}://${host}/admin#subscription`;
         const { createCheckout } = await import('../../platform/billing/stripe.js');
         return await createCheckout({
           tenantId: session.tenantId, plan: wanted, period,

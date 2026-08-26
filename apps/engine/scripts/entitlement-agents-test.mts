@@ -5,7 +5,7 @@
  * `tenant_agents` проверяются интеграционно, здесь проверяются правила.
  */
 import { productById } from '@assistwidget/contract';
-import { accessOf, agentsInPlan, type AgentGrant } from '../src/engine/billing/agents.js';
+import { accessOf, agentsInPlan, planForAgent, type AgentGrant } from '../src/engine/billing/agents.js';
 import { PLAN_IDS } from '../src/engine/plans.js';
 
 let failed = 0;
@@ -122,6 +122,32 @@ console.log('поагентные права:');
   // раздел, которого движок открыть не может.
   const analystSomewhere = PLAN_IDS.filter((p) => agentsInPlan(p).includes('data-analyst'));
   check('аналитика не даёт ни один тариф', analystSomewhere.length === 0, analystSomewhere);
+}
+
+// ── Чем включается запертый агент ──────────────────────────────────────
+//
+// Кнопка оплаты обязана знать не только цену, но и за что платить. Пока
+// портал этого не знал, он уводил человека в другое приложение.
+{
+  const chatbot = planForAgent('chatbot');
+  check('чат-бот включается стартовым тарифом', chatbot?.id === 'starter', chatbot?.id);
+  check('и цена приходит вместе с ним', chatbot?.priceEur === 79, chatbot?.priceEur);
+
+  const cfg = planForAgent('configurator');
+  check('конфигуратор — тарифом pro', cfg?.id === 'pro', cfg?.id);
+
+  // Business не продаётся кнопкой. Кнопка, ведущая к отказу «этот пакет ещё
+  // не продаётся», хуже отсутствия кнопки.
+  check('непокупаемый тариф не предлагается', planForAgent('follow-up') === null,
+        planForAgent('follow-up'));
+  check('аналитика не включает ни один тариф', planForAgent('data-analyst') === null,
+        planForAgent('data-analyst'));
+
+  // Запереть можно только то, что построено и продаётся, — и у всего такого
+  // тариф обязан быть, иначе замок некому открыть.
+  const lockable = ['chatbot', 'configurator'];
+  const withoutPlan = lockable.filter((id) => planForAgent(id) === null);
+  check('у каждого запираемого агента есть чем открыть', withoutPlan.length === 0, withoutPlan);
 }
 
 if (failed) {
