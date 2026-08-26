@@ -79,6 +79,45 @@ export function registerBilling(app: FastifyInstance): void {
          change.customerId ?? null, change.currentPeriodEnd ?? null, change.plan ?? null],
       );
 
+      // Поагентная покупка: платёж прошёл — права выдаются здесь и больше
+      // нигде. Выдавать их при оформлении заказа значило бы открыть агента
+      // тому, кто до карты не дошёл.
+      if (change.agents?.length) {
+        if (change.status === 'active') {
+          await client.query(
+            `INSERT INTO tenant_agents (tenant_id, agent_id, tier, source, status)
+             SELECT $1, a.agent_id, a.tier, 'subscription', 'active'
+               FROM unnest($2::text[], $3::text[]) AS a(agent_id, tier)
+             ON CONFLICT (tenant_id, agent_id) DO UPDATE
+                SET tier = EXCLUDED.tier,
+                    source = 'subscription',
+                    status = 'active',
+                    -- Продление снимает дату отключения, поставленную отменой.
+                    expires_at = NULL`,
+            [
+              change.tenantId,
+              change.agents.map((a) => a.agentId),
+              change.agents.map((a) => a.tier),
+            ],
+          );
+        } else {
+          // Отмена и просрочка не удаляют право: агент доживает оплаченный
+          // период, и решает это `accessOf`, а не строка в базе. Стереть её
+          // значило бы отключить клиента в день нажатия кнопки.
+          await client.query(
+            `UPDATE tenant_agents
+                SET status = $3, expires_at = coalesce($4, expires_at, now())
+              WHERE tenant_id = $1 AND agent_id = ANY($2::text[])`,
+            [
+              change.tenantId,
+              change.agents.map((a) => a.agentId),
+              change.status,
+              change.currentPeriodEnd ?? null,
+            ],
+          );
+        }
+      }
+
       await client.query(
         `INSERT INTO billing_events (tenant_id, event_id, type, status)
          VALUES ($1, $2, $3, $4)

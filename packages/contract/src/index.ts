@@ -147,3 +147,113 @@ export const setupFor = (agentCount: number, pilot = false, c: Commerce = COMMER
   if (agentCount <= 0) return 0;
   return c.setup.first + c.setup.next * (agentCount - 1);
 };
+
+// ── Расчёт заказа ────────────────────────────────────────────────────────────
+
+export interface QuoteItem {
+  agentId: string;
+  tier: TierName;
+}
+
+export interface QuoteLine extends QuoteItem {
+  /** Прайсовая цена вилки за месяц, без скидок. */
+  listMonthly: number;
+  /** Разовая плата за заведение именно этого агента. */
+  setup: number;
+}
+
+export interface Quote {
+  lines: QuoteLine[];
+  period: BillingPeriod;
+  /** Доля скидки за количество агентов. Считается от ОБЩЕГО числа у клиента. */
+  volumeDiscount: number;
+  /** Доля годовой скидки. Ноль при помесячной оплате. */
+  annualDiscount: number;
+  /** Сумма прайсовых месячных, без единой скидки. */
+  listMonthly: number;
+  /** Периодический платёж: за месяц или за год, со всеми скидками. */
+  recurring: number;
+  /** Разовая плата за заведение. Скидки на неё не распространяются. */
+  setup: number;
+  /** Сколько списывается при оформлении. */
+  dueNow: number;
+}
+
+export type BillingPeriod = 'monthly' | 'yearly';
+
+export interface QuoteOptions {
+  period?: BillingPeriod;
+  /**
+   * Сколько агентов у клиента УЖЕ есть.
+   *
+   * Влияет на две вещи, и по-разному. Скидка за количество считается от общего
+   * числа: клиент с двумя агентами, берущий третьего, получает скидку за трёх,
+   * а не начинает счёт заново. Плата за заведение, наоборот, знает только про
+   * новых — за уже заведённое второй раз не платят, — но «первый» у клиента
+   * бывает один раз в жизни, поэтому при непустом кабинете все новые идут по
+   * цене следующего.
+   */
+  existingAgents?: number;
+  /** Пилот в своей нише: заведение бесплатно. */
+  pilot?: boolean;
+  commerce?: Commerce;
+}
+
+/**
+ * Во что обойдётся набор агентов.
+ *
+ * Одно место на витрину, портал, движок и письмо в отдел продаж. Пока расчёта
+ * не было, каждый из них считал бы сам, и расходиться они начали бы в первый
+ * же день: скидки перемножаются, а не складываются, и «минус 10 и минус 20»
+ * читается как минус 30 у любого, кто не смотрел в код.
+ *
+ * Цены берутся из манифестов продуктов. Агент без вилки или без цены в заказ
+ * не попадает: продать то, у чего нет цены, нельзя, и молча посчитать его
+ * нулём — худший из способов об этом сообщить.
+ */
+export function quote(items: QuoteItem[], options: QuoteOptions = {}): Quote {
+  const c = options.commerce ?? COMMERCE;
+  const period = options.period ?? 'monthly';
+  const existing = Math.max(0, options.existingAgents ?? 0);
+
+  const lines: QuoteLine[] = items.map((item, index) => {
+    const product = productById(item.agentId);
+    const price = product?.tiers?.[item.tier]?.price;
+    if (price === undefined) {
+      throw new Error(`У агента «${item.agentId}» нет цены на вилке «${item.tier}»`);
+    }
+    // «Первый» у клиента бывает один раз: с непустым кабинетом все новые идут
+    // по цене следующего.
+    const isVeryFirst = existing === 0 && index === 0;
+    return {
+      ...item,
+      listMonthly: price,
+      setup: options.pilot ? c.setup.pilot : isVeryFirst ? c.setup.first : c.setup.next,
+    };
+  });
+
+  const listMonthly = lines.reduce((sum, l) => sum + l.listMonthly, 0);
+  const volume = volumeDiscount(existing + lines.length, c);
+  const annual = period === 'yearly' ? c.annualDiscount : 0;
+
+  // Перемножением, а не сложением долей: два агента на год — это 0.9 × 0.8,
+  // то есть минус 28 %, а не минус 30.
+  const discounted = listMonthly * (1 - volume);
+  const recurring =
+    period === 'yearly'
+      ? Math.floor(discounted * 12 * (1 - annual))
+      : Math.floor(discounted);
+
+  const setup = lines.reduce((sum, l) => sum + l.setup, 0);
+
+  return {
+    lines,
+    period,
+    volumeDiscount: volume,
+    annualDiscount: annual,
+    listMonthly,
+    recurring,
+    setup,
+    dueNow: recurring + setup,
+  };
+}

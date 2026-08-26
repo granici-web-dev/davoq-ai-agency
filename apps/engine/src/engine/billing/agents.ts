@@ -49,6 +49,13 @@ export interface UnlockPlan {
 
 export interface PortalAgent {
   id: string;
+  /**
+   * Вилки с ценами. Пусто — агент не продаётся.
+   *
+   * Нужны экрану покупки: выбор между Basic и Pro без обеих цен рядом — это
+   * выбор вслепую, а спросить цену второй вилки нечем.
+   */
+  tiers: Partial<Record<TierName, number>> | null;
   access: AgentAccess;
   tier: TierName | null;
   /** Сколько стоит открыть. null — у агента нет цены (ещё не продаётся). */
@@ -182,6 +189,9 @@ export function accessOf(
   const priceFrom = product.tiers?.basic.price ?? null;
   const sellable = product.status === 'shipped' && priceFrom !== null;
   const plan = planForAgent(product.id);
+  const tiers = product.tiers
+    ? { basic: product.tiers.basic.price, pro: product.tiers.pro.price }
+    : null;
 
   if (!grant || !grantIsLive(grant, now)) {
     return {
@@ -191,6 +201,7 @@ export function accessOf(
       priceFrom,
       daysLeft: null,
       plan,
+      tiers,
     };
   }
 
@@ -207,6 +218,7 @@ export function accessOf(
     priceFrom,
     daysLeft,
     plan,
+    tiers,
   };
 }
 

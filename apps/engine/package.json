@@ -43,10 +43,12 @@
     "configurator:preview": "tsx --env-file-if-exists=.env scripts/configurator-preview.mts",
     "test:offers": "tsx --env-file=.env scripts/offers-test.mts",
     "test:promo": "tsx --env-file=.env scripts/promo-test.mts",
-    "embed:preview": "tsx --env-file-if-exists=.env scripts/embed-preview.mts"
+    "embed:preview": "tsx --env-file-if-exists=.env scripts/embed-preview.mts",
+    "test:quote": "tsx scripts/quote-test.mts"
   },
   "dependencies": {
     "@anthropic-ai/bedrock-sdk": "^0.30.0",
+    "@assistwidget/contract": "*",
     "@aws-sdk/client-bedrock-runtime": "^3.700.0",
     "@fastify/multipart": "^10.1.1",
     "@react-pdf/renderer": "^4.7.0",
@@ -65,8 +67,7 @@
     "react-dom": "^19.2.8",
     "undici": "^7.29.0",
     "unpdf": "^1.8.1",
-    "yaml": "^2.9.0",
-    "@assistwidget/contract": "*"
+    "yaml": "^2.9.0"
   },
   "devDependencies": {
     "@types/node": "^22.0.0",

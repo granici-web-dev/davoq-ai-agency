@@ -1,5 +1,6 @@
 import { createHmac, timingSafeEqual } from 'node:crypto';
 import { PLANS, type PlanId } from '../../engine/plans.js';
+import { productById, type TierName } from '@assistwidget/contract';
 
 /**
  * Stripe — и только он один в этом файле.
@@ -65,6 +66,20 @@ export const priceIdFor = (plan: PlanId, period: BillingPeriod = 'monthly'): str
   return id;
 };
 
+/**
+ * Оплата не настроена — это не отказ Stripe и не поломка.
+ *
+ * Отличается намеренно: вызывающий вправе поступить с этим иначе, чем со
+ * сбоем платежа, — например, принять заказ письмом, а не сказать клиенту
+ * «попробуйте позже», когда пробовать бессмысленно.
+ */
+export class BillingNotConfigured extends Error {
+  constructor(message: string) {
+    super(message);
+    this.name = 'BillingNotConfigured';
+  }
+}
+
 async function call(path: string, form: Record<string, string>): Promise<Record<string, unknown>> {
   const res = await fetch(`${API}${path}`, {
     method: 'POST',
@@ -119,6 +134,101 @@ export async function createCheckout(args: {
   if (args.trialDays && args.trialDays > 0) {
     form['subscription_data[trial_period_days]'] = String(args.trialDays);
   }
+  const session = await call('/checkout/sessions', form);
+  return { url: String(session.url) };
+}
+
+/**
+ * Цена одного агента на вилке.
+ *
+ * Так же, как у тарифов: год — отдельная цена в Stripe, а не скидка к
+ * месячной. Он считает периоды по цене, и «то же самое, но раз в год» у него
+ * иначе не выражается.
+ *
+ * Имя переменной собирается из идентификаторов, а не берётся из таблицы:
+ * таблица — это второй список агентов, который однажды разойдётся с первым.
+ */
+export const agentPriceIdFor = (
+  agentId: string,
+  tier: TierName,
+  period: BillingPeriod = 'monthly',
+): string => {
+  const key = `STRIPE_PRICE_AGENT_${agentId.replace(/-/g, '_').toUpperCase()}_${tier.toUpperCase()}${
+    period === 'yearly' ? '_YEARLY' : ''
+  }`;
+  const id = process.env[key];
+  if (!id) {
+    throw new BillingNotConfigured(
+      `${key} не задан. Заведите цену агента «${agentId}» (${tier}, ${period}) ` +
+      'в панели Stripe и впишите её id.',
+    );
+  }
+  return id;
+};
+
+/**
+ * Купон на скидку за количество.
+ *
+ * Скидка не вшивается в цену: цена агента одна, а скидка зависит от того,
+ * сколько агентов клиент берёт. Вшить её означало бы завести отдельную цену
+ * на каждое сочетание — их десятки, и согласовывать их пришлось бы руками.
+ */
+const volumeCouponFor = (discount: number): string | null => {
+  if (discount <= 0) return null;
+  const key = `STRIPE_COUPON_VOLUME_${Math.round(discount * 100)}`;
+  const id = process.env[key];
+  if (!id) {
+    throw new BillingNotConfigured(
+      `${key} не задан. Заведите в Stripe купон на ${Math.round(discount * 100)} % ` +
+      'и впишите его id — иначе клиент заплатит цену без обещанной скидки.',
+    );
+  }
+  return id;
+};
+
+/**
+ * Оплата набора агентов.
+ *
+ * Отличается от тарифной не только составом: тариф — это одна строка, а здесь
+ * их столько, сколько агентов, и к ним прикладывается купон за количество.
+ * Состав уезжает в метаданные подписки, чтобы вебхук знал, какие права
+ * выдавать: без него платёж прошёл бы, а кабинет остался бы закрытым.
+ */
+export async function createAgentCheckout(args: {
+  tenantId: string;
+  items: Array<{ agentId: string; tier: TierName }>;
+  period?: BillingPeriod;
+  volumeDiscount?: number;
+  email?: string;
+  successUrl: string;
+  cancelUrl: string;
+}): Promise<{ url: string }> {
+  if (args.items.length === 0) throw new Error('в заказе нет ни одного агента');
+
+  const period = args.period ?? 'monthly';
+  const form: Record<string, string> = {
+    mode: 'subscription',
+    success_url: args.successUrl,
+    cancel_url: args.cancelUrl,
+    'metadata[tenant_id]': args.tenantId,
+    'subscription_data[metadata][tenant_id]': args.tenantId,
+    // Состав в одной строке: «chatbot:basic,configurator:pro». Разбирается
+    // вебхуком, см. `interpret`.
+    'subscription_data[metadata][agents]': args.items
+      .map((i) => `${i.agentId}:${i.tier}`)
+      .join(','),
+  };
+
+  args.items.forEach((item, index) => {
+    form[`line_items[${index}][price]`] = agentPriceIdFor(item.agentId, item.tier, period);
+    form[`line_items[${index}][quantity]`] = '1';
+  });
+
+  const coupon = volumeCouponFor(args.volumeDiscount ?? 0);
+  if (coupon) form['discounts[0][coupon]'] = coupon;
+
+  if (args.email) form.customer_email = args.email;
+
   const session = await call('/checkout/sessions', form);
   return { url: String(session.url) };
 }
@@ -249,6 +359,11 @@ export interface SubscriptionChange {
   customerId?: string;
   currentPeriodEnd?: Date;
   plan?: PlanId;
+  /**
+   * Что куплено поагентно. Пусто у тарифных подписок — это две разные покупки,
+   * и путать их нельзя: тарифная даёт набор целиком, поагентная — перечисленное.
+   */
+  agents?: Array<{ agentId: string; tier: TierName }>;
 }
 
 const str = (v: unknown): string | undefined => (typeof v === 'string' && v ? v : undefined);
@@ -261,6 +376,25 @@ const str = (v: unknown): string | undefined => (typeof v === 'string' && v ? v 
  * Доверять email или порядку событий нельзя: вебхуки приходят не по порядку
  * и могут повторяться.
  */
+/**
+ * Разобрать состав заказа из метаданных подписки.
+ *
+ * Строка приходит от нас же, но разбирается как чужая: метаданные Stripe
+ * правятся из его панели, и запись, которой там не место, не должна
+ * превращаться в право на агента.
+ */
+function parseAgentsMeta(raw: string): Array<{ agentId: string; tier: TierName }> {
+  const out: Array<{ agentId: string; tier: TierName }> = [];
+  for (const part of raw.split(',')) {
+    const [agentId, tier] = part.trim().split(':');
+    if (!agentId || !tier) continue;
+    if (tier !== 'basic' && tier !== 'pro') continue;
+    if (!productById(agentId)) continue;
+    out.push({ agentId, tier });
+  }
+  return out;
+}
+
 export function interpret(event: StripeEvent): SubscriptionChange | null {
   const o = event.data.object;
 
@@ -303,6 +437,9 @@ export function interpret(event: StripeEvent): SubscriptionChange | null {
         ...(str(o.customer) ? { customerId: str(o.customer)! } : {}),
         ...(Number.isFinite(periodEnd) ? { currentPeriodEnd: new Date(periodEnd * 1000) } : {}),
         ...(planId && planId in PLANS ? { plan: planId as PlanId } : {}),
+        // Поагентная покупка: состав приехал строкой «id:вилка,id:вилка».
+        // Разбирается здесь, чтобы обработчик вебхука не знал про её формат.
+        ...(meta.agents ? { agents: parseAgentsMeta(meta.agents) } : {}),
       };
     }
 

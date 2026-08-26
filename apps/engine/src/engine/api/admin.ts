@@ -3,7 +3,8 @@ import { readFile } from 'node:fs/promises';
 import type { FastifyInstance, FastifyRequest } from 'fastify';
 import type pg from 'pg';
 import { withPlatform, withTenant } from '../db/pool.js';
-import { portalAgents } from '../billing/agents.js';
+import { loadGrants, portalAgents } from '../billing/agents.js';
+import { PRODUCTS, productById, quote, type Quote, type TierName } from '@assistwidget/contract';
 import { createDocument } from '../ingest/index.js';
 import { get as storageGet } from '../ingest/storage.js';
 import { DRIVE_SYNC_MINUTES, enqueueDriveSyncNow, enqueueIngest, enqueueRecheck } from '../ingest/queue.js';
@@ -261,6 +262,135 @@ export function registerAdmin(app: FastifyInstance): void {
   app.get('/admin/api/agents', guarded(async ({ session, client }) =>
     ({ agents: await portalAgents(client, session.tenantId) })));
 
+  /**
+   * Во что обойдётся набор — до того, как его закажут.
+   *
+   * Отдельным адресом, а не флагом у оформления: расчёт ничего не меняет и
+   * вызывается на каждое движение переключателя, а оформление списывает
+   * деньги. Одна ручка на оба означала бы, что опечатка в поле превращает
+   * показ цены в покупку.
+   *
+   * Считать в портале нельзя: скидки перемножаются, и вторая реализация
+   * разойдётся с первой в первый же день. Портал показывает то, что скажут.
+   */
+  app.post('/admin/api/agents/quote', guarded(async ({ session, client, body }) => {
+    const input = (body ?? {}) as {
+      items?: Array<{ agentId?: string; tier?: string }>;
+      period?: string;
+    };
+    const raw = Array.isArray(input.items) ? input.items : [];
+    if (raw.length === 0) throw clientError('empty_order', 'Не выбран ни один агент');
+
+    const items: Array<{ agentId: string; tier: TierName }> = [];
+    for (const entry of raw) {
+      const product = entry.agentId ? productById(entry.agentId) : undefined;
+      if (!product?.tiers) continue;
+      const tier = entry.tier === 'pro' ? 'pro' : 'basic';
+      if (product.tiers[tier]?.price === undefined) continue;
+      items.push({ agentId: product.id, tier });
+    }
+    if (items.length === 0) throw clientError('no_price', 'Нечего считать');
+
+    const owned = await loadGrants(client, session.tenantId);
+    return quote(items, {
+      period: input.period === 'yearly' ? 'yearly' : 'monthly',
+      existingAgents: owned.length,
+    });
+  }));
+
+  /**
+   * Поагентная покупка.
+   *
+   * Витрина продаёт агентов поштучно, с вилками и скидкой за количество, а
+   * купить до сих пор можно было только тариф целиком. Клиент, взявший одного
+   * агента, получал счёт за пакет — расхождение, которое замечает первый же
+   * покупатель.
+   *
+   * Цена считается контрактом, а не здесь: тот же расчёт стоит на витрине и
+   * уезжает в письмо. Два расчёта разошлись бы в первый же день — скидки
+   * перемножаются, и «минус 10 и минус 20» читается как минус 30 у любого,
+   * кто не смотрел в код.
+   *
+   * Права здесь НЕ выдаются. Их выдаёт вебхук по факту платежа: выдать их при
+   * оформлении значило бы открыть агента тому, кто до карты не дошёл.
+   */
+  app.post<{ Body: { items?: Array<{ agentId?: string; tier?: string }>; period?: string } }>(
+    '/admin/api/agents/checkout',
+    guarded(async ({ session, client, body, request }) => {
+      // `guarded` не выводит тип тела из обобщения маршрута — тот же приём,
+      // что у соседнего checkout.
+      const order_ = (body ?? {}) as { items?: Array<{ agentId?: string; tier?: string }>; period?: string };
+      const raw = Array.isArray(order_.items) ? order_.items : [];
+      if (raw.length === 0) throw clientError('empty_order', 'Не выбран ни один агент');
+      if (raw.length > PRODUCTS.length) throw clientError('empty_order', 'Слишком много позиций');
+
+      const owned = new Map((await loadGrants(client, session.tenantId)).map((g) => [g.agentId, g]));
+
+      const items: Array<{ agentId: string; tier: TierName }> = [];
+      for (const entry of raw) {
+        const product = entry.agentId ? productById(entry.agentId) : undefined;
+        if (!product) throw clientError('unknown_agent', `Агент «${entry.agentId}» не существует`);
+        if (product.status !== 'shipped') {
+          // Продать непостроенное — не «предпродажа», а долг, который отдаёт
+          // поддержка. Отсекается здесь, а не кнопкой: кнопки у него нет, но
+          // запрос отправляется и без кнопки.
+          throw clientError('not_sellable', `Агент «${product.id}» ещё не продаётся`);
+        }
+        const tier = entry.tier === 'pro' ? 'pro' : 'basic';
+        if (product.tiers?.[tier]?.price === undefined) {
+          throw clientError('no_price', `У агента «${product.id}» нет цены на этой вилке`);
+        }
+        if (owned.has(product.id)) {
+          throw clientError('already_owned', `Агент «${product.id}» уже подключён`);
+        }
+        if (items.some((i) => i.agentId === product.id)) {
+          throw clientError('duplicate', `Агент «${product.id}» указан дважды`);
+        }
+        items.push({ agentId: product.id, tier });
+      }
+
+      const period = order_.period === 'yearly' ? 'yearly' : 'monthly';
+      const order = quote(items, { period, existingAgents: owned.size });
+
+      if (!process.env.STRIPE_SECRET_KEY) {
+        await requestAgentsByEmail(session.email, session.tenantId, order);
+        return { requested: true, quote: order };
+      }
+
+      const proto = (request.headers['x-forwarded-proto'] as string | undefined) ?? 'https';
+      const host = request.headers.host ?? '';
+      const portal = process.env.PORTAL_BASE_URL?.replace(/\/+$/, '');
+      const back = portal ? `${portal}/subscription` : `${proto}://${host}/admin#subscription`;
+
+      try {
+        const { createAgentCheckout } = await import('../../platform/billing/stripe.js');
+        return await createAgentCheckout({
+          tenantId: session.tenantId,
+          items,
+          period,
+          volumeDiscount: order.volumeDiscount,
+          email: session.email,
+          successUrl: back,
+          cancelUrl: back,
+        });
+      } catch (err) {
+        const { BillingNotConfigured } = await import('../../platform/billing/stripe.js');
+        if (err instanceof BillingNotConfigured) {
+          // Цены или купона в Stripe ещё нет. Это не сбой платежа, и говорить
+          // клиенту «попробуйте позже» бессмысленно — пробовать нечего.
+          // Заказ принимается письмом, а причина уходит в журнал целиком.
+          request.log.warn({ err: err.message, tenantId: session.tenantId },
+            'поагентная оплата не настроена — заказ принят письмом');
+          await requestAgentsByEmail(session.email, session.tenantId, order);
+          return { requested: true, quote: order };
+        }
+        request.log.error({ err, tenantId: session.tenantId }, 'оплата не сработала');
+        throw clientError('billing_unavailable',
+          'Plata nu este disponibilă momentan. Scrieți-ne și rezolvăm noi.');
+      }
+    }),
+  );
+
   app.get('/admin/api/subscription', guarded(async ({ session, client }) => {
     const { rows } = await client.query<{
       plan: string; subscription_status: string;
@@ -364,6 +494,48 @@ export function registerAdmin(app: FastifyInstance): void {
         `Переключить и прислать ссылку на оплату:`,
         `  npm run client -- plan <клиент> ${wanted}`,
         `  npm run client -- checkout <клиент> ${wanted}`,
+      ].join('\n'),
+      html: '',
+    });
+  }
+
+  /**
+   * Заказ агентов письмом — когда оплата картой ещё не настроена.
+   *
+   * В письме состав и итог, посчитанный ТЕМ ЖЕ расчётом, что показан клиенту.
+   * Пересчитывать в письме своими руками значило бы завести третью цену:
+   * одну на экране, одну в Stripe, одну в почте.
+   */
+  async function requestAgentsByEmail(
+    who: string, tenantId: string, order: Quote,
+  ): Promise<void> {
+    const to = process.env.SALES_EMAIL ?? process.env.WATCHDOG_EMAIL;
+    if (!to) {
+      throw clientError('sales_email_missing',
+        'Momentan nu putem prelua cererea. Scrieți-ne direct, vă rugăm.');
+    }
+    const period = order.period === 'yearly' ? 'год' : 'мес';
+    const { send, defaultMailFrom } = await import('../notify/email.js');
+    await send({
+      from: defaultMailFrom(), to,
+      subject: `Заказ агентов: ${order.lines.length} шт. на ${order.recurring} €/${period}`,
+      text: [
+        `Клиент: ${tenantId}`,
+        `Кто просит: ${who}`,
+        ``,
+        `Состав:`,
+        // Идентификатором, а не названием: названия живут в переводах витрины,
+        // и тащить их в письмо значило бы завести им второе место жительства.
+        ...order.lines.map(
+          (l) => `  ${l.agentId} — ${l.tier}, ${l.listMonthly} €/мес, заведение ${l.setup} €`,
+        ),
+        ``,
+        `Прайс: ${order.listMonthly} €/мес`,
+        `Скидка за количество: ${Math.round(order.volumeDiscount * 100)} %`,
+        `Годовая скидка: ${Math.round(order.annualDiscount * 100)} %`,
+        `Платёж: ${order.recurring} €/${period}`,
+        `Заведение: ${order.setup} €`,
+        `К оплате сейчас: ${order.dueNow} €`,
       ].join('\n'),
       html: '',
     });
