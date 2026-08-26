@@ -1,0 +1,81 @@
+# Заготовка для контрольного набора. Это НЕ клиент.
+#
+# «Etalon Mobilă» не существует: домен в зоне .example зарезервирован RFC 2606
+# и не может принадлежать никому, телефоны из диапазона 0700 в Румынии
+# не выданы ни одному оператору. Ни одного факта, взятого у настоящего
+# клиента, здесь нет.
+#
+# Зачем: контрольный набор — это проверка ДВИЖКА (поиск находит, промпт
+# не течёт, цена не выдумывается, заявка доезжает), а не проверка знаний
+# конкретного мебельщика. До этой заготовки набор мог идти только против
+# базы с материалами пилота — то есть нигде, кроме одной машины, и с чужими
+# персональными данными в придачу.
+#
+# Факты в knowledge/ подобраны так, чтобы совпадать с фактами пилота
+# по СМЫСЛУ и по числам: гарантия 36 месяцев, срок 4–6 недель, возврат
+# 14 дней, отгрузка из Брашова, скидки до 30%. Поэтому тот же набор
+# случаев проходит и против пилотного тенанта — см. заголовок
+# tests/control-set.yaml.
+#
+#   npm run seed:control     — завести и проиндексировать
+#   npm run test:control     — прогнать набор
+schema: 1
+id: control
+name: Etalon Mobilă
+
+vertical: furniture
+# Тот же тариф, что у пилота: тариф задаёт модель и пороги поиска, и на
+# другом тарифе набор мерил бы не то поведение, которое едет клиенту.
+plan: pro
+
+locale:
+  default: ro
+  supported: [ro]
+
+channels:
+  web:
+    domains:
+      - etalon.example
+    widget:
+      bot_name: Etalon
+      position: bottom-right
+      welcome:
+        ro: Bună! Sunt asistentul Etalon Mobilă. Întrebați-mă despre garanție, livrare sau termene.
+
+brand:
+  # Тон — инструкция модели, поэтому по-английски: промпт английский целиком,
+  # и чужой язык в нём — повод для протечки в ответ посетителю.
+  tone: |
+    Address the visitor formally. Keep replies short and businesslike, with no
+    enthusiastic adjectives. Never promise a lead time or a price that is not
+    in the company materials.
+
+catalog:
+  price_guidance: |
+    Paturi, fotolii, taburete și celelalte produse: prețul este publicat pe pagina produsului și depinde de dimensiune — spune-l exact așa cum este scris.
+    Canapele și canapele de colț: nu au un preț unic, se compun din module, iar umplutura, tapițeria și cerințele speciale schimbă totalul. Prețul exact îl calculează managerul.
+    În showroom-uri există produse gata făcute din stoc, iar la secțiunea Outlet reduceri de până la 30%.
+
+qualification:
+  inherit: true
+
+# Три города — ровно как у пилота: случай chisinau_showroom проверяет, что
+# список не растягивается на соседние страны, и для этого важно, каких
+# городов в нём НЕТ.
+showrooms:
+  - { city: Brașov, phone: "+40 700 000 011" }
+  - { city: București, phone: "+40 700 000 012" }
+  - { city: Cluj-Napoca, phone: "+40 700 000 013" }
+
+notifications:
+  leads:
+    # Адреса нет намеренно: случай lead_handoff проверяет строку в базе,
+    # а не письмо. С адресом каждый прогон набора слал бы почту.
+    email:
+
+retrieval: {}
+
+panel:
+  # Прятать нечего: материалы кладутся прямо в базу знаний, папки на Drive
+  # у заготовки нет.
+  hidden_screens: []

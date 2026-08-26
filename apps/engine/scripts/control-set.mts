@@ -5,8 +5,10 @@
  * разговоре — иначе ответ на десятый вопрос зависит от того, что было в первом,
  * и упавшая проверка ничего не говорит о причине.
  *
+ *   npm run seed:control          — завести корпус-заготовку (один раз)
  *   npm run test:control
  *   npm run test:control -- --only warranty,lead_time
+ *   npm run test:control -- --tenant "Sofa Belle"   — против другого тенанта
  *
  * Код возврата 0 — прошло. Ответы упавших случаев печатаются целиком:
  * «case failed» без текста ответа не даёт понять, что чинить.
@@ -28,9 +30,11 @@ interface Case {
 }
 
 const BASE = process.env.BASE ?? `http://localhost:${process.env.PORT ?? 3779}`;
-const only = process.argv.includes('--only')
-  ? (process.argv[process.argv.indexOf('--only') + 1] ?? '').split(',')
-  : null;
+const flag = (name: string): string | undefined => {
+  const i = process.argv.indexOf(`--${name}`);
+  return i === -1 ? undefined : process.argv[i + 1];
+};
+const only = flag('only')?.split(',') ?? null;
 
 const spec = parse(readFileSync(new URL('../tests/control-set.yaml', import.meta.url), 'utf8')) as {
   tenant: string; locale: string; cases: Case[]; global_forbid?: string;
@@ -42,13 +46,46 @@ function forbidden(pattern: string, text: string): string | null {
   return new RegExp(ci ? pattern.slice(4) : pattern, ci ? 'i' : '').exec(text)?.[0] ?? null;
 }
 
+/** Имя из набора, если не переопределили: набор идёт против заготовки. */
+const wanted = flag('tenant') ?? spec.tenant;
+
 const tenant = await withOwner(async (client) => {
   const { rows } = await client.query<{
     id: string; name: string; public_key: string; allowed_domains: string[];
-  }>('SELECT id, name, public_key, allowed_domains FROM tenants WHERE name = $1', [spec.tenant]);
-  if (!rows[0]) throw new Error(`тенант «${spec.tenant}» не найден`);
-  return rows[0];
+  }>('SELECT id, name, public_key, allowed_domains FROM tenants WHERE name = $1', [wanted]);
+  if (rows[0]) return rows[0];
+
+  // Отсутствие тенанта — самая частая причина, по которой набор не идёт,
+  // и «не найден» о ней не говорит ничего. Печатаем то, что в базе есть,
+  // и команду, которая заводит недостающее: разница между «Etalon Mobilă»
+  // и «Sofa Belle» видна глазом, между «SofaBelle» и «Sofa Belle» — нет.
+  const { rows: known } = await client.query<{ name: string; chunks: string }>(
+    `SELECT t.name, (SELECT count(*) FROM chunks c WHERE c.tenant_id = t.id) AS chunks
+       FROM tenants t ORDER BY t.created_at`);
+  throw new Error(
+    `тенант «${wanted}» не найден.\n` +
+    (known.length
+      ? `  в базе есть: ${known.map((t) => `«${t.name}» (${t.chunks} фрагментов)`).join(', ')}\n`
+      : '  в базе нет ни одного тенанта\n') +
+    '  завести заготовку: npm run seed:control\n' +
+    '  взять другого:     npm run test:control -- --tenant "имя"',
+  );
 });
+
+// Тенант без единого фрагмента ответит «уточните у менеджера» на каждый
+// вопрос, и набор насчитает десяток провалов там, где сломан не бот, а база.
+const indexed = await withOwner(async (client) => {
+  const { rows } = await client.query<{ n: string }>(
+    'SELECT count(*) AS n FROM chunks WHERE tenant_id = $1', [tenant.id]);
+  return Number(rows[0]!.n);
+});
+if (indexed === 0) {
+  throw new Error(
+    `у тенанта «${tenant.name}» не проиндексировано ни одного фрагмента.\n` +
+    '  набор проверяет ответы по материалам — без материалов проверять нечего.\n' +
+    '  завести заготовку: npm run seed:control',
+  );
+}
 
 const VISITOR = `control-${process.pid}`;
 
@@ -89,7 +126,10 @@ async function ask(message: string): Promise<{ text: string; conversationId?: st
 const cases = spec.cases.filter((c) => !only || only.includes(c.id));
 let failed = 0;
 
-console.log(`контрольный набор: ${cases.length} случаев, тенант «${tenant.name}»\n`);
+console.log(
+  `контрольный набор: ${cases.length} случаев, тенант «${tenant.name}», `
+  + `${indexed} фрагментов\n`,
+);
 
 for (const c of cases) {
   const problems: string[] = [];

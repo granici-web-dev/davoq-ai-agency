@@ -19,6 +19,7 @@
     "client": "tsx --env-file=.env src/platform/cli/client.ts",
     "test:isolation": "tsx --env-file=.env scripts/isolation-test.mts",
     "test:control": "tsx --env-file=.env scripts/control-set.mts",
+    "seed:control": "tsx --env-file=.env scripts/seed-control.mts",
     "test:guard": "tsx --env-file=.env scripts/prompt-guard-test.mts",
     "test:language": "tsx scripts/language-test.mts",
     "test:entitlements": "tsx scripts/entitlement-agents-test.mts",

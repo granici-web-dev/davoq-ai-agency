@@ -1,10 +1,31 @@
-# Контрольный набор пилотного клиента (SofaBelle, ниша furniture, ro).
+# Контрольный набор: критерий приёмки каждого шага рефакторинга.
 #
-# Это критерий приёмки каждого шага рефакторинга. Проверяется не «код
-# компилируется», а то, что бот отвечает теми же фактами, что и до правки.
+# Проверяется не «код компилируется», а то, что бот отвечает теми же фактами,
+# что и до правки, и молчит там, где данных нет.
 #
-# Эталоны взяты из настоящей базы знаний клиента, а не придуманы: каждый
-# факт ниже найден поиском по проиндексированным материалам (см. `source`).
+# ── Против чего он идёт ────────────────────────────────────────────────────
+#
+# Против заготовки, а не против пилота. Раньше здесь стоял тенант пилотного
+# клиента, и набор мог запускаться ровно на одной машине — той, где лежала
+# база с его материалами. Проверить свою правку было нечем никому, включая
+# нас самих: имя тенанта в этом файле не совпадало с именем в базе, и набор
+# не проходил ни разу.
+#
+# Заготовка — вымышленный мебельщик «Etalon Mobilă»: clients/control/config.yaml
+# и материалы в clients/control/knowledge/. Ни одного факта, взятого у
+# настоящего клиента, там нет; домен в зоне .example не может существовать.
+#
+#   npm run seed:control     — завести и проиндексировать (нужны AWS: эмбеддинги)
+#   npm run test:control     — прогнать набор
+#
+# Факты заготовки подобраны совпадающими с фактами пилота по смыслу и числам:
+# гарантия 36 месяцев, срок 4–6 недель, возврат 14 дней, отгрузка из Брашова,
+# скидки до 30%, три шоурума. Поэтому тот же набор идёт и против пилотного
+# тенанта — именем через --tenant:
+#
+#   npm run test:control -- --tenant "Sofa Belle"
+#
+# ── Как читать случаи ──────────────────────────────────────────────────────
 #
 # Проверка нарочно не сравнивает тексты дословно — модель каждый раз строит
 # фразу заново, и требовать буквального совпадения значило бы ловить шум.
@@ -13,12 +34,11 @@
 #   expect      — хотя бы одно из перечисленных должно встретиться
 #   expect_all  — все перечисленные должны встретиться
 #   forbid      — регулярное выражение, которого быть не должно
+#   source      — где этот факт лежит в материалах: проверяемо, а не на слово
 #   why         — зачем этот вопрос в наборе (чтобы через месяц не удалили нужный)
-#
-# Запуск: npm run test:control
 
 schema: 1
-tenant: SofaBelle
+tenant: Etalon Mobilă
 locale: ro
 
 # Проверяется на КАЖДОМ ответе, а не в отдельном случае.
@@ -35,7 +55,7 @@ cases:
   - id: warranty
     ask: Ce garanție oferiți la canapele?
     reference: Гарантия 36 месяцев (она же «3 года»); средний срок службы — 15 лет.
-    source: "Canapele & Colțare > Garanție 36 luni; Q&A клиента: «garanție standard de 3 ani»"
+    source: "knowledge/01-produse.md > Garanție: «36 de luni»; 02-intrebari-frecvente.md, вопрос 4: «garanție standard de 3 ani»"
     expect: ["36", "3 ani"]
     note: >
       В материалах клиента два написания одного факта: сайт пишет «36 luni»,
@@ -47,49 +67,49 @@ cases:
   - id: lead_time
     ask: Care este termenul de livrare?
     reference: Срок изготовления и доставки — 4–6 недель.
-    source: "Care este termenul de livrare? Termenul de livrare este de 4-6 saptamani"
+    source: "knowledge/02-intrebari-frecvente.md, вопрос 3: «Termenul de livrare este de 4-6 săptămâni»"
     expect_all: ["4", "6"]
     why: Срок — обещание, за которое отвечает клиент. Выдуманный срок хуже отсутствия ответа.
 
   - id: returns
     ask: Dacă nu îmi place după ce ajunge acasă, o pot returna?
     reference: Да, 14 календарных дней по закону; для изделий на заказ политика другая.
-    source: "12 Întrebare: Dacă nu îmi place... Da, în termen de 14 zile calendaristice"
+    source: "knowledge/02-intrebari-frecvente.md, вопрос 6: «în termen de 14 zile calendaristice»"
     expect: ["14"]
     why: "Юридически значимый факт: ошибка здесь — претензия, а не недовольство."
 
   - id: custom_size
     ask: Se poate personaliza dimensiunea canapelei?
     reference: Да, длину и глубину подгоняют под помещение.
-    source: "2 Întrebare: Se poate personaliza dimensiunea? Da, multe dintre modelele noastre permit personalizare"
+    source: "knowledge/02-intrebari-frecvente.md, вопрос 2: «Da, multe dintre modelele noastre permit personalizare»"
     expect: ["da", "Da", "putem", "personaliz", "ajust"]
     why: Ключевое отличие производства на заказ от магазина; на этом строится продажа.
 
   - id: materials
     ask: Din ce materiale sunt făcute canapelele?
     reference: Каркас — слоистая древесина и массив хвойных пород; обивка — прочные ткани или кожа.
-    source: "1 Întrebare: Ce materiale folosiți pentru canapele?"
+    source: "knowledge/02-intrebari-frecvente.md, вопрос 1; 01-produse.md > Materiale"
     expect: ["lemn"]
     why: Проверяет, что достаётся длинный ответ из файла Q&A, а не только короткие страницы сайта.
 
   - id: delivery_from
     ask: De unde se face livrarea și ce include costul?
     reference: Доставка из Брашова; в стоимость входят монтаж и переноска.
-    source: "De ce transportul are costul atât de mare? Livrarea produselor se face de la Brasov..."
+    source: "knowledge/02-intrebari-frecvente.md, вопрос 5: «Livrarea produselor se face de la Brașov…»"
     expect: ["Bra"]
     why: Единственное объяснение дорогой доставки. Без него посетитель уходит с мыслью «дорого».
 
   - id: showroom_cities
     ask: În ce orașe aveți showroom?
     reference: Брашов, Бухарест, Клуж-Напока.
-    source: "profile.showrooms в конфиге клиента + страницы сайта"
+    source: "showrooms в clients/control/config.yaml — в промпт попадает через {showrooms}"
     expect: ["Bra"]
     why: Проверяет, что факты клиента из конфига доходят до промпта через плейсхолдер {showrooms}.
 
   - id: outlet
     ask: Aveți reduceri la produsele din showroom?
     reference: На товары из шоурума и в разделе Outlet — скидки до 30%.
-    source: "Reduceri Exclusive de până la 30% la Produse de Showroom"
+    source: "knowledge/03-livrare-retur-outlet.md > Outlet: «reduceri exclusive de până la 30%»"
     expect: ["30"]
     why: Действующая акция; проверяет, что бот отвечает по актуальным материалам.
 
