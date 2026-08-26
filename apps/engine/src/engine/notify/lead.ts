@@ -102,10 +102,21 @@ export async function notifyLead(
   return isUpdate ? 'sent-update' : 'sent';
 }
 
-/** Ссылка на разговор. Без неё письмо — тупик: прочитал и всё равно иди искать руками. */
-const conversationLink = (conversationId: string): string =>
-  `${(process.env.PUBLIC_BASE_URL ?? 'http://localhost:3779').replace(/\/+$/, '')}` +
-  `/admin#chats/${conversationId}`;
+/**
+ * Ссылка на разговор. Без неё письмо — тупик: прочитал и всё равно иди искать
+ * руками среди сотни переписок.
+ *
+ * Ведёт в портал: панель движка снесена. Строкой запроса, а не якорем —
+ * якорь браузер серверу не посылает, и переадресовать по нему нельзя.
+ * Без настроенного портала остаётся `/admin` на движке: он тем же письмом
+ * не воспользуется, но переадресует, как только адрес зададут.
+ */
+const conversationLink = (conversationId: string): string => {
+  const portal = process.env.PORTAL_BASE_URL?.replace(/\/+$/, '');
+  if (portal) return `${portal}/agents/chatbot/conversations?conversation=${conversationId}`;
+  const engine = (process.env.PUBLIC_BASE_URL ?? 'http://localhost:3779').replace(/\/+$/, '');
+  return `${engine}/admin?conversation=${conversationId}`;
+};
 
 function buildMail(a: {
   from: string | undefined;

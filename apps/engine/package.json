@@ -8,12 +8,11 @@
   },
   "scripts": {
     "dev": "tsx watch src/engine/api/server.ts",
-    "build": "npm run build:server && npm run build:widget && npm run build:admin && npm run build:static",
+    "build": "npm run build:server && npm run build:widget && npm run build:static",
     "typecheck": "tsc -p tsconfig.json --noEmit",
     "migrate": "tsx src/engine/db/migrate.ts",
     "db:up": "docker compose up -d && sleep 3 && npm run migrate",
     "build:widget": "esbuild src/engine/widget/embed.tsx --bundle --minify --format=iife --target=es2020 --outfile=dist/widget.js",
-    "build:admin": "esbuild src/engine/admin/main.tsx --bundle --minify --format=iife --target=es2020 --outfile=dist/admin.js",
     "worker": "tsx src/engine/ingest/worker.ts",
     "smoke": "node scripts/smoke.mjs",
     "cli": "tsx --env-file=.env src/platform/cli/admin.ts",
@@ -44,7 +43,8 @@
     "test:offers": "tsx --env-file=.env scripts/offers-test.mts",
     "test:promo": "tsx --env-file=.env scripts/promo-test.mts",
     "embed:preview": "tsx --env-file-if-exists=.env scripts/embed-preview.mts",
-    "test:quote": "tsx scripts/quote-test.mts"
+    "test:quote": "tsx scripts/quote-test.mts",
+    "test:moved": "tsx scripts/moved-test.mts"
   },
   "dependencies": {
     "@anthropic-ai/bedrock-sdk": "^0.30.0",

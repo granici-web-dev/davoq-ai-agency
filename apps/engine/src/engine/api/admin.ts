@@ -1,5 +1,4 @@
 import { createHash } from 'node:crypto';
-import { readFile } from 'node:fs/promises';
 import type { FastifyInstance, FastifyRequest } from 'fastify';
 import type pg from 'pg';
 import { withPlatform, withTenant } from '../db/pool.js';
@@ -33,23 +32,41 @@ interface Session {
   email: string;
 }
 
+/**
+ * Адрес кабинета. Кабинет один — портал; панель движка снесена.
+ *
+ * Без настройки остаётся `/admin` на самом движке, а он переадресует сюда же,
+ * как только настройку зададут. Пустой адрес возврата из кассы был бы хуже
+ * отказа: человек платит и приходит в никуда.
+ */
+const portalUrl = (path = ''): string | null => {
+  const base = process.env.PORTAL_BASE_URL?.replace(/\/+$/, '');
+  return base ? `${base}${path}` : null;
+};
+
 export function registerAdmin(app: FastifyInstance): void {
-  app.get('/admin', async (_req, reply) =>
-    reply.type('text/html').send(await readFile(new URL('../../../dist/admin.html', import.meta.url), 'utf8')),
-  );
-  // Шрифт отдаётся с нашего сервера, а не с fonts.gstatic.com: продукт продаётся
-  // как DSGVO-native, и обращение браузера к Google за шрифтом этому противоречит.
-  app.get<{ Params: { '*': string } }>('/admin/fonts/*', async (request, reply) => {
-    const name = request.params['*'];
-    if (!/^[\w.-]+\.woff2$/.test(name)) return reply.code(400).send();
+  /**
+   * Панель жила здесь. Теперь тут только дорога в портал: закладки клиентов
+   * и ссылки в уже отправленных письмах не должны упираться в пустоту.
+   *
+   * Сама страница — в `admin/moved.ts`, там же объяснено, почему она страница,
+   * а не заголовок `Location`, и почему её содержимое проверяется отдельно.
+   */
+  app.get('/admin', async (request, reply) => {
+    const portal = portalUrl();
+    if (!portal) {
+      return reply.code(503).type('text/plain; charset=utf-8').send(
+        'Cabinetul s-a mutat. Adresa nu este configurată (PORTAL_BASE_URL).',
+      );
+    }
+    const { movedPage } = await import('../admin/moved.js');
     return reply
-      .type('font/woff2')
-      .header('cache-control', 'public, max-age=31536000, immutable')
-      .send(await readFile(new URL(`../../../dist/fonts/${name}`, import.meta.url)));
+      .type('text/html; charset=utf-8')
+      .send(movedPage(portal, new URL(request.url, 'http://x').search));
   });
 
-  // Логотип тоже с нашего сервера: панель не должна дёргать сайт клиента,
-  // иначе его падение или смена CMS ломает шапку админки.
+  // Логотип с нашего сервера: кабинет не должен дёргать сайт клиента,
+  // иначе его падение или смена CMS ломает шапку.
   //
   // Имени файла в адресе нет намеренно. Логотип — файл клиента, лежит под
   // префиксом его тенанта, и какой именно — знает только запись в базе.
@@ -74,12 +91,6 @@ export function registerAdmin(app: FastifyInstance): void {
       .header('cache-control', 'private, max-age=86400')
       .send(await storageGet(brand.logo_key));
   });
-
-  app.get('/admin.js', async (_req, reply) =>
-    reply
-      .type('application/javascript; charset=utf-8')
-      .send(await readFile(new URL('../../../dist/admin.js', import.meta.url), 'utf8')),
-  );
 
   app.post<{ Body: { email?: string; password?: string } }>(
     '/admin/api/login',
@@ -375,8 +386,7 @@ export function registerAdmin(app: FastifyInstance): void {
 
       const proto = (request.headers['x-forwarded-proto'] as string | undefined) ?? 'https';
       const host = request.headers.host ?? '';
-      const portal = process.env.PORTAL_BASE_URL?.replace(/\/+$/, '');
-      const back = portal ? `${portal}/subscription` : `${proto}://${host}/admin#subscription`;
+      const back = portalUrl('/subscription') ?? `${proto}://${host}/admin#subscription`;
 
       try {
         const { createAgentCheckout } = await import('../../platform/billing/stripe.js');
@@ -623,9 +633,9 @@ export function registerAdmin(app: FastifyInstance): void {
         // Адрес не принимается запросом, а берётся из настройки: параметр
         // с адресом возврата — это открытое перенаправление, и подписаться
         // на него можно было бы чужой ссылкой.
-        const portal = process.env.PORTAL_BASE_URL?.replace(/\/+$/, '');
-        const fromPortal = (body as { from?: string })?.from === 'portal' && portal;
-        const back = fromPortal ? `${portal}/subscription` : `${proto}://${host}/admin#subscription`;
+        // Откуда начали, туда и возвращаемся. Панели больше нет, поэтому
+        // «не из портала» означает только один случай — портал не настроен.
+        const back = portalUrl('/subscription') ?? `${proto}://${host}/admin#subscription`;
         const { createCheckout } = await import('../../platform/billing/stripe.js');
         return await createCheckout({
           tenantId: session.tenantId, plan: wanted, period,
@@ -650,7 +660,7 @@ export function registerAdmin(app: FastifyInstance): void {
     const host = request.headers.host ?? '';
     const proto = (request.headers['x-forwarded-proto'] as string | undefined) ?? 'https';
     const { createPortalLink } = await import('../../platform/billing/stripe.js');
-    return createPortalLink(customer, `${proto}://${host}/admin`);
+    return createPortalLink(customer, portalUrl('/subscription') ?? `${proto}://${host}/admin`);
   }));
 
   app.get('/admin/api/me', guarded(async ({ session, client }) => {

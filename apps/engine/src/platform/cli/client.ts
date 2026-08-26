@@ -15,6 +15,12 @@ import { listClients, loadClientConfig } from '../onboarding/config.js';
 import { scaffoldClient } from '../onboarding/scaffold.js';
 import { isPlanId, PLAN_IDS, PLANS } from '../../engine/plans.js';
 
+/** Куда возвращает касса. */
+const backUrl = (engineBase: string): string => {
+  const portal = process.env.PORTAL_BASE_URL?.replace(/\/+$/, '');
+  return portal ? `${portal}/subscription` : `${engineBase}/admin`;
+};
+
 const [cmd, ...rest] = process.argv.slice(2);
 const positional = rest.filter((a) => !a.startsWith('--'));
 const flag = (name: string): string | undefined => {
@@ -229,8 +235,10 @@ try {
       const { url } = await createCheckout({
         tenantId: tenant.id,
         plan: planId,
-        successUrl: `${base}/admin#subscription`,
-        cancelUrl: `${base}/admin#subscription`,
+        // Панель снесена: возврат ведёт в портал. Без настроенного адреса
+        // остаётся `/admin` движка, который туда же и переадресует.
+        successUrl: backUrl(base),
+        cancelUrl: backUrl(base),
       });
       console.log(`\n${tenant.name} · ${PLANS[planId].name} · ${PLANS[planId].priceEur} €/мес`);
       console.log(`\n${url}\n`);

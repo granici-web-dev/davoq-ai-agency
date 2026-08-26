@@ -6,9 +6,9 @@
 # записано вслух, потому что гейт, умалчивающий о том, чего он не проверяет,
 # хуже отсутствующего.
 #
-# Что здесь есть — восемь проверок движка, которым база не нужна: язык,
-# права по агентам, защита от SSRF, оплата, вебхук, оферта, конфигуратор
-# и расчёт цены.
+# Что здесь есть — девять проверок движка, которым база не нужна: язык,
+# права по агентам, защита от SSRF, оплата, вебхук, оферта, конфигуратор,
+# расчёт цены и страница на месте снесённой панели.
 name: CI
 
 on:
@@ -58,7 +58,7 @@ jobs:
         working-directory: apps/engine
         run: |
           set -e
-          for t in language entitlements ssrf billing webhook offer configurator quote; do
+          for t in language entitlements ssrf billing webhook offer configurator quote moved; do
             echo "── $t ──"
             npm run -s "test:$t"
           done
