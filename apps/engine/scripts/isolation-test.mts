@@ -19,11 +19,47 @@ import { spawnSync } from 'node:child_process';
 import { closeOwnerPool, pool, withOwner, withTenant } from '../src/engine/db/pool.js';
 import { retrieve } from '../src/engine/rag/retrieve.js';
 
-const TABLES = [
-  'chunks', 'documents', 'conversations', 'messages', 'leads',
-  'approved_answers', 'unanswered_log', 'usage_daily', 'widget_configs',
-  'connectors', 'connector_tools', 'audit_log', 'offers', 'promotions',
-];
+/**
+ * Таблицы клиентских данных берутся из базы, а не из списка руками.
+ *
+ * Список руками отстаёт молча. `tenant_agents` — таблица, которая решает,
+ * что клиенту доступно, — приехала без RLS и без политики и полгода была бы
+ * невидима этой проверке: в списке её просто не было, и «14 таблиц под FORCE»
+ * читалось как «все». Признак клиентской таблицы объективен — колонка
+ * `tenant_id`, — и спросить о нём базу дешевле, чем помнить.
+ *
+ * Исключения перечислены поимённо и с причиной. Именно так исключение и
+ * должно выглядеть: строкой, которую видно, а не отсутствием строки.
+ */
+const NOT_TENANT_DATA: Record<string, string> = {
+  // Учётные записи админов: своего тенантного контекста у входа ещё нет —
+  // он им и устанавливается. Читается через withPlatform.
+  admin_users: 'таблица входа, читается до установки тенантного контекста',
+  // Журнал событий Stripe: пишет вебхук, у которого тенантного контекста нет,
+  // читаем мы, а не клиент. Причина записана в миграции 033.
+  billing_events: 'журнал платёжной системы, клиенту не показывается',
+};
+
+const TABLES = await (async (): Promise<string[]> => {
+  const { rows } = await pool.query<{ table_name: string }>(
+    `SELECT c.table_name
+       FROM information_schema.columns c
+       JOIN information_schema.tables t
+         ON t.table_name = c.table_name AND t.table_schema = c.table_schema
+      WHERE c.column_name = 'tenant_id'
+        AND c.table_schema = 'public'
+        AND t.table_type = 'BASE TABLE'
+      ORDER BY 1`,
+  );
+  const found = rows.map((r) => r.table_name).filter((t) => !(t in NOT_TENANT_DATA));
+  // Сторож сторожа: обход по короткому списку проходит так же тихо, как обход
+  // по полному. Опечатка в запросе выше не должна выглядеть как чистая база.
+  if (found.length < 14) {
+    console.error(`  ✗ нашлось всего ${found.length} клиентских таблиц — запрос сломан`);
+    process.exit(1);
+  }
+  return found;
+})();
 
 let failures = 0;
 const ok = (m: string): void => console.log(`  ✓ ${m}`);
