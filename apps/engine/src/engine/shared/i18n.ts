@@ -29,6 +29,14 @@ export interface Strings {
   busy: string;
 
   /**
+   * Отказ по частоте. От `busy` отличается тем, кого просят подождать:
+   * там ждут все, здесь — этот адрес. Живой посетитель сюда попадает редко
+   * (десять сообщений в минуту он не наберёт), но если попал — сказать надо
+   * правду, а не «сейчас пишут многие».
+   */
+  tooFast: string;
+
+  /**
    * Когда оборот кончился без единого знака текста: модель только вызывала
    * инструменты. Пустую реплику нельзя ни показать, ни сохранить — в истории
    * она отвергается моделью, и разговор ломается насмерть.
@@ -48,6 +56,7 @@ export const STRINGS: Record<Locale, Strings> = {
     leadNeedContact: 'Please provide an email or a phone number.',
     noAnswer: 'I have noted your request — a colleague will get back to you shortly.',
     busy: 'A lot of people are writing right now. Please try again in a moment.',
+    tooFast: 'Too many messages in a short time. Please wait a minute.',
   },
   de: {
     launcher: 'Schreiben Sie uns', title: 'Assistent', placeholder: 'Stellen Sie eine Frage…',
@@ -60,6 +69,7 @@ export const STRINGS: Record<Locale, Strings> = {
     leadNeedContact: 'Bitte geben Sie eine E-Mail-Adresse oder Telefonnummer an.',
     noAnswer: 'Ich habe Ihre Anfrage notiert — ein Kollege meldet sich in Kürze bei Ihnen.',
     busy: 'Gerade schreiben viele Menschen. Bitte versuchen Sie es gleich noch einmal.',
+    tooFast: 'Zu viele Nachrichten in kurzer Zeit. Bitte warten Sie eine Minute.',
   },
   ro: {
     launcher: 'Scrieți-ne', title: 'Asistent', placeholder: 'Puneți o întrebare…',
@@ -72,6 +82,7 @@ export const STRINGS: Record<Locale, Strings> = {
     leadNeedContact: 'Indicați un email sau un număr de telefon.',
     noAnswer: 'Am notat solicitarea dvs. — un coleg vă va contacta în curând.',
     busy: 'Acum ne scriu mulți. Încercați din nou peste un minut.',
+    tooFast: 'Prea multe mesaje într-un timp scurt. Așteptați un minut.',
   },
   ru: {
     launcher: 'Написать нам', title: 'Ассистент', placeholder: 'Задайте вопрос…',
@@ -84,6 +95,7 @@ export const STRINGS: Record<Locale, Strings> = {
     leadNeedContact: 'Укажите email или телефон.',
     noAnswer: 'Я записал ваш запрос — коллега свяжется с вами в ближайшее время.',
     busy: 'Сейчас пишут многие. Попробуйте ещё раз через минуту.',
+    tooFast: 'Слишком много сообщений подряд. Подождите минуту.',
   },
 };
 

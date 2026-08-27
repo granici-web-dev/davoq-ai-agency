@@ -17,7 +17,7 @@ import { ConfiguratorModal } from './configurator/ConfiguratorModal.js';
 export const CONFIGURATOR_EVENT = 'assistwidget:configurator';
 
 type Msg = { role: 'user' | 'bot' | 'note'; text: string };
-type Phase = 'idle' | 'streaming' | 'error' | 'busy' | 'offline';
+type Phase = 'idle' | 'streaming' | 'error' | 'busy' | 'slow' | 'offline';
 
 /**
  * Переписка в sessionStorage.
@@ -211,7 +211,12 @@ export function App({ base, publicKey }: { base: string; publicKey: string }): p
             // Пустой пузырь бота убираем: оборванный ответ не должен выглядеть
             // как ответ, состоящий из пустоты.
             setMessages((m) => (m[m.length - 1]?.text === '' ? m.slice(0, -1) : m));
-            setPhase(kind === 'quota' ? 'offline' : kind === 'busy' ? 'busy' : 'error');
+            setPhase(
+              kind === 'quota' ? 'offline'
+                : kind === 'busy' ? 'busy'
+                : kind === 'slow' ? 'slow'
+                : 'error',
+            );
           },
         },
         abort.current.signal,
@@ -310,9 +315,9 @@ export function App({ base, publicKey }: { base: string; publicKey: string }): p
                 <i /><i /><i />
               </div>
             )}
-            {(phase === 'error' || phase === 'busy') && (
+            {(phase === 'error' || phase === 'busy' || phase === 'slow') && (
               <div class="msg note">
-                {phase === 'busy' ? t.busy : t.error}{' '}
+                {phase === 'busy' ? t.busy : phase === 'slow' ? t.tooFast : t.error}{' '}
                 <button class="retry" onClick={() => void ask(lastQuestion.current)}>
                   {t.retry}
                 </button>

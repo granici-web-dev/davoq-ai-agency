@@ -66,6 +66,13 @@ async function say(tenant, message, conversationId) {
     }),
   });
 
+  // См. control-set.mts: свой же потолок частоты, объяснённый вслух.
+  if (res.status === 429) {
+    throw new Error(
+      'упёрлись в СВОЙ потолок частоты (429). Поднимите его у сервера:\n' +
+      '    CHAT_RATE_PER_MINUTE=60 CHAT_RATE_PER_HOUR=600 npm run dev',
+    );
+  }
   if (!res.ok) throw new Error(`HTTP ${res.status}: ${(await res.text()).slice(0, 200)}`);
 
   let text = '';

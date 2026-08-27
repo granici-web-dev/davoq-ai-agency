@@ -21,7 +21,7 @@ export async function fetchConfig(base: string, key: string): Promise<WidgetConf
 export interface ChatHandlers {
   onMeta: (conversationId: string) => void;
   onDelta: (text: string) => void;
-  onError: (kind: 'quota' | 'busy' | 'network') => void;
+  onError: (kind: 'quota' | 'busy' | 'slow' | 'network') => void;
 }
 
 /**
@@ -51,7 +51,12 @@ export async function streamChat(
     // 503 — «сейчас занято», и это принципиально другое, чем поломка:
     // повтор через минуту помогает. Приходит и от нашего потолка
     // одновременных диалогов, и от квоты модели.
-    const kind = res.status === 402 ? 'quota' : res.status === 503 ? 'busy' : 'network';
+    // 429 отделён от 503 намеренно. «Занято» — про нас, ждут все; отказ по
+    // частоте — про этот адрес, и посетителю надо сказать именно это.
+    const kind = res.status === 402 ? 'quota'
+      : res.status === 429 ? 'slow'
+      : res.status === 503 ? 'busy'
+      : 'network';
     handlers.onError(kind);
     return;
   }

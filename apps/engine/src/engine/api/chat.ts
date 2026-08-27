@@ -14,6 +14,7 @@ import { buildSystem, buildUserContent } from '../rag/prompt.js';
 import { retrieveAll } from '../rag/retrieve.js';
 import { findConversationForVisitor, originAllowed, resolveTenant } from './auth.js';
 import { acquireSlot, slotStats } from './concurrency.js';
+import { takeRateSlot } from './rate-limit.js';
 import { plausibleLocales } from '../rag/language.js';
 import { LOCALES, STRINGS, type Locale } from '../shared/i18n.js';
 import { MESSAGE_MAX_CHARS, sanitizeText } from '../shared/text.js';
@@ -89,6 +90,19 @@ export function registerChat(app: FastifyInstance): void {
 
     if (!originAllowed(request.headers.origin, tenant.allowedDomains)) {
       return reply.code(403).send({ error: 'origin not allowed' });
+    }
+
+    // Частота. Раньше отказа, требующего работы: между чужим скриптом и счётом
+    // клиента не стояло ничего, кроме потолка одновременных и месячной квоты —
+    // то есть ровно того, что атака и уничтожает.
+    const rate = takeRateSlot(tenant.id, request.ip);
+    if (!rate.allowed) {
+      request.log.warn(
+        { tenantId: tenant.id, ip: request.ip, window: rate.window },
+        'превышена частота обращений',
+      );
+      return reply.code(429).header('retry-after', String(rate.retryAfterSeconds))
+        .send({ error: 'too many requests', retryAfterSeconds: rate.retryAfterSeconds });
     }
 
     // Право отвечать: оплачено, идёт триал или отсрочка после неудачного

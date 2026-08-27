@@ -40,6 +40,13 @@ const spec = parse(readFileSync(new URL('../tests/control-set.yaml', import.meta
   tenant: string; locale: string; cases: Case[]; global_forbid?: string;
 };
 
+/**
+ * Собственный потолок частоты. Отдельным типом, потому что это не провал
+ * случая, а конец прогона: остальные вопросы упрутся в то же самое, и
+ * «10/15» с пятью пустыми ответами скажет неправду о боте.
+ */
+class RateLimited extends Error {}
+
 /** `(?i)` — привычная запись из других языков; в JavaScript регистр задаётся флагом. */
 function forbidden(pattern: string, text: string): string | null {
   const ci = pattern.startsWith('(?i)');
@@ -100,6 +107,20 @@ async function ask(message: string): Promise<{ text: string; conversationId?: st
       publicKey: tenant.public_key, visitorId: VISITOR, locale: spec.locale, message,
     }),
   });
+  // Собственный потолок частоты. Набор — машина, а ограничитель на машины
+  // и рассчитан: пятнадцать вопросов подряд в него упираются. Провал в этом
+  // месте читался бы как «бот не отвечает», хотя бот в порядке, — поэтому
+  // прогон останавливается с объяснением и командой, а не досчитывается
+  // до «9/15» с шестью загадочными пустыми ответами.
+  if (res.status === 429) {
+    const wait = res.headers.get('retry-after') ?? '?';
+    throw new RateLimited(
+      `упёрлись в СВОЙ потолок частоты (429, ждать ${wait} с).\n` +
+      '  Набор шлёт пятнадцать вопросов подряд — это машинная частота.\n' +
+      '  Поднимите потолки у сервера, против которого идёт прогон:\n' +
+      '    CHAT_RATE_PER_MINUTE=60 CHAT_RATE_PER_HOUR=600 npm run dev',
+    );
+  }
   if (!res.ok) throw new Error(`HTTP ${res.status}: ${(await res.text()).slice(0, 160)}`);
 
   let text = '';
@@ -172,6 +193,13 @@ for (const c of cases) {
       }
     }
   } catch (err) {
+    if (err instanceof RateLimited) {
+      console.error(`\n  ✗ ${c.id} — ${err.message}`);
+      console.error('\nПРОГОН ОСТАНОВЛЕН: это наш потолок, а не ответ бота.');
+      await closeOwnerPool();
+      await pool.end();
+      process.exit(2);
+    }
     problems.push((err as Error).message);
   }
 

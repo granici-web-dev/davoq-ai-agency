@@ -45,7 +45,8 @@
     "test:promo": "tsx --env-file=.env scripts/promo-test.mts",
     "embed:preview": "tsx --env-file-if-exists=.env scripts/embed-preview.mts",
     "test:quote": "tsx scripts/quote-test.mts",
-    "test:moved": "tsx scripts/moved-test.mts"
+    "test:moved": "tsx scripts/moved-test.mts",
+    "test:rate": "tsx scripts/rate-limit-test.mts"
   },
   "dependencies": {
     "@anthropic-ai/bedrock-sdk": "^0.30.0",

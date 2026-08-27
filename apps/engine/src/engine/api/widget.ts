@@ -4,6 +4,7 @@ import { withPlatform, withTenant } from '../db/pool.js';
 import { STRINGS, type Locale } from '../shared/i18n.js';
 import { normalizeTheme } from '../shared/theme.js';
 import { findConversationForVisitor, originAllowed, resolveTenant } from './auth.js';
+import { takeRateSlot } from './rate-limit.js';
 import { sanitizeOptional, sanitizeText } from '../shared/text.js';
 
 export function registerWidget(app: FastifyInstance): void {
@@ -109,6 +110,19 @@ export function registerWidget(app: FastifyInstance): void {
     if (!tenant) return reply.code(404).send({ error: 'unknown key' });
     if (!originAllowed(request.headers.origin, tenant.allowedDomains)) {
       return reply.code(403).send({ error: 'origin not allowed' });
+    }
+
+    // Форма отправляется руками и по одной, поэтому потолок ей тем более
+    // не жмёт. А без него она остаётся открытой дверью: заявки пишутся
+    // в базу и уходят письмами отделу продаж.
+    const rate = takeRateSlot(tenant.id, request.ip);
+    if (!rate.allowed) {
+      request.log.warn(
+        { tenantId: tenant.id, ip: request.ip, window: rate.window },
+        'превышена частота отправки формы',
+      );
+      return reply.code(429).header('retry-after', String(rate.retryAfterSeconds))
+        .send({ error: 'too many requests', retryAfterSeconds: rate.retryAfterSeconds });
     }
 
     await withTenant(tenant.id, async (client) => {
