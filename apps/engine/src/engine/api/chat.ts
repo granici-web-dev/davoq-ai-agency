@@ -13,7 +13,7 @@ import { verticalOf } from '../prompt/vertical.js';
 import { buildSystem, buildUserContent } from '../rag/prompt.js';
 import { retrieveAll } from '../rag/retrieve.js';
 import { findConversationForVisitor, originAllowed, resolveTenant } from './auth.js';
-import { acquireSlot, slotStats } from './concurrency.js';
+import { acquireSlot, inFlightFor, quotaExhausted, slotStats } from './concurrency.js';
 import { takeRateSlot } from './rate-limit.js';
 import { plausibleLocales } from '../rag/language.js';
 import { LOCALES, STRINGS, type Locale } from '../shared/i18n.js';
@@ -152,7 +152,7 @@ export function registerChat(app: FastifyInstance): void {
      */
     const QUOTA = Symbol('quota');
     const prep = await withTenant(tenant.id, async (client) => {
-      if (await overQuota(client, tenant.id, tenant.monthlyMessageCap)) return QUOTA;
+      if (await overQuota(client, tenant.id, tenant.monthlyMessageCap, inFlightFor(tenant.id))) return QUOTA;
 
       // Существующий диалог ищем; новый не заводим до успешного ответа, иначе каждый
       // сбой апстрима оставляет в базе пустую беседу. Идентификатор генерируем заранее —
@@ -556,13 +556,17 @@ async function overQuota(
   client: import('pg').PoolClient,
   tenantId: string,
   cap: number,
+  inFlight: number,
 ): Promise<boolean> {
   const { rows } = await client.query<{ used: string }>(
     `SELECT coalesce(sum(messages), 0) AS used FROM usage_daily
       WHERE tenant_id = $1 AND date >= date_trunc('month', current_date)`,
     [tenantId],
   );
-  return Number(rows[0]?.used ?? 0) >= cap;
+  // Записанные плюс те, что ещё в работе: между чтением и записью проходят
+  // секунды, и без второго слагаемого потолок перепрыгивался на число
+  // одновременных диалогов. Арифметика и её причина — в concurrency.ts.
+  return quotaExhausted(Number(rows[0]?.used ?? 0), cap, inFlight);
 }
 
 interface PersistArgs {

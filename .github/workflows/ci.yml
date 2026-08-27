@@ -12,9 +12,10 @@
 # коммита, читать перестают — ровно та же причина, по которой этот поток
 # сначала сделали зелёным, а потом включили.
 #
-# Что здесь есть — девять проверок движка, которым база не нужна: язык,
+# Что здесь есть — одиннадцать проверок движка, которым база не нужна: язык,
 # права по агентам, защита от SSRF, оплата, вебхук, оферта, конфигуратор,
-# расчёт цены и страница на месте снесённой панели.
+# расчёт цены, страница на месте снесённой панели, частота обращений
+# и потолки одновременных диалогов с месячной квотой.
 name: CI
 
 on:
@@ -67,7 +68,7 @@ jobs:
         working-directory: apps/engine
         run: |
           set -e
-          for t in language entitlements ssrf billing webhook offer configurator quote moved; do
+          for t in language entitlements ssrf billing webhook offer configurator quote moved rate concurrency; do
             echo "── $t ──"
             npm run -s "test:$t"
           done
