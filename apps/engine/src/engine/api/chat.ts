@@ -14,7 +14,7 @@ import { buildSystem, buildUserContent } from '../rag/prompt.js';
 import { retrieveAll } from '../rag/retrieve.js';
 import { findConversationForVisitor, originAllowed, resolveTenant } from './auth.js';
 import { acquireSlot, inFlightFor, quotaExhausted, slotStats } from './concurrency.js';
-import { takeRateSlot } from './rate-limit.js';
+import { CHAT_BUDGET, takeRateSlot } from './rate-limit.js';
 import { plausibleLocales } from '../rag/language.js';
 import { LOCALES, STRINGS, type Locale } from '../shared/i18n.js';
 import { MESSAGE_MAX_CHARS, sanitizeText } from '../shared/text.js';
@@ -95,7 +95,7 @@ export function registerChat(app: FastifyInstance): void {
     // Частота. Раньше отказа, требующего работы: между чужим скриптом и счётом
     // клиента не стояло ничего, кроме потолка одновременных и месячной квоты —
     // то есть ровно того, что атака и уничтожает.
-    const rate = takeRateSlot(tenant.id, request.ip);
+    const rate = takeRateSlot(CHAT_BUDGET, tenant.id, request.ip);
     if (!rate.allowed) {
       request.log.warn(
         { tenantId: tenant.id, ip: request.ip, window: rate.window },

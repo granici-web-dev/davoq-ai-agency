@@ -1,8 +1,11 @@
 import { basename } from 'node:path';
-import type { FastifyInstance } from 'fastify';
-import { resolveTenant } from '../../../engine/api/auth.js';
+import type { FastifyInstance, FastifyReply, FastifyRequest } from 'fastify';
+import { originAllowed, resolveTenant } from '../../../engine/api/auth.js';
 import { configuratorAllowed, offerQuotaLeft } from '../access.js';
 import { acquireSlot } from '../../../engine/api/concurrency.js';
+import {
+  CONFIGURATOR_ASK_BUDGET, CONFIGURATOR_BUDGET, takeRateSlot, type RateBudget,
+} from '../../../engine/api/rate-limit.js';
 import { withTenant } from '../../../engine/db/pool.js';
 import { get as storageGet } from '../../../engine/ingest/storage.js';
 import { buildAgentSystem } from '../agent/prompt.js';
@@ -24,16 +27,66 @@ import { tenantConfigurator, type TenantConfigurator } from '../tenant.js';
  *
  * Прайса в ответах нет ни в одном (см. `flow/public.ts`): цена приходит
  * отдельным запросом и считается на сервере.
+ *
+ * Происхождение и частота проверяются на всех маршрутах, КРОМЕ `/asset`.
+ * Картинки вариантов виджет выводит тегом `<img>`, а он не шлёт `Origin`
+ * вовсе и грузит их пачкой на открытие шага — замок сломал бы страницу,
+ * а общий потолок частоты сработал бы на первом же шаге с десятком вариантов.
+ * Сам маршрут узкий: нужен рабочий ключ, имя файла обязано совпасть со своим
+ * `basename`, каталог берётся по тенанту. И картинки эти в любом случае лежат
+ * на открытой странице клиента.
  */
 
 const MAX_QUESTION = 500;
+
+/**
+ * Ключ, происхождение и частота — одной проверкой на все маршруты.
+ *
+ * Отдельной функцией, потому что маршрутов шесть, и разошедшиеся проверки —
+ * это дыра в том из них, про который забыли. Ровно так в этом продукте и
+ * вышло: чат и форма контакта происхождение проверяли, конфигуратор — ни на
+ * одном из маршрутов.
+ *
+ * Возвращает `null`, когда всё в порядке; иначе готовый ответ.
+ */
+async function guard(
+  request: FastifyRequest,
+  reply: FastifyReply,
+  publicKey: string | undefined,
+  budget: RateBudget,
+): Promise<Found | null> {
+  const found = await load(publicKey);
+  if (!found) {
+    await reply.code(404).send({ error: 'no configurator' });
+    return null;
+  }
+
+  if (!originAllowed(request.headers.origin, found.tenant.allowedDomains)) {
+    await reply.code(403).send({ error: 'origin not allowed' });
+    return null;
+  }
+
+  const rate = takeRateSlot(budget, found.tenant.id, request.ip);
+  if (!rate.allowed) {
+    request.log.warn(
+      { tenantId: found.tenant.id, ip: request.ip, window: rate.window, budget: budget.name },
+      'превышена частота обращений к конфигуратору',
+    );
+    await reply.code(429)
+      .header('retry-after', String(rate.retryAfterSeconds))
+      .send({ error: 'too many requests', retryAfterSeconds: rate.retryAfterSeconds });
+    return null;
+  }
+
+  return found;
+}
 
 export function registerConfigurator(app: FastifyInstance): void {
   /** Конфиг тенанта. Нет конфигуратора — 404: это законное состояние. */
   app.get<{ Querystring: { key?: string; locale?: string } }>(
     '/v1/configurator/config', async (request, reply) => {
-      const found = await load(request.query.key);
-      if (!found) return reply.code(404).send({ error: 'no configurator' });
+      const found = await guard(request, reply, request.query.key, CONFIGURATOR_BUDGET);
+      if (!found) return reply;
       const { tenant, cfg } = found;
       const locale = pickLocale(request.query.locale, tenant.localeDefault, tenant.supportedLocales);
 
@@ -71,8 +124,8 @@ export function registerConfigurator(app: FastifyInstance): void {
    */
   app.post<{ Body: { publicKey?: string; selections?: Selections } }>(
     '/v1/configurator/price', async (request, reply) => {
-      const found = await load(request.body?.publicKey);
-      if (!found) return reply.code(404).send({ error: 'no configurator' });
+      const found = await guard(request, reply, request.body?.publicKey, CONFIGURATOR_BUDGET);
+      if (!found) return reply;
       const { cfg } = found;
       try {
         const { price, promo } = await priceWithPromotion(
@@ -98,17 +151,22 @@ export function registerConfigurator(app: FastifyInstance): void {
    * События воронки. Пачкой и без ответа по существу: виджет шлёт их фоном,
    * и ждать от нас чего-либо ему незачем.
    *
-   * 204 в любом случае, включая отброшенные события. Отвечать браузеру
-   * подробностями о том, какие имена шагов существуют, значит рассказывать
-   * про конфиг тенанта тому, кто его не спрашивал.
+   * 204 на всё, что дошло до обработчика, включая отброшенные события:
+   * отвечать браузеру подробностями о том, какие имена шагов существуют,
+   * значит рассказывать про конфиг тенанта тому, кто его не спрашивал.
+   *
+   * Отказы замка (чужой ключ, чужое происхождение, частота) отдаются как на
+   * остальных маршрутах, а не заметаются под 204. Про существование тенанта
+   * они не сообщают ничего нового — то же самое отвечает `/config`, — зато
+   * 429 виджету полезен: он шлёт события фоном и без ответа не узнает,
+   * что пора притормозить.
    */
   app.post<{ Body: { publicKey?: string; hits?: unknown } }>(
     '/v1/configurator/event', async (request, reply) => {
-      const found = await load(request.body?.publicKey);
-      if (found) {
-        await recordStats(found.tenant.id, found.cfg.configurator.flow, request.body?.hits)
-          .catch((err: Error) => console.error(`события конфигуратора: ${err.message}`));
-      }
+      const found = await guard(request, reply, request.body?.publicKey, CONFIGURATOR_BUDGET);
+      if (!found) return reply;
+      await recordStats(found.tenant.id, found.cfg.configurator.flow, request.body?.hits)
+        .catch((err: Error) => console.error(`события конфигуратора: ${err.message}`));
       return reply.code(204).send();
     },
   );
@@ -118,8 +176,8 @@ export function registerConfigurator(app: FastifyInstance): void {
     publicKey?: string; locale?: string; stepId?: string;
     selections?: Selections; question?: string;
   } }>('/v1/configurator/ask', async (request, reply) => {
-    const found = await load(request.body?.publicKey);
-    if (!found) return reply.code(404).send({ error: 'no configurator' });
+    const found = await guard(request, reply, request.body?.publicKey, CONFIGURATOR_ASK_BUDGET);
+    if (!found) return reply;
     const { tenant, cfg, name } = found;
 
     const question = (request.body?.question ?? '').trim().slice(0, MAX_QUESTION);
@@ -180,8 +238,8 @@ export function registerConfigurator(app: FastifyInstance): void {
     contact?: { name?: string; email?: string; phone?: string };
     consent?: boolean; consentMarketing?: boolean; conversationId?: string;
   } }>('/v1/configurator/offer', async (request, reply) => {
-    const found = await load(request.body?.publicKey);
-    if (!found) return reply.code(404).send({ error: 'no configurator' });
+    const found = await guard(request, reply, request.body?.publicKey, CONFIGURATOR_BUDGET);
+    if (!found) return reply;
     const { tenant, cfg, name, notifyEmail, notifyFrom } = found;
 
     const body = request.body ?? {};
@@ -216,7 +274,11 @@ export function registerConfigurator(app: FastifyInstance): void {
            FROM tenants t WHERE t.id = $1`, [tenant.id]);
       return rows[0];
     });
-    if (cap && !offerQuotaLeft(tenant.plan, cap.cap, Number(cap.used))) {
+    // Строки тенанта нет — отказ, а не «без ограничений». Случиться это не
+    // должно (тенант уже разрешён выше), но у неверного умолчания цена
+    // несимметричная: лишний отказ клиент заметит и напишет, а молча снятый
+    // потолок он увидит счётом.
+    if (!cap || !offerQuotaLeft(tenant.plan, cap.cap, Number(cap.used))) {
       console.warn(`оферты тенанта ${tenant.id}: месячный потолок исчерпан`);
       return reply.code(402).send({ error: 'offer quota exceeded' });
     }

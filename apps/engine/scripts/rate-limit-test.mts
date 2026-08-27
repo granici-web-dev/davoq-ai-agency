@@ -7,7 +7,10 @@
  *
  *   npm run test:rate
  */
-import { resetRateLimits, takeRateSlot, rateLimits } from '../src/engine/api/rate-limit.js';
+import {
+  CHAT_BUDGET, CONFIGURATOR_ASK_BUDGET, CONFIGURATOR_BUDGET,
+  rateLimits, resetRateLimits, takeRateSlot,
+} from '../src/engine/api/rate-limit.js';
 
 let failures = 0;
 const ok = (m: string): void => console.log(`  ✓ ${m}`);
@@ -19,16 +22,17 @@ const T = 1_700_000_000_000;
 const MIN = 60_000;
 const HOUR = 60 * MIN;
 
-console.log(`частота: ${rateLimits.perMinute}/мин, ${rateLimits.perHour}/час\n`);
+const B = CHAT_BUDGET;
+console.log(`частота чата: ${B.perMinute}/мин, ${B.perHour}/час\n`);
 
 // 1. Потолок минуты: пропускается ровно столько, сколько объявлено.
 {
   resetRateLimits();
   let passed = 0;
-  for (let i = 0; i < rateLimits.perMinute + 5; i++) {
-    if (takeRateSlot('t1', '1.1.1.1', T).allowed) passed++;
+  for (let i = 0; i < B.perMinute + 5; i++) {
+    if (takeRateSlot(B, 't1', '1.1.1.1', T).allowed) passed++;
   }
-  eq(passed, rateLimits.perMinute, 'за минуту пропущено ровно по потолку');
+  eq(passed, B.perMinute, 'за минуту пропущено ровно по потолку');
 }
 
 // 2. Отказ не продлевает сам себя. Иначе достаточно продолжать стучаться,
@@ -36,17 +40,17 @@ console.log(`частота: ${rateLimits.perMinute}/мин, ${rateLimits.perHou
 //    а пока стучащийся не остановится.
 {
   resetRateLimits();
-  for (let i = 0; i < 100; i++) takeRateSlot('t1', '1.1.1.1', T);
-  eq(takeRateSlot('t1', '1.1.1.1', T + MIN).allowed, true, 'через минуту снова пропускает');
+  for (let i = 0; i < 100; i++) takeRateSlot(B, 't1', '1.1.1.1', T);
+  eq(takeRateSlot(B, 't1', '1.1.1.1', T + MIN).allowed, true, 'через минуту снова пропускает');
 }
 
 // 3. Ключи не перетекают: ни между адресами, ни между клиентами.
 {
   resetRateLimits();
-  for (let i = 0; i < rateLimits.perMinute; i++) takeRateSlot('t1', '1.1.1.1', T);
-  eq(takeRateSlot('t1', '2.2.2.2', T).allowed, true, 'другой адрес не наказан за первый');
-  eq(takeRateSlot('t2', '1.1.1.1', T).allowed, true, 'другой клиент не наказан за первого');
-  eq(takeRateSlot('t1', '1.1.1.1', T).allowed, false, 'исходный ключ всё ещё под потолком');
+  for (let i = 0; i < B.perMinute; i++) takeRateSlot(B, 't1', '1.1.1.1', T);
+  eq(takeRateSlot(B, 't1', '2.2.2.2', T).allowed, true, 'другой адрес не наказан за первый');
+  eq(takeRateSlot(B, 't2', '1.1.1.1', T).allowed, true, 'другой клиент не наказан за первого');
+  eq(takeRateSlot(B, 't1', '1.1.1.1', T).allowed, false, 'исходный ключ всё ещё под потолком');
 }
 
 // 4. Часовое окно ловит то, что в минуту укладывается: по потолку минуты
@@ -55,25 +59,25 @@ console.log(`частота: ${rateLimits.perMinute}/мин, ${rateLimits.perHou
   resetRateLimits();
   let passed = 0;
   for (let m = 0; m < 120; m++) {
-    for (let i = 0; i < rateLimits.perMinute; i++) {
-      if (takeRateSlot('t1', '1.1.1.1', T + m * MIN).allowed) passed++;
+    for (let i = 0; i < B.perMinute; i++) {
+      if (takeRateSlot(B, 't1', '1.1.1.1', T + m * MIN).allowed) passed++;
     }
   }
-  eq(passed, rateLimits.perHour * 2, 'за два часа пропущено два часовых потолка');
+  eq(passed, B.perHour * 2, 'за два часа пропущено два часовых потолка');
 }
 
 // 5. Через час счёт начинается заново.
 {
   resetRateLimits();
-  for (let i = 0; i < 1000; i++) takeRateSlot('t1', '1.1.1.1', T);
-  eq(takeRateSlot('t1', '1.1.1.1', T + HOUR).allowed, true, 'через час окно новое');
+  for (let i = 0; i < 1000; i++) takeRateSlot(B, 't1', '1.1.1.1', T);
+  eq(takeRateSlot(B, 't1', '1.1.1.1', T + HOUR).allowed, true, 'через час окно новое');
 }
 
 // 6. Заголовок retry-after не врёт: ждать столько, сколько осталось окну.
 {
   resetRateLimits();
-  for (let i = 0; i < rateLimits.perMinute; i++) takeRateSlot('t1', '1.1.1.1', T);
-  const v = takeRateSlot('t1', '1.1.1.1', T + 20_000);
+  for (let i = 0; i < B.perMinute; i++) takeRateSlot(B, 't1', '1.1.1.1', T);
+  const v = takeRateSlot(B, 't1', '1.1.1.1', T + 20_000);
   eq(v.window, 'minute', 'названо переполненное окно');
   eq(v.retryAfterSeconds, 40, 'ждать ровно остаток окна');
 }
@@ -82,9 +86,9 @@ console.log(`частота: ${rateLimits.perMinute}/мин, ${rateLimits.perHou
 {
   resetRateLimits();
   const many = 60_000;
-  for (let i = 0; i < many; i++) takeRateSlot('t1', `10.${(i >> 16) & 255}.${(i >> 8) & 255}.${i & 255}`, T);
+  for (let i = 0; i < many; i++) takeRateSlot(B, 't1', `10.${(i >> 16) & 255}.${(i >> 8) & 255}.${i & 255}`, T);
   const grown = rateLimits.tracked();
-  for (let i = 0; i < 100; i++) takeRateSlot('t1', `11.0.0.${i}`, T + HOUR + 1);
+  for (let i = 0; i < 100; i++) takeRateSlot(B, 't1', `11.0.0.${i}`, T + HOUR + 1);
   const after = rateLimits.tracked();
   if (after <= 200) ok(`просроченные ключи убираются: было ${grown}, стало ${after}`);
   else bad(`просроченное не убирается: было ${grown}, стало ${after}`);
@@ -97,11 +101,37 @@ console.log(`частота: ${rateLimits.perMinute}/мин, ${rateLimits.perHou
   resetRateLimits();
   const flood = 120_000;
   for (let i = 0; i < flood; i++) {
-    takeRateSlot('t1', `10.${(i >> 16) & 255}.${(i >> 8) & 255}.${i & 255}`, T);
+    takeRateSlot(B, 't1', `10.${(i >> 16) & 255}.${(i >> 8) & 255}.${i & 255}`, T);
   }
   const tracked = rateLimits.tracked();
   if (tracked <= 50_000) ok(`${flood.toLocaleString('ru')} свежих адресов подряд: в памяти ${tracked.toLocaleString('ru')} ключей`);
   else bad(`потолок ключей не держит: ${tracked}`);
+}
+
+// Бюджеты не перетекают друг в друга: щелчки по вариантам не должны
+// расходовать право задать вопрос агенту, и наоборот.
+{
+  resetRateLimits();
+  for (let i = 0; i < CONFIGURATOR_BUDGET.perMinute; i++) {
+    takeRateSlot(CONFIGURATOR_BUDGET, 't1', '1.1.1.1', T);
+  }
+  eq(takeRateSlot(CONFIGURATOR_BUDGET, 't1', '1.1.1.1', T).allowed, false,
+     'бюджет конфигуратора исчерпан');
+  eq(takeRateSlot(CONFIGURATOR_ASK_BUDGET, 't1', '1.1.1.1', T).allowed, true,
+     'вопрос агенту не наказан за щелчки по вариантам');
+  eq(takeRateSlot(B, 't1', '1.1.1.1', T).allowed, true,
+     'и чат тоже не наказан');
+}
+
+// Потолок вопроса агенту тесный намеренно: это вызов модели, который больше
+// нигде не учитывается — ни в месячной квоте сообщений, ни в пакете оферт.
+{
+  resetRateLimits();
+  let passed = 0;
+  for (let i = 0; i < 100; i++) {
+    if (takeRateSlot(CONFIGURATOR_ASK_BUDGET, 't1', '1.1.1.1', T + i * MIN).allowed) passed++;
+  }
+  eq(passed, CONFIGURATOR_ASK_BUDGET.perHour * 2, 'за сто минут — два часовых потолка вопросов');
 }
 
 resetRateLimits();

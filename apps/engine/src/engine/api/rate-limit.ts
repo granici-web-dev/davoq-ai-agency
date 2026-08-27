@@ -27,9 +27,43 @@
  * несколько, потолок умножится на их число, и это надо будет переделать.
  */
 
-/** Окна и потолки. Пилотные, настраиваются окружением. */
-const PER_MINUTE = Number(process.env.CHAT_RATE_PER_MINUTE ?? 10);
-const PER_HOUR = Number(process.env.CHAT_RATE_PER_HOUR ?? 60);
+/**
+ * Бюджеты. Разные ручки — разная естественная частота, и один потолок на всех
+ * пришлось бы ставить по самой частой, то есть не ставить вовсе.
+ *
+ * Живой посетитель в чате шлёт три-шесть сообщений в минуту: он читает ответ
+ * и печатает. В конфигураторе он щёлкает варианты, и цена пересчитывается
+ * на каждый щелчок — десятки запросов за ту же минуту, и это норма, а не
+ * атака. А вопрос агенту снова зовёт модель, и там потолок нужен самый тесный.
+ *
+ * Ключ включает имя бюджета, поэтому щелчки по вариантам не расходуют
+ * право задать вопрос.
+ */
+export interface RateBudget {
+  name: string;
+  perMinute: number;
+  perHour: number;
+}
+
+export const CHAT_BUDGET: RateBudget = {
+  name: 'chat',
+  perMinute: Number(process.env.CHAT_RATE_PER_MINUTE ?? 10),
+  perHour: Number(process.env.CHAT_RATE_PER_HOUR ?? 60),
+};
+
+/** Щелчки по вариантам и пересчёт цены. Частота человеческая, но высокая. */
+export const CONFIGURATOR_BUDGET: RateBudget = {
+  name: 'cfg',
+  perMinute: Number(process.env.CONFIGURATOR_RATE_PER_MINUTE ?? 60),
+  perHour: Number(process.env.CONFIGURATOR_RATE_PER_HOUR ?? 300),
+};
+
+/** Вопрос агенту конфигуратора: вызов модели, ничем больше не учитываемый. */
+export const CONFIGURATOR_ASK_BUDGET: RateBudget = {
+  name: 'cfg-ask',
+  perMinute: Number(process.env.CONFIGURATOR_ASK_RATE_PER_MINUTE ?? 5),
+  perHour: Number(process.env.CONFIGURATOR_ASK_RATE_PER_HOUR ?? 40),
+};
 
 const MINUTE_MS = 60_000;
 const HOUR_MS = 60 * MINUTE_MS;
@@ -101,10 +135,12 @@ function sweep(now: number): void {
  * посетитель, случайно попавший под потолок вместе с соседом по NAT, ждал бы
  * не минуту, а пока сосед не остановится.
  */
-export function takeRateSlot(tenantId: string, ip: string, now = Date.now()): RateVerdict {
+export function takeRateSlot(
+  budget: RateBudget, tenantId: string, ip: string, now = Date.now(),
+): RateVerdict {
   if (counters.size >= MAX_KEYS) sweep(now);
 
-  const key = `${tenantId}:${ip}`;
+  const key = `${budget.name}:${tenantId}:${ip}`;
   let c = counters.get(key);
   if (!c) {
     c = { minute: { startedAt: now, count: 0 }, hour: { startedAt: now, count: 0 } };
@@ -114,14 +150,14 @@ export function takeRateSlot(tenantId: string, ip: string, now = Date.now()): Ra
   roll(c.minute, now, MINUTE_MS);
   roll(c.hour, now, HOUR_MS);
 
-  if (c.minute.count >= PER_MINUTE) {
+  if (c.minute.count >= budget.perMinute) {
     return {
       allowed: false,
       retryAfterSeconds: Math.ceil((MINUTE_MS - (now - c.minute.startedAt)) / 1000),
       window: 'minute',
     };
   }
-  if (c.hour.count >= PER_HOUR) {
+  if (c.hour.count >= budget.perHour) {
     return {
       allowed: false,
       retryAfterSeconds: Math.ceil((HOUR_MS - (now - c.hour.startedAt)) / 1000),
@@ -139,4 +175,4 @@ export function resetRateLimits(): void {
   counters.clear();
 }
 
-export const rateLimits = { perMinute: PER_MINUTE, perHour: PER_HOUR, tracked: () => counters.size };
+export const rateLimits = { tracked: (): number => counters.size };
