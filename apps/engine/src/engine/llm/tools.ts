@@ -70,10 +70,13 @@ export interface ToolContext {
     email?: string; phone?: string; name?: string; note?: string;
     payload?: Record<string, string>;
   }>;
-  /** Инструменты тенанта из connector_tools. Список статичен (§11): */
-  connectorTools: Map<string, ConnectorTool>;
   /** Диалога в базе ещё нет — пробелы копим и пишем вместе с ним. */
   pendingUnanswered: Array<{ question: string; reason: string }>;
+  /**
+   * Инструменты тенанта из connector_tools. Список статичен (§11): модель не
+   * может придумать эндпоинт — имени нет в реестре, значит вызова не будет.
+   */
+  connectorTools: Map<string, ConnectorTool>;
 }
 
 export async function runTool(

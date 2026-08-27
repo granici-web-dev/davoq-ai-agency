@@ -15,15 +15,6 @@ export const claude = new AnthropicBedrock({
 });
 
 /**
- * Идентификаторы — это **inference profile**, а не foundation model.
- * Новые модели Anthropic на Bedrock по прямому id не вызываются вовсе:
- * «Invocation of model ID … with on-demand throughput isn't supported».
- *
- * Префикс `eu.` означает маршрутизацию между регионами ЕС — Франкфурт, Стокгольм
- * и другие. Обработка остаётся в ЕС, но назвать в AVV один дата-центр уже нельзя:
- * перечислять придётся регионы. См. 06-Implement/stack.md.
- */
-/**
  * Запасные значения — это ПРОВЕРЕННЫЕ идентификаторы, а не правдоподобные.
  *
  * Здесь стояло `eu.anthropic.claude-sonnet-5` — идентификатор, которого
@@ -37,6 +28,15 @@ export const claude = new AnthropicBedrock({
 const FALLBACK_BASE = 'eu.anthropic.claude-haiku-4-5-20251001-v1:0';
 const FALLBACK_PREMIUM = 'eu.anthropic.claude-sonnet-4-5-20250929-v1:0';
 
+/**
+ * Идентификаторы — это **inference profile**, а не foundation model.
+ * Новые модели Anthropic на Bedrock по прямому id не вызываются вовсе:
+ * «Invocation of model ID … with on-demand throughput isn't supported».
+ *
+ * Префикс `eu.` означает маршрутизацию между регионами ЕС — Франкфурт, Стокгольм
+ * и другие. Обработка остаётся в ЕС, но назвать в AVV один дата-центр уже нельзя:
+ * перечислять придётся регионы. См. 06-Implement/stack.md.
+ */
 export function modelFor(tier: 'base' | 'premium'): string {
   return tier === 'premium'
     ? (process.env.MODEL_PREMIUM ?? FALLBACK_PREMIUM)
