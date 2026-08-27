@@ -1,3 +1,4 @@
+import type pg from 'pg';
 import { withPlatform } from '../db/pool.js';
 import { messageCapFor } from '../plans.js';
 
@@ -72,4 +73,37 @@ export function originAllowed(origin: string | undefined, allowed: string[]): bo
     const domain = raw.trim().toLowerCase().replace(/^\*\./, '');
     return host === domain || host.endsWith(`.${domain}`);
   });
+}
+
+/**
+ * Разговор, принадлежащий ЭТОМУ посетителю.
+ *
+ * RLS ограничивает выборку клиентом, и этого казалось достаточно. Не
+ * достаточно: внутри одного клиента посетители друг от друга не отделены
+ * ничем. Идентификатор разговора приходит из тела запроса, лежит
+ * в `sessionStorage` на домене клиента и читается любым сторонним скриптом
+ * на его странице — аналитикой, рекламным тегом, чужим виджетом. Прислав
+ * его, посторонний получал историю чужого диалога в ответе бота (имя,
+ * телефон — то, ради чего диалог и ведётся) и мог переписать чужую заявку
+ * на свой номер. Проверено вживую, обе половины.
+ *
+ * Не найден — значит не найден: разговор начинается новый, как при
+ * неизвестном идентификаторе. Отказ вместо этого сообщал бы постороннему,
+ * что такой разговор существует.
+ *
+ * Живёт здесь, а не в обработчике чата, потому что дверей две: то же самое
+ * делает форма контакта в widget.ts, и разошедшиеся проверки — это дыра
+ * в той из них, про которую забыли.
+ */
+export async function findConversationForVisitor(
+  client: pg.PoolClient,
+  conversationId: string | undefined,
+  visitorId: string,
+): Promise<string | null> {
+  if (!conversationId) return null;
+  const { rows } = await client.query<{ id: string }>(
+    'SELECT id FROM conversations WHERE id = $1 AND visitor_id = $2',
+    [conversationId, visitorId],
+  );
+  return rows[0]?.id ?? null;
 }

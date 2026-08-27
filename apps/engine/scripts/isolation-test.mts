@@ -18,6 +18,7 @@ import { randomUUID } from 'node:crypto';
 import { spawnSync } from 'node:child_process';
 import { closeOwnerPool, pool, withOwner, withTenant } from '../src/engine/db/pool.js';
 import { retrieve } from '../src/engine/rag/retrieve.js';
+import { findConversationForVisitor } from '../src/engine/api/auth.js';
 
 /**
  * Таблицы клиентских данных берутся из базы, а не из списка руками.
@@ -213,6 +214,49 @@ await withTenant(a.id, async (client) => {
   const def = rows[0]?.def ?? '';
   if (/\(tenant_id, conversation_id\)/.test(def)) ok('ключ заявки составной: столкнуть клиентов через чужой UUID нельзя');
   else bad(`ключ заявки не тенантный: ${def || 'индекса нет'}`);
+}
+
+// 8. Изоляция ПОСЕТИТЕЛЕЙ внутри одного клиента.
+//
+//    Всё выше проверяет, что клиенты не видят друг друга, — и проверяло
+//    исправно, пока внутри клиента посетители не были отделены ничем.
+//    Идентификатор разговора приходит из тела запроса и лежит
+//    в `sessionStorage` на домене клиента, то есть доступен любому стороннему
+//    скрипту на его странице. Прислав чужой, посторонний получал историю
+//    чужого диалога в ответе бота и переписывал чужую заявку на свой телефон.
+//    Обе половины воспроизводились живым ботом.
+//
+//    Дверей две: разговор в чате и форма контакта. Проверка одна на обе,
+//    поэтому и проверяется здесь одна.
+{
+  const owner = `visitor-owner-${randomUUID()}`;
+  const stranger = `visitor-stranger-${randomUUID()}`;
+  const conversationId = randomUUID();
+
+  await withTenant(a.id, (client) => client.query(
+    `INSERT INTO conversations (id, tenant_id, visitor_id, locale) VALUES ($1, $2, $3, 'ro')`,
+    [conversationId, a.id, owner],
+  ));
+
+  const mine = await withTenant(a.id, (client) =>
+    findConversationForVisitor(client, conversationId, owner));
+  if (mine === conversationId) ok('свой разговор продолжается');
+  else bad(`посетитель не нашёл собственный разговор: ${mine}`);
+
+  const theirs = await withTenant(a.id, (client) =>
+    findConversationForVisitor(client, conversationId, stranger));
+  if (theirs === null) ok('чужой разговор посторонним не находится, даже с верным UUID');
+  else bad(`ПОСТОРОННИЙ ПОЛУЧИЛ ЧУЖОЙ РАЗГОВОР: ${theirs}`);
+
+  // Тот же UUID из-под другого клиента: это уже про RLS, но проверять стоит
+  // здесь же — починка не должна была подменить одну защиту другой.
+  const acrossTenants = await withTenant(b.id, (client) =>
+    findConversationForVisitor(client, conversationId, owner));
+  if (acrossTenants === null) ok('чужой разговор не находится и из-под другого клиента');
+  else bad(`разговор виден другому клиенту: ${acrossTenants}`);
+
+  await withTenant(a.id, (client) =>
+    client.query('DELETE FROM conversations WHERE id = $1', [conversationId]));
 }
 
 if (temporary) {

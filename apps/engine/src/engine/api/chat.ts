@@ -12,7 +12,7 @@ import { CAPTURE_LEAD, REPORT_UNANSWERED, runTool, type ToolContext } from '../l
 import { verticalOf } from '../prompt/vertical.js';
 import { buildSystem, buildUserContent } from '../rag/prompt.js';
 import { retrieveAll } from '../rag/retrieve.js';
-import { originAllowed, resolveTenant } from './auth.js';
+import { findConversationForVisitor, originAllowed, resolveTenant } from './auth.js';
 import { acquireSlot, slotStats } from './concurrency.js';
 import { plausibleLocales } from '../rag/language.js';
 import { LOCALES, STRINGS, type Locale } from '../shared/i18n.js';
@@ -143,7 +143,7 @@ export function registerChat(app: FastifyInstance): void {
       // Существующий диалог ищем; новый не заводим до успешного ответа, иначе каждый
       // сбой апстрима оставляет в базе пустую беседу. Идентификатор генерируем заранее —
       // он нужен клиенту в meta-событии раньше, чем строка появится в таблице.
-      const existing = await findConversation(client, body.conversationId);
+      const existing = await findConversationForVisitor(client, body.conversationId, body.visitorId);
       const history = existing ? await loadHistory(client, existing) : [];
       // Имя бота и компании берутся из настроек тенанта, а не из заглушки:
       // иначе бот представляется посетителю названием, которого клиент не выбирал.
@@ -516,19 +516,6 @@ function openSse(reply: FastifyReply): void {
     // ни на одном сайте клиента, кроме нашего собственного.
     'access-control-allow-origin': '*',
   });
-}
-
-/** RLS ограничивает выборку своим тенантом, так что чужой id просто не найдётся. */
-async function findConversation(
-  client: import('pg').PoolClient,
-  id: string | undefined,
-): Promise<string | null> {
-  if (!id) return null;
-  const { rows } = await client.query<{ id: string }>(
-    'SELECT id FROM conversations WHERE id = $1',
-    [id],
-  );
-  return rows[0]?.id ?? null;
 }
 
 async function loadHistory(

@@ -3,8 +3,8 @@ import type { FastifyInstance } from 'fastify';
 import { withPlatform, withTenant } from '../db/pool.js';
 import { STRINGS, type Locale } from '../shared/i18n.js';
 import { normalizeTheme } from '../shared/theme.js';
-import { originAllowed, resolveTenant } from './auth.js';
-import { sanitizeOptional } from '../shared/text.js';
+import { findConversationForVisitor, originAllowed, resolveTenant } from './auth.js';
+import { sanitizeOptional, sanitizeText } from '../shared/text.js';
 
 export function registerWidget(app: FastifyInstance): void {
   /**
@@ -92,6 +92,7 @@ export function registerWidget(app: FastifyInstance): void {
     Body: {
       publicKey?: string;
       conversationId?: string;
+      visitorId?: string;
       name?: string;
       email?: string;
       phone?: string;
@@ -111,12 +112,18 @@ export function registerWidget(app: FastifyInstance): void {
     }
 
     await withTenant(tenant.id, async (client) => {
-      // Разговор привязывается, только если он существует и принадлежит этому
-      // клиенту. Идентификатор приходит из тела запроса, а `Origin` подделывается
-      // обычным curl — то есть сюда можно прислать чужой UUID. Записанный как
-      // есть, он ломал настоящую заявку того клиента: уникальность была общей
-      // на всю платформу, ON CONFLICT бился о невидимую под RLS строку и валил
-      // транзакцию ответа целиком.
+      // Разговор привязывается, только если он существует, принадлежит этому
+      // клиенту И этому посетителю. Идентификатор приходит из тела запроса,
+      // а `Origin` подделывается обычным curl — то есть сюда можно прислать
+      // чужой UUID. Записанный как есть, он ломал настоящую заявку того
+      // клиента: уникальность была общей на всю платформу, ON CONFLICT бился
+      // о невидимую под RLS строку и валил транзакцию ответа целиком.
+      //
+      // Проверки клиента оказалось мало. `ON CONFLICT ... DO UPDATE` ниже
+      // дополняет ЧУЖУЮ заявку: прислав идентификатор чужого разговора,
+      // посторонний переписывал имя и телефон в заявке, которую отдел продаж
+      // уже держит в работе, — и продавец звонил по подставленному номеру.
+      // Модель для этого не нужна вовсе, достаточно одного POST.
       //
       // Не найден — заявка сохраняется без привязки, а не отклоняется. Случай
       // законный: виджет получает идентификатор в meta раньше, чем разговор
@@ -124,13 +131,12 @@ export function registerWidget(app: FastifyInstance): void {
       // Терять из-за этого контакт — хуже, чем потерять привязку.
       let linked: string | null = null;
       if (b.conversationId && UUID.test(b.conversationId)) {
-        const { rows } = await client.query(
-          'SELECT 1 FROM conversations WHERE id = $1', [b.conversationId],
-        );
-        if (rows.length > 0) linked = b.conversationId;
-        else request.log.info(
+        linked = b.visitorId
+          ? await findConversationForVisitor(client, b.conversationId, sanitizeText(b.visitorId, 200))
+          : null;
+        if (!linked) request.log.info(
           { tenantId: tenant.id, conversationId: b.conversationId },
-          'заявка с неизвестным этому клиенту разговором — сохранена без привязки',
+          'заявка с чужим или неизвестным разговором — сохранена без привязки',
         );
       }
 

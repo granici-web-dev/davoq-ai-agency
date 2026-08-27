@@ -369,7 +369,7 @@ export function LeadForm({
       return;
     }
     setState('sending');
-    const ok = await submitLead(base, { publicKey, conversationId, ...form });
+    const ok = await submitLead(base, { publicKey, conversationId, visitorId: visitorId(), ...form });
     setState(ok ? 'sent' : 'error');
   };
 

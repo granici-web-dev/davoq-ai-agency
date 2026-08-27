@@ -126,17 +126,32 @@ export async function submitLead(
 /**
  * Идентификатор посетителя в localStorage, без кук (§9): непрерывность диалога есть,
  * а согласия на куки не требуется. Приватный режим может запретить запись —
- * тогда работаем без непрерывности, но работаем.
+ * тогда непрерывность живёт до конца вкладки, но живёт.
+ *
+ * Значение запоминается в модуле, а не берётся из хранилища каждый раз.
+ * Раньше запрет записи означал НОВЫЙ идентификатор на каждый вызов, а зовут
+ * эту функцию на каждый запрос. Пока сервер продолжал разговор по одному лишь
+ * его идентификатору, это было незаметно; теперь он сверяет и посетителя,
+ * и без памяти приватный режим терял бы историю на каждой реплике.
+ * Время жизни при этом совпадает с sessionStorage, где лежит сам разговор.
  */
+let cachedVisitorId: string | null = null;
+
 export function visitorId(): string {
+  if (cachedVisitorId) return cachedVisitorId;
   const KEY = 'cw_visitor_id';
   try {
     const existing = localStorage.getItem(KEY);
-    if (existing) return existing;
+    if (existing) {
+      cachedVisitorId = existing;
+      return existing;
+    }
     const fresh = crypto.randomUUID();
     localStorage.setItem(KEY, fresh);
+    cachedVisitorId = fresh;
     return fresh;
   } catch {
-    return crypto.randomUUID();
+    cachedVisitorId = crypto.randomUUID();
+    return cachedVisitorId;
   }
 }
